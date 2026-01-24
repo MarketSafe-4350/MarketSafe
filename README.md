@@ -127,3 +127,8 @@ MarketSafe makes buying and selling easier, safer, and more convenient while sup
   - Priority: Medium | Estimates: 2 days
   - Acceptance test:
     - Users can sort the marketplace listings.
+
+## Others
+
+- [MarketSafe Wiki](https://github.com/MarketSafe-4350/MarketSafe/wiki)
+  - Consist of design diagrams & meeting minutes.
