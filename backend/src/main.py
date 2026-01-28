@@ -8,7 +8,7 @@ app = FastAPI(title="test MarketSafe")
 
 @app.get("/api/hello")
 def read_root():
-    return {"hello": "world"}
+    return {"hello": "hello world"}
 
 
 @app.get("/api/health")

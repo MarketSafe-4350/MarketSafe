@@ -1,22 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
-  message = 'Loading...';
+export class AppComponent {
+  message = '';
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void {
-    this.http.get<{ message: string }>('/api/hello').subscribe({
-      next: (res) => (this.message = res.message),
+  callHelloApi(): void {
+    this.http.get<{ hello: string }>('/api/hello').subscribe({
+      next: (res) => (this.message = res.hello),
+      error: () => (this.message = 'Error calling backend'),
+    });
+  }
+
+  callHealthApi(): void {
+    this.http.get<{ status: string }>('/api/health').subscribe({
+      next: (res) => (this.message = res.status),
       error: () => (this.message = 'Error calling backend'),
     });
   }
