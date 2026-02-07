@@ -4,27 +4,28 @@
     <mat-card-subtitle>Sign up to get started</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <h1>Create Account</h1>
+    <h1 class="create-account">Create Account</h1>
+
     <label class="plain-label">First Name</label>
-    <mat-form-field appearance="outline" class="field">
+    <mat-form-field appearance="outline" class="input-field">
       <mat-label> First Name </mat-label>
       <input matInput />
     </mat-form-field>
 
     <label class="plain-label">Last Name</label>
-    <mat-form-field appearance="outline" class="field">
+    <mat-form-field appearance="outline" class="input-field">
       <mat-label> Last Name </mat-label>
       <input matInput />
     </mat-form-field>
 
     <label class="plain-label">University Email</label>
-    <mat-form-field appearance="outline" class="field">
+    <mat-form-field appearance="outline" class="input-field">
       <mat-label> Email </mat-label>
       <input matInput type="text" />
     </mat-form-field>
 
     <label class="plain-label">Password</label>
-    <mat-form-field appearance="outline" class="field">
+    <mat-form-field appearance="outline" class="input-field">
       <mat-label> Password </mat-label>
       <input matInput [type]="hidePassword() ? 'password' : 'text'" />
       <button
@@ -41,7 +42,7 @@
     </mat-form-field>
 
     <label class="plain-label">Confirm Password</label>
-    <mat-form-field appearance="outline" class="field">
+    <mat-form-field appearance="outline" class="input-field">
       <mat-label> Confirm Password </mat-label>
       <input matInput [type]="hideConfirmPassword() ? 'password' : 'text'" />
       <button
@@ -58,7 +59,10 @@
     </mat-form-field>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button color="primary">Create Account</button>
+    <button mat-raised-button>Create Account</button>
   </mat-card-actions>
-  <mat-card-footer> Already have an account?</mat-card-footer>
+  <mat-card-footer>
+    Already have an account?
+    <a routerLink="/login" class="login-link">Log in</a>
+  </mat-card-footer>
 </mat-card>
