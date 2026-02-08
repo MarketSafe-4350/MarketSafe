@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["dev", "main"]
+    paths:
+      - "frontend/**"
+      - "server/**"
+      - ".github/workflows/**"
+  push:
+    branches: ["dev", "main"]
+    paths:
+      - "frontend/**"
+      - "server/**"
+      - ".github/workflows/**"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend-ci:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build -- --configuration=production
+
+      # -----------------------------
+      # FUTURE: Frontend tests here
+      # Example:
+      # - name: Run frontend tests
+      #   run: npm test -- --watch=false
+      # -----------------------------
+
+  backend-ci:
+    name: Backend CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: server/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Quick syntax check
+      - name: Compile check
+        run: python -m compileall -q src
+
+      # -----------------------------
+      # FUTURE: Backend tests here
+      # Example:
+      # - name: Run backend tests
+      #   run: pytest
+      # -----------------------------
