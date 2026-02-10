@@ -1,10 +1,53 @@
 services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: marketsafe
+      MYSQL_USER: marketsafe
+      MYSQL_PASSWORD: marketsafe
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  db-init:
+    build:
+      context: ./persistence/db
+      dockerfile: init/Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: marketsafe
+      DB_MODE: ${DB_MODE:-dev}   # dev seeds, prod skips
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
   api:
-    build: ./backend
+    build: ./server
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./server:/app
+      - ./persistence/stub:/opt/stub:ro
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: marketsafe
+      DB_USER: marketsafe
+      DB_PASSWORD: marketsafe
+      APP_ENV: ${APP_ENV:-dev}
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
 
   frontend:
     build: ./frontend
@@ -17,4 +60,5 @@ services:
       - /app/node_modules
     command: npm run start:docker
 
-# docker compose -f docker-compose.dev.yml up --build
+volumes:
+  mysql_data:
