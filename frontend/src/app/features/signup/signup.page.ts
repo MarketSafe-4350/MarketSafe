@@ -10,6 +10,26 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import {
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+  AbstractControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { ValidationMessages } from '../../shared/signup-validation-errors';
+
+type Messages = Record<string, Record<string, string>>;
+
+function matchFields(field1: string, field2: string) {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const firstValue = group.get(field1)?.value;
+    const secondValue = group.get(field2)?.value;
+
+    return firstValue === secondValue ? null : { fieldsMismatch: true };
+  };
+}
 
 @Component({
   standalone: true,
@@ -23,15 +43,101 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatSelectModule,
     MatIconModule,
+    ReactiveFormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignupComponent {
+  messages: Messages = ValidationMessages;
+
   hidePassword: WritableSignal<boolean> = signal(true);
-  hideConfirmPassword: WritableSignal<boolean> = signal(true);
 
   toggleHide(event: MouseEvent, hideSignal: WritableSignal<boolean>): void {
     hideSignal.update((value) => !value);
     event.stopPropagation();
+  }
+
+  // umanitoba and myumanitoba email
+  private readonly universityEmailRegex =
+    /^[^@]+@(umanitoba\.ca|myumanitoba\.ca)$/i;
+
+  // Baseline password: >= 8 chars, 1 lower, 1 upper, 1 number (no spaces)
+  private readonly passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]{8,}$/;
+
+  // Letters, spaces, hyphen, apostrophe
+  private readonly nameRegex = /^[a-zA-Z'-\s]+$/;
+
+  constructor(private formBuilder: FormBuilder) {}
+
+  readonly form: FormGroup = this.createForm();
+
+  private createForm(): FormGroup {
+    return this.formBuilder.group({
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          Validators.pattern(this.nameRegex),
+        ],
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50),
+          Validators.pattern(this.nameRegex),
+        ],
+      ],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email,
+          Validators.pattern(this.universityEmailRegex),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(128),
+          Validators.pattern(this.passwordRegex),
+        ],
+      ],
+    });
+  }
+
+  markTouched(controlName: string): void {
+    this.form.get(controlName)?.markAsTouched();
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.form.get(controlName);
+    if (!control || !control.errors) return '';
+
+    const firstKey = Object.keys(control.errors)[0];
+    return this.messages[controlName]?.[firstKey] ?? '';
+  }
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const payload = {
+      firstName: this.form.value.firstName?.trim(),
+      lastName: this.form.value.lastName?.trim(),
+      email: this.form.value.email?.trim().toLowerCase(),
+      password: this.form.value.password,
+    };
+
+    console.log('Signup payload:', payload);
+
+    // TODO: call backend, send payload
   }
 }
