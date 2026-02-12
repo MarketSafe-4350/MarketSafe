@@ -3,6 +3,7 @@ import {
   Component,
   signal,
   WritableSignal,
+  inject,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -22,7 +23,7 @@ type Messages = Record<string, Record<string, string>>;
 
 @Component({
   standalone: true,
-  selector: 'signup-page',
+  selector: 'app-signup-page',
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
   imports: [
@@ -51,7 +52,7 @@ export class SignupComponent {
   // letters, spaces, hyphen, apostrophe
   private readonly nameRegex = /^[a-zA-Z'-\s]+$/;
 
-  constructor(private formBuilder: FormBuilder) {}
+  private readonly formBuilder = inject(FormBuilder);
 
   readonly form: FormGroup = this.createForm();
 

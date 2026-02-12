@@ -8,7 +8,7 @@
     <mat-card-content>
       <h1 class="create-account">Create Account</h1>
 
-      <label class="plain-label">First Name</label>
+      <label class="plain-label" for="firstName">First Name</label>
       <mat-form-field appearance="outline" class="input-field">
         <mat-label> First Name </mat-label>
         <input
@@ -21,7 +21,7 @@
         }
       </mat-form-field>
 
-      <label class="plain-label">Last Name</label>
+      <label class="plain-label" for="lastName">Last Name</label>
       <mat-form-field appearance="outline" class="input-field">
         <mat-label> Last Name </mat-label>
         <input
@@ -34,7 +34,7 @@
         }
       </mat-form-field>
 
-      <label class="plain-label">University Email</label>
+      <label class="plain-label" for="email">University Email</label>
       <mat-form-field appearance="outline" class="input-field">
         <mat-label> Email </mat-label>
         <input matInput formControlName="email" (blur)="markTouched('email')" />
@@ -43,7 +43,7 @@
         }
       </mat-form-field>
 
-      <label class="plain-label">Password</label>
+      <label class="plain-label" for="password">Password</label>
       <mat-form-field appearance="outline" class="input-field">
         <mat-label> Password </mat-label>
         <input
