@@ -1,0 +1,149 @@
+class Account:
+    """
+    Domain Entity: Account
+
+    This class represents the `account` table in the database.
+
+    Design Decisions (SoftEng 2):
+
+    1. Encapsulation
+       - All internal state is stored in variables prefixed with `_`.
+       - Python does not enforce true private access like Java.
+       - Instead, `_variable` is used by convention to signal
+         that these fields must not be modified directly.
+
+    2. No Double Underscore (__)
+       - We intentionally avoid `__variable` (name mangling).
+       - It is unnecessary for domain entities and complicates debugging.
+       - `_variable` is the Pythonic standard for protected fields.
+
+    3. Controlled Access
+       - Read access is provided using `@property`.
+       - Mutation is allowed only through domain methods.
+       - This mirrors Java's private fields + public methods approach.
+
+    4. Invariants
+       - Email is normalized and validated.
+       - Names cannot be empty.
+       - Password must already be hashed before reaching this entity.
+       - ID can only be assigned once (after DB persistence).
+
+    5. Keyword-Only Parameters (*)
+       - Parameters after `*` must be passed explicitly by name.
+       - This prevents accidental parameter misordering.
+       - Improves clarity and safety in object creation.
+    """
+
+    def __init__(
+            self,
+            email: str,
+            password: str,
+            fname: str,
+            lname: str,
+            *,
+            account_id: int | None = None,
+            verified: bool = False,
+    ):
+        # Internal state (protected by convention)
+        self._id = account_id
+        self._email = email
+        self._password = password
+        self._fname = fname
+        self._lname = lname
+        self._verified = verified
+
+# ==============================
+    # ID (read-only, may be None before DB insert)
+    # ==============================
+
+    @property
+    def id(self):
+        return self._id
+
+    def mark_persisted(self, account_id: int):
+        if account_id is None:
+            raise ValueError("id cannot be None")
+        self._id = account_id
+
+    # ==============================
+    # EMAIL (NOT NULL)
+    # ==============================
+
+    @property
+    def email(self):
+        return self._email
+
+    @email.setter
+    def email(self, value):
+        if value is None:
+            raise ValueError("email cannot be None")
+        self._email = value
+
+    # ==============================
+    # PASSWORD (NOT NULL)
+    # ==============================
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value):
+        if value is None:
+            raise ValueError("password cannot be None")
+        self._password = value
+
+    # ==============================
+    # FIRST NAME (NOT NULL)
+    # ==============================
+
+    @property
+    def fname(self):
+        return self._fname
+
+    @fname.setter
+    def fname(self, value):
+        if value is None:
+            raise ValueError("fname cannot be None")
+        self._fname = value
+
+    # ==============================
+    # LAST NAME (NOT NULL)
+    # ==============================
+
+    @property
+    def lname(self):
+        return self._lname
+
+    @lname.setter
+    def lname(self, value):
+        if value is None:
+            raise ValueError("lname cannot be None")
+        self._lname = value
+
+    # ==============================
+    # VERIFIED (NOT NULL)
+    # ==============================
+
+    @property
+    def verified(self):
+        return self._verified
+
+    @verified.setter
+    def verified(self, value):
+        if value is None:
+            raise ValueError("verified cannot be None")
+        self._verified = value
+
+    # ==============================
+    # DEBUG REPRESENTATION
+    # ==============================
+
+    def __repr__(self):
+        return (
+            f"Account(id={self._id}, "
+            f"email={self._email!r}, "
+            f"fname={self._fname!r}, "
+            f"lname={self._lname!r}, "
+            f"verified={self._verified})"
+        )
