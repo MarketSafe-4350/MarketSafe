@@ -13,23 +13,12 @@ import { MatIconModule } from '@angular/material/icon';
 import {
   FormBuilder,
   FormGroup,
-  ValidationErrors,
   Validators,
-  AbstractControl,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ValidationMessages } from '../../shared/signup-validation-errors';
 
 type Messages = Record<string, Record<string, string>>;
-
-function matchFields(field1: string, field2: string) {
-  return (group: AbstractControl): ValidationErrors | null => {
-    const firstValue = group.get(field1)?.value;
-    const secondValue = group.get(field2)?.value;
-
-    return firstValue === secondValue ? null : { fieldsMismatch: true };
-  };
-}
 
 @Component({
   standalone: true,
@@ -52,26 +41,26 @@ export class SignupComponent {
 
   hidePassword: WritableSignal<boolean> = signal(true);
 
-  toggleHide(event: MouseEvent, hideSignal: WritableSignal<boolean>): void {
-    hideSignal.update((value) => !value);
-    event.stopPropagation();
-  }
-
   // umanitoba and myumanitoba email
   private readonly universityEmailRegex =
     /^[^@]+@(umanitoba\.ca|myumanitoba\.ca)$/i;
 
-  // Baseline password: >= 8 chars, 1 lower, 1 upper, 1 number (no spaces)
+  // password requirements: >= 8 chars, 1 lower, 1 upper, 1 number (no spaces)
   private readonly passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]{8,}$/;
 
-  // Letters, spaces, hyphen, apostrophe
+  // letters, spaces, hyphen, apostrophe
   private readonly nameRegex = /^[a-zA-Z'-\s]+$/;
 
   constructor(private formBuilder: FormBuilder) {}
 
   readonly form: FormGroup = this.createForm();
 
-  private createForm(): FormGroup {
+  toggleHide(event: MouseEvent, hideSignal: WritableSignal<boolean>): void {
+    hideSignal.update((value) => !value);
+    event.stopPropagation();
+  }
+
+  createForm(): FormGroup {
     return this.formBuilder.group({
       firstName: [
         '',
@@ -123,21 +112,22 @@ export class SignupComponent {
     return this.messages[controlName]?.[firstKey] ?? '';
   }
 
-  onSubmit(): void {
+  onSubmit(): {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  } | null {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      return;
+      return null;
     }
 
-    const payload = {
+    return {
       firstName: this.form.value.firstName?.trim(),
       lastName: this.form.value.lastName?.trim(),
       email: this.form.value.email?.trim().toLowerCase(),
       password: this.form.value.password,
     };
-
-    console.log('Signup payload:', payload);
-
-    // TODO: call backend, send payload
   }
 }
