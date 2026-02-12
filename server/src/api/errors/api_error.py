@@ -1,0 +1,24 @@
+class ApiError(Exception):
+    def __init__(self, status_code: int, message: str):
+        self._status_code = status_code
+        self._message = message
+
+    @property
+    def status_code(self):
+        return self._status_code
+
+    @status_code.setter
+    def status_code(self, value):
+        if value is None:
+            raise ValueError("status code cannot be None")
+        self._status_code = value
+
+    @property
+    def message(self):
+        return self._status_code
+
+    @message.setter
+    def message(self, value):
+        if value is None:
+            return ValueError("message cannot be None")
+        self._message = value
