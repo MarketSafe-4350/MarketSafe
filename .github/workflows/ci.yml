@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   frontend-ci:
-    name: Frontend CI
+    name: MarketSafe Frontend CI
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -40,18 +40,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build -- --configuration=production
+      - name: Lint check
+        run: npm run lint
 
-      # -----------------------------
-      # FUTURE: Frontend tests here
-      # Example:
-      # - name: Run frontend tests
-      #   run: npm test -- --watch=false
-      # -----------------------------
+      - name: Run frontend tests
+        run: npm test -- --watch=false --browsers=ChromeHeadless --progress=false
+
+      - name: Build
+        run: npm run build -- --configuration=development
 
   backend-ci:
-    name: Backend CI
+    name: MarketSafe Backend CI
     runs-on: ubuntu-latest
     defaults:
       run:
