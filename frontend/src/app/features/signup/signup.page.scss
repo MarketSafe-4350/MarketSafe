@@ -1,0 +1,77 @@
+:host {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3vw;
+  background: #f4f5f7;
+  box-sizing: border-box;
+}
+
+.signup-page {
+  width: min(520px, 100%);
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: #fff;
+
+  mat-card-header {
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 0.5rem;
+  }
+
+  mat-card-title {
+    color: #d32f2f;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .create-account {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0.75rem;
+  }
+
+  .plain-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .input-field {
+    width: 100%;
+    margin-bottom: 0.4rem;
+  }
+
+  mat-card-actions {
+    padding-top: 0.5rem;
+
+    button {
+      width: 100%;
+      font-weight: 550;
+      background-color: rgb(206, 204, 204);
+    }
+  }
+
+  mat-card-footer {
+    text-align: center;
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.55);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .login-link {
+      margin-left: 4px;
+      color: #d32f2f;
+      font-weight: 560;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

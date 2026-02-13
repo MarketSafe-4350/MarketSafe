@@ -25,7 +25,7 @@ services:
       DB_HOST: db
       DB_PORT: 3306
       DB_NAME: marketsafe
-      DB_MODE: ${DB_MODE:-dev}   # dev seeds, prod skips
+      DB_MODE: ${DB_MODE:-dev} # dev seeds, prod skips
     depends_on:
       db:
         condition: service_healthy
@@ -50,7 +50,9 @@ services:
         condition: service_completed_successfully
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "4200:4200"
     depends_on:
