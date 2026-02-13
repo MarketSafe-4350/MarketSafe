@@ -1,5 +1,5 @@
-from src.domain_models.account import Account
-from src.api.errors.api_error import ApiError
+from server.src.api.errors import ApiError
+from server.src.domain_models import Account
 
 
 class AccountService:

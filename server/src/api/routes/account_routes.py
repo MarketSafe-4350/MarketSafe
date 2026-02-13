@@ -1,8 +1,9 @@
 from fastapi import APIRouter
 
-from src.api.converter.account_converter import AccountSignup, AccountResponse
-from src.business_logic.services.account_service import AccountService
-from src.domain_models.account import Account
+
+from server.src.api.converter import AccountResponse, AccountSignup
+from server.src.business_logic.services import AccountService
+from server.src.domain_models import Account
 
 router = APIRouter(prefix="/accounts")
 service = AccountService()
