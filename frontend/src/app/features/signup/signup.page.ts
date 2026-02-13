@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -41,6 +42,8 @@ export class SignupComponent {
   messages: Messages = ValidationMessages;
 
   hidePassword: WritableSignal<boolean> = signal(true);
+
+  private readonly router = inject(Router);
 
   // umanitoba and myumanitoba email
   private readonly universityEmailRegex =
@@ -100,6 +103,11 @@ export class SignupComponent {
       ],
     });
   }
+
+  goBack(): void {
+    this.router.navigate(['/']);
+  }
+
 
   markTouched(controlName: string): void {
     this.form.get(controlName)?.markAsTouched();
