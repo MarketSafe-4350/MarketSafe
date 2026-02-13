@@ -1,3 +1,6 @@
+from server.src.utils import ValidationError, UnapprovedBehaviorError, Validation
+
+
 class Account:
     """
     Domain Entity: Account
@@ -46,13 +49,13 @@ class Account:
     ):
         # Internal state (protected by convention)
         self._id = account_id
-        self._email = email
-        self._password = password
-        self._fname = fname
-        self._lname = lname
-        self._verified = verified
+        self._email = Validation.normalize_email(email, "email")
+        self._password = Validation.require_str(password, "password")  # hashed already (your assumption)
+        self._fname = Validation.require_str(fname, "fname")
+        self._lname = Validation.require_str(lname, "lname")
+        self._verified = Validation.require_bool(verified, "verified")
 
-# ==============================
+    # ==============================
     # ID (read-only, may be None before DB insert)
     # ==============================
 
@@ -62,7 +65,11 @@ class Account:
 
     def mark_persisted(self, account_id: int):
         if account_id is None:
-            raise ValueError("id cannot be None")
+            raise ValidationError("Account ID cannot be None.")
+        if self._id is not None:
+            raise UnapprovedBehaviorError(
+                "Account ID has already been assigned."
+            )
         self._id = account_id
 
     # ==============================
@@ -75,9 +82,7 @@ class Account:
 
     @email.setter
     def email(self, value):
-        if value is None:
-            raise ValueError("email cannot be None")
-        self._email = value
+        self._email = Validation.valid_email(value)
 
     # ==============================
     # PASSWORD (NOT NULL)
@@ -89,9 +94,7 @@ class Account:
 
     @password.setter
     def password(self, value):
-        if value is None:
-            raise ValueError("password cannot be None")
-        self._password = value
+        self._password = Validation.require_str(value, "password")
 
     # ==============================
     # FIRST NAME (NOT NULL)
@@ -103,9 +106,7 @@ class Account:
 
     @fname.setter
     def fname(self, value):
-        if value is None:
-            raise ValueError("fname cannot be None")
-        self._fname = value
+        self._fname = Validation.require_str(value, "fname")
 
     # ==============================
     # LAST NAME (NOT NULL)
@@ -115,11 +116,10 @@ class Account:
     def lname(self):
         return self._lname
 
+
     @lname.setter
     def lname(self, value):
-        if value is None:
-            raise ValueError("lname cannot be None")
-        self._lname = value
+        self._lname = Validation.require_str(value, "lname")
 
     # ==============================
     # VERIFIED (NOT NULL)
@@ -132,7 +132,7 @@ class Account:
     @verified.setter
     def verified(self, value):
         if value is None:
-            raise ValueError("verified cannot be None")
+            raise ValidationError("verified cannot be None")
         self._verified = value
 
     # ==============================
