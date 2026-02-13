@@ -34,9 +34,15 @@ describe('SignupComponent', () => {
     expect(control.invalid).toBeTrue();
   });
 
-  it('createForm_EmailUniversityDomain_ShouldBeValid', () => {
+  it('createForm_EmailUniversityDomainUmanitoba_ShouldBeValid', () => {
     const control = signupComponent.form.get('email')!;
     control.setValue('abc@umanitoba.ca');
+    expect(control.valid).toBeTrue();
+  });
+
+  it('createForm_EmailUniversityDomainMyumanitoba_ShouldBeValid', () => {
+    const control = signupComponent.form.get('email')!;
+    control.setValue('abc@myumanitoba.ca');
     expect(control.valid).toBeTrue();
   });
 
