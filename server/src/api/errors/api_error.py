@@ -1,4 +1,10 @@
 class ApiError(Exception):
+    """Custom exception class for API errors.
+
+    Args:
+        Exception (_type_): Base exception class.
+    """
+
     def __init__(self, status_code: int, message: str):
         self._status_code = status_code
         self._message = message
