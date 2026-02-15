@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt
 
+from src import SECRET_KEY
 from src.api.errors.api_error import ApiError
 from src.api.converter import AccountResponse, AccountSignup, Token
 from src.business_logic.services import AccountService
@@ -11,9 +12,8 @@ from src.domain_models import Account
 router = APIRouter(prefix="/accounts")
 service = AccountService()
 
-SECRET_KEY = "PbulrbjzIlDEsk79Nk3rCZnSG+WviBFF07g36VKsmlQ="
-
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/accounts/login")
+
 
 @router.post("", response_model=AccountResponse)
 def create_account(request: AccountSignup):
@@ -36,6 +36,7 @@ def create_account(request: AccountSignup):
         email=account.email, fname=account.fname, lname=account.lname
     )
 
+
 @router.post("/login", response_model=Token)
 def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
     """
@@ -49,20 +50,20 @@ def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
     """
 
     try:
- 
+
         token = service.login(form_data.username, form_data.password)
-        
+
         if not token:
             raise ApiError(status_code=401, detail="Authentication failed.")
 
         return {"access_token": token, "token_type": "bearer"}
-    
+
     except ApiError as error:
         return JSONResponse(
             status_code=error.status_code,
             content={"error_message": error.message}
         )
-    
+
 
 @router.get("/me", response_model=AccountResponse)
 def get_account(token: str = Depends(oauth2_scheme)):
@@ -76,9 +77,9 @@ def get_account(token: str = Depends(oauth2_scheme)):
     """
 
     try:
-        
+
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        account_id = payload.get("sub")  
+        account_id = payload.get("sub")
 
         if not account_id:
             raise ApiError(status_code=401, detail="Could not validate user.")

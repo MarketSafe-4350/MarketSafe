@@ -1,10 +1,10 @@
 import jwt
 import datetime
+
+from src import SECRET_KEY
 from src.api.errors import ApiError
 from src.domain_models import Account
 
-
-SECRET_KEY = "PbulrbjzIlDEsk79Nk3rCZnSG+WviBFF07g36VKsmlQ="
 
 class AccountService:
     """Service class for handling account-related business logic."""
@@ -14,7 +14,7 @@ class AccountService:
         ...
 
     def create_account(
-        self, email: str, password: str, fname: str, lname: str
+            self, email: str, password: str, fname: str, lname: str
     ) -> Account:
         """Creates a new account with the provided details.
 
@@ -69,9 +69,9 @@ class AccountService:
 
         ##
         return acc_test
-    
+
     def login(self, email: str, password: str) -> str:
-        
+
         """Authenticates a user and returns a JWT token.
 
         Args:
@@ -81,16 +81,15 @@ class AccountService:
         Returns:
             str: A JWT token for the authenticated user.
         """
-    
+
         if not email or not password:
             raise ApiError(status_code=400, message="Email and password are required")
 
-
-        #mock data for test, set up db check
+        # mock data for test, set up db check
         if email == "test1@gmail.com" and password == "test":
             expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
             token = jwt.encode({
-                "sub": "test1@gmail.com",  
+                "sub": "test1@gmail.com",
                 "exp": expiration
             }, SECRET_KEY, algorithm="HS256")
             return token
