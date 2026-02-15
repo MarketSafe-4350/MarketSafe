@@ -1,8 +1,7 @@
 import re
 from typing import Any
 
-from server.src.errors import ValidationError
-
+from src.utils import ValidationError
 
 class Validation:
     """
