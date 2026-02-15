@@ -77,3 +77,10 @@ class UnapprovedBehaviorError(DomainError):
     """
     code: str = "UNAPPROVED_BEHAVIOR"
     status_code: int = 403
+
+
+
+@dataclass
+class ConfigurationError(InfrastructureError):
+    code: str = "CONFIGURATION_ERROR"
+    status_code: int = 500
