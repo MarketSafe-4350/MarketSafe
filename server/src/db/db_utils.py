@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine, Connection
 from sqlalchemy.exc import OperationalError
 
-from server.src.utils import Validation, DatabaseUnavailableError
+from src.utils import Validation, DatabaseUnavailableError
 
 
 class DBUtility:
