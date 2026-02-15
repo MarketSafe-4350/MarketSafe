@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { LandingComponent } from './features/landing/landing.component';
 
 @Component({

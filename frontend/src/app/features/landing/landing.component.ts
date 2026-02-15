@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -19,10 +19,10 @@ import { SignupComponent } from '../signup/signup.page';
 })
 export class LandingComponent {
 
-  constructor(private router: Router) {}
+  private readonly router = inject(Router);
 
-  showSignup() {
-  this.router.navigate(['/signup']);
-}
+  showSignup(): void {
+    this.router.navigate(['/signup']);
+  }
 
 }
