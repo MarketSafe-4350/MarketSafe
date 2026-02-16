@@ -1,0 +1,26 @@
+<mat-card class="listing-list-card" appearance="outlined">
+  @if (isSold) {
+    <div class="sold-badge">SOLD</div>
+  }
+  <div class="list-row">
+    <div class="thumbnail">
+      <img [src]="imageUrl" [alt]="title" />
+    </div>
+
+    <div class="list-content">
+      <div class="list-title">
+        {{ title }}
+      </div>
+
+      <div class="list-price">
+        {{ price }}
+      </div>
+
+      <div class="list-meta">
+        <span>{{ location }}</span>
+        <span class="dot">•</span>
+        <span>{{ createdAt }}</span>
+      </div>
+    </div>
+  </div>
+</mat-card>
