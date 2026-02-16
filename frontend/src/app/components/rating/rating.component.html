@@ -1,0 +1,10 @@
+<div class="rating">
+  <div class="rating-row">
+    @for (star of model.stars; track $index) {
+      <mat-icon class="rating-star">{{ star }}</mat-icon>
+    }
+
+    <span class="rating-value">{{ model.ratingAvg }}</span>
+    <span class="rating-count">{{ model.reviewCount }}</span>
+  </div>
+</div>

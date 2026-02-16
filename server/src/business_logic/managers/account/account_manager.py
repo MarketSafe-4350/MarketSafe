@@ -86,3 +86,12 @@ class AccountManager(IAccountManager):
                 details={"account_id": account_id},
             )
         return acc
+
+    @override
+    def clear_accounts(self) -> None:
+        """
+        Testing/dev utility: wipe the account table.
+        Delegates to persistence layer.
+        """
+        self._account_db.clear_db()
+
