@@ -33,7 +33,7 @@ export class RatingComponent implements OnChanges {
       'star_border',
     ],
     ratingAvg: '-',
-    reviewCount: '(0 reviews)',
+    reviewCount: '(0 review(s))',
   };
 
   ngOnChanges(): void {
@@ -52,7 +52,7 @@ export class RatingComponent implements OnChanges {
     }
     return {
       stars: starsIcons,
-      ratingAvg: average ? average.toFixed(1) : '-',
+      ratingAvg: average.toFixed(1),
       reviewCount: `(${reviews} review(s))`,
     };
   }
