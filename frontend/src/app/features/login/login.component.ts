@@ -21,6 +21,10 @@ import {
 } from '@angular/forms';
 
 import { ValidationMessages } from '../../shared/signup-validation-errors';
+import {
+  UNIVERSITY_EMAIL_REGEX,
+} from '../../shared/auth-validation.constants';
+
 
 type Messages = Record<string, Record<string, string>>;
 
@@ -47,8 +51,6 @@ export class LoginComponent {
     private readonly router = inject(Router);
     private readonly formBuilder = inject(FormBuilder);
 
-    private readonly universityEmailRegex =
-        /^[^@]+@(umanitoba\.ca|myumanitoba\.ca)$/i;
 
     readonly form: FormGroup = this.createForm();
 
@@ -59,7 +61,7 @@ export class LoginComponent {
                 [
                     Validators.required,
                     Validators.email,
-                    Validators.pattern(this.universityEmailRegex),
+                    Validators.pattern(UNIVERSITY_EMAIL_REGEX),
                 ],
             ],
             password: ['', [Validators.required, Validators.minLength(8)]],
