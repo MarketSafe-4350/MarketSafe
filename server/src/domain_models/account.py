@@ -1,4 +1,4 @@
-from server.src.utils import ValidationError, UnapprovedBehaviorError, Validation
+from src.utils import ValidationError, UnapprovedBehaviorError, Validation
 
 
 class Account:
@@ -49,11 +49,11 @@ class Account:
     ):
         # Internal state (protected by convention)
         self._id = account_id
-        self._email = Validation.normalize_email(email, "email")
+        self._email = Validation.valid_email(email)
         self._password = Validation.require_str(password, "password")  # hashed already (your assumption)
         self._fname = Validation.require_str(fname, "fname")
         self._lname = Validation.require_str(lname, "lname")
-        self._verified = Validation.require_bool(verified, "verified")
+        self._verified = Validation.is_boolean(verified, "verified")
 
     # ==============================
     # ID (read-only, may be None before DB insert)
