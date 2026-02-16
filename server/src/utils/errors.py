@@ -1,3 +1,4 @@
+# src/errors.py
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
 
@@ -20,6 +21,7 @@ class AppError(Exception):
     def __str__(self) -> str:
         return self.message
 
+
 @dataclass
 class InfrastructureError(AppError):
     code: str = "INFRA_ERROR"
@@ -35,15 +37,12 @@ class DatabaseUnavailableError(InfrastructureError):
 @dataclass
 class DatabaseQueryError(InfrastructureError):
     """
-    Use this when DB is reachable but the query fails (syntax, constraint, etc.)
+    DB is reachable but the query fails (syntax, constraint, etc.)
     Usually it's a server bug -> 500.
     """
     code: str = "DB_QUERY_ERROR"
     status_code: int = 500
 
-# -----------------------------
-# Domain/Business rule errors (unapproved behaviors)
-# -----------------------------
 
 @dataclass
 class DomainError(AppError):
@@ -51,23 +50,16 @@ class DomainError(AppError):
     status_code: int = 400
 
 
-
 @dataclass
 class ValidationError(DomainError):
-    """
-    Input is invalid (missing fields, wrong format).
-    """
     code: str = "VALIDATION_ERROR"
     status_code: int = 422
 
+
 @dataclass
 class ConflictError(DomainError):
-    """
-    Conflicts like duplicate unique fields, state conflict, etc.
-    """
     code: str = "CONFLICT"
     status_code: int = 409
-
 
 @dataclass
 class UnapprovedBehaviorError(DomainError):
@@ -77,10 +69,26 @@ class UnapprovedBehaviorError(DomainError):
     """
     code: str = "UNAPPROVED_BEHAVIOR"
     status_code: int = 403
-
-
-
+# -----------------------------
+# Account-specific errors (domain layer friendly)
+# -----------------------------
 @dataclass
 class ConfigurationError(InfrastructureError):
     code: str = "CONFIGURATION_ERROR"
     status_code: int = 500
+@dataclass
+class AccountError(DomainError):
+    code: str = "ACCOUNT_ERROR"
+    status_code: int = 400
+
+
+@dataclass
+class AccountNotFoundError(AccountError):
+    code: str = "ACCOUNT_NOT_FOUND"
+    status_code: int = 404
+
+
+@dataclass
+class AccountAlreadyExistsError(AccountError):
+    code: str = "ACCOUNT_ALREADY_EXISTS"
+    status_code: int = 409
