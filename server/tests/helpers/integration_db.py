@@ -60,7 +60,7 @@ class IntegrationDBContext:
                 driver=driver,
             )
 
-        db = DBUtility._instance
+        db = DBUtility.instance()
         assert db is not None
 
         return IntegrationDBContext(
