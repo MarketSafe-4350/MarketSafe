@@ -23,7 +23,6 @@ export interface RatingModel {
 export class RatingComponent implements OnChanges {
   @Input() average: number | null | undefined = null;
   @Input() reviewCount: number | null | undefined = null;
-  @Input() title = 'Rating';
 
   model: RatingModel = {
     stars: [
