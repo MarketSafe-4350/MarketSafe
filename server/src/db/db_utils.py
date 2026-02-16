@@ -103,6 +103,13 @@ class DBUtility:
         """
         Borrow a connection from the pool.
         If DB is down, raises DatabaseUnavailableError (to be mapped to 503).
+
+        IMPORTANT:
+        - OperationalError (DB unreachable, network failure, etc.)
+          is converted into DatabaseUnavailableError here.
+        - Higher layers (e.g., MySQLAccountDB) should NOT catch
+          OperationalError directly.
+        - They should only convert query-level failures.
         """
         try:
             with self._engine.connect() as conn:

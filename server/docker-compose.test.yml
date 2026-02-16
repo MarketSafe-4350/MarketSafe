@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: marketsafe
+      MYSQL_USER: marketsafe
+      MYSQL_PASSWORD: marketsafe
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  db-init:
+    build:
+      context: ../persistence/db
+      dockerfile: init/Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: marketsafe
+      DB_MODE: dev
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"

@@ -19,6 +19,11 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ValidationMessages } from '../../shared/signup-validation-errors';
+import {
+  UNIVERSITY_EMAIL_REGEX,
+  PASSWORD_REGEX,
+} from '../../shared/auth-validation.constants';
+
 
 type Messages = Record<string, Record<string, string>>;
 
@@ -45,12 +50,6 @@ export class SignupComponent {
 
   private readonly router = inject(Router);
 
-  // umanitoba and myumanitoba email
-  private readonly universityEmailRegex =
-    /^[^@]+@(umanitoba\.ca|myumanitoba\.ca)$/i;
-
-  // password requirements: >= 8 chars, 1 lower, 1 upper, 1 number (no spaces)
-  private readonly passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]{8,}$/;
 
   // letters, spaces, hyphen, apostrophe
   private readonly nameRegex = /^[a-zA-Z'-\s]+$/;
@@ -89,7 +88,7 @@ export class SignupComponent {
         [
           Validators.required,
           Validators.email,
-          Validators.pattern(this.universityEmailRegex),
+          Validators.pattern(UNIVERSITY_EMAIL_REGEX),
         ],
       ],
       password: [
@@ -98,7 +97,7 @@ export class SignupComponent {
           Validators.required,
           Validators.minLength(8),
           Validators.maxLength(128),
-          Validators.pattern(this.passwordRegex),
+          Validators.pattern(PASSWORD_REGEX),
         ],
       ],
     });
