@@ -50,7 +50,7 @@ class Account:
         # Internal state (protected by convention)
         self._id = account_id
         self._email = Validation.valid_email(email)
-        self._password = Validation.require_str(password, "password")  # hashed already (your assumption)
+        self._password = Validation.require_str(password, "password")
         self._fname = Validation.require_str(fname, "fname")
         self._lname = Validation.require_str(lname, "lname")
         self._verified = Validation.is_boolean(verified, "verified")
