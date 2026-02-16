@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine, Connection
 from sqlalchemy.exc import OperationalError
 
-from src.utils import Validation, DatabaseUnavailableError
+from src.utils import Validation, DatabaseUnavailableError, ConfigurationError
 
 
 class DBUtility:
@@ -133,6 +133,12 @@ class DBUtility:
     def engine(self) -> Engine:
         """Expose the underlying Engine (pool) if you want to share it."""
         return self._engine
+
+    @staticmethod
+    def instance() -> DBUtility:
+        if DBUtility._instance is None:
+            raise ConfigurationError("DBUtility not initialized")
+        return DBUtility._instance
 
     def dispose(self) -> None:
         """Close all pooled connections (useful on app shutdown)."""

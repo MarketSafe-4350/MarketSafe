@@ -164,3 +164,25 @@ class IAccountManager(ABC):
             - ValidationError (if email invalid)
         """
         raise NotImplementedError
+
+
+    @abstractmethod
+    def clear_accounts(self) -> None:
+        """
+        PURPOSE:
+            Clear all rows from the `account` table.
+
+        EXPECTED BEHAVIOR:
+            - Calls the persistence layer (AccountDB.clear_db()) to delete all rows.
+            - Intended ONLY for testing / development utilities.
+            - Must raise if any database error occurs (do not swallow exceptions).
+            - Should not be exposed in production API routes.
+
+        RETURNS:
+            None
+
+        RAISES (typical):
+            - DatabaseUnavailableError / DatabaseQueryError: on infrastructure failures.
+        """
+        raise NotImplementedError
+
