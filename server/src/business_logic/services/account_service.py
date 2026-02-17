@@ -1,5 +1,18 @@
 from src.api.errors import ApiError
 from src.domain_models import Account
+from src.utils.validation import Validation
+from src.utils.errors import ValidationError, DatabaseUnavailableError, AccountAlreadyExistsError
+from src.config import SECRET_KEY
+from src.business_logic.managers.account import AccountManager
+# from src.business_logic.managers.account import IAccountManager
+
+from src.db.account.mysql import MySQLAccountDB
+from src.db import DBUtility
+
+import jwt
+import datetime
+import re
+
 
 PASSWORD_REGEX = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]{8,}$"
 ALLOWED_DOMAINS = ("umanitoba.ca", "myumanitoba.ca")
@@ -7,37 +20,79 @@ ALLOWED_DOMAINS = ("umanitoba.ca", "myumanitoba.ca")
 class AccountService:
     """Service class for handling account-related business logic."""
 
-    def __init__(self):
-        # will have a DAO instance here
-        ...
+    # def __init__(self):
+    # # def __init__(self, account_dao):
+    # #     self.account_dao = account_dao
+    #     ...
 
-    def create_account(
-            self, email: str, password: str, fname: str, lname: str
-    ) -> Account:
-        """Creates a new account with the provided details.
+    # def create_account(
+    #         self, email: str, password: str, fname: str, lname: str
+    # ) -> Account:
+    #     """Creates a new account with the provided details.
+    #        Validates provided details before creating account.
 
-        Args:
-            email (str): The email address for the new account.
-            password (str): The password for the new account.
-            fname (str): The first name of the account holder.
-            lname (str): The last name of the account holder.
+    #     Args:
+    #         email (str): The email address for the new account.
+    #         password (str): The password for the new account.
+    #         fname (str): The first name of the account holder.
+    #         lname (str): The last name of the account holder.
 
-        Returns:
-            Account: The newly created account domain model.
-        """
+    #     Returns:
+    #         Account: The newly created account domain model.
+    #     """
+    #     email, password, fname, lname = self.validate_account(email, password, fname, lname)
+
+    #     # should call DAO create account here
+    #     # if self.account_dao._account_db.get_by_email(email) is not None:
+    #     #     raise ValidationError("Email is already in use.")
+    #     ## convert into account domain model
+    #     account: Account = Account(
+    #         email=email,
+    #         password=password,
+    #         fname=fname,
+    #         lname=lname,
+    #     )
+
+    #     # call account_manager.create_account to add account to db
+    #     try:
+    #         AccountManager.create_account(account)
+    #     catch:
+    #         email exists error
+
+    #     return account
+
+
+class AccountService:
+    def __init__(self, account_manager):
+        self.account_manager = account_manager
+        
+    # def __init__(self, db=None):
+    #     # db = DBUtility.instance()
+    #     # account_db = MySQLAccountDB(db=db)
+    #     # self.account_manager = AccountManager(account_db)
+    #     self.account_manager = AccountManager(db)
+
+
+
+    def create_account(self, email: str, password: str, fname: str, lname: str) -> Account:
         email, password, fname, lname = self.validate_account(email, password, fname, lname)
 
-        # should call DAO create account here
+        account = Account(email=email, password=password, fname=fname, lname=lname)
 
-        ## convert into account domain model
-        account: Account = Account(
-            email=email,
-            password=password,
-            fname=fname,
-            lname=lname,
-        )
+        try:
+            created = self.account_manager.create_account(account)
+        except ValidationError as e:
+            msg = str(e).lower()
+            if "exists" in msg or "already" in msg or "duplicate" in msg:
+                raise AccountAlreadyExistsError(status_code=409, message="Email is already in use")
+            raise ApiError(status_code=400, message=str(e))
+        except DatabaseUnavailableError:
+            raise ApiError(status_code=503, message="Database unavailable")
+        except Exception:
+            raise ApiError(status_code=500, message="Internal server error")
 
-        return account
+        return created if created is not None else account
+
 
     def validate_account(self, email: str, password: str, fname: str, lname: str):
         """ Validates created account information
@@ -69,7 +124,7 @@ class AccountService:
         domain = email.split("@")[-1]
         if domain not in ALLOWED_DOMAINS:
             raise ValidationError("Email must be a valid University of Manitoba email address "
-                                    "(@umanitoba.ca / @myumanitoba.ca")
+                                    "(@umanitoba.ca / @myumanitoba.ca)")
 
     def validate_password(self, password: str):
         if not re.fullmatch(PASSWORD_REGEX, password):

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt
@@ -10,13 +10,18 @@ from src.business_logic.services import AccountService
 from src.domain_models import Account
 
 router = APIRouter(prefix="/accounts")
-service = AccountService()
+# service = AccountService()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/accounts/login")
 
 
+def get_account_service(request: Request) -> AccountService:
+    return request.app.state.account_service
+
 @router.post("", response_model=AccountResponse)
-def create_account(request: AccountSignup):
+# def create_account(request: AccountSignup):
+def create_account(request: AccountSignup, service: AccountService = Depends(get_account_service)):
+
     """Creates a new account.
 
     Args:
@@ -38,7 +43,8 @@ def create_account(request: AccountSignup):
 
 
 @router.post("/login", response_model=Token)
-def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
+def login_account(form_data: OAuth2PasswordRequestForm = Depends(), 
+                  service: AccountService = Depends(get_account_service),):
     """
     Authenticates a user and returns a JWT token.
 
@@ -66,7 +72,13 @@ def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
 
 
 @router.get("/me", response_model=AccountResponse)
-def get_account(token: str = Depends(oauth2_scheme)):
+# def get_account(token: str = Depends(oauth2_scheme)):
+def get_account(
+    token: str = Depends(oauth2_scheme),
+    service: AccountService = Depends(get_account_service),
+):
+    ...
+
     """Retrieves the current user's information using the user_id from the JWT token.
 
     Args:

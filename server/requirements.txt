@@ -10,4 +10,4 @@ pycparser==3.0
 pydantic[email]==2.12.5
 PyJWT==2.11.0
 
-python-multipart==0.0.22
+python-multipart==0.0.9
