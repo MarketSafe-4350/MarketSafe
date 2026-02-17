@@ -1,6 +1,7 @@
 import jwt
 import datetime
 
+from src.business_logic.managers.account.account_manager import AccountManager
 from src import SECRET_KEY
 from src.api.errors import ApiError
 from src.domain_models import Account
@@ -9,9 +10,8 @@ from src.domain_models import Account
 class AccountService:
     """Service class for handling account-related business logic."""
 
-    def __init__(self):
-        # will have a DAO instance here
-        ...
+    def __init__(self, account_manager: AccountManager):
+        self.account_manager = account_manager
 
     def create_account(
             self, email: str, password: str, fname: str, lname: str
@@ -42,7 +42,7 @@ class AccountService:
 
         return account
 
-    def get_account_by_userid(self, userid: str) -> Account:
+    def get_account_by_email(self, email: str) -> Account:
         """Retrieves an account by its user ID.
 
         Args:
@@ -51,24 +51,16 @@ class AccountService:
         Returns:
             Account: The retrieved account domain model.
         """
-        # do logic here (this is an example)
-        ##
-        if userid is None:
-            raise ApiError(status_code=400, message="userid cannot be None")
+        if not email:
+            raise ApiError(status_code=400, message="email is required")
 
-        # should call DAO get account here
+        account = self.account_manager.get_account_by_email(email)
 
-        acc_test: Account = Account(
-            email="test1@gmail.com",
-            password="test",
-            fname="test",
-            lname="test",
-            account_id=1,
-            verified=False,
-        )
+        if account is None:
+            raise ApiError(status_code=404, message="Account not found")
 
-        ##
-        return acc_test
+        return account
+
 
     def login(self, email: str, password: str) -> str:
 
@@ -85,13 +77,27 @@ class AccountService:
         if not email or not password:
             raise ApiError(status_code=400, message="Email and password are required")
 
-        # mock data for test, set up db check
-        if email == "test1@gmail.com" and password == "test":
-            expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
-            token = jwt.encode({
-                "sub": "test1@gmail.com",
-                "exp": expiration
-            }, SECRET_KEY, algorithm="HS256")
-            return token
+        account = self.account_manager.get_account_by_email(email)
 
-        raise ApiError(status_code=401, message="Invalid email or password")
+        if account is None:
+            raise ApiError(status_code=401, message="Invalid email or password")
+
+        if account.password != password:
+            raise ApiError(status_code=401, message="Invalid email or password")
+        
+        #for when we implement password hashing
+        ## if not bcrypt.checkpw(password.encode(), account.password.encode()):
+        #raise ApiError(status_code=401, message="Invalid email or password")
+
+        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
+
+        token = jwt.encode(
+            {
+                "sub": account.email,
+                "exp": expiration
+            },
+            SECRET_KEY,
+            algorithm="HS256"
+        )
+
+        return token
