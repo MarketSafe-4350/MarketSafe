@@ -51,13 +51,8 @@ def create_app() -> FastAPI:
 
     app.state.account_service = AccountService(acc_db_manager)
 
-    app.include_router(account_router)
-
-    # app = FastAPI(title="MarketSafe API")
-
-
     # routers
-    # app.include_router(account_router)
+    app.include_router(account_router)
 
     # exception handlers
     app.add_exception_handler(ApiError, api_error_handler)
