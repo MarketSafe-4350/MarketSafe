@@ -1,39 +1,46 @@
-<mat-card class="signup-page" appearance="outlined">
-  <mat-card-header>
-    <div class="profile-header">
-      <div class="profile-info">
-        <div class="profile-name">{{fullName}}</div>
-        <div class="profile-email">{{account?.email ?? '-'}}</div>
-        <div class="profile-verified">
-          <mat-icon [color]="isVerified ? 'primary' : undefined">
-            {{ isVerified ? 'verified' : 'info' }}
-          </mat-icon>
-          {{ isVerified ? 'Verified Student' : 'Not Verified' }}
+<app-header></app-header>
+
+<div class="page-body">
+  <mat-card class="signup-page" appearance="outlined">
+    <mat-card-header>
+      <div class="profile-header">
+        <div class="profile-info">
+          <div class="profile-name">{{fullName}}</div>
+          <div class="profile-email">{{account?.email ?? '-'}}</div>
+          <div class="profile-verified">
+            <mat-icon [color]="isVerified ? 'primary' : undefined">
+              {{ isVerified ? 'verified' : 'info' }}
+            </mat-icon>
+            {{ isVerified ? 'Verified Student' : 'Not Verified' }}
+          </div>
+        </div>
+      </div>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="section">
+      <div class="section-header">
+        <h3 class="section-title">My Rating</h3>
+      </div>
+
+      <app-rating
+        [average]="ratingAvg"
+        [reviewCount]="ratingCount"
+      ></app-rating>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+    <div class="section listing-section">
+      <div class="section-header">
+        <h3 class="section-title">My Listings</h3>
+      </div>
+
+      <div class="listings-scroll">
+        <div class="listing-grid">
+          @for (item of listings; track item.id) {
+          <app-listing-card [listing]="item"></app-listing-card>
+          }
         </div>
       </div>
     </div>
-  </mat-card-header>
-  <mat-divider></mat-divider>
-  <mat-card-content class="section">
-    <div class="section-header">
-      <h3 class="section-title">My Rating</h3>
-    </div>
-
-    <app-rating [average]="ratingAvg" [reviewCount]="ratingCount"></app-rating>
-  </mat-card-content>
-
-  <mat-divider></mat-divider>
-  <div class="section listing-section">
-    <div class="section-header">
-      <h3 class="section-title">My Listings</h3>
-    </div>
-
-    <div class="listings-scroll">
-      <div class="listing-grid">
-        @for (item of listings; track item.id) {
-        <app-listing-card [listing]="item"></app-listing-card>
-        }
-      </div>
-    </div>
-  </div>
-</mat-card>
+  </mat-card>
+</div>
