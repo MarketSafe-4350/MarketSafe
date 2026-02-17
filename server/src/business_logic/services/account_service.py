@@ -1,7 +1,7 @@
 from src.api.errors import ApiError
 from src.domain_models import Account
 from src.utils.validation import Validation
-from src.utils.errors import ValidationError, DatabaseUnavailableError, AccountAlreadyExistsError
+from src.utils.errors import ValidationError, DatabaseUnavailableError, AccountAlreadyExistsError, AppError
 from src.config import SECRET_KEY
 from src.business_logic.managers.account import AccountManager
 # from src.business_logic.managers.account import IAccountManager
@@ -65,7 +65,6 @@ class AccountService:
 class AccountService:
     def __init__(self, account_manager):
         self.account_manager = account_manager
-        
     # def __init__(self, db=None):
     #     # db = DBUtility.instance()
     #     # account_db = MySQLAccountDB(db=db)
@@ -75,21 +74,61 @@ class AccountService:
 
 
     def create_account(self, email: str, password: str, fname: str, lname: str) -> Account:
+        """Creates a new account with the provided details.
+           Validates provided details before creating account.
+
+        Args:
+            email (str): The email address for the new account.
+            password (str): The password for the new account.
+            fname (str): The first name of the account holder.
+            lname (str): The last name of the account holder.
+
+        Returns:
+            Account: The newly created account domain model.
+        """
+
+
         email, password, fname, lname = self.validate_account(email, password, fname, lname)
 
         account = Account(email=email, password=password, fname=fname, lname=lname)
 
         try:
-            created = self.account_manager.create_account(account)
-        except ValidationError as e:
-            msg = str(e).lower()
-            if "exists" in msg or "already" in msg or "duplicate" in msg:
-                raise AccountAlreadyExistsError(status_code=409, message="Email is already in use")
-            raise ApiError(status_code=400, message=str(e))
-        except DatabaseUnavailableError:
-            raise ApiError(status_code=503, message="Database unavailable")
+            return self.account_manager.create_account(account)
+
+        except (ValidationError, AccountAlreadyExistsError, DatabaseUnavailableError):
+            # already has correct status_code + message
+            raise
+
         except Exception:
-            raise ApiError(status_code=500, message="Internal server error")
+            # unexpected bug
+            raise AppError(message="Internal server error", status_code=500)
+    
+        # try:
+        #     created = self.account_manager.create_account(account)
+        # except AccountAlreadyExistsError as e:
+        #     # service layer maps domain conflict to API response
+        #     raise AccountAlreadyExistsError(status_code=409, message=str(e))
+
+        # except ValidationError as e:
+        #     raise ApiError(status_code=422, message=str(e))
+
+        # except DatabaseUnavailableError as e:
+        #     raise ApiError(status_code=503, message=str(e))
+
+        # except Exception:
+        #     raise ApiError(status_code=500, message="Internal server error")
+
+
+        
+        # except ValidationError as e:
+        #     msg = str(e).lower()
+        #     if "exists" in msg or "already" in msg or "duplicate" in msg:
+        #         raise AccountAlreadyExistsError(status_code=409, message="Email is already in use")
+        #     raise ApiError(status_code=400, message=str(e))
+        # except DatabaseUnavailableError:
+        #     raise ApiError(status_code=503, message="Database unavailable")
+        # except Exception:
+        #     raise ApiError(status_code=500, message="Internal server error")
 
         return created if created is not None else account
 
