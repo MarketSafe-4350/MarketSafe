@@ -1,3 +1,4 @@
+from typing import Optional
 from src.utils import ValidationError, UnapprovedBehaviorError, Validation
 
 
@@ -44,7 +45,7 @@ class Account:
             fname: str,
             lname: str,
             *,
-            account_id: int | None = None,
+            account_id: Optional[int] = None,
             verified: bool = False,
     ):
         # Internal state (protected by convention)

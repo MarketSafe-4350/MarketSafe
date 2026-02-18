@@ -1,65 +1,120 @@
 <mat-card class="signup-page" appearance="outlined">
-  <mat-card-header>
-    <button mat-icon-button class="back-button" type="button" (click)="goBack()" aria-label="Back">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <div class="header-text">
-      <mat-card-title>MarketSafe</mat-card-title>
-      <mat-card-subtitle>Sign up to get started</mat-card-subtitle>
-    </div>
-  </mat-card-header>
+  @if (!verificationLink()) {
+    <mat-card-header>
+      <button mat-icon-button class="back-button" type="button" (click)="goBack()" aria-label="Back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-text">
+        <mat-card-title>MarketSafe</mat-card-title>
+        <mat-card-subtitle>Sign up to get started</mat-card-subtitle>
+      </div>
+    </mat-card-header>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <mat-card-content>
-      <h1 class="create-account">Create Account</h1>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-card-content>
+        <h1 class="create-account">Create Account</h1>
 
-      <label class="plain-label" for="firstName">First Name</label>
-      <mat-form-field appearance="outline" class="input-field">
-        <mat-label> First Name </mat-label>
-        <input matInput formControlName="firstName" (blur)="markTouched('firstName')" />
-        @if (form.get('firstName')?.invalid){
-        <mat-error>{{getErrorMessage('firstName')}}</mat-error>
+        <label class="plain-label" for="firstName">First Name</label>
+        <mat-form-field appearance="outline" class="input-field">
+          <mat-label> First Name </mat-label>
+          <input matInput formControlName="firstName" (blur)="markTouched('firstName')" />
+          @if (form.get('firstName')?.invalid){
+          <mat-error>{{getErrorMessage('firstName')}}</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="plain-label" for="lastName">Last Name</label>
+        <mat-form-field appearance="outline" class="input-field">
+          <mat-label> Last Name </mat-label>
+          <input matInput formControlName="lastName" (blur)="markTouched('lastName')" />
+          @if (form.get('lastName')?.invalid){
+          <mat-error>{{getErrorMessage('lastName')}}</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="plain-label" for="email">University Email</label>
+        <mat-form-field appearance="outline" class="input-field">
+          <mat-label> Email </mat-label>
+          <input matInput formControlName="email" (blur)="markTouched('email')" />
+          @if (form.get('email')?.invalid){
+          <mat-error>{{getErrorMessage('email')}}</mat-error>
+          }
+        </mat-form-field>
+
+        <label class="plain-label" for="password">Password</label>
+        <mat-form-field appearance="outline" class="input-field">
+          <mat-label> Password </mat-label>
+          <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
+            (blur)="markTouched('password')" />
+          @if (form.get('password')?.invalid) {
+          <mat-error>{{ getErrorMessage('password') }}</mat-error>
+          }
+          <button type="button" mat-icon-button matSuffix (click)="toggleHide($event, hidePassword)"
+            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="!hidePassword()">
+            <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        @if (error()) {
+          <div class="error-message">
+            {{ error() }}
+          </div>
         }
-      </mat-form-field>
-
-      <label class="plain-label" for="lastName">Last Name</label>
-      <mat-form-field appearance="outline" class="input-field">
-        <mat-label> Last Name </mat-label>
-        <input matInput formControlName="lastName" (blur)="markTouched('lastName')" />
-        @if (form.get('lastName')?.invalid){
-        <mat-error>{{getErrorMessage('lastName')}}</mat-error>
-        }
-      </mat-form-field>
-
-      <label class="plain-label" for="email">University Email</label>
-      <mat-form-field appearance="outline" class="input-field">
-        <mat-label> Email </mat-label>
-        <input matInput formControlName="email" (blur)="markTouched('email')" />
-        @if (form.get('email')?.invalid){
-        <mat-error>{{getErrorMessage('email')}}</mat-error>
-        }
-      </mat-form-field>
-
-      <label class="plain-label" for="password">Password</label>
-      <mat-form-field appearance="outline" class="input-field">
-        <mat-label> Password </mat-label>
-        <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
-          (blur)="markTouched('password')" />
-        @if (form.get('password')?.invalid) {
-        <mat-error>{{ getErrorMessage('password') }}</mat-error>
-        }
-        <button type="button" mat-icon-button matSuffix (click)="toggleHide($event, hidePassword)"
-          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="!hidePassword()">
-          <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </mat-card-content>
+      <mat-card-actions type="submit">
+        <button mat-raised-button [disabled]="loading()">
+          {{ loading() ? 'Creating Account...' : 'Create Account' }}
         </button>
-      </mat-form-field>
+      </mat-card-actions>
+      <mat-card-footer>
+        Already have an account?
+        <a routerLink="/login" class="login-link">Log in</a>
+      </mat-card-footer>
+    </form>
+  } @else {
+    <mat-card-header>
+      <div class="header-text">
+        <mat-card-title>MarketSafe</mat-card-title>
+        <mat-card-subtitle>Verify Your Email</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content class="verification-content">
+      <h1 class="verification-title">Email Verification Link</h1>
+      
+      <p class="verification-message">
+        Click the button below to verify your email address:
+      </p>
+
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="verify-button"
+        (click)="openVerificationLink()">
+        Verify Email
+      </button>
+
+      <p class="link-label">Or copy this link:</p>
+      
+      <div class="link-container">
+        <code class="verification-link">{{ verificationLink() }}</code>
+        <button 
+          mat-icon-button 
+          (click)="copyToClipboard(verificationLink() || '')"
+          matTooltip="Copy to clipboard">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      </div>
+
+      <p class="expiry-notice">
+        This link expires in 5 minutes.
+      </p>
     </mat-card-content>
-    <mat-card-actions type="submit">
-      <button mat-raised-button>Create Account</button>
+
+    <mat-card-actions>
+      <button mat-stroked-button (click)="goBack()">
+        Back to Sign Up
+      </button>
     </mat-card-actions>
-    <mat-card-footer>
-      Already have an account?
-      <a routerLink="/login" class="login-link">Log in</a>
-    </mat-card-footer>
-  </form>
+  }
 </mat-card>
