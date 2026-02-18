@@ -14,4 +14,5 @@ EXPOSE 8000
 
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
+# docker build -t marketsafe-api -f server/Dockerfile server (build image)
 # docker run --name marketsafe-api -p 8000:8000 marketsafe-api (run container)
