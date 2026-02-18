@@ -1,0 +1,39 @@
+<header class="top-header">
+  <div class="header-left">
+    <span class="logo-text">MarketSafe</span>
+  </div>
+
+  <div class="header-right">
+    <button mat-icon-button disableRipple aria-label="Notifications">
+      <mat-icon>notifications</mat-icon>
+    </button>
+
+    <button
+      mat-button
+      class="user-profile-btn"
+      type="button"
+      (click)="goToProfile()"
+      disableRipple
+    >
+      <span class="user-name">Someone</span>
+    </button>
+
+    <button
+      mat-icon-button
+      class="user-dropdown-btn"
+      disableRipple
+      [matMenuTriggerFor]="userMenu"
+      aria-label="User menu"
+      disableRipple
+    >
+      <mat-icon>expand_more</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+</header>
