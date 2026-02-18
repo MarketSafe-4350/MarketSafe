@@ -1,6 +1,12 @@
 <mat-card class="signup-page" appearance="outlined">
   <mat-card-header>
-    <button mat-icon-button class="back-button" type="button" (click)="goBack()" aria-label="Back">
+    <button
+      mat-icon-button
+      class="back-button"
+      type="button"
+      (click)="goBack()"
+      aria-label="Back"
+    >
       <mat-icon>arrow_back</mat-icon>
     </button>
     <div class="header-text">
@@ -16,7 +22,11 @@
       <label class="plain-label" for="firstName">First Name</label>
       <mat-form-field appearance="outline" class="input-field">
         <mat-label> First Name </mat-label>
-        <input matInput formControlName="firstName" (blur)="markTouched('firstName')" />
+        <input
+          matInput
+          formControlName="firstName"
+          (blur)="markTouched('firstName')"
+        />
         @if (form.get('firstName')?.invalid){
         <mat-error>{{getErrorMessage('firstName')}}</mat-error>
         }
@@ -25,7 +35,11 @@
       <label class="plain-label" for="lastName">Last Name</label>
       <mat-form-field appearance="outline" class="input-field">
         <mat-label> Last Name </mat-label>
-        <input matInput formControlName="lastName" (blur)="markTouched('lastName')" />
+        <input
+          matInput
+          formControlName="lastName"
+          (blur)="markTouched('lastName')"
+        />
         @if (form.get('lastName')?.invalid){
         <mat-error>{{getErrorMessage('lastName')}}</mat-error>
         }
@@ -43,14 +57,26 @@
       <label class="plain-label" for="password">Password</label>
       <mat-form-field appearance="outline" class="input-field">
         <mat-label> Password </mat-label>
-        <input matInput formControlName="password" [type]="hidePassword() ? 'password' : 'text'"
-          (blur)="markTouched('password')" />
+        <input
+          matInput
+          formControlName="password"
+          [type]="hidePassword() ? 'password' : 'text'"
+          (blur)="markTouched('password')"
+        />
         @if (form.get('password')?.invalid) {
         <mat-error>{{ getErrorMessage('password') }}</mat-error>
         }
-        <button type="button" mat-icon-button matSuffix (click)="toggleHide($event, hidePassword)"
-          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="!hidePassword()">
-          <mat-icon>{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="toggleHide($event, hidePassword)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="!hidePassword()"
+        >
+          <mat-icon
+            >{{hidePassword() ? 'visibility_off' : 'visibility'}}</mat-icon
+          >
         </button>
       </mat-form-field>
     </mat-card-content>
@@ -59,7 +85,7 @@
     </mat-card-actions>
     <mat-card-footer>
       Already have an account?
-      <a routerLink="/login" class="login-link">Log in</a>
+      <button (click)="goToLogin()" class="login-link">Log in</button>
     </mat-card-footer>
   </form>
 </mat-card>
