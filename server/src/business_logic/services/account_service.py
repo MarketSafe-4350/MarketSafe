@@ -42,7 +42,6 @@ class AccountService:
         try:
             created = self.account_manager.create_account(account)
         except AccountAlreadyExistsError as e:
-            # service layer maps domain conflict to API response
             raise AccountAlreadyExistsError(status_code=409, message=str(e))
 
         except ValidationError as e:

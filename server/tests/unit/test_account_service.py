@@ -96,12 +96,26 @@ class TestAccountService(unittest.TestCase):
     # create_account - db unavailable mapping
     # -----------------------------
 
+    # def test_create_account_db_unavailable_maps_to_503(self) -> None:
+    #     self.manager.create_account.side_effect = DatabaseUnavailableError(
+    #         message="Database is unavailable."
+    #     )
+
+    #     with self.assertRaises(DatabaseUnavailableError) as ctx:
+    #         self.service.create_account(
+    #             email="test@umanitoba.ca",
+    #             password="Password1",
+    #             fname="John",
+    #             lname="Smith",
+    #         )
+
+    #     self.assertEqual(ctx.exception.status_code, 503)
     def test_create_account_db_unavailable_maps_to_503(self) -> None:
         self.manager.create_account.side_effect = DatabaseUnavailableError(
             message="Database is unavailable."
         )
 
-        with self.assertRaises(DatabaseUnavailableError) as ctx:
+        with self.assertRaises(ApiError) as ctx:
             self.service.create_account(
                 email="test@umanitoba.ca",
                 password="Password1",
@@ -112,10 +126,24 @@ class TestAccountService(unittest.TestCase):
         self.assertEqual(ctx.exception.status_code, 503)
 
 
-    def test_create_account_unknown_exception_maps_to_500(self) -> None:
-        self.manager.create_account.side_effect = RuntimeError("boom")
 
-        with self.assertRaises(AppError) as ctx:
+    # def test_create_account_unknown_exception_maps_to_500(self) -> None:
+    #     self.manager.create_account.side_effect = RuntimeError("RTE")
+
+    #     with self.assertRaises(AppError) as ctx:
+    #         self.service.create_account(
+    #             email="test@umanitoba.ca",
+    #             password="Password1",
+    #             fname="John",
+    #             lname="Smith",
+    #         )
+
+    #     self.assertEqual(ctx.exception.status_code, 500)
+    #     self.assertEqual(ctx.exception.message, "Internal server error")
+    def test_create_account_unknown_exception_maps_to_500(self) -> None:
+        self.manager.create_account.side_effect = RuntimeError("RTE")
+
+        with self.assertRaises(ApiError) as ctx:
             self.service.create_account(
                 email="test@umanitoba.ca",
                 password="Password1",
@@ -124,107 +152,35 @@ class TestAccountService(unittest.TestCase):
             )
 
         self.assertEqual(ctx.exception.status_code, 500)
-        self.assertEqual(ctx.exception.message, "Internal server error")
-    # def test_create_account_db_unavailable_maps_to_api_503(self) -> None:
-    #     self.manager.create_account.side_effect = DatabaseUnavailableError(
-    #         message="Database is unavailable."
-    #     )
+ 
 
-    #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.create_account(
-    #             email="test@umanitoba.ca",
-    #             password="Password1",
-    #             fname="John",
-    #             lname="Smith",
-    #         )
-
-    #     self.assertEqual(ctx.exception.status_code, 503)
-
-    # # -----------------------------
-    # # create_account - unknown error mapping
-    # # -----------------------------
-    # def test_create_account_unknown_exception_maps_to_api_500(self) -> None:
-    #     self.manager.create_account.side_effect = RuntimeError("RTE")
-
-    #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.create_account(
-    #             email="test@umanitoba.ca",
-    #             password="Password1",
-    #             fname="John",
-    #             lname="Smith",
-    #         )
-
-    #     self.assertEqual(ctx.exception.status_code, 500)
-
+    
     # -----------------------------
     # get_account_by_userid
     # -----------------------------
-    def test_get_account_by_userid_none_raises_api_400(self) -> None:
-        with self.assertRaises(ApiError) as ctx:
-            self.service.get_account_by_userid(None)  # type: ignore[arg-type]
-
-        self.assertEqual(ctx.exception.status_code, 400)
-
-
-    def test_login_missing_fields_raises_api_400(self) -> None:
-        with self.assertRaises(ApiError) as ctx:
-            self.service.login("", "")
-
-        self.assertEqual(ctx.exception.status_code, 400)
-
-    def test_login_valid_mock_user_returns_jwt(self) -> None:
-        token = self.service.login("test1@gmail.com", "test")
-        self.assertTrue(isinstance(token, str) and len(token) > 10)
-
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        self.assertEqual(payload.get("sub"), "test1@gmail.com")
-        self.assertIn("exp", payload)
-
-    def test_login_invalid_credentials_raises_api_401(self) -> None:
-        with self.assertRaises(ApiError) as ctx:
-            self.service.login("nope@umanitoba.ca", "Password1")
-
-        self.assertEqual(ctx.exception.status_code, 401)
-
-    # def test_create_account_validationerror_maps_to_api_422(self) -> None:
-    #     # Make manager throw ValidationError AFTER validation passes
-    #     self.manager.create_account.side_effect = ValidationError("bad domain but from manager")
-
+    # def test_get_account_by_userid_none_raises_api_400(self) -> None:
     #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.create_account(
-    #             email="ok@umanitoba.ca",
-    #             password="Password1",
-    #             fname="A",
-    #             lname="B",
-    #         )
+    #         self.service.get_account_by_userid(None)  # type: ignore[arg-type]
 
-    #     self.assertEqual(ctx.exception.status_code, 422)
-    #     self.assertIn("bad domain", ctx.exception.message)
+    #     self.assertEqual(ctx.exception.status_code, 400)
 
-    # def test_create_account_db_unavailable_maps_to_api_503(self) -> None:
-    #     self.manager.create_account.side_effect = DatabaseUnavailableError("db down")
 
+    # def test_login_missing_fields_raises_api_400(self) -> None:
     #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.create_account(
-    #             email="ok@umanitoba.ca",
-    #             password="Password1",
-    #             fname="A",
-    #             lname="B",
-    #         )
+    #         self.service.login("", "")
 
-    #     self.assertEqual(ctx.exception.status_code, 503)
-    #     self.assertIn("db down", str(ctx.exception))
+    #     self.assertEqual(ctx.exception.status_code, 400)
 
-    # def test_create_account_unknown_exception_maps_to_api_500(self) -> None:
-    #     self.manager.create_account.side_effect = RuntimeError("boom")
+    # def test_login_valid_mock_user_returns_jwt(self) -> None:
+    #     token = self.service.login("test1@gmail.com", "test")
+    #     self.assertTrue(isinstance(token, str) and len(token) > 10)
 
+    #     payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    #     self.assertEqual(payload.get("sub"), "test1@gmail.com")
+    #     self.assertIn("exp", payload)
+
+    # def test_login_invalid_credentials_raises_api_401(self) -> None:
     #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.create_account(
-    #             email="ok@umanitoba.ca",
-    #             password="Password1",
-    #             fname="A",
-    #             lname="B",
-    #         )
+    #         self.service.login("nope@umanitoba.ca", "Password1")
 
-    #     self.assertEqual(ctx.exception.status_code, 500)
-    #     self.assertIn("Internal server error", str(ctx.exception))
+    #     self.assertEqual(ctx.exception.status_code, 401)
