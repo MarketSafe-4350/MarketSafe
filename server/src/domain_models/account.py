@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from src.domain_models import Listing
+from .listing import Listing
 from src.utils import ValidationError, UnapprovedBehaviorError, Validation
 
 
