@@ -9,6 +9,8 @@ from src.config import FRONTEND_URL
 from src.api.errors.api_error import ApiError
 from src.api.converter import AccountResponse, AccountSignup, Token, SignupResponse, VerifyEmailResponse
 from src.business_logic.services import AccountService
+from src.business_logic.managers.account import AccountManager
+from src.db.account.mysql import MySQLAccountDB
 from src.db import DBUtility
 from src.db.email_verification_token.mysql import MySQLEmailVerificationTokenDB
 from src.domain_models import Account
@@ -26,16 +28,14 @@ router = APIRouter(prefix="/accounts")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/accounts/login")
 
 # Helper function to get service when needed
+
+
 def _get_service() -> AccountService:
-    """Initialize service with database dependency."""
-    try:
-        db = DBUtility.instance()
-        token_db = MySQLEmailVerificationTokenDB(db=db)
-        return AccountService(token_db=token_db)
-    except Exception as e:
-        logger.error(f"Failed to initialize AccountService: {e}")
-        # Fallback to basic service without token verification
-        return AccountService()
+    db = DBUtility.instance()
+    account_db = MySQLAccountDB(db=db)
+    account_manager = AccountManager(account_db=account_db)
+    token_db = MySQLEmailVerificationTokenDB(db=db)
+    return AccountService(account_manager=account_manager, token_db=token_db)
 
 
 @router.post("", response_model=SignupResponse)
@@ -61,10 +61,10 @@ def create_account(request: AccountSignup):
         # NOTE: In production, this would be done after saving to DB
         # For now, using a mock account_id for demonstration
         raw_token = service.generate_and_store_verification_token(account_id=1)
-        
+
         # Create verification link
         verification_link = f"{FRONTEND_URL}/verify-email?token={raw_token}"
-        
+
         logger.info(f"Account created for {account.email}")
         logger.info(f"Verification link: {verification_link}")
 
@@ -113,25 +113,22 @@ def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @router.get("/me", response_model=AccountResponse)
 def get_account(token: str = Depends(oauth2_scheme)):
-    """Retrieves the current user's information using the user_id from the JWT token.
-
-    Args:
-        token (str): The JWT token containing the user's identity.
-
-    Returns:
-        AccountResponse: The account details of the authenticated user.
-    """
+    """Retrieves the current user's information using the email from the JWT token."""
     service = _get_service()
     try:
-
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        account_id = payload.get("sub")
+        email = payload.get("sub")   # JWT subject is email
 
-        if not account_id:
+        if not email:
             raise ApiError(status_code=401, detail="Could not validate user.")
 
-        account = service.get_account_by_userid(account_id)
-        return AccountResponse(email=account.email, fname=account.fname, lname=account.lname)
+        account = service.get_account_by_email(email)
+
+        return AccountResponse(
+            email=account.email,
+            fname=account.fname,
+            lname=account.lname
+        )
 
     except jwt.ExpiredSignatureError:
         raise ApiError(status_code=401, detail="Token has expired.")
@@ -147,9 +144,9 @@ def verify_email(token: str = Query(..., min_length=10)):
     service = _get_service()
     try:
         account = service.verify_email_token(token)
-        
+
         logger.info(f"Email verified for account {account.email}")
-        
+
         return VerifyEmailResponse(
             email=account.email,
             fname=account.fname,
@@ -170,3 +167,11 @@ def verify_email(token: str = Query(..., min_length=10)):
             status_code=500,
             content={"error_message": "An error occurred during verification"}
         )
+
+
+def create_account_router(service: AccountService):
+    """
+    We ignore the passed-in service for now because this module already uses _get_service().
+    """
+    return router
+

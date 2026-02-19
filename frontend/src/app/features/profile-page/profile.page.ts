@@ -12,6 +12,7 @@ import { Listing } from '../../shared/models/listing.models';
 
 import { RatingComponent } from '../../components/rating/rating.component';
 import { ListingCardComponent } from '../../components/listing-card/listing-card.component';
+import { HeaderComponent } from '../../components/header/header.component';
 
 import { HttpClient } from '@angular/common/http';
 @Component({
@@ -27,6 +28,7 @@ import { HttpClient } from '@angular/common/http';
     MatChipsModule,
     RatingComponent,
     ListingCardComponent,
+    HeaderComponent,
   ],
 })
 export class ProfilePageComponent implements OnInit {

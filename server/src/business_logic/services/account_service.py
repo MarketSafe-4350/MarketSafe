@@ -21,10 +21,7 @@ logger = logging.getLogger(__name__)
 class AccountService:
     """Service class for handling account-related business logic."""
 
-    def __init__(
-        self,
-        token_db: MySQLEmailVerificationTokenDB = None,
-    ):
+    def __init__(self, account_manager=None, token_db: MySQLEmailVerificationTokenDB = None):
         """
         Initialize AccountService.
 
@@ -33,6 +30,7 @@ class AccountService:
         """
         # Token database - will be injected or created if needed
         self.token_db = token_db
+        self.account_manager = account_manager
 
     def create_account(
             self, email: str, password: str, fname: str, lname: str

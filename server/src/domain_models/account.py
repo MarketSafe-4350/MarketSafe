@@ -1,4 +1,6 @@
-from typing import Optional
+from typing import List, Optional
+
+from .listing import Listing
 from src.utils import ValidationError, UnapprovedBehaviorError, Validation
 
 
@@ -47,6 +49,8 @@ class Account:
             *,
             account_id: Optional[int] = None,
             verified: bool = False,
+            listings: Optional[List[Listing]] = None,
+
     ):
         # Internal state (protected by convention)
         self._id = account_id
@@ -55,6 +59,8 @@ class Account:
         self._fname = Validation.require_str(fname, "fname")
         self._lname = Validation.require_str(lname, "lname")
         self._verified = Validation.is_boolean(verified, "verified")
+
+        self._listings: List[Listing] = list(listings) if listings is not None else []
 
     # ==============================
     # ID (read-only, may be None before DB insert)
@@ -137,6 +143,36 @@ class Account:
         self._verified = value
 
     # ==============================
+    # LISTINGS (owned by this account)
+    # ==============================
+
+    @property
+    def listings(self) -> List[Listing]:
+        # return a copy to avoid accidental external mutation
+        return list(self._listings)
+
+    def add_listing(self, listing: Listing) -> None:
+        Validation.require_not_none(listing, "listing")
+
+        # If account is persisted, ensure the listing matches this seller
+        if self._id is not None and listing.seller_id != self._id:
+            raise UnapprovedBehaviorError(
+                f"Cannot add Listing(seller_id={listing.seller_id}) to Account(id={self._id})."
+            )
+
+        self._listings.append(listing)
+
+    def remove_listing(self, listing_id: int) -> None:
+        listing_id = Validation.require_positive_int(listing_id, "listing_id")
+
+        for i, l in enumerate(self._listings):
+            if l.id == listing_id:
+                self._listings.pop(i)
+                return
+
+        raise ValidationError(f"Listing with id={listing_id} not found in this account.")
+
+    # ==============================
     # DEBUG REPRESENTATION
     # ==============================
 
@@ -146,5 +182,8 @@ class Account:
             f"email={self._email!r}, "
             f"fname={self._fname!r}, "
             f"lname={self._lname!r}, "
-            f"verified={self._verified})"
+            f"verified={self._verified}, "
+            f"listings_count={len(self._listings)})"
+            f"listings={self._listings})"
+
         )

@@ -27,7 +27,6 @@ import {
   PASSWORD_REGEX,
 } from '../../shared/auth-validation.constants';
 
-
 type Messages = Record<string, Record<string, string>>;
 
 @Component({
@@ -59,7 +58,6 @@ export class SignupComponent {
 
   private readonly router = inject(Router);
   private readonly http = inject(HttpClient);
-
 
   // letters, spaces, hyphen, apostrophe
   private readonly nameRegex = /^[a-zA-Z'-\s]+$/;
@@ -117,6 +115,9 @@ export class SignupComponent {
     this.router.navigate(['/']);
   }
 
+  goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
 
   markTouched(controlName: string): void {
     this.form.get(controlName)?.markAsTouched();
