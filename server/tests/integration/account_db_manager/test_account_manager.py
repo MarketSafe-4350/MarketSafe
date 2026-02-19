@@ -8,17 +8,24 @@ from src.db.account.mysql import MySQLAccountDB
 
 from src.domain_models import Account
 from src.utils import AccountAlreadyExistsError, AccountNotFoundError
+from tests.helpers.integration_db import ensure_tables_exist
 
 from tests.helpers.integration_db_session import acquire, get_db, release
 
 
 class TestAccountManagerIntegration(unittest.TestCase):
+    required_tables = ("account",)
+
     @classmethod
     def setUpClass(cls) -> None:
         cls._session = acquire(timeout_s=60)
         cls._db = get_db()
         cls._account_db = MySQLAccountDB(cls._db)
         cls._manager = AccountManager(cls._account_db)
+
+        # Ensure schema needed by this test class exists
+        if cls.required_tables:
+            ensure_tables_exist(cls._db, tables=cls.required_tables, timeout_s=60)
 
     @classmethod
     def tearDownClass(cls) -> None:

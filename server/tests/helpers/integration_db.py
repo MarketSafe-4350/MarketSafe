@@ -8,28 +8,37 @@ from typing import Optional
 from src.db.db_utils import DBUtility
 from tests.helpers.docker_db import DockerComposeConfig, ensure_db_for_tests, down
 from sqlalchemy import text
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import OperationalError, SQLAlchemyError
 import time
 
 
 
 
 
-def wait_for_db_ready(db: DBUtility, timeout_s: float = 20.0) -> None:
+def ensure_tables_exist(db: DBUtility, tables: tuple[str, ...], timeout_s: float = 30.0) -> None:
+    schema = db.database
+    import time
     deadline = time.time() + timeout_s
-    last: Exception | None = None
+    table_sql = text("""
+        SELECT COUNT(*) AS c
+        FROM information_schema.tables
+        WHERE table_schema = :schema
+          AND table_name IN :tables
+    """)
 
+    last = None
     while time.time() < deadline:
         try:
-            with db._engine.connect() as conn:
-                conn.execute(text("SELECT 1"))
-            return
-        except OperationalError as e:
+            with db.connect() as conn:
+                c = conn.execute(table_sql, {"schema": schema, "tables": tuple(tables)}).scalar_one()
+                if int(c) == len(tables):
+                    return
+                last = f"have {c}/{len(tables)}"
+        except Exception as e:
             last = e
-            time.sleep(0.4)
+        time.sleep(0.4)
 
-    raise RuntimeError(f"DB not ready after {timeout_s}s. Last error: {last}")
-
+    raise RuntimeError(f"Schema not ready for {tables} in schema '{schema}'. Last: {last}")
 
 @dataclass
 class IntegrationDBContext:
@@ -86,7 +95,6 @@ class IntegrationDBContext:
             )
 
         db = DBUtility.instance()
-        wait_for_db_ready(db, timeout_s=timeout_s)
 
         assert db is not None
 
