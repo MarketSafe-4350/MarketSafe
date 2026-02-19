@@ -8,7 +8,7 @@ from src.db.account.mysql import MySQLAccountDB
 
 from src.domain_models import Account
 from src.utils import AccountAlreadyExistsError, AccountNotFoundError
-from tests.helpers.integration_db import ensure_tables_exist
+from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
 
 from tests.helpers.integration_db_session import acquire, get_db, release
 
@@ -18,22 +18,20 @@ class TestAccountManagerIntegration(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+
         cls._session = acquire(timeout_s=60)
         cls._db = get_db()
         cls._account_db = MySQLAccountDB(cls._db)
         cls._manager = AccountManager(cls._account_db)
 
         # Ensure schema needed by this test class exists
-        if cls.required_tables:
-            ensure_tables_exist(cls._db, tables=cls.required_tables, timeout_s=60)
+        ensure_tables_exist(cls._db,  timeout_s=60)
+        reset_all_tables(cls._db)
 
     @classmethod
     def tearDownClass(cls) -> None:
         release(cls._session, remove_volumes=False)
 
-    def setUp(self) -> None:
-        # isolate tests
-        self._manager.clear_accounts()
 
     def _new_account(self) -> Account:
         uniq = uuid4().hex[:10]
@@ -49,11 +47,14 @@ class TestAccountManagerIntegration(unittest.TestCase):
     def test_create_account_persists_and_returns_id(self) -> None:
         acc = self._new_account()
         created = self._manager.create_account(acc)
+        self.assertIsNotNone(created, "Row missing immediately after insert -> cleanup/race/schema issue")
 
         self.assertIsNotNone(created.id)  # adjust if your property is account_id
         self.assertEqual(created.email, acc.email)
 
         fetched = self._manager.get_account_by_email(acc.email)
+        self.assertIsNotNone(fetched, "Account disappeared after update (likely cleanup race)")
+
         self.assertIsNotNone(fetched)
 
     def test_create_account_duplicate_raises(self) -> None:
@@ -66,10 +67,13 @@ class TestAccountManagerIntegration(unittest.TestCase):
     def test_set_verified_by_email_updates_row(self) -> None:
         acc = self._new_account()
         created = self._manager.create_account(acc)
+        self.assertIsNotNone(created, "Row missing immediately after insert -> cleanup/race/schema issue")
 
         self._manager.set_verified_by_email(created.email, True)
 
         updated = self._manager.get_account_by_email(created.email)
+        self.assertIsNotNone(updated, "Account disappeared after update (likely cleanup race)")
+
         self.assertIsNotNone(updated)
         self.assertIsNotNone(updated)
         self.assertTrue(bool(updated.verified))

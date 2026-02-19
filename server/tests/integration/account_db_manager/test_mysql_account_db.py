@@ -2,17 +2,16 @@ from __future__ import annotations
 
 import unittest
 from uuid import uuid4
-
+from sqlalchemy import text
 from src.db.account.mysql import MySQLAccountDB
 from src.domain_models import Account
 from src.utils import AccountAlreadyExistsError, AccountNotFoundError
-from tests.helpers.integration_db import ensure_tables_exist
+from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
 
 from tests.helpers.integration_db_session import acquire, get_db, release
 
 
 class TestMySQLAccountDB(unittest.TestCase):
-    required_tables = ("account",)
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -21,16 +20,15 @@ class TestMySQLAccountDB(unittest.TestCase):
         cls._account_db = MySQLAccountDB(cls._db)
 
         # Ensure schema needed by this test class exists
-        if cls.required_tables:
-            ensure_tables_exist(cls._db,  tables=cls.required_tables, timeout_s=60)
+
+        ensure_tables_exist(cls._db,  timeout_s=60)
+        reset_all_tables(cls._db)
 
     @classmethod
     def tearDownClass(cls) -> None:
         release(cls._session, remove_volumes=False)
 
-    def setUp(self) -> None:
-        # Keep tests isolated: clean the table before each test
-        self._account_db.clear_db()
+
 
     def _new_account(self) -> Account:
         uniq = uuid4().hex[:10]

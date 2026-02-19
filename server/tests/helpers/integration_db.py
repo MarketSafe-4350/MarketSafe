@@ -8,14 +8,27 @@ from typing import Optional
 from src.db.db_utils import DBUtility
 from tests.helpers.docker_db import DockerComposeConfig, ensure_db_for_tests, down
 from sqlalchemy import text
-from sqlalchemy.exc import OperationalError, SQLAlchemyError
-import time
 
 
 
 
+RESET_TABLES_ORDER = ("rating", "comment", "offer", "listing", "account")
 
-def ensure_tables_exist(db: DBUtility, tables: tuple[str, ...], timeout_s: float = 30.0) -> None:
+def reset_all_tables(db: DBUtility, *, tables: tuple[str, ...] = RESET_TABLES_ORDER) -> None:
+    """
+    Test helper: wipe all rows and reset auto-increment for the integration DB.
+    TRUNCATE requires child->parent order when FKs exist.
+    """
+    with db.transaction() as conn:
+        conn.execute(text("SET FOREIGN_KEY_CHECKS = 0"))
+        for t in tables:
+            conn.execute(text(f"TRUNCATE TABLE `{t}`"))
+        conn.execute(text("SET FOREIGN_KEY_CHECKS = 1"))
+
+
+def ensure_tables_exist(db: DBUtility, timeout_s: float = 30.0) -> None:
+    tables = ("account", "listing", "offer", "comment", "rating")
+
     schema = db.database
     import time
     deadline = time.time() + timeout_s
