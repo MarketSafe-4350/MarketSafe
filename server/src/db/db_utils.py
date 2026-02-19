@@ -82,6 +82,10 @@ class DBUtility:
         Validation.require_str(username, "username")
         Validation.require_not_none(password, "password")
 
+        self._database = database
+        self._host = host
+        self._port = port
+
         url = f"{driver}://{username}:{password}@{host}:{port}/{database}"
 
         self._engine: Engine = create_engine(
@@ -129,10 +133,6 @@ class DBUtility:
         except OperationalError as e:
             raise DatabaseUnavailableError("Database is unavailable.") from e
 
-    @property
-    def engine(self) -> Engine:
-        """Expose the underlying Engine (pool) if you want to share it."""
-        return self._engine
 
     @staticmethod
     def instance() -> DBUtility:
@@ -143,3 +143,23 @@ class DBUtility:
     def dispose(self) -> None:
         """Close all pooled connections (useful on app shutdown)."""
         self._engine.dispose()
+    @classmethod
+    def reset(cls) -> None:
+        if cls._instance is not None:
+            try:
+                cls._instance._engine.dispose()
+            except Exception:
+                pass
+        cls._instance = None
+
+    @property
+    def engine(self) -> Engine:
+        """Expose the underlying Engine (pool) if you want to share it."""
+        return self._engine
+
+    @property
+    def database(self) -> str:
+        return self._database
+    @property
+    def url_database(self) -> str:
+        return self._database

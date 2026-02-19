@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 import os
@@ -6,7 +7,51 @@ from typing import Optional
 
 from src.db.db_utils import DBUtility
 from tests.helpers.docker_db import DockerComposeConfig, ensure_db_for_tests, down
+from sqlalchemy import text
 
+
+
+
+RESET_TABLES_ORDER = ("rating", "comment", "offer", "listing", "account")
+
+def reset_all_tables(db: DBUtility, *, tables: tuple[str, ...] = RESET_TABLES_ORDER) -> None:
+    """
+    Test helper: wipe all rows and reset auto-increment for the integration DB.
+    TRUNCATE requires child->parent order when FKs exist.
+    """
+    with db.transaction() as conn:
+        conn.execute(text("SET FOREIGN_KEY_CHECKS = 0"))
+        for t in tables:
+            conn.execute(text(f"TRUNCATE TABLE `{t}`"))
+        conn.execute(text("SET FOREIGN_KEY_CHECKS = 1"))
+
+
+def ensure_tables_exist(db: DBUtility, timeout_s: float = 30.0) -> None:
+    tables = ("account", "listing", "offer", "comment", "rating")
+
+    schema = db.database
+    import time
+    deadline = time.time() + timeout_s
+    table_sql = text("""
+        SELECT COUNT(*) AS c
+        FROM information_schema.tables
+        WHERE table_schema = :schema
+          AND table_name IN :tables
+    """)
+
+    last = None
+    while time.time() < deadline:
+        try:
+            with db.connect() as conn:
+                c = conn.execute(table_sql, {"schema": schema, "tables": tuple(tables)}).scalar_one()
+                if int(c) == len(tables):
+                    return
+                last = f"have {c}/{len(tables)}"
+        except Exception as e:
+            last = e
+        time.sleep(0.4)
+
+    raise RuntimeError(f"Schema not ready for {tables} in schema '{schema}'. Last: {last}")
 
 @dataclass
 class IntegrationDBContext:
@@ -49,6 +94,8 @@ class IntegrationDBContext:
         pwd = os.getenv("DB_PASSWORD", "marketsafe")
         driver = os.getenv("DB_DRIVER", "mysql+pymysql")
 
+        DBUtility.reset()
+
         # DBUtility is a singleton. Initialize only if not already initialized.
         if DBUtility._instance is None:
             DBUtility.initialize(
@@ -61,6 +108,7 @@ class IntegrationDBContext:
             )
 
         db = DBUtility.instance()
+
         assert db is not None
 
         return IntegrationDBContext(
@@ -72,6 +120,8 @@ class IntegrationDBContext:
     def down(self, *, remove_volumes: bool = True) -> None:
         # Dispose pooled connections
         self.db.dispose()
+
+        DBUtility.reset()
 
         # Only shut down docker if we started it
         if self.started_by_tests:

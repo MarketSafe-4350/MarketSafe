@@ -1,2 +1,3 @@
 from .docker_db import DockerComposeConfig
 from .integration_db import IntegrationDBContext
+from .integration_db_session import SessionHandle

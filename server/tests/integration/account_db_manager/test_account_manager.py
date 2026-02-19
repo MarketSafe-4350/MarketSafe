@@ -1,36 +1,37 @@
 from __future__ import annotations
 
-import os
 import unittest
 from uuid import uuid4
 
 from src.business_logic.managers.account import AccountManager
 from src.db.account.mysql import MySQLAccountDB
-from src.db.db_utils import DBUtility
 
 from src.domain_models import Account
 from src.utils import AccountAlreadyExistsError, AccountNotFoundError
-from tests.helpers import IntegrationDBContext
+from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
 
-from tests.helpers.docker_db import DockerComposeConfig, ensure_db_for_tests, down
+from tests.helpers.integration_db_session import acquire, get_db, release
 
 
 class TestAccountManagerIntegration(unittest.TestCase):
+    required_tables = ("account",)
+
     @classmethod
     def setUpClass(cls) -> None:
-        cls._it = IntegrationDBContext.up(timeout_s=60)
-        cls._db = cls._it.db
 
+        cls._session = acquire(timeout_s=60)
+        cls._db = get_db()
         cls._account_db = MySQLAccountDB(cls._db)
         cls._manager = AccountManager(cls._account_db)
 
+        # Ensure schema needed by this test class exists
+        ensure_tables_exist(cls._db,  timeout_s=60)
+        reset_all_tables(cls._db)
+
     @classmethod
     def tearDownClass(cls) -> None:
-        cls._it.down(remove_volumes=True)
+        release(cls._session, remove_volumes=False)
 
-    def setUp(self) -> None:
-        # isolate tests
-        self._account_db.clear_db()
 
     def _new_account(self) -> Account:
         uniq = uuid4().hex[:10]
@@ -46,11 +47,14 @@ class TestAccountManagerIntegration(unittest.TestCase):
     def test_create_account_persists_and_returns_id(self) -> None:
         acc = self._new_account()
         created = self._manager.create_account(acc)
+        self.assertIsNotNone(created, "Row missing immediately after insert -> cleanup/race/schema issue")
 
         self.assertIsNotNone(created.id)  # adjust if your property is account_id
         self.assertEqual(created.email, acc.email)
 
         fetched = self._manager.get_account_by_email(acc.email)
+        self.assertIsNotNone(fetched, "Account disappeared after update (likely cleanup race)")
+
         self.assertIsNotNone(fetched)
 
     def test_create_account_duplicate_raises(self) -> None:
@@ -63,12 +67,15 @@ class TestAccountManagerIntegration(unittest.TestCase):
     def test_set_verified_by_email_updates_row(self) -> None:
         acc = self._new_account()
         created = self._manager.create_account(acc)
+        self.assertIsNotNone(created, "Row missing immediately after insert -> cleanup/race/schema issue")
 
         self._manager.set_verified_by_email(created.email, True)
 
         updated = self._manager.get_account_by_email(created.email)
+        self.assertIsNotNone(updated, "Account disappeared after update (likely cleanup race)")
+
         self.assertIsNotNone(updated)
-        assert updated is not None
+        self.assertIsNotNone(updated)
         self.assertTrue(bool(updated.verified))
 
     def test_require_account_by_id_raises_when_missing(self) -> None:
