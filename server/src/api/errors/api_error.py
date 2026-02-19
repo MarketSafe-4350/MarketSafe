@@ -6,8 +6,9 @@ class ApiError(Exception):
     """
 
     def __init__(self, status_code: int, message: str):
-        self._status_code = status_code
-        self._message = message
+        super().__init__(message)
+        self.status_code = status_code
+        self.message = message
 
     @property
     def status_code(self):
