@@ -3,11 +3,15 @@ import os
 from fastapi import FastAPI
 
 from src.api.errors.exception_handlers import api_error_handler
-from src.api.routes.account_routes import router as account_router
+from src.api.routes.account_routes import create_account_router
+from src.business_logic.services.account_service import AccountService
 from src.api.errors.api_error import ApiError
 from src.business_logic.managers.account import AccountManager
 from src.db import DBUtility
 from src.db.account.mysql import MySQLAccountDB
+from src.business_logic.services import AccountService
+
+
 
 
 def create_app() -> FastAPI:
@@ -45,8 +49,15 @@ def create_app() -> FastAPI:
     """
     acc_db_manager = AccountManager(account_db=account_db)
 
+    # build service that uses the manager
+    account_service = AccountService(account_manager=acc_db_manager)
+
+    # create router bound to that service and include it
+    account_router = create_account_router(account_service)
 
     app = FastAPI(title="MarketSafe API")
+
+    app.state.account_service = AccountService(acc_db_manager)
 
     # routers
     app.include_router(account_router)
