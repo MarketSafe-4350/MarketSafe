@@ -3,15 +3,12 @@ from __future__ import annotations
 import unittest
 from unittest.mock import MagicMock
 
-import jwt
 
 from src.business_logic.services.account_service import AccountService
 from src.domain_models import Account
 
-# Use the same "src.utils" import style as your TestAccountManager
 from src.utils import ValidationError, DatabaseUnavailableError, AccountAlreadyExistsError, AppError
 from src.api.errors import ApiError
-from src.config import SECRET_KEY
 
 
 class TestAccountService(unittest.TestCase):

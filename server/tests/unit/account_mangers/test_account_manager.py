@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import unittest
-from typing import Optional, List
 from unittest.mock import MagicMock
 
 from src.business_logic.managers.account import AccountManager
