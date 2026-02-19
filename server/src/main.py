@@ -9,6 +9,9 @@ from src.api.errors.api_error import ApiError
 from src.business_logic.managers.account import AccountManager
 from src.db import DBUtility
 from src.db.account.mysql import MySQLAccountDB
+from src.business_logic.services import AccountService
+
+
 
 
 def create_app() -> FastAPI:
@@ -53,6 +56,8 @@ def create_app() -> FastAPI:
     account_router = create_account_router(account_service)
 
     app = FastAPI(title="MarketSafe API")
+
+    app.state.account_service = AccountService(acc_db_manager)
 
     # routers
     app.include_router(account_router)
