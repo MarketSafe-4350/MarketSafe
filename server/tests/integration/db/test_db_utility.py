@@ -1,26 +1,23 @@
 from __future__ import annotations
 
-import os
 import unittest
 
 from sqlalchemy import text
 
-from src.db.db_utils import DBUtility
 from src.utils import DatabaseUnavailableError, DatabaseQueryError
-from tests.helpers import IntegrationDBContext
 
-from tests.helpers.docker_db import DockerComposeConfig, ensure_db_for_tests, down
+from tests.helpers.integration_db_session import acquire, get_db, release
 
 
 class TestDBUtility(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls._it = IntegrationDBContext.up(timeout_s=60)
-        cls._db = cls._it.db
+        cls._session = acquire(timeout_s=60)
+        cls._db = get_db()
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls._it.down(remove_volumes=True)
+        release(cls._session, remove_volumes=False)
 
     def test_ping_select_1(self) -> None:
         try:

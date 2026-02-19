@@ -1,27 +1,25 @@
 from __future__ import annotations
 
-import os
 import unittest
 from uuid import uuid4
 
 from src.db.account.mysql import MySQLAccountDB
 from src.domain_models import Account
 from src.utils import AccountAlreadyExistsError, AccountNotFoundError
-from tests.helpers import IntegrationDBContext
 
+from tests.helpers.integration_db_session import acquire, get_db, release
 
 
 class TestMySQLAccountDB(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls._it = IntegrationDBContext.up(timeout_s=60)
-        cls._db = cls._it.db
+        cls._session = acquire(timeout_s=60)
+        cls._db = get_db()
         cls._account_db = MySQLAccountDB(cls._db)
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls._it.down(remove_volumes=True)
-
+        release(cls._session, remove_volumes=False)
 
     def setUp(self) -> None:
         # Keep tests isolated: clean the table before each test

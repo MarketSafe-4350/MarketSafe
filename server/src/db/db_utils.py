@@ -143,3 +143,11 @@ class DBUtility:
     def dispose(self) -> None:
         """Close all pooled connections (useful on app shutdown)."""
         self._engine.dispose()
+    @classmethod
+    def reset(cls) -> None:
+        if cls._instance is not None:
+            try:
+                cls._instance._engine.dispose()
+            except Exception:
+                pass
+        cls._instance = None

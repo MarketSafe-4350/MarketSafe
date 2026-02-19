@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 import os
@@ -6,6 +7,28 @@ from typing import Optional
 
 from src.db.db_utils import DBUtility
 from tests.helpers.docker_db import DockerComposeConfig, ensure_db_for_tests, down
+from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
+import time
+
+
+
+
+
+def wait_for_db_ready(db: DBUtility, timeout_s: float = 20.0) -> None:
+    deadline = time.time() + timeout_s
+    last: Exception | None = None
+
+    while time.time() < deadline:
+        try:
+            with db._engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            return
+        except OperationalError as e:
+            last = e
+            time.sleep(0.4)
+
+    raise RuntimeError(f"DB not ready after {timeout_s}s. Last error: {last}")
 
 
 @dataclass
@@ -49,6 +72,8 @@ class IntegrationDBContext:
         pwd = os.getenv("DB_PASSWORD", "marketsafe")
         driver = os.getenv("DB_DRIVER", "mysql+pymysql")
 
+        DBUtility.reset()
+
         # DBUtility is a singleton. Initialize only if not already initialized.
         if DBUtility._instance is None:
             DBUtility.initialize(
@@ -61,6 +86,8 @@ class IntegrationDBContext:
             )
 
         db = DBUtility.instance()
+        wait_for_db_ready(db, timeout_s=timeout_s)
+
         assert db is not None
 
         return IntegrationDBContext(
@@ -72,6 +99,8 @@ class IntegrationDBContext:
     def down(self, *, remove_volumes: bool = True) -> None:
         # Dispose pooled connections
         self.db.dispose()
+
+        DBUtility.reset()
 
         # Only shut down docker if we started it
         if self.started_by_tests:

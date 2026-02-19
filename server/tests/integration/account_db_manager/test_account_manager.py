@@ -1,36 +1,32 @@
 from __future__ import annotations
 
-import os
 import unittest
 from uuid import uuid4
 
 from src.business_logic.managers.account import AccountManager
 from src.db.account.mysql import MySQLAccountDB
-from src.db.db_utils import DBUtility
 
 from src.domain_models import Account
 from src.utils import AccountAlreadyExistsError, AccountNotFoundError
-from tests.helpers import IntegrationDBContext
 
-from tests.helpers.docker_db import DockerComposeConfig, ensure_db_for_tests, down
+from tests.helpers.integration_db_session import acquire, get_db, release
 
 
 class TestAccountManagerIntegration(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls._it = IntegrationDBContext.up(timeout_s=60)
-        cls._db = cls._it.db
-
+        cls._session = acquire(timeout_s=60)
+        cls._db = get_db()
         cls._account_db = MySQLAccountDB(cls._db)
         cls._manager = AccountManager(cls._account_db)
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls._it.down(remove_volumes=True)
+        release(cls._session, remove_volumes=False)
 
     def setUp(self) -> None:
         # isolate tests
-        self._account_db.clear_db()
+        self._manager.clear_accounts()
 
     def _new_account(self) -> Account:
         uniq = uuid4().hex[:10]
@@ -68,7 +64,7 @@ class TestAccountManagerIntegration(unittest.TestCase):
 
         updated = self._manager.get_account_by_email(created.email)
         self.assertIsNotNone(updated)
-        assert updated is not None
+        self.assertIsNotNone(updated)
         self.assertTrue(bool(updated.verified))
 
     def test_require_account_by_id_raises_when_missing(self) -> None:
