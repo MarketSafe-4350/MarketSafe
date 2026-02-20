@@ -77,7 +77,7 @@ jobs:
         run: python -m compileall -q src
 
       - name: Run unit tests
-        run: python -m -v unittest ./tests/unit/all_unit_tests.py
+        run: python -m unittest -v ./tests/unit/all_unit_tests.py
 
       - name: Run integration tests
-        run: python -m -v unittest ./tests/integration/all_integration_tests.py
+        run: python -m unittest -v ./tests/integration/all_integration_tests.py
