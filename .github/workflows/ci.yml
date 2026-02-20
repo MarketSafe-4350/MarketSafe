@@ -85,7 +85,7 @@ jobs:
         run: coverage run -m unittest -v ./tests/unit/all_unit_tests.py
 
       - name: Run integration tests
-        run: coverage run --append -m unittest -v ./tests/integration/all_integration_tests.py
+        run: python -m unittest ./tests/integration/all_integration_tests.py
 
       - name: Generate coverage report (terminal)
         run: |
