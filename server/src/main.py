@@ -1,6 +1,7 @@
 import os
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.utils.errors import AppError
 from src.api.errors.exception_handlers import (
@@ -65,7 +66,14 @@ def create_app() -> FastAPI:
 
     app = FastAPI(title="MarketSafe API")
 
-    app.state.account_service = AccountService(acc_db_manager)
+    # CORS middleware
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:4200", "http://localhost:3000"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     # routers
     app.include_router(account_router)

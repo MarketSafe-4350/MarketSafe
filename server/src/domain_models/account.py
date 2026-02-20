@@ -47,7 +47,7 @@ class Account:
             fname: str,
             lname: str,
             *,
-            account_id: int | None = None,
+            account_id: Optional[int] = None,
             verified: bool = False,
             listings: Optional[List[Listing]] = None,
 
