@@ -31,7 +31,7 @@ class ListingService:
         Returns:
             Listing: The newly created listing domain model.
         """
-        title, description, price, location, image_url = self.validate_listing(
+        title, description, price, location, image_url = self._validate_listing(
             title, description, price, location, image_url
         )
 
@@ -50,7 +50,7 @@ class ListingService:
         # waiting for manager to be implemented, for now just return the listing (after validation)
         return listing
 
-    def validate_listing(
+    def _validate_listing(
         self,
         title: str,
         description: str,
@@ -81,11 +81,11 @@ class ListingService:
         # Key is the field name, value is a list of error messages for that field
         errors: dict[str, list[str]] = {}
 
-        title = self.validate_title(title, errors=errors)
-        description = self.validate_description(description, errors=errors)
-        price = self.validate_price(price, errors=errors)
-        location = self.validate_location(location, errors=errors)
-        image_url = self.validate_image_url(image_url, errors=errors)
+        title = self._validate_title(title, errors=errors)
+        description = self._validate_description(description, errors=errors)
+        price = self._validate_price(price, errors=errors)
+        location = self._validate_location(location, errors=errors)
+        image_url = self._validate_image_url(image_url, errors=errors)
 
         if errors:
             raise ValidationError(
@@ -107,7 +107,7 @@ class ListingService:
         """
         errors.setdefault(field, []).append(message)
 
-    def validate_title(self, title: str, errors: dict[str, list[str]]) -> str:
+    def _validate_title(self, title: str, errors: dict[str, list[str]]) -> str:
         """Validate listing title
 
         Args:
@@ -127,7 +127,7 @@ class ListingService:
 
         return title
 
-    def validate_description(
+    def _validate_description(
         self, description: str, errors: dict[str, list[str]]
     ) -> str:
         """Validate listing description
@@ -147,7 +147,7 @@ class ListingService:
 
         return description
 
-    def validate_price(self, price: float, errors: dict[str, list[str]]) -> float:
+    def _validate_price(self, price: float, errors: dict[str, list[str]]) -> float:
         """Validates price for a listing
 
         Args:
@@ -165,13 +165,13 @@ class ListingService:
             self._add_error(errors, "price", "Price cannot be None.")
             return default_price
 
-        if price < 0:
+        if price <= 0:
             self._add_error(errors, "price", "Price must be a non-negative number.")
             return default_price
 
         return price
 
-    def validate_location(self, location: str, errors: dict[str, list[str]]) -> str:
+    def _validate_location(self, location: str, errors: dict[str, list[str]]) -> str:
         """Validates location for a listing
 
         Args:
@@ -188,7 +188,7 @@ class ListingService:
             return ""
         return location
 
-    def validate_image_url(
+    def _validate_image_url(
         self, image_url: str | None, errors: dict[str, list[str]]
     ) -> str | None:
         """Validate image URL for a listing

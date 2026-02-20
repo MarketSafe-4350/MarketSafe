@@ -4,8 +4,8 @@ from fastapi.security import (
     HTTPAuthorizationCredentials,
     HTTPBearer,
 )
+from src.auth.dependencies import get_current_user_id
 from src.business_logic.managers.account.account_manager import AccountManager
-from src.business_logic.services import auth
 from src.db.account.mysql.mysql_account_db import MySQLAccountDB
 from src.db.db_utils import DBUtility
 from src.db.email_verification_token.mysql.mysql_email_verification_token_db import (
@@ -31,7 +31,7 @@ def _get_service() -> ListingService:
 @router.post("", response_model=ListingResponse)
 def create_listing(
     request: ListingCreate,
-    credentials: HTTPAuthorizationCredentials = Depends(security),
+    user_id: int = Depends(get_current_user_id),
 ):
     """Creates a new listing.
 
@@ -42,9 +42,6 @@ def create_listing(
         ListingResponse: The response model for the newly created listing.
     """
     service = _get_service()
-
-    token = credentials.credentials
-    user_id = auth.auth_user(token)
 
     listing: Listing = service.create_listing(
         seller_id=user_id,
