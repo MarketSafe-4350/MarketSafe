@@ -56,6 +56,10 @@ jobs:
       run:
         working-directory: server
 
+    env:
+      APP_ENV: test
+      SECRET_KEY: ci-test_secret_key
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -71,14 +75,28 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install coverage
 
       # Quick syntax check
       - name: Compile check
         run: python -m compileall -q src
 
-      # -----------------------------
-      # FUTURE: Backend tests here
-      # Example:
-      # - name: Run backend tests
-      #   run: pytest
-      # -----------------------------
+      - name: Run unit tests
+        run: coverage run -m unittest -v ./tests/unit/all_unit_tests.py
+
+      - name: Run integration tests
+        run: coverage run --append -m tests.integration.all_integration_tests
+
+      - name: Generate coverage report (terminal)
+        run: |
+          coverage report -m
+
+      - name: Generate coverage report (HTML)
+        run: |
+          coverage html
+
+      - name: Upload coverage HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-html
+          path: server/htmlcov

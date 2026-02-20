@@ -5,6 +5,7 @@ import unittest
 from sqlalchemy import text
 
 from src.utils import DatabaseUnavailableError, DatabaseQueryError
+from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
 
 from tests.helpers.integration_db_session import acquire, get_db, release
 
@@ -14,6 +15,9 @@ class TestDBUtility(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls._session = acquire(timeout_s=60)
         cls._db = get_db()
+
+        ensure_tables_exist(cls._db, timeout_s=60)
+        reset_all_tables(cls._db)
 
     @classmethod
     def tearDownClass(cls) -> None:
