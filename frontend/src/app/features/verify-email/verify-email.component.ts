@@ -58,8 +58,8 @@ export class VerifyEmailComponent implements OnInit {
       // Call the backend API to verify the email (GET request)
       const apiUrl = `http://localhost:8000/accounts/verify-email?token=${encodeURIComponent(token)}`;
 
-      this.http.get<any>(apiUrl).subscribe({
-        next: (response) => {
+      this.http.get<{ message?: string }>(apiUrl).subscribe({
+        next: () => {
           this.loading.set(false);
           this.success.set(true);
           this.errorMessage.set(null);

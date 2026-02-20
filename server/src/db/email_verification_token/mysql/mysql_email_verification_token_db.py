@@ -99,7 +99,7 @@ class MySQLEmailVerificationTokenDB(EmailVerificationTokenDB):
                    SELECT id, account_id, token_hash, created_at, expires_at, used, used_at
                    FROM email_verification_tokens
                    WHERE account_id = :account_id
-                   ORDER BY created_at DESC
+                   ORDER BY created_at DESC, id DESC
                    LIMIT 1
                    """)
 

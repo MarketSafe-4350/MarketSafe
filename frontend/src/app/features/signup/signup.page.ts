@@ -157,7 +157,7 @@ export class SignupComponent {
     // Use the backend API URL - adjust based on your environment
     const apiUrl = 'http://localhost:8000/accounts'; // Change this for production
 
-    this.http.post<any>(apiUrl, formData).subscribe({
+    this.http.post<{ verification_link?: string }>(apiUrl, formData).subscribe({
       next: (response) => {
         this.loading.set(false);
         if (response.verification_link) {

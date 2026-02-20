@@ -21,8 +21,11 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         integration_db.setup_tokens_table(cls.db)
 
     def setUp(self) -> None:
-        """Clear tokens table before each test."""
+        """Clear tokens table and create test accounts before each test."""
         integration_db.clear_tokens_table(self.db)
+        # Create test accounts for foreign key constraints
+        integration_db.create_test_account(self.db, account_id=1, email="test1@example.com")
+        integration_db.create_test_account(self.db, account_id=2, email="test2@example.com")
         self.token_db = MySQLEmailVerificationTokenDB(db=self.db)
 
     # -------------------------

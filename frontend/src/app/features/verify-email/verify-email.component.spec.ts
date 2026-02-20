@@ -9,12 +9,12 @@ describe('VerifyEmailComponent', () => {
   let fixture: ComponentFixture<VerifyEmailComponent>;
   let httpMock: HttpTestingController;
   let routerMock: jasmine.SpyObj<Router>;
-  let activatedRouteMock: any;
+  let activatedRouteMock: { queryParams: BehaviorSubject<Record<string, string>> };
 
   beforeEach(async () => {
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
     activatedRouteMock = {
-      queryParams: new BehaviorSubject({ token: 'test-token-123' }),
+      queryParams: new BehaviorSubject<Record<string, string>>({ token: 'test-token-123' }),
     };
 
     await TestBed.configureTestingModule({
@@ -31,9 +31,11 @@ describe('VerifyEmailComponent', () => {
     // Prevent automatic verifyEmail() execution during fixture.detectChanges()
     // We'll call the original method manually in tests that need it.
     const originalVerify = component.verifyEmail.bind(component);
-    spyOn(component, 'verifyEmail').and.callFake(() => {});
+    spyOn(component, 'verifyEmail').and.callFake(() => {
+      // Prevent auto-execution
+    });
     // expose original for tests
-    (component as any).__origVerify = originalVerify;
+    (component as { __origVerify?: () => void }).__origVerify = originalVerify;
   });
 
   afterEach(() => {
@@ -56,7 +58,7 @@ describe('VerifyEmailComponent', () => {
   // Email Verification Success Tests
   // -------------------------
   it('verifyEmail_ValidToken_ShouldSetSuccessTrue', () => {
-    (component as any).__origVerify();
+    (component as { __origVerify?: () => void }).__origVerify?.();
 
     const req = httpMock.expectOne(
       req => req.url.includes('/accounts/verify-email') && req.method === 'GET'
@@ -78,7 +80,7 @@ describe('VerifyEmailComponent', () => {
   });
 
   it('verifyEmail_SuccessResponse_ShouldRedirectToLoginAfterDelay', fakeAsync(() => {
-    (component as any).__origVerify();
+    (component as { __origVerify?: () => void }).__origVerify?.();
 
     const req = httpMock.expectOne(
       req => req.url.includes('/accounts/verify-email') && req.method === 'GET'
@@ -103,7 +105,7 @@ describe('VerifyEmailComponent', () => {
   // Email Verification Failure Tests
   // -------------------------
   it('verifyEmail_InvalidToken_ShouldSetErrorMessage', () => {
-    (component as any).__origVerify();
+    (component as { __origVerify?: () => void }).__origVerify?.();
 
     const req = httpMock.expectOne(
       req => req.url.includes('/accounts/verify-email') && req.method === 'GET'
@@ -120,7 +122,7 @@ describe('VerifyEmailComponent', () => {
   });
 
   it('verifyEmail_TokenExpired_ShouldShowExpiredMessage', () => {
-    (component as any).__origVerify();
+    (component as { __origVerify?: () => void }).__origVerify?.();
 
     const req = httpMock.expectOne(
       req => req.url.includes('/accounts/verify-email') && req.method === 'GET'
@@ -135,7 +137,7 @@ describe('VerifyEmailComponent', () => {
   });
 
   it('verifyEmail_ErrorResponse_ShouldRedirectToSignupAfterDelay', fakeAsync(() => {
-    (component as any).__origVerify();
+    (component as { __origVerify?: () => void }).__origVerify?.();
 
     const req = httpMock.expectOne(
       req => req.url.includes('/accounts/verify-email') && req.method === 'GET'
@@ -154,9 +156,9 @@ describe('VerifyEmailComponent', () => {
   }));
 
   it('verifyEmail_NoToken_ShouldRedirectToSignup', fakeAsync(() => {
-    activatedRouteMock.queryParams = new BehaviorSubject({});
+    activatedRouteMock.queryParams = new BehaviorSubject<Record<string, string>>({});
 
-    (component as any).__origVerify(); // Trigger verifyEmail
+    (component as { __origVerify?: () => void }).__origVerify?.(); // Trigger verifyEmail
 
     expect(component.loading()).toBe(false);
     expect(component.errorMessage()).toBe('No verification token provided.');

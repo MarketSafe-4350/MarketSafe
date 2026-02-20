@@ -6,34 +6,46 @@
 
     <mat-card-content>
       <!-- Loading State -->
-      <div *ngIf="loading()" class="loading-section">
-        <mat-spinner diameter="50"></mat-spinner>
-        <p class="loading-text">Verifying your email...</p>
-      </div>
+      @if (loading()) {
+        <div class="loading-section">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p class="loading-text">Verifying your email...</p>
+        </div>
+      }
 
       <!-- Success State -->
-      <div *ngIf="success() && !loading()" class="success-section">
-        <div class="success-icon">✓</div>
-        <h2>Verification Complete!</h2>
-        <p>Your email has been successfully verified. Redirecting to login...</p>
-      </div>
+      @if (success() && !loading()) {
+        <div class="success-section">
+          <div class="success-icon">✓</div>
+          <h2>Verification Complete!</h2>
+          <p>Your email has been successfully verified. Redirecting to login...</p>
+        </div>
+      }
 
       <!-- Error State -->
-      <div *ngIf="errorMessage() && !loading()" class="error-section">
-        <div class="error-icon">✕</div>
-        <h2>Verification Failed</h2>
-        <p class="error-message">{{ errorMessage() }}</p>
-        <p class="redirect-message">Redirecting to sign up...</p>
-      </div>
+      @if (errorMessage() && !loading()) {
+        <div class="error-section">
+          <div class="error-icon">✕</div>
+          <h2>Verification Failed</h2>
+          <p class="error-message">{{ errorMessage() }}</p>
+          <p class="redirect-message">Redirecting to sign up...</p>
+        </div>
+      }
     </mat-card-content>
 
-    <mat-card-actions *ngIf="!loading()" class="action-buttons">
-      <button *ngIf="success()" mat-raised-button color="primary" (click)="router.navigate(['/login'])">
-        Go to Login
-      </button>
-      <button *ngIf="errorMessage()" mat-raised-button (click)="router.navigate(['/signup'])">
-        Back to Sign Up
-      </button>
-    </mat-card-actions>
+    @if (!loading()) {
+      <mat-card-actions class="action-buttons">
+        @if (success()) {
+          <button mat-raised-button color="primary" (click)="router.navigate(['/login'])">
+            Go to Login
+          </button>
+        }
+        @if (errorMessage()) {
+          <button mat-raised-button (click)="router.navigate(['/signup'])">
+            Back to Sign Up
+          </button>
+        }
+      </mat-card-actions>
+    }
   </mat-card>
 </div>

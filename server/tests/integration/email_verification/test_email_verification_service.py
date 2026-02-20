@@ -26,8 +26,11 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
         integration_db.setup_tokens_table(cls.db)
 
     def setUp(self) -> None:
-        """Clear tokens and initialize service."""
+        """Clear tokens, create test accounts, and initialize service."""
         integration_db.clear_tokens_table(self.db)
+        # Create test accounts for foreign key constraints
+        integration_db.create_test_account(self.db, account_id=1, email="test1@example.com")
+        integration_db.create_test_account(self.db, account_id=2, email="test2@example.com")
         self.token_db = MySQLEmailVerificationTokenDB(db=self.db)
         self.service = AccountService(token_db=self.token_db)
 
@@ -57,16 +60,17 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
 
     def test_expired_token_cannot_be_verified(self) -> None:
         """Test that expired tokens cannot be verified."""
-        # Create expired token directly in DB
+        # Generate a proper raw token and hash it
+        raw_token = TokenGenerator.generate_token()
+        token_hash = TokenGenerator.hash_token(raw_token)
+        
+        # Create expired token directly in DB with the proper hash
         expired_token = VerificationToken(
             account_id=1,
-            token_hash="expired-hash",
+            token_hash=token_hash,
             expires_at=datetime.now() - timedelta(minutes=1),  # Already expired
         )
         self.token_db.add(expired_token)
-
-        # Mock the raw token for hashing check
-        raw_token = "test-token-that-hashes-to-expired-hash"
 
         # Try to verify and expect TokenExpiredError
         with self.assertRaises(TokenExpiredError):
@@ -109,14 +113,14 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
     def test_token_retrieval_by_account(self) -> None:
         """Test getting the latest token for an account."""
         # Generate multiple tokens for same account
-        self.service.generate_and_store_verification_token(account_id=1)
+        raw_token_first = self.service.generate_and_store_verification_token(account_id=1)
         raw_token_latest = self.service.generate_and_store_verification_token(account_id=1)
 
         # Get latest
         latest = self.token_db.get_latest_by_account(account_id=1)
         self.assertIsNotNone(latest)
 
-        # Verify it's the most recent
+        # Verify it's the most recent (should be the second token)
         latest_hash = TokenGenerator.hash_token(raw_token_latest)
         self.assertEqual(latest.token_hash, latest_hash)
 
