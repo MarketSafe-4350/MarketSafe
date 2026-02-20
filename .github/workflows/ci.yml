@@ -94,3 +94,9 @@ jobs:
       - name: Generate coverage report (HTML)
         run: |
           coverage html
+      
+      - name: Upload coverage HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+        name: backend-coverage-html
+        path: server/htmlcov
