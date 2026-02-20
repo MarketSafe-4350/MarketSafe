@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import socket
 import subprocess
 import time
 from dataclasses import dataclass
@@ -164,10 +165,15 @@ def ensure_db_for_tests(cfg: DockerComposeConfig, *, timeout_s: int = 60) -> boo
         - Otherwise, start services and wait for db healthcheck.
     """
     if _in_docker() and os.getenv("ALLOW_DOCKER_FROM_TESTS") != "1":
-        # Inside containers we usually connect to an already-running db service
         return False
 
     if not _docker_available():
+        return False
+
+        # NEW: if the port we intend to use is already occupied, do NOT try to start our compose stack
+    host = os.getenv("DB_HOST", "127.0.0.1")
+    port = int(os.getenv("DB_PORT", "3307"))
+    if _port_open(host, port):
         return False
 
     if is_service_running(cfg, "db"):
@@ -181,3 +187,15 @@ def ensure_db_for_tests(cfg: DockerComposeConfig, *, timeout_s: int = 60) -> boo
     # - If db-init is "no restart" it might exit quickly; that's fine.
 
     return True
+
+def _port_open(host: str, port: int, timeout_s: float = 0.25) -> bool:
+    """
+    True if something is listening on host:port.
+    (We treat this as 'DB likely already up' for local integration tests.)
+    """
+    try:
+        with socket.create_connection((host, port), timeout=timeout_s):
+            return True
+    except OSError:
+        return False
+

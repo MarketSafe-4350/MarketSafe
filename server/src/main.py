@@ -10,6 +10,9 @@ from src.api.errors.api_error import ApiError
 from src.business_logic.managers.account import AccountManager
 from src.db import DBUtility
 from src.db.account.mysql import MySQLAccountDB
+from src.business_logic.services import AccountService
+
+
 
 
 def create_app() -> FastAPI:
