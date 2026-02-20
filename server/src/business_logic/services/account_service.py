@@ -251,13 +251,59 @@ class AccountService:
         if not email or not password:
             raise ApiError(status_code=400, message="Email and password are required")
 
-        # mock data for test, set up db check
-        if email == "test1@gmail.com" and password == "test":
-            expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
-            token = jwt.encode({
-                "sub": "test1@gmail.com",
-                "exp": expiration
-            }, SECRET_KEY, algorithm="HS256")
-            return token
+        account = self.account_manager.get_account_by_email(email)
 
-        raise ApiError(status_code=401, message="Invalid email or password")
+        if account is None:
+            raise ApiError(status_code=401, message="Invalid email or password")
+
+        if account.password != password:
+            raise ApiError(status_code=401, message="Invalid email or password")
+        
+        #for when we implement password hashing
+        ## if not bcrypt.checkpw(password.encode(), account.password.encode()):
+        #raise ApiError(status_code=401, message="Invalid email or password")
+
+        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
+
+        token = jwt.encode(
+            {
+                "sub": account.email,
+                "exp": expiration
+            },
+            SECRET_KEY,
+            algorithm="HS256"
+        )
+
+        return token
+    
+    def get_current_user(self, token: str) -> Account:
+
+        """
+        Validates a Bearer token and returns the authenticated Account.
+        """
+
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            email = payload.get("sub")
+
+            if not email:
+                raise ApiError(status_code=401, message="Invalid token payload")
+
+            account = self.account_manager.get_account_by_email(email)
+
+            if account is None:
+                raise ApiError(status_code=401, message="Account not found")
+
+            return account
+
+        except jwt.ExpiredSignatureError:
+            raise ApiError(status_code=401, message="Token has expired")
+
+        except jwt.InvalidTokenError:
+            raise ApiError(status_code=401, message="Invalid token")
+
+        except DatabaseUnavailableError as e:
+            raise ApiError(status_code=503, message=str(e))
+
+        except Exception:
+            raise ApiError(status_code=500, message="Internal server error")
