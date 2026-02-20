@@ -29,12 +29,12 @@ ALLOWED_DOMAINS = ("umanitoba.ca", "myumanitoba.ca")
 class AccountService:
     """Service class for handling account-related business logic."""
 
-    def __init__(self, account_manager: AccountManager, token_db: MySQLEmailVerificationTokenDB = None):
+    def __init__(self, account_manager: AccountManager = None, token_db: MySQLEmailVerificationTokenDB = None):
         """
         Initialize AccountService.
 
         Args:
-            account_manager: Manager for account database operations
+            account_manager: Manager for account database operations (optional)
             token_db: Database layer for email verification tokens (optional)
         """
         self.account_manager = account_manager
