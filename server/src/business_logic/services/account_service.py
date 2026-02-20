@@ -267,43 +267,21 @@ class AccountService:
 
         token = jwt.encode(
             {
-                "sub": account.email,
+                "sub": str(account.id),
                 "exp": expiration
             },
             SECRET_KEY,
             algorithm="HS256"
         )
-
         return token
     
-    def get_current_user(self, token: str) -> Account:
+    def get_account_userid(self, userid: int) -> Account:
+        if userid is None:
+            raise ApiError(status_code=400, message="User ID cannot be None")
 
-        """
-        Validates a Bearer token and returns the authenticated Account.
-        """
+        account = self.account_manager.get_account_by_id(userid)
 
-        try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            email = payload.get("sub")
+        if account is None:
+            raise ApiError(status_code=404, message="Account not found")
 
-            if not email:
-                raise ApiError(status_code=401, message="Invalid token payload")
-
-            account = self.account_manager.get_account_by_email(email)
-
-            if account is None:
-                raise ApiError(status_code=401, message="Account not found")
-
-            return account
-
-        except jwt.ExpiredSignatureError:
-            raise ApiError(status_code=401, message="Token has expired")
-
-        except jwt.InvalidTokenError:
-            raise ApiError(status_code=401, message="Invalid token")
-
-        except DatabaseUnavailableError as e:
-            raise ApiError(status_code=503, message=str(e))
-
-        except Exception:
-            raise ApiError(status_code=500, message="Internal server error")
+        return account
