@@ -9,7 +9,7 @@ from src.api.errors.exception_handlers import (
     app_error_handler,
 )
 from src.api.routes.account_routes import create_account_router
-from src.api.routes.listing_routes import create_listing_router
+from src.api.routes.listing_routes import router as listing_router
 
 from src.business_logic.services.account_service import AccountService
 from src.business_logic.services.listing_service import ListingService
@@ -58,11 +58,9 @@ def create_app() -> FastAPI:
 
     # build service that uses the manager
     account_service = AccountService(account_manager=acc_db_manager)
-    listing_service = ListingService(None)  # pass None for now, will implement later
 
     # create router bound to that service and include it
     account_router = create_account_router(account_service)
-    listing_router = create_listing_router(listing_service)
 
     app = FastAPI(title="MarketSafe API")
 

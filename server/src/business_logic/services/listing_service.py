@@ -77,6 +77,8 @@ class ListingService:
             Error handling is done in the route layer (under ./errors/exception_handlers.py),
             so we can raise exceptions here and let the route handle it.
         """
+        # Collect all validation errors in a dictionary to return all at once
+        # Key is the field name, value is a list of error messages for that field
         errors: dict[str, list[str]] = {}
 
         title = self.validate_title(title, errors=errors)
