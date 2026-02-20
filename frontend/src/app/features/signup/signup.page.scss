@@ -92,6 +92,82 @@
   text-align: center;
 }
 
+// Verification section styles
+.verification-content {
+  padding: 2rem 0;
+  text-align: center;
+
+  .verification-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  .verification-message {
+    font-size: 0.95rem;
+    color: rgba(0, 0, 0, 0.7);
+    margin-bottom: 1.5rem;
+  }
+
+  .verify-button {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .link-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 0.75rem;
+  }
+
+  .link-container {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    gap: 0.5rem;
+
+    .verification-link {
+      flex: 1;
+      font-size: 0.75rem;
+      word-break: break-all;
+      color: #666;
+      font-family: 'Courier New', monospace;
+      padding: 0.5rem;
+      overflow-y: auto;
+      max-height: 80px;
+    }
+
+    button {
+      flex-shrink: 0;
+    }
+  }
+
+  .expiry-notice {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 1rem;
+  }
+}
+
+.error-message {
+  background-color: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  color: #c62828;
+  font-size: 0.875rem;
+}
+
 .login-link {
   background: transparent;
   border: none;

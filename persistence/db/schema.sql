@@ -265,6 +265,29 @@ END$$
 
 DELIMITER ;
 
+CREATE TABLE email_verification_tokens (
+  id             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  account_id     BIGINT UNSIGNED NOT NULL,
+  token_hash     VARCHAR(255)    NOT NULL,
+  created_at     DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  expires_at     DATETIME        NOT NULL,
+  used           BOOLEAN         NOT NULL DEFAULT FALSE,
+  used_at        DATETIME        NULL,
+
+  PRIMARY KEY (id),
+
+  -- Index for fast token lookups
+  KEY idx_email_token_hash (token_hash),
+  -- Index for finding unused tokens by account
+  KEY idx_email_token_account (account_id, used),
+
+  -- Foreign key to account table
+  CONSTRAINT fk_email_token_account
+    FOREIGN KEY (account_id) REFERENCES account(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
 DELIMITER $$
 
 -- Enforce: if a listing is marked sold, a buyer must be provided
