@@ -76,9 +76,8 @@ jobs:
       - name: Compile check
         run: python -m compileall -q src
 
-      # -----------------------------
-      # FUTURE: Backend tests here
-      # Example:
-      # - name: Run backend tests
-      #   run: pytest
-      # -----------------------------
+      - name: Run unit tests
+        run: python -m -v unittest ./tests/unit/all_unit_tests.py
+
+      - name: Run integration tests
+        run: python -m -v unittest ./tests/integration/all_integration_tests.py
