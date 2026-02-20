@@ -3,7 +3,8 @@ import jwt
 from src.api.errors.api_error import ApiError
 from src.config import SECRET_KEY
 
-def auth_user(token: str) -> int:
+
+def get_user_id_from_token(token: str) -> int:
     if not token:
         raise ApiError(status_code=401, message="Missing authentication token")
 
