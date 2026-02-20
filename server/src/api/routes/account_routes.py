@@ -1,12 +1,10 @@
-from fastapi import APIRouter, Depends, Request, Query
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-import jwt
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 import logging
 
-from src import SECRET_KEY
+from src.api.converter.account_converter import LoginRequest
 from src.config import FRONTEND_URL
-from src.api.errors.api_error import ApiError
 from src.api.converter import AccountResponse, AccountSignup, Token, SignupResponse, VerifyEmailResponse
 from src.business_logic.services import AccountService
 from src.business_logic.managers.account import AccountManager
@@ -25,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/accounts")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/accounts/login")
+security = HTTPBearer()
 
 # Helper function to get service when needed
 
@@ -84,7 +82,7 @@ def create_account(request: AccountSignup):
 
 
 @router.post("/login", response_model=Token)
-def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
+def login_account(request: LoginRequest):
     """
     Authenticates a user and returns a JWT token.
 
@@ -95,45 +93,25 @@ def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
         dict: A JSON object containing the access token and token type.
     """
     service = _get_service()
-    try:
-
-        token = service.login(form_data.username, form_data.password)
-
-        if not token:
-            raise ApiError(status_code=401, detail="Authentication failed.")
-
-        return {"access_token": token, "token_type": "bearer"}
-
-    except ApiError as error:
-        return JSONResponse(
-            status_code=error.status_code,
-            content={"error_message": error.message}
-        )
+    
+    token = service.login(request.email, request.password)
+    return {"access_token": token, "token_type": "bearer"}
 
 
 @router.get("/me", response_model=AccountResponse)
-def get_account(token: str = Depends(oauth2_scheme)):
-    """Retrieves the current user's information using the email from the JWT token."""
+def get_account(
+     credentials: HTTPAuthorizationCredentials = Depends(security)
+    ):
     service = _get_service()
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        email = payload.get("sub")   # JWT subject is email
 
-        if not email:
-            raise ApiError(status_code=401, detail="Could not validate user.")
+    token = credentials.credentials
+    account = service.get_current_user(token)
 
-        account = service.get_account_by_email(email)
-
-        return AccountResponse(
-            email=account.email,
-            fname=account.fname,
-            lname=account.lname
-        )
-
-    except jwt.ExpiredSignatureError:
-        raise ApiError(status_code=401, detail="Token has expired.")
-    except jwt.InvalidTokenError:
-        raise ApiError(status_code=401, detail="Invalid token.")
+    return AccountResponse(
+        email=account.email,
+        fname=account.fname,
+        lname=account.lname,
+    )
 
 @router.get("/verify-email", response_model=VerifyEmailResponse)
 def verify_email(token: str = Query(..., min_length=10)):
