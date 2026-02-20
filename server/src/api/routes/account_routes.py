@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 import logging
 
+from src.business_logic.services import auth
 from src.api.converter.account_converter import LoginRequest
 from src.config import FRONTEND_URL
 from src.api.converter import AccountResponse, AccountSignup, Token, SignupResponse, VerifyEmailResponse
@@ -103,9 +104,11 @@ def get_account(
      credentials: HTTPAuthorizationCredentials = Depends(security)
     ):
     service = _get_service()
-
+    
     token = credentials.credentials
-    account = service.get_current_user(token)
+    user_id = auth.auth_user(token)
+    
+    account = service.get_account_userid(user_id)
 
     return AccountResponse(
         email=account.email,
