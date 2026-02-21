@@ -52,19 +52,22 @@
 </div>
 
   <div class="listing-list">
-    <div class="listing" *ngFor="let item of listings">
-      <div class="thumb">
-        <img *ngIf="item.imageUrl; else fallback" [src]="item.imageUrl" [alt]="item.title" />
-        <ng-template #fallback>
-          <div class="thumb-fallback"></div>
-        </ng-template>
-      </div>
+    @for (item of listings; track item.title) {
+      <div class="listing">
+        <div class="thumb">
+          @if (item.imageUrl) {
+            <img [src]="item.imageUrl" [alt]="item.title" />
+          } @else {
+            <div class="thumb-fallback"></div>
+          }
+        </div>
 
-      <div class="meta">
-        <div class="name">{{ item.title }}</div>
-        <div class="sub">{{ item.comments }} comments</div>
+        <div class="meta">
+          <div class="name">{{ item.title }}</div>
+          <div class="sub">{{ item.comments }} comments</div>
+        </div>
       </div>
-    </div>
+    }
   </div>
 
   <div class="see-all">

@@ -10,14 +10,14 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateListingDialogComponent, CreateListingPayload } from '../create-listing/create-listing.component';
 
-type Listing = {
+interface Listing {
   title: string;
   comments: number;
   imageUrl?: string;
-};
+}
 
 @Component({
-  selector: 'left-navigation',
+  selector: 'app-left-navigation',
   standalone: true,
   imports: [
     CommonModule,

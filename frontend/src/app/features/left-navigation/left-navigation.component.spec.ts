@@ -3,7 +3,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { LeftNavigationComponent } from './left-navigation.component';
 import {
@@ -15,9 +15,10 @@ describe('LeftNavigationComponent', () => {
   let fixture: ComponentFixture<LeftNavigationComponent>;
   let component: LeftNavigationComponent;
 
-  const dialogRefSpy = {
-    afterClosed: jasmine.createSpy('afterClosed'),
-  };
+  const dialogRefSpy = jasmine.createSpyObj<MatDialogRef<CreateListingDialogComponent>>(
+    'MatDialogRef',
+    ['afterClosed']
+  );
 
   const matDialogSpy = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
 
@@ -53,7 +54,7 @@ describe('LeftNavigationComponent', () => {
 
   it('openCreateListing_ShouldOpenDialogWithCorrectConfig', () => {
     dialogRefSpy.afterClosed.and.returnValue(of(null));
-    matDialogSpy.open.and.returnValue(dialogRefSpy as any);
+    matDialogSpy.open.and.returnValue(dialogRefSpy);
 
     component.openCreateListing();
 
@@ -68,7 +69,7 @@ describe('LeftNavigationComponent', () => {
     spyOn(console, 'log');
 
     dialogRefSpy.afterClosed.and.returnValue(of(null));
-    matDialogSpy.open.and.returnValue(dialogRefSpy as any);
+    matDialogSpy.open.and.returnValue(dialogRefSpy);
 
     component.openCreateListing();
 
@@ -87,7 +88,7 @@ describe('LeftNavigationComponent', () => {
     };
 
     dialogRefSpy.afterClosed.and.returnValue(of(payload));
-    matDialogSpy.open.and.returnValue(dialogRefSpy as any);
+    matDialogSpy.open.and.returnValue(dialogRefSpy);
 
     component.openCreateListing();
 

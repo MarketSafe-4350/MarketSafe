@@ -44,9 +44,11 @@
       </span>
     </label>
 
-    <div class="file-name" *ngIf="selectedFile">
-      {{ selectedFile.name }}
-    </div>
+    @if (selectedFile) {
+      <div class="file-name">
+        {{ selectedFile.name }}
+      </div>
+    }
   </div>
 
   <div class="actions">

@@ -3,7 +3,7 @@ import { HeaderComponent } from '../../components/header/header.component';
 import { LeftNavigationComponent } from '../left-navigation/left-navigation.component';
 
 @Component({
-  selector: 'main-page',
+  selector: 'app-main-page',
   standalone: true,
   imports: [HeaderComponent, LeftNavigationComponent],
   templateUrl: './main-page.component.html',

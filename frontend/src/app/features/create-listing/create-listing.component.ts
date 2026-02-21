@@ -7,13 +7,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 
-export type CreateListingPayload = {
+export interface CreateListingPayload {
   title: string;
   description: string;
   price: number;
   location: string;
   picture?: File | null;
-};
+}
 
 @Component({
   selector: 'app-create-listing-dialog',
