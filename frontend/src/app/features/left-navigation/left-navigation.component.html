@@ -1,0 +1,78 @@
+<aside class="sidebar">
+  <div class="brand">
+    <span class="brand-text">MarketSafe</span>
+  </div>
+
+  <mat-nav-list class="nav">
+    <a mat-list-item routerLink="/home" routerLinkActive="active">
+      <mat-icon matListItemIcon>home</mat-icon>
+      <span matListItemTitle>Home</span>
+    </a>
+
+    <a mat-list-item routerLink="/profile" routerLinkActive="active">
+      <mat-icon matListItemIcon>badge</mat-icon>
+      <span matListItemTitle>Profile</span>
+    </a>
+
+    <a mat-list-item routerLink="/search" routerLinkActive="active">
+      <mat-icon matListItemIcon>search</mat-icon>
+      <span matListItemTitle>Search</span>
+    </a>
+
+    <a mat-list-item routerLink="/settings" routerLinkActive="active">
+      <mat-icon matListItemIcon>settings</mat-icon>
+      <span matListItemTitle>Settings</span>
+    </a>
+  </mat-nav-list>
+
+  <mat-divider class="divider"></mat-divider>
+
+  <div class="listings-header">
+  <span class="title">My Listings</span>
+
+  <div class="listings-actions">
+    <button
+      mat-icon-button
+      class="add-btn"
+      type="button"
+      (click)="openCreateListing()"
+      aria-label="Add listing"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+
+    <span
+      class="badge"
+      matBadge="{{ listingsCount }}"
+      matBadgeColor="warn"
+      matBadgeSize="small"
+      matBadgeOverlap="false"
+    ></span>
+  </div>
+</div>
+
+  <div class="listing-list">
+    @for (item of listings; track item.title) {
+      <div class="listing">
+        <div class="thumb">
+          @if (item.imageUrl) {
+            <img [src]="item.imageUrl" [alt]="item.title" />
+          } @else {
+            <div class="thumb-fallback"></div>
+          }
+        </div>
+
+        <div class="meta">
+          <div class="name">{{ item.title }}</div>
+          <div class="sub">{{ item.comments }} comments</div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="see-all">
+    <button mat-stroked-button class="see-all-btn" type="button">
+      See All
+    </button>
+  </div>
+</aside>

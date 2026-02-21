@@ -236,6 +236,28 @@ class AccountService:
         ##
         return acc_test
 
+    def get_account_by_email(self, email: str) -> Account:
+        """Retrieves an account by email address.
+
+        Args:
+            email (str): The email address of the account to retrieve.
+
+        Returns:
+            Account: The retrieved account domain model.
+            
+        Raises:
+            ApiError: If account not found.
+        """
+        if not email:
+            raise ApiError(status_code=400, message="Email cannot be empty")
+        
+        account = self.account_manager.get_account_by_email(email)
+        
+        if account is None:
+            raise ApiError(status_code=404, message=f"Account not found for email: {email}")
+        
+        return account
+
     def login(self, email: str, password: str) -> str:
 
         """Authenticates a user and returns a JWT token.
@@ -251,13 +273,20 @@ class AccountService:
         if not email or not password:
             raise ApiError(status_code=400, message="Email and password are required")
 
-        # mock data for test, set up db check
-        if email == "test1@gmail.com" and password == "test":
-            expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
-            token = jwt.encode({
-                "sub": "test1@gmail.com",
-                "exp": expiration
-            }, SECRET_KEY, algorithm="HS256")
-            return token
-
-        raise ApiError(status_code=401, message="Invalid email or password")
+        # Get account from database
+        account = self.account_manager.get_account_by_email(email)
+        
+        if account is None:
+            raise ApiError(status_code=401, message="Invalid email or password")
+        
+        if account.password != password:
+            raise ApiError(status_code=401, message="Invalid email or password")
+        
+        # Generate JWT token
+        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
+        token = jwt.encode({
+            "sub": account.email,
+            "exp": expiration
+        }, SECRET_KEY, algorithm="HS256")
+        
+        return token
