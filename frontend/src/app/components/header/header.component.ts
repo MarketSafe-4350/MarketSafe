@@ -15,6 +15,8 @@ export class HeaderComponent {
   private readonly router = inject(Router);
 
   onLogout(): void {
+    // Clear the authentication token
+    localStorage.removeItem('access_token');
     this.router.navigate(['/']);
   }
 
