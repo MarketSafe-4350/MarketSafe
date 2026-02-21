@@ -1,0 +1,160 @@
+:host {
+  display: block;
+}
+
+.sidebar {
+  height: 100vh;
+  width: 320px;
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.04);
+  padding: 22px 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand {
+  padding: 4px 10px 18px 10px;
+}
+
+.brand-text {
+  font-size: 34px;
+  font-weight: 750;
+  letter-spacing: 0.2px;
+  color: #f0394f; // match your landing color
+}
+
+.nav {
+  padding-top: 6px;
+
+  a[mat-list-item] {
+    border-radius: 12px;
+    margin: 6px 0;
+
+    mat-icon {
+      color: rgba(0, 0, 0, 0.55);
+    }
+
+    span[matListItemTitle] {
+      font-weight: 520;
+      color: rgba(0, 0, 0, 0.72);
+    }
+  }
+
+  a.active {
+    background: rgba(240, 57, 79, 0.08);
+
+    mat-icon,
+    span[matListItemTitle] {
+      color: #f0394f;
+    }
+  }
+}
+
+.divider {
+  margin: 14px 6px;
+}
+
+.listings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px 6px 10px;
+
+  .title {
+    font-weight: 650;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  .badge {
+    // matBadge renders a badge on this element
+  }
+}
+
+.listing-list {
+  padding: 6px 6px 0 6px;
+  flex: 1;
+  overflow: auto;
+}
+
+.listing {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 12px;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  .thumb {
+    width: 44px;
+    height: 34px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.04);
+    display: grid;
+    place-items: center;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thumb-fallback {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: rgba(240, 57, 79, 0.25);
+    }
+  }
+
+  .meta {
+    min-width: 0;
+
+    .name {
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.78);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sub {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+      margin-top: 2px;
+    }
+  }
+}
+
+.see-all {
+  padding: 16px 6px 8px 6px;
+}
+
+.see-all-btn {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  border-color: rgba(240, 57, 79, 0.7) !important;
+  color: #f0394f !important;
+  font-weight: 650;
+}
+
+.listings-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-btn {
+  color: #f0394f;
+
+  &:hover {
+    background: rgba(240, 57, 79, 0.08);
+  }
+}

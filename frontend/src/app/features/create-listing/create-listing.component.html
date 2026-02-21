@@ -1,0 +1,56 @@
+<h2 class="dialog-title">Create Listing</h2>
+
+<form [formGroup]="form" class="dialog-form" (ngSubmit)="create()">
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title" />
+    @if (form.get('title')?.touched && form.get('title')?.invalid) {
+      <mat-error>Title is required (2–80 chars).</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Description</mat-label>
+    <textarea matInput rows="4" formControlName="description"></textarea>
+    @if (form.get('description')?.touched && form.get('description')?.invalid) {
+      <mat-error>Description is required (10–1000 chars).</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="row">
+    <mat-form-field appearance="outline" class="half">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" formControlName="price" />
+      @if (form.get('price')?.touched && form.get('price')?.invalid) {
+        <mat-error>Enter a valid price.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="half">
+      <mat-label>Location</mat-label>
+      <input matInput formControlName="location" />
+      @if (form.get('location')?.touched && form.get('location')?.invalid) {
+        <mat-error>Location is required.</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <div class="file">
+    <label class="file-label">
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+      <span class="file-btn">
+        <mat-icon>upload</mat-icon>
+        Choose picture
+      </span>
+    </label>
+
+    <div class="file-name" *ngIf="selectedFile">
+      {{ selectedFile.name }}
+    </div>
+  </div>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-raised-button type="submit">Create</button>
+  </div>
+</form>

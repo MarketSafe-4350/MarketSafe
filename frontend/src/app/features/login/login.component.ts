@@ -6,6 +6,7 @@ import {
     signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -22,7 +23,7 @@ import {
 
 import { ValidationMessages } from '../../shared/signup-validation-errors';
 import {
-  UNIVERSITY_EMAIL_REGEX,
+    UNIVERSITY_EMAIL_REGEX,
 } from '../../shared/auth-validation.constants';
 
 
@@ -47,9 +48,12 @@ export class LoginComponent {
     messages: Messages = ValidationMessages;
 
     hidePassword: WritableSignal<boolean> = signal(true);
+    isLoading: WritableSignal<boolean> = signal(false);
+    errorMessage: WritableSignal<string> = signal('');
 
     private readonly router = inject(Router);
     private readonly formBuilder = inject(FormBuilder);
+    private readonly http = inject(HttpClient);
 
 
     readonly form: FormGroup = this.createForm();
@@ -89,8 +93,9 @@ export class LoginComponent {
         return this.messages[controlName]?.[firstKey] ?? '';
     }
 
-    onSubmit(): { email: string; password: string } | null {
+    onSubmit(): void {
         const emailCtrl = this.form.get('email');
+
         if (emailCtrl) {
             emailCtrl.setValue((emailCtrl.value ?? '').trim(), { emitEvent: false });
             emailCtrl.updateValueAndValidity({ emitEvent: false });
@@ -98,13 +103,40 @@ export class LoginComponent {
 
         if (this.form.invalid) {
             this.form.markAllAsTouched();
-            return null;
+            return;
         }
 
-        return {
-            email: this.form.value.email?.trim().toLowerCase(),
-            password: this.form.value.password,
-        };
+        const email = this.form.value.email?.trim().toLowerCase();
+        const password = this.form.value.password;
+
+        this.isLoading.set(true);
+        this.errorMessage.set('');
+
+        // OAuth2PasswordRequestForm expects form data with 'username' and 'password' fields
+        const formData = new URLSearchParams();
+        formData.set('username', email);
+        formData.set('password', password);
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/x-www-form-urlencoded'
+        });
+
+        const apiUrl = 'http://localhost:8000/accounts/login';
+
+        this.http.post<{ access_token: string; token_type: string }>(apiUrl, formData.toString(), { headers }).subscribe({
+            next: (response) => {
+                localStorage.setItem('access_token', response.access_token);
+                this.isLoading.set(false);
+                this.router.navigate(['/main-page']);
+            },
+            error: (error: HttpErrorResponse) => {
+                this.isLoading.set(false);
+                const message = 'Login failed. Please check your credentials.';
+                this.errorMessage.set(message);
+                console.error('Login error:', error);
+            }
+        });
     }
+
 
 }
