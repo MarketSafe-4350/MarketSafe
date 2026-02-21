@@ -1,13 +1,18 @@
-from fastapi import APIRouter, Depends, Request, Query
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-import jwt
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 import logging
 
-from src import SECRET_KEY
+from src.auth.dependencies import get_current_user_id
+from src.api.converter.account_converter import LoginRequest
 from src.config import FRONTEND_URL
-from src.api.errors.api_error import ApiError
-from src.api.converter import AccountResponse, AccountSignup, Token, SignupResponse, VerifyEmailResponse
+from src.api.converter import (
+    AccountResponse,
+    AccountSignup,
+    Token,
+    SignupResponse,
+    VerifyEmailResponse,
+)
 from src.business_logic.services import AccountService
 from src.business_logic.managers.account import AccountManager
 from src.db.account.mysql import MySQLAccountDB
@@ -25,12 +30,13 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/accounts")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/accounts/login")
-
-# Helper function to get service when needed
-
 
 def _get_service() -> AccountService:
+    """Helper function to get service when needed
+
+    Returns:
+        AccountService: A new instance of AccountService with its dependencies initialized.
+    """
     db = DBUtility.instance()
     account_db = MySQLAccountDB(db=db)
     account_manager = AccountManager(account_db=account_db)
@@ -72,19 +78,16 @@ def create_account(request: AccountSignup):
             email=account.email,
             fname=account.fname,
             lname=account.lname,
-            verification_link=verification_link
+            verification_link=verification_link,
         )
 
     except Exception as e:
         logger.error(f"Failed to create account: {e}")
-        return JSONResponse(
-            status_code=500,
-            content={"error_message": str(e)}
-        )
+        return JSONResponse(status_code=500, content={"error_message": str(e)})
 
 
 @router.post("/login", response_model=Token)
-def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
+def login_account(request: LoginRequest):
     """
     Authenticates a user and returns a JWT token.
 
@@ -95,45 +98,24 @@ def login_account(form_data: OAuth2PasswordRequestForm = Depends()):
         dict: A JSON object containing the access token and token type.
     """
     service = _get_service()
-    try:
 
-        token = service.login(form_data.username, form_data.password)
-
-        if not token:
-            raise ApiError(status_code=401, detail="Authentication failed.")
-
-        return {"access_token": token, "token_type": "bearer"}
-
-    except ApiError as error:
-        return JSONResponse(
-            status_code=error.status_code,
-            content={"error_message": error.message}
-        )
+    token = service.login(request.email, request.password)
+    return {"access_token": token, "token_type": "bearer"}
 
 
 @router.get("/me", response_model=AccountResponse)
-def get_account(token: str = Depends(oauth2_scheme)):
-    """Retrieves the current user's information using the email from the JWT token."""
+def get_account(
+    user_id: int = Depends(get_current_user_id),
+):
     service = _get_service()
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        email = payload.get("sub")   # JWT subject is email
+    account = service.get_account_userid(user_id)
 
-        if not email:
-            raise ApiError(status_code=401, detail="Could not validate user.")
+    return AccountResponse(
+        email=account.email,
+        fname=account.fname,
+        lname=account.lname,
+    )
 
-        account = service.get_account_by_email(email)
-
-        return AccountResponse(
-            email=account.email,
-            fname=account.fname,
-            lname=account.lname
-        )
-
-    except jwt.ExpiredSignatureError:
-        raise ApiError(status_code=401, detail="Token has expired.")
-    except jwt.InvalidTokenError:
-        raise ApiError(status_code=401, detail="Invalid token.")
 
 @router.get("/verify-email", response_model=VerifyEmailResponse)
 def verify_email(token: str = Query(..., min_length=10)):
@@ -152,20 +134,24 @@ def verify_email(token: str = Query(..., min_length=10)):
             fname=account.fname,
             lname=account.lname,
             verified=account.verified,
-            message="Email verified successfully!"
+            message="Email verified successfully!",
         )
 
-    except (TokenNotFoundError, TokenExpiredError, TokenAlreadyUsedError, EmailVerificationError) as e:
+    except (
+        TokenNotFoundError,
+        TokenExpiredError,
+        TokenAlreadyUsedError,
+        EmailVerificationError,
+    ) as e:
         logger.warning(f"Email verification failed: {e.message}")
         return JSONResponse(
-            status_code=e.status_code,
-            content={"error_message": e.message}
+            status_code=e.status_code, content={"error_message": e.message}
         )
     except Exception as e:
         logger.error(f"Unexpected error during email verification: {e}")
         return JSONResponse(
             status_code=500,
-            content={"error_message": "An error occurred during verification"}
+            content={"error_message": "An error occurred during verification"},
         )
 
 
@@ -174,4 +160,3 @@ def create_account_router(service: AccountService):
     We ignore the passed-in service for now because this module already uses _get_service().
     """
     return router
-

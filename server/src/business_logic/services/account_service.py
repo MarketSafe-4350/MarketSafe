@@ -16,7 +16,12 @@ from src.utils import (
     EmailVerificationError,
 )
 from src.utils.validation import Validation
-from src.utils.errors import ValidationError, DatabaseUnavailableError, AccountAlreadyExistsError, AppError
+from src.utils.errors import (
+    ValidationError,
+    DatabaseUnavailableError,
+    AccountAlreadyExistsError,
+    AppError,
+)
 from src.config import SECRET_KEY
 
 
@@ -26,10 +31,15 @@ logger = logging.getLogger(__name__)
 PASSWORD_REGEX = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]{8,}$"
 ALLOWED_DOMAINS = ("umanitoba.ca", "myumanitoba.ca")
 
+
 class AccountService:
     """Service class for handling account-related business logic."""
 
-    def __init__(self, account_manager: AccountManager = None, token_db: MySQLEmailVerificationTokenDB = None):
+    def __init__(
+        self,
+        account_manager: AccountManager = None,
+        token_db: MySQLEmailVerificationTokenDB = None,
+    ):
         """
         Initialize AccountService.
 
@@ -40,7 +50,9 @@ class AccountService:
         self.account_manager = account_manager
         self.token_db = token_db
 
-    def create_account(self, email: str, password: str, fname: str, lname: str) -> Account:
+    def create_account(
+        self, email: str, password: str, fname: str, lname: str
+    ) -> Account:
         """Creates a new account with the provided details.
            Validates provided details before creating account.
 
@@ -53,9 +65,11 @@ class AccountService:
         Returns:
             Account: The newly created account domain model.
         """
-        email, password, fname, lname = self.validate_account(email, password, fname, lname)
+        email, password, fname, lname = self.validate_account(
+            email, password, fname, lname
+        )
         account = Account(email=email, password=password, fname=fname, lname=lname)
-    
+
         try:
             created = self.account_manager.create_account(account)
         except AccountAlreadyExistsError as e:
@@ -70,19 +84,17 @@ class AccountService:
         except Exception:
             raise ApiError(status_code=500, message="Internal server error")
 
-
         return created if created is not None else account
 
-
     def validate_account(self, email: str, password: str, fname: str, lname: str):
-        """ Validates created account information
+        """Validates created account information
 
-        Args: 
+        Args:
             email (str): The email address for the new account - passed from create_account.
             password (str): The password for the new account - passed from create_account.
             fname (str): The first name of the account holder - passed from create_account.
             lname (str): The last name of the account holder - passed from create_account.
-        
+
         Returns:
             email, password, fname, lname - All validated from utils/validation.py and self methods
 
@@ -91,7 +103,7 @@ class AccountService:
         """
         email = Validation.valid_email(email)
         self.validate_email(email)
-        
+
         fname = Validation.require_str(fname, "First name")
         lname = Validation.require_str(lname, "Last name")
 
@@ -99,12 +111,14 @@ class AccountService:
         self.validate_password(password)
 
         return email, password, fname, lname
-    
+
     def validate_email(self, email: str):
         domain = email.split("@")[-1]
         if domain not in ALLOWED_DOMAINS:
-            raise ValidationError("Email must be a valid University of Manitoba email address "
-                                    "(@umanitoba.ca / @myumanitoba.ca)")
+            raise ValidationError(
+                "Email must be a valid University of Manitoba email address "
+                "(@umanitoba.ca / @myumanitoba.ca)"
+            )
 
     def validate_password(self, password: str):
         if not re.fullmatch(PASSWORD_REGEX, password):
@@ -165,8 +179,7 @@ class AccountService:
         """
         if not token:
             raise EmailVerificationError(
-                message="Token cannot be empty",
-                details={"token": token}
+                message="Token cannot be empty", details={"token": token}
             )
 
         # Hash the provided token to look it up
@@ -178,26 +191,29 @@ class AccountService:
         if db_token is None:
             raise TokenNotFoundError(
                 message="Invalid or expired verification token",
-                details={"token_hash": token_hash}
+                details={"token_hash": token_hash},
             )
 
         # Check if token has been used already
         if db_token.used:
             raise TokenAlreadyUsedError(
                 message="This verification token has already been used",
-                details={"token_id": db_token.id}
+                details={"token_id": db_token.id},
             )
 
         # Check if token has expired
         if db_token.is_expired():
             raise TokenExpiredError(
                 message="This verification token has expired",
-                details={"token_id": db_token.id, "expires_at": str(db_token.expires_at)}
+                details={
+                    "token_id": db_token.id,
+                    "expires_at": str(db_token.expires_at),
+                },
             )
 
         # Get the account and mark as verified
         account = self.get_account_by_userid(db_token.account_id)
-        
+
         # TODO: Call DAO to update account.verified = true
         # For now, we'll return the account (real implementation will update DB)
         account.verified = True
@@ -244,22 +260,23 @@ class AccountService:
 
         Returns:
             Account: The retrieved account domain model.
-            
+
         Raises:
             ApiError: If account not found.
         """
         if not email:
             raise ApiError(status_code=400, message="Email cannot be empty")
-        
+
         account = self.account_manager.get_account_by_email(email)
-        
+
         if account is None:
-            raise ApiError(status_code=404, message=f"Account not found for email: {email}")
-        
+            raise ApiError(
+                status_code=404, message=f"Account not found for email: {email}"
+            )
+
         return account
 
     def login(self, email: str, password: str) -> str:
-
         """Authenticates a user and returns a JWT token.
 
         Args:
@@ -275,18 +292,50 @@ class AccountService:
 
         # Get account from database
         account = self.account_manager.get_account_by_email(email)
-        
+
         if account is None:
             raise ApiError(status_code=401, message="Invalid email or password")
-        
+
         if account.password != password:
             raise ApiError(status_code=401, message="Invalid email or password")
-        
+
         # Generate JWT token
-        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
-        token = jwt.encode({
-            "sub": account.email,
-            "exp": expiration
-        }, SECRET_KEY, algorithm="HS256")
-        
+        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
+            hours=1
+        )
+        token = jwt.encode(
+            {"sub": account.email, "exp": expiration}, SECRET_KEY, algorithm="HS256"
+        )
+
         return token
+        account = self.account_manager.get_account_by_email(email)
+
+        if account is None:
+            raise ApiError(status_code=401, message="Invalid email or password")
+
+        if account.password != password:
+            raise ApiError(status_code=401, message="Invalid email or password")
+
+        # for when we implement password hashing
+        ## if not bcrypt.checkpw(password.encode(), account.password.encode()):
+        # raise ApiError(status_code=401, message="Invalid email or password")
+
+        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
+            days=30
+        )
+
+        token = jwt.encode(
+            {"sub": str(account.id), "exp": expiration}, SECRET_KEY, algorithm="HS256"
+        )
+        return token
+
+    def get_account_userid(self, userid: int) -> Account:
+        if userid is None:
+            raise ApiError(status_code=400, message="User ID cannot be None")
+
+        account = self.account_manager.get_account_by_id(userid)
+
+        if account is None:
+            raise ApiError(status_code=404, message="Account not found")
+
+        return account
