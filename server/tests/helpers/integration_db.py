@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import time
 from dataclasses import dataclass
 from typing import Optional
 
@@ -12,13 +13,22 @@ from sqlalchemy import text
 
 
 
-RESET_TABLES_ORDER = ("rating", "comment", "offer", "listing", "account")
+# One source of truth
+TABLES: tuple[str, ...] = (
+    "account",
+    "email_verification_tokens",
+    "listing",
+    "offer",
+    "comment",
+    "rating",
+)
+
+# TRUNCATE child -> parent
+RESET_TABLES_ORDER: tuple[str, ...] = tuple(reversed(TABLES))
+
 
 def reset_all_tables(db: DBUtility, *, tables: tuple[str, ...] = RESET_TABLES_ORDER) -> None:
-    """
-    Test helper: wipe all rows and reset auto-increment for the integration DB.
-    TRUNCATE requires child->parent order when FKs exist.
-    """
+    """Wipe all rows and reset auto-increment for the integration DB."""
     with db.transaction() as conn:
         conn.execute(text("SET FOREIGN_KEY_CHECKS = 0"))
         for t in tables:
@@ -27,11 +37,9 @@ def reset_all_tables(db: DBUtility, *, tables: tuple[str, ...] = RESET_TABLES_OR
 
 
 def ensure_tables_exist(db: DBUtility, timeout_s: float = 30.0) -> None:
-    tables = ("account", "listing", "offer", "comment", "rating")
-
     schema = db.database
-    import time
     deadline = time.time() + timeout_s
+
     table_sql = text("""
         SELECT COUNT(*) AS c
         FROM information_schema.tables
@@ -43,15 +51,17 @@ def ensure_tables_exist(db: DBUtility, timeout_s: float = 30.0) -> None:
     while time.time() < deadline:
         try:
             with db.connect() as conn:
-                c = conn.execute(table_sql, {"schema": schema, "tables": tuple(tables)}).scalar_one()
-                if int(c) == len(tables):
+                c = conn.execute(table_sql, {"schema": schema, "tables": TABLES}).scalar_one()
+                if int(c) == len(TABLES):
                     return
-                last = f"have {c}/{len(tables)}"
+                last = f"have {c}/{len(TABLES)}"
         except Exception as e:
             last = e
         time.sleep(0.4)
 
-    raise RuntimeError(f"Schema not ready for {tables} in schema '{schema}'. Last: {last}")
+    raise RuntimeError(f"Schema not ready for {TABLES} in schema '{schema}'. Last: {last}")
+
+
 
 @dataclass
 class IntegrationDBContext:
