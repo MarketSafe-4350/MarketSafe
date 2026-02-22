@@ -207,18 +207,3 @@ class MySQLAccountDB(AccountDB):
                 details={"op": "remove", "table": "account"},
             ) from e
 
-    # -----------------------------
-    # TEST / DEV
-    # -----------------------------
-    @override
-    def clear_db(self) -> None:
-        sql = text("DELETE FROM account")
-
-        try:
-            with self._db.transaction() as conn:
-                conn.execute(sql)
-        except SQLAlchemyError as e:
-            raise DatabaseQueryError(
-                message="Failed to clear account table.",
-                details={"op": "clear_db", "table": "account"},
-            ) from e

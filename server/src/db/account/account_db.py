@@ -141,18 +141,3 @@ class AccountDB(ABC):
         """
         raise NotImplementedError
 
-    # --------------------------------------------------
-    # TEST / DEV
-    # --------------------------------------------------
-
-    @abstractmethod
-    def clear_db(self) -> None:
-        """
-        Delete all rows from the account table.
-
-        Expected behavior:
-        - Remove all rows.
-        - Used only for testing or development.
-        - Must raise an exception if a database error occurs.
-        """
-        raise NotImplementedError
