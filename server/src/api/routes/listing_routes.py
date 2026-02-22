@@ -6,9 +6,10 @@ from fastapi.security import (
 )
 from typing import List
 from src.auth.dependencies import get_current_user_id
-from src.business_logic.managers.account.account_manager import AccountManager
-from src.db.account.mysql.mysql_account_db import MySQLAccountDB
-from src.db.db_utils import DBUtility
+from src.business_logic.managers.listing.listing_manager import ListingManager
+from src.db.listing.mysql.mysql_listing_db import MySQLListingDB
+from src.business_logic.managers.listing.abstract_listing_manager import CommentDB
+from src.db.utils.db_utils import DBUtility
 from src.db.email_verification_token.mysql.mysql_email_verification_token_db import (
     MySQLEmailVerificationTokenDB,
 )
@@ -22,9 +23,10 @@ security = HTTPBearer()
 
 def _get_service() -> ListingService:
     db = DBUtility.instance()
-    account_db = MySQLAccountDB(db=db)
-    # listing_manager = ListingManager(account_db=account_db)
-    listing_manager = None  # placeholder until we implement the manager
+    listing_db = MySQLListingDB(db=db)
+    # placeholder for now, will change when comment db is implemented
+    comment_db = CommentDB()
+    listing_manager = ListingManager(listing_db=listing_db, comment_db=comment_db)
     return ListingService(listing_manager=listing_manager)
 
 

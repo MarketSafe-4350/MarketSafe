@@ -27,10 +27,9 @@ class TestListingService(unittest.TestCase):
         )
         expected_result: List[Listing] = [one_listing, one_listing]
 
-        self.manager.get_all_listing.return_value = expected_result
-
+        self.manager.list_listings.return_value = expected_result
         result = self.service.get_all_listing()
-
+        self.manager.list_listings.assert_called_once()
         self.assertEqual(result, expected_result)
 
     # -----------------------------
@@ -49,17 +48,16 @@ class TestListingService(unittest.TestCase):
         )
         expected_result: List[Listing] = [one_listing, one_listing]
 
-        self.manager.get_listing_by_user_id.return_value = expected_result
-
+        self.manager.list_listings_by_seller.return_value = expected_result
         result = self.service.get_listing_by_user_id(user_id=user_id)
-
+        self.manager.list_listings_by_seller.assert_called_once()
         self.assertEqual(result, expected_result)
 
     # -----------------------------
     # create_listing - happy path
     # -----------------------------
     def test_create_listing_validates_and_delegates_to_manager(self) -> None:
-        result = Listing(
+        expected_result: Listing = Listing(
             listing_id=123,
             seller_id=456,
             title="Test Listing",
@@ -69,10 +67,18 @@ class TestListingService(unittest.TestCase):
             image_url="http://example.com/image.jpg",
         )
 
-        self.manager.create_listing.return_value = result
+        self.manager.create_listing.return_value = expected_result
 
-        # Currently, service does NOT call manager (it's commented out)
-        self.manager.create_listing.assert_not_called()
+        result = self.service.create_listing(
+            expected_result.seller_id,
+            expected_result.title,
+            expected_result.description,
+            expected_result.price,
+            expected_result.location,
+            expected_result.image_url,
+        )
+
+        self.manager.create_listing.assert_called_once()
 
         self.assertIsInstance(result, Listing)
         self.assertEqual(result.seller_id, 456)
@@ -253,21 +259,35 @@ class TestListingService(unittest.TestCase):
     # create_listing - image URL validation
     # -----------------------------
     def test_create_listing_image_url_valid(self) -> None:
+        expected = Listing(
+            listing_id=123,
+            seller_id=1,
+            title="A",
+            description="B",
+            price=10.0,
+            location="Winnipeg",
+            image_url="http://example.com/image.jpg",
+        )
+
+        self.manager.create_listing.return_value = expected
+
         result = self.service.create_listing(
             seller_id=1,
             title="A",
             description="B",
             price=10.0,
             location="Winnipeg",
-            image_url="http://example.com/image.jpg",  # valid
+            image_url="http://example.com/image.jpg",
         )
 
+        # manager should be called once
+        self.manager.create_listing.assert_called_once()
+
         self.assertIsNotNone(result)
+        self.assertEqual(result.id, 123)
         self.assertEqual(result.image_url, "http://example.com/image.jpg")
         self.assertEqual(result.title, "A")
         self.assertEqual(result.price, 10.0)
-
-        self.manager.create_listing.assert_not_called()
 
     def test_create_listing_image_url_invalid_scheme_raises_validation_error(
         self,
@@ -312,22 +332,35 @@ class TestListingService(unittest.TestCase):
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_image_url_none_is_valid(self) -> None:
-        result = self.service.create_listing(
-            seller_id=1,
-            title="A",
-            description="B",
+        expected_result: Listing = Listing(
+            listing_id=123,
+            seller_id=456,
+            title="Test Listing",
+            description="This is a test listing.",
             price=10.0,
-            location="Winnipeg",
-            image_url=None,  # valid - indicates no image provided
+            location="Test Location",
+            image_url=None,
         )
+
+        self.manager.create_listing.return_value = expected_result
+
+        result = self.service.create_listing(
+            seller_id=expected_result.seller_id,
+            title=expected_result.title,
+            description=expected_result.description,
+            price=expected_result.price,
+            location=expected_result.location,
+            image_url=expected_result.image_url,
+        )
+
+        self.manager.create_listing.assert_called_once()
 
         # Should not raise exception
         self.assertIsNotNone(result)
+        self.assertEqual(result.id, 123)
         self.assertIsNone(result.image_url)
-        self.assertEqual(result.title, "A")
+        self.assertEqual(result.title, "Test Listing")
         self.assertEqual(result.price, 10.0)
-
-        self.manager.create_listing.assert_not_called()
 
     def test_create_listing_image_url_invalid_domain_raises_validation_error(
         self,
