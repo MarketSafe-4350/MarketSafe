@@ -19,8 +19,7 @@ class AccountManager(IAccountManager):
     """
 
     def __init__(self, account_db: AccountDB) -> None:
-        self._account_db = account_db
-
+        super().__init__(account_db)
     @override
     def create_account(self, account: Account) -> Account:
         Validation.require_not_none(account, "account")

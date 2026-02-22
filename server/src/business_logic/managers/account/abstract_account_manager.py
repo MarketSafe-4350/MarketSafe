@@ -2,7 +2,9 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional, List
 
+from src.db.account import AccountDB
 from src.domain_models import Account
+from src.utils import Validation
 
 
 class IAccountManager(ABC):
@@ -14,7 +16,14 @@ class IAccountManager(ABC):
         - Calls persistence layer (AccountDB) to read/write data.
         - Decides which domain errors to raise (404/409/422/etc.).
         - Does NOT write SQL.
+
+    Dependency contract:
+        - account_db: AccountDB (required)
     """
+
+    def __init__(self, account_db: AccountDB) -> None:
+        Validation.require_not_none(account_db, "account_db")
+        self._account_db = account_db
 
     @abstractmethod
     def create_account(self, account: Account) -> Account:
