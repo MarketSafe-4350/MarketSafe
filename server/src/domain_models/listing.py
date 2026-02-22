@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from src.utils import ValidationError, UnapprovedBehaviorError, Validation
+from typing import List
+from src.domain_models.comment import Comment
 
 
 class Listing:
@@ -27,9 +29,10 @@ class Listing:
         listing_id: int | None = None,
         image_url: str | None = None,
         location: str | None = None,
-        created_at=None,  #Set by DB; keep flexible type to avoid coupling
+        created_at=None,  # Set by DB; keep flexible type to avoid coupling
         is_sold: bool = False,
         sold_to_id: int | None = None,
+        comments: List[Comment] | None = None,
     ):
         self._id = listing_id
         self._seller_id = Validation.require_int(seller_id, "seller_id")
@@ -37,15 +40,22 @@ class Listing:
         self._title = Validation.require_str(title, "title")
         self._description = Validation.require_str(description, "description")
 
-
         self._price = Validation.is_positive_number(price, "price")
 
-        self._image_url = None if image_url is None else Validation.require_str(image_url, "image_url")
-        self._location = None if location is None else Validation.require_str(location, "location")
+        self._image_url = (
+            None
+            if image_url is None
+            else Validation.require_str(image_url, "image_url")
+        )
+        self._location = (
+            None if location is None else Validation.require_str(location, "location")
+        )
 
         self._created_at = created_at
         self._is_sold = Validation.is_boolean(is_sold, "is_sold")
         self._sold_to_id = sold_to_id
+
+        self._comments = comments
 
         self._enforce_sold_invariants()
 
@@ -110,7 +120,9 @@ class Listing:
 
     @image_url.setter
     def image_url(self, value: str | None) -> None:
-        self._image_url = None if value is None else Validation.require_str(value, "image_url")
+        self._image_url = (
+            None if value is None else Validation.require_str(value, "image_url")
+        )
 
     # ==============================
     # PRICE (NOT NULL)
@@ -134,7 +146,9 @@ class Listing:
 
     @location.setter
     def location(self, value: str | None) -> None:
-        self._location = None if value is None else Validation.require_str(value, "location")
+        self._location = (
+            None if value is None else Validation.require_str(value, "location")
+        )
 
     # ==============================
     # CREATED AT (DB-managed)
@@ -166,12 +180,58 @@ class Listing:
         self._sold_to_id = buyer_account_id
         self._enforce_sold_invariants()
 
-
     def _enforce_sold_invariants(self) -> None:
         if self._is_sold and self._sold_to_id is None:
             raise ValidationError("sold_to_id must be set when is_sold is True.")
         if (not self._is_sold) and self._sold_to_id is not None:
             raise ValidationError("sold_to_id must be None when is_sold is False.")
+
+    # ==============================
+    # comments (NULLABLE)
+    # ==============================
+    @property
+    def comments(self) -> List[Comment] | None:
+        return self._comments
+
+    @comments.setter
+    def comments(self, value: List[Comment]) -> None:
+        if value is None:
+            self._comments = None
+            return self._comments
+
+        if not isinstance(value, list):
+            raise ValidationError("comments must be a list of Comment.")
+
+        for i, comment in enumerate(value):
+            if not isinstance(comment, Comment):
+                raise ValidationError(f"comments[{i}] must be a Comment.")
+
+        # shallow copy list for safety measure from external mutation
+        self._comments = list(value)
+
+    def add_comment(self, comment: Comment) -> None:
+        Validation.require_not_none(comment, "Comment")
+
+        self._comments.append(comment)
+
+    def add_comments(self, comments: List[Comment]) -> None:
+        Validation.require_not_none(comments, "Comments")
+
+        if not isinstance(comments, list):
+            raise ValidationError("comments must be a list of Comment.")
+
+        for i, comment in enumerate(comments):
+            if not isinstance(comment, Comment):
+                raise ValidationError(f"comments[{i}] must be a Comment.")
+
+            # invariant check
+            if self._id is not None and comment.listing_id != self._id:
+                raise ValidationError(
+                    f"comments[{i}].listing_id ({comment.listing_id}) "
+                    f"does not match Listing.id ({self._id})."
+                )
+
+            self._comments.append(comment)
 
     # ==============================
     # DEBUG REPRESENTATION
@@ -185,5 +245,6 @@ class Listing:
             f"price={self._price}, "
             f"is_sold={self._is_sold}, "
             f"sold_to_id={self._sold_to_id}, "
-            f"created_at={self._created_at!r})"
+            f"created_at={self._created_at!r}"
+            f"comments={self._comments})"
         )
