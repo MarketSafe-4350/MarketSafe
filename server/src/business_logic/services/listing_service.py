@@ -1,6 +1,7 @@
 from src.domain_models.listing import Listing
 from src.utils.errors import ValidationError, DatabaseUnavailableError
 from urllib.parse import urlparse
+from typing import List
 
 
 class ListingService:
@@ -8,6 +9,20 @@ class ListingService:
 
     def __init__(self, listing_manager):
         self.listing_manager = listing_manager
+
+    def get_all_listing(self) -> List[Listing]:
+        # test data, waiting for account manager to be created
+        listing = Listing(
+            seller_id=1,
+            title="test title",
+            description="test_desc",
+            price=1,
+            location="test_loc",
+            image_url="test_img_url",
+        )
+
+        listings: List[Listing] = [listing, listing]
+        return listings
 
     def create_listing(
         self,
