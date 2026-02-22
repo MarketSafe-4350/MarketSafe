@@ -3,11 +3,11 @@ from __future__ import annotations
 import unittest
 
 from tests.helpers.integration_db_session import suite_begin, suite_end
-from tests.integration.account_db_manager import (
+from tests.integration.account import (
     TestMySQLAccountDB,
     TestAccountManagerIntegration,
 )
-from tests.integration.account_db_manager.test_account_service import (
+from tests.integration.account.test_account_service import (
     TestAccountServiceIntegration,
 )
 from tests.integration.db import TestDBUtility
