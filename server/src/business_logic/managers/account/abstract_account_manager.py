@@ -2,7 +2,10 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional, List
 
+from src.db.account import AccountDB
+from src.db.listing import ListingDB
 from src.domain_models import Account
+from src.utils import Validation
 
 
 class IAccountManager(ABC):
@@ -14,7 +17,18 @@ class IAccountManager(ABC):
         - Calls persistence layer (AccountDB) to read/write data.
         - Decides which domain errors to raise (404/409/422/etc.).
         - Does NOT write SQL.
+
+    Dependency contract:
+        - account_db: AccountDB (required)
     """
+
+    def __init__(self, account_db: AccountDB, listing_db: Optional[ListingDB] = None) -> None:
+        Validation.require_not_none(account_db, "account_db")
+        self._account_db = account_db
+
+        # Optional dependency (used only by specific methods)
+        self._listing_db = listing_db
+
 
     @abstractmethod
     def create_account(self, account: Account) -> Account:
@@ -165,24 +179,23 @@ class IAccountManager(ABC):
         """
         raise NotImplementedError
 
-
     @abstractmethod
-    def clear_accounts(self) -> None:
+    def get_account_with_listings(self, account_id: int):
         """
         PURPOSE:
-            Clear all rows from the `account` table.
+            Fetch an account and all listings posted by that account.
 
         EXPECTED BEHAVIOR:
-            - Calls the persistence layer (AccountDB.clear_db()) to delete all rows.
-            - Intended ONLY for testing / development utilities.
-            - Must raise if any database error occurs (do not swallow exceptions).
-            - Should not be exposed in production API routes.
+            - Validate account_id.
+            - If account does not exist -> return None.
+            - Fetch listings using ListingDB.get_by_seller_id.
+            - Return composed result (Account + Listings).
+            - Must NOT raise if account is missing (normal read outcome).
 
-        RETURNS:
-            None
-
-        RAISES (typical):
-            - DatabaseUnavailableError / DatabaseQueryError: on infrastructure failures.
+        RAISES:
+            - ValidationError
+            - ConfigurationError (if ListingDB not provided)
+            - DatabaseUnavailableError / DatabaseQueryError
         """
         raise NotImplementedError
 

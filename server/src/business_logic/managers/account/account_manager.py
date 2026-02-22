@@ -5,8 +5,9 @@ from typing_extensions import override
 
 from src.business_logic.managers.account import IAccountManager
 from src.db.account import AccountDB
+from src.db.listing import ListingDB
 from src.domain_models import Account
-from src.utils import Validation, AccountAlreadyExistsError, AccountNotFoundError
+from src.utils import Validation, AccountAlreadyExistsError, AccountNotFoundError, ConfigurationError
 
 
 class AccountManager(IAccountManager):
@@ -18,8 +19,9 @@ class AccountManager(IAccountManager):
     - Delegates SQL work to AccountDB
     """
 
-    def __init__(self, account_db: AccountDB) -> None:
-        self._account_db = account_db
+    class AccountManager(IAccountManager):
+        def __init__(self, account_db: AccountDB, listing_db: Optional[ListingDB] = None) -> None:
+            super().__init__(account_db, listing_db)
 
     @override
     def create_account(self, account: Account) -> Account:
@@ -87,11 +89,71 @@ class AccountManager(IAccountManager):
             )
         return acc
 
-    @override
-    def clear_accounts(self) -> None:
-        """
-        Testing/dev utility: wipe the account table.
-        Delegates to persistence layer.
-        """
-        self._account_db.clear_db()
+    from typing import Optional
 
+    @override
+    def get_account_with_listings(self, account_id: int) -> Optional[Account]:
+        """
+        Orchestration:
+          - account_db.get_by_id(account_id)
+          - listing_db.get_by_seller_id(account_id)
+          - attach listings to Account via account.add_listing(...)
+          - return Account (or None if not found)
+
+        Notes:
+          - This method requires ListingDB to be provided (optional dependency).
+          - We return the Account domain object with its internal listings populated.
+        """
+        account_id = Validation.require_int(account_id, "account_id")
+
+        # Requires optional dependency
+        if self._listing_db is None:
+            raise ConfigurationError(
+                message="ListingDB dependency is required for get_account_with_listings().",
+                details={"missing_dependency": "ListingDB"},
+            )
+
+        account = self._account_db.get_by_id(account_id)
+        if account is None:
+            return None
+
+        listings = self._listing_db.get_by_seller_id(account_id)
+
+        # Attach safely through domain method (enforces seller_id invariant)
+        for listing in listings:
+            account.add_listing(listing)
+
+        return account
+
+    def get_account_with_listings_by_email(self, email: str) -> Optional[Account]:
+        """
+        Wrapper:
+            - Normalize/validate email
+            - Fetch account by email
+            - Delegate to get_account_with_listings(account_id)
+        """
+
+        email = Validation.valid_email(email)
+
+        account = self._account_db.get_by_email(email)
+        if account is None:
+            return None
+
+        return self.get_account_with_listings(account.id)
+
+
+    def get_account_with_listings_for(self, account: Account) -> Optional[Account]:
+        """
+        Wrapper:
+            - Validate account object
+            - Ensure account is persisted
+            - Delegate to get_account_with_listings(account.id)
+        """
+
+        Validation.require_not_none(account, "account")
+
+        if account.id is None:
+            # Unpersisted account cannot have DB listings
+            return None
+
+        return self.get_account_with_listings(account.id)

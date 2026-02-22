@@ -4,4 +4,4 @@ from .errors import (AppError, InfrastructureError, DatabaseUnavailableError, Da
                      DomainError, ValidationError, ConflictError, UnapprovedBehaviorError, ConfigurationError,
                      AccountAlreadyExistsError, AccountError, AccountNotFoundError,
                      TokenError, TokenNotFoundError, TokenExpiredError, TokenAlreadyUsedError,
-                     EmailVerificationError)
+                     EmailVerificationError, ListingError, ListingNotFoundError)

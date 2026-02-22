@@ -18,13 +18,6 @@ class AccountMapper:
     So this class never touches SQLAlchemy internals.
     """
 
-    # @staticmethod
-    # def from_row(row: Any) -> Account:
-    #     """
-    #     Accepts an SQLAlchemy Row (row._mapping)
-    #     """
-    #     m: Mapping[str, Any] = row._mapping  # SQLAlchemy Row -> mapping view
-    #     return AccountMapper.from_mapping(m)
 
     @staticmethod
     def from_mapping(m: Mapping[str, Any]) -> Account:

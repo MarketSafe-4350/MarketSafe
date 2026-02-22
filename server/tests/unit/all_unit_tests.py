@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import unittest
 
+from tests.integration.listing import TestMySQLListingDB
+from tests.unit.listing import TestListingManagerUnit
 from tests.unit.listings.test_listing_service import TestListingService
 from tests.unit.account_mangers import TestAccountManager, TestAccountService
 
@@ -13,6 +15,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestAccountManager))
     suite.addTests(loader.loadTestsFromTestCase(TestAccountService))
     suite.addTests(loader.loadTestsFromTestCase(TestListingService))
+    suite.addTests(loader.loadTestsFromTestCase(TestListingManagerUnit))
     return suite
 
 
