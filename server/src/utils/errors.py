@@ -125,3 +125,16 @@ class TokenAlreadyUsedError(TokenError):
 class EmailVerificationError(TokenError):
     code: str = "EMAIL_VERIFICATION_ERROR"
     status_code: int = 400
+
+# -----------------------------
+# Listing-specific errors (domain layer friendly)
+# -----------------------------
+@dataclass
+class ListingError(DomainError):
+    code: str = "LISTING_ERROR"
+    status_code: int = 400
+
+@dataclass
+class ListingNotFoundError(ListingError):
+    code: str = "LISTING_NOT_FOUND"
+    status_code: int = 404
