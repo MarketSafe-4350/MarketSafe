@@ -299,23 +299,6 @@ class AccountService:
         if account.password != password:
             raise ApiError(status_code=401, message="Invalid email or password")
 
-        # Generate JWT token
-        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-            hours=1
-        )
-        token = jwt.encode(
-            {"sub": account.email, "exp": expiration}, SECRET_KEY, algorithm="HS256"
-        )
-
-        return token
-        account = self.account_manager.get_account_by_email(email)
-
-        if account is None:
-            raise ApiError(status_code=401, message="Invalid email or password")
-
-        if account.password != password:
-            raise ApiError(status_code=401, message="Invalid email or password")
-
         # for when we implement password hashing
         ## if not bcrypt.checkpw(password.encode(), account.password.encode()):
         # raise ApiError(status_code=401, message="Invalid email or password")
