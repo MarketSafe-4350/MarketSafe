@@ -55,8 +55,7 @@ class Listing:
         self._is_sold = Validation.is_boolean(is_sold, "is_sold")
         self._sold_to_id = sold_to_id
 
-        self._comments: List[Comment] | None = None
-        self.comments = comments  # use setter's Validation
+        self._comments = comments
 
         self._enforce_sold_invariants()
 
@@ -195,10 +194,10 @@ class Listing:
         return self._comments
 
     @comments.setter
-    def comments(self, value: List[Comment] | None) -> None:
+    def comments(self, value: List[Comment]) -> None:
         if value is None:
             self._comments = None
-            return
+            return self._comments
 
         if not isinstance(value, list):
             raise ValidationError("comments must be a list of Comment.")
@@ -209,6 +208,30 @@ class Listing:
 
         # shallow copy list for safety measure from external mutation
         self._comments = list(value)
+
+    def add_comment(self, comment: Comment) -> None:
+        Validation.require_not_none(comment, "Comment")
+
+        self._comments.append(comment)
+
+    def add_comments(self, comments: List[Comment]) -> None:
+        Validation.require_not_none(comments, "Comments")
+
+        if not isinstance(comments, list):
+            raise ValidationError("comments must be a list of Comment.")
+
+        for i, comment in enumerate(comments):
+            if not isinstance(comment, Comment):
+                raise ValidationError(f"comments[{i}] must be a Comment.")
+
+            # invariant check
+            if self._id is not None and comment.listing_id != self._id:
+                raise ValidationError(
+                    f"comments[{i}].listing_id ({comment.listing_id}) "
+                    f"does not match Listing.id ({self._id})."
+                )
+
+            self._comments.append(comment)
 
     # ==============================
     # DEBUG REPRESENTATION
