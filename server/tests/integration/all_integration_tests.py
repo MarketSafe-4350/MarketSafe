@@ -3,13 +3,30 @@ from __future__ import annotations
 import unittest
 
 from tests.helpers.integration_db_session import suite_begin, suite_end
-from tests.integration.account_db_manager import TestMySQLAccountDB, TestAccountManagerIntegration
-from tests.integration.account_db_manager.test_account_service import TestAccountServiceIntegration
+from tests.integration.account_db_manager import (
+    TestMySQLAccountDB,
+    TestAccountManagerIntegration,
+)
+from tests.integration.account_db_manager.test_account_service import (
+    TestAccountServiceIntegration,
+)
 from tests.integration.db import TestDBUtility
 from tests.helpers import IntegrationDBContext
 
 
-def load_tests(loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str) -> unittest.TestSuite:
+def setUpModule() -> None:
+    """Start DB once for the entire integration test module."""
+    suite_begin(timeout_s=60)
+
+
+def tearDownModule() -> None:
+    """Stop DB once after all integration tests in this module finish."""
+    suite_end(remove_volumes=True)
+
+
+def load_tests(
+    loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str
+) -> unittest.TestSuite:
     suite = unittest.TestSuite()
     suite.addTests(loader.loadTestsFromTestCase(TestDBUtility))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLAccountDB))
