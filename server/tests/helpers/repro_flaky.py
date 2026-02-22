@@ -4,7 +4,7 @@ import os
 import threading
 import unittest
 
-from tests.integration.account_db_manager import TestMySQLAccountDB
+from tests.integration.account import TestMySQLAccountDB
 
 
 def run_until_failure(testcase: type[unittest.TestCase], max_iters: int = 1_000_000) -> None:

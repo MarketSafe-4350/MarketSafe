@@ -100,9 +100,84 @@ class TestAccountServiceIntegration(unittest.TestCase):
             )
 
     # -----------------------------
-    # login (currently mock logic)
+    # login
     # -----------------------------
-    def test_login_invalid_credentials_raises_401(self) -> None:
+    def test_login_valid_credentials_returns_jwt(self) -> None:
+        # Create a real account first
+        created = self._service.create_account(
+            email="login@umanitoba.ca",
+            password="Password1",
+            fname="Jane",
+            lname="Doe",
+        )
+
+        # Attempt login with correct credentials
+        token = self._service.login("login@umanitoba.ca", "Password1")
+
+        # Should return a JWT string
+        self.assertIsInstance(token, str)
+        self.assertTrue(len(token) > 0)
+
+    def test_login_wrong_password_raises_401(self) -> None:
+        # Create account
+        self._service.create_account(
+            email="wrongpass@umanitoba.ca",
+            password="Password1",
+            fname="Jane",
+            lname="Doe",
+        )
+
+        # Wrong password should fail
         with self.assertRaises(ApiError) as ctx:
-            self._service.login("x@umanitoba.ca", "Password1")
+            self._service.login("wrongpass@umanitoba.ca", "WrongPassword1")
+
         self.assertEqual(ctx.exception.status_code, 401)
+
+    def test_login_nonexistent_email_raises_401(self) -> None:
+        # Email not in DB
+        with self.assertRaises(ApiError) as ctx:
+            self._service.login("doesnotexist@umanitoba.ca", "Password1")
+
+        self.assertEqual(ctx.exception.status_code, 401)
+
+    def test_login_missing_fields_raises_400(self) -> None:
+        # Empty email + password should be rejected
+        with self.assertRaises(ApiError) as ctx:
+            self._service.login("", "")
+
+        self.assertEqual(ctx.exception.status_code, 400)
+    
+    # -----------------------------
+    # get account with userid
+    # -----------------------------
+
+    def test_get_account_userid_returns_account(self) -> None:
+        # Create account to retrieve
+        created = self._service.create_account(
+            email="userid@umanitoba.ca",
+            password="Password1",
+            fname="John",
+            lname="User",
+        )
+
+        # Fetch using returned ID
+        account = self._service.get_account_userid(created.id)
+
+        # Verify returned data matches DB
+        self.assertIsNotNone(account)
+        self.assertEqual(account.id, created.id)
+        self.assertEqual(account.email, "userid@umanitoba.ca")
+
+    def test_get_account_userid_not_found_raises_404(self) -> None:
+        # Non-existent ID
+        with self.assertRaises(ApiError) as ctx:
+            self._service.get_account_userid(999999)
+
+        self.assertEqual(ctx.exception.status_code, 404)
+
+    def test_get_account_userid_none_raises_400(self) -> None:
+        # None should be rejected immediately
+        with self.assertRaises(ApiError) as ctx:
+            self._service.get_account_userid(None)
+
+        self.assertEqual(ctx.exception.status_code, 400)
