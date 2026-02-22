@@ -181,3 +181,106 @@ class TestAccountService(unittest.TestCase):
     #         self.service.login("nope@umanitoba.ca", "Password1")
 
     #     self.assertEqual(ctx.exception.status_code, 401)
+
+
+    # -----------------------------
+    # login
+    # -----------------------------
+
+    def test_login_valid_credentials_returns_token(self) -> None:
+        # Arrange: mock existing account
+        account = Account(
+            account_id=1,
+            email="test@umanitoba.ca",
+            password="Password1",
+            fname="John",
+            lname="Smith",
+            verified=False,
+        )
+        self.manager.get_account_by_email.return_value = account
+
+        # Act: login with correct credentials
+        token = self.service.login("test@umanitoba.ca", "Password1")
+
+        # Assert: token returned and manager called
+        self.assertIsInstance(token, str)
+        self.manager.get_account_by_email.assert_called_once_with("test@umanitoba.ca")
+
+    def test_login_missing_fields_raises_400(self) -> None:
+        # Act + Assert: empty fields rejected immediately
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("", "")
+
+        self.assertEqual(ctx.exception.status_code, 400)
+        self.manager.get_account_by_email.assert_not_called()
+
+    def test_login_nonexistent_email_raises_401(self) -> None:
+        # Arrange: manager returns None (no account)
+        self.manager.get_account_by_email.return_value = None
+
+        # Act + Assert: invalid email should fail
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("nope@umanitoba.ca", "Password1")
+
+        self.assertEqual(ctx.exception.status_code, 401)
+        self.manager.get_account_by_email.assert_called_once_with("nope@umanitoba.ca")
+
+    def test_login_wrong_password_raises_401(self) -> None:
+        # Arrange: account exists but password mismatch
+        account = Account(
+            account_id=1,
+            email="test@umanitoba.ca",
+            password="Password1",
+            fname="John",
+            lname="Smith",
+            verified=False,
+        )
+        self.manager.get_account_by_email.return_value = account
+
+        # Act + Assert: wrong password rejected
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("test@umanitoba.ca", "WrongPassword1")
+
+        self.assertEqual(ctx.exception.status_code, 401)
+
+    # -----------------------------
+    # get_account_by_userid
+    # -----------------------------
+
+    def test_get_account_userid_success_returns_account(self) -> None:
+        # Arrange: mock account returned from manager
+        account = Account(
+            account_id=5,
+            email="user@umanitoba.ca",
+            password="Password1",
+            fname="Jane",
+            lname="Doe",
+            verified=False,
+        )
+        self.manager.get_account_by_id.return_value = account
+
+        # Act: fetch by ID
+        result = self.service.get_account_userid(5)
+
+        # Assert: correct account returned and manager called
+        self.assertEqual(result, account)
+        self.manager.get_account_by_id.assert_called_once_with(5)
+
+    def test_get_account_userid_none_raises_400(self) -> None:
+        # Act + Assert: None should fail validation
+        with self.assertRaises(ApiError) as ctx:
+            self.service.get_account_userid(None)
+
+        self.assertEqual(ctx.exception.status_code, 400)
+        self.manager.get_account_by_id.assert_not_called()
+
+    def test_get_account_userid_not_found_raises_404(self) -> None:
+        # Arrange: manager returns None (not found)
+        self.manager.get_account_by_id.return_value = None
+
+        # Act + Assert: unknown ID should raise 404
+        with self.assertRaises(ApiError) as ctx:
+            self.service.get_account_userid(99)
+
+        self.assertEqual(ctx.exception.status_code, 404)
+        self.manager.get_account_by_id.assert_called_once_with(99)
