@@ -5,7 +5,7 @@ import os
 from dataclasses import dataclass
 from typing import Optional
 
-from src.db.db_utils import DBUtility
+from src.db import DBUtility
 from tests.helpers.docker_db import DockerComposeConfig, ensure_db_for_tests, down
 from sqlalchemy import text
 
