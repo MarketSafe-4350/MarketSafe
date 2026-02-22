@@ -4,7 +4,6 @@ import datetime
 import re
 
 from src.business_logic.managers.account.account_manager import AccountManager
-from src import SECRET_KEY
 from src.api.errors import ApiError
 from src.domain_models import Account, VerificationToken
 from src.db.email_verification_token.mysql import MySQLEmailVerificationTokenDB

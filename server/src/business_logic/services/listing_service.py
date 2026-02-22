@@ -11,6 +11,11 @@ class ListingService:
         self.listing_manager = listing_manager
 
     def get_all_listing(self) -> List[Listing]:
+        """Get all listing
+
+        Returns:
+            List[Listing]: list of Listing
+        """
         # test data, waiting for account manager to be created
         listing = Listing(
             seller_id=1,
@@ -19,6 +24,25 @@ class ListingService:
             price=1,
             location="test_loc",
             image_url="test_img_url",
+        )
+
+        listings: List[Listing] = [listing, listing]
+        return listings
+
+    def get_listing_by_user_id(self, user_id) -> List[Listing]:
+        """Get current user listing
+
+        Returns:
+            List[Listing]: list of Listing
+        """
+        # test data, waiting for account manager to be created
+        listing = Listing(
+            seller_id=user_id,
+            title="test my title",
+            description="test my desc",
+            price=1,
+            location="test my loc",
+            image_url="test my img url",
         )
 
         listings: List[Listing] = [listing, listing]

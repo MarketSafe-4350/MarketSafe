@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
+from typing import List
 
 from src.business_logic.services.listing_service import ListingService
 from src.domain_models.listing import Listing
@@ -9,7 +10,50 @@ from src.utils import ValidationError
 class TestListingService(unittest.TestCase):
     def setUp(self) -> None:
         self.manager: MagicMock = MagicMock()
-        self.service = ListingService(self.manager)
+        self.service = ListingService(listing_manager=self.manager)
+
+    # -----------------------------
+    # get_all_listing - happy path
+    # -----------------------------
+    def test_get_all_listing_delegates_to_manager(self) -> None:
+        one_listing = Listing(
+            listing_id=123,
+            seller_id=456,
+            title="Test Listing",
+            description="This is a test listing.",
+            price=10.0,
+            location="Test Location",
+            image_url="http://example.com/image.jpg",
+        )
+        expected_result: List[Listing] = [one_listing, one_listing]
+
+        self.manager.get_all_listing.return_value = expected_result
+
+        result = self.service.get_all_listing()
+
+        self.assertEqual(result, expected_result)
+
+    # -----------------------------
+    # get listing by user id
+    # -----------------------------
+    def test_get_listing_by_user_id_delegates_to_manager(self) -> None:
+        user_id = 456
+        one_listing = Listing(
+            listing_id=123,
+            seller_id=user_id,
+            title="Test Listing",
+            description="This is a test listing.",
+            price=10.0,
+            location="Test Location",
+            image_url="http://example.com/image.jpg",
+        )
+        expected_result: List[Listing] = [one_listing, one_listing]
+
+        self.manager.get_listing_by_user_id.return_value = expected_result
+
+        result = self.service.get_listing_by_user_id(user_id=user_id)
+
+        self.assertEqual(result, expected_result)
 
     # -----------------------------
     # create_listing - happy path

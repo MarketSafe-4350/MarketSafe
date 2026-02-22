@@ -29,16 +29,46 @@ def _get_service() -> ListingService:
 
 
 @router.get("", response_model=List[ListingResponse])
-def get_all_listing(user_id: int = Depends(get_current_user_id)):
-    """Get all available listings.
+def get_all_listing(_: int = Depends(get_current_user_id)):
+    """Get all listings
+
+    Args:
+        _ (int, optional): Jwt auth token. Defaults to Depends(get_current_user_id).
 
     Returns:
-        list[ListingResponse]: All available listings
+        _type_: list of ListingResponse
     """
     service = _get_service()
-    print(user_id)
 
     listings: List[Listing] = service.get_all_listing()
+
+    return [
+        ListingResponse(
+            title=listing.title,
+            description=listing.description,
+            price=listing.price,
+            image_url=listing.image_url,
+            location=listing.location,
+            created_at=listing.created_at.isoformat() if listing.created_at else None,
+            is_sold=listing.is_sold,
+        )
+        for listing in listings
+    ]
+
+
+@router.get("/me", response_model=List[ListingResponse])
+def get_my_listing(user_id: int = Depends(get_current_user_id)):
+    """Get current user listings
+
+    Args:
+        _ (int, optional): Jwt auth token. Defaults to Depends(get_current_user_id).
+
+    Returns:
+        _type_:  list of ListingResponse
+    """
+    service = _get_service()
+
+    listings: List[Listing] = service.get_listing_by_user_id(user_id=user_id)
 
     return [
         ListingResponse(
