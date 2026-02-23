@@ -18,9 +18,9 @@ from src.utils.errors import (
 from src.api.errors.exception_handlers import AppError, app_error_handler
 
 
-class TestListingRoutes(unittest.TestCase):
+class TestListingRouteIntegration(unittest.TestCase):
     """
-    Route tests (with mocked service): route -> (mocked) service
+    Route tests (with mocked service): route -> service -> manager -> db (docker)
     Includes error-path tests to verify exception handling.
     """
 

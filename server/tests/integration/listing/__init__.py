@@ -1,2 +1,4 @@
 from .test_mysql_listing_db import TestMySQLListingDB
 from .test_listing_manager_integration import TestListingManagerIntegration
+from .test_listing_route_integration import TestListingRouteIntegration
+from .test_listing_service_integration import TestListingServiceIntegration
