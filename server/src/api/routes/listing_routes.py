@@ -6,9 +6,8 @@ from fastapi.security import (
 )
 from typing import List
 from src.auth.dependencies import get_current_user_id
-from src.business_logic.managers.listing.listing_manager import ListingManager
-from src.db.listing.mysql.mysql_listing_db import MySQLListingDB
-from src.business_logic.managers.listing.abstract_listing_manager import CommentDB
+from src.business_logic.managers.account.account_manager import AccountManager
+from src.db.account.mysql.mysql_account_db import MySQLAccountDB
 from src.db.utils.db_utils import DBUtility
 from src.db.email_verification_token.mysql.mysql_email_verification_token_db import (
     MySQLEmailVerificationTokenDB,
