@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import Mock
 
 from src.business_logic.managers.listing.listing_manager import ListingManager
-from src.domain_models import Account, Listing
+from src.domain_models import Account, Listing, Comment
 from src.utils import ListingNotFoundError, UnapprovedBehaviorError
 
 
@@ -48,7 +48,21 @@ class TestListingManagerUnit(unittest.TestCase):
             sold_to_id=sold_to_id,
             location="Winnipeg",
         )
-
+        
+    def _comment(
+        self,
+        *,
+        comment_id: int | None,
+        listing_id: int,
+        author_id: int,
+        body: str | None = "none",
+    ) -> Comment:
+        return Comment(
+            listing_id=listing_id,
+            author_id=author_id,
+            body=body,
+            comment_id=comment_id,
+        )
     # -----------------------------
     # orchestration
     # -----------------------------
@@ -64,13 +78,13 @@ class TestListingManagerUnit(unittest.TestCase):
     def test_get_listing_with_comments_attaches_comments(self) -> None:
         listing = self._listing(listing_id=10, seller_id=1)
         self.listing_db.get_by_id.return_value = listing
-        self.comment_db.get_for_listing.return_value = []  # can be fake Comment objects later
+        self.comment_db.get_by_listing_id.return_value = []  # can be fake Comment objects later
 
         out = self.mgr.get_listing_with_comments(10)
 
         self.assertIsNotNone(out)
         assert out is not None
-        self.comment_db.get_for_listing.assert_called_once_with(10)
+        self.comment_db.get_by_listing_id.assert_called_once_with(10)
         self.assertEqual(out.comments, [])
 
     # -----------------------------

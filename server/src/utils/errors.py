@@ -13,6 +13,7 @@ class AppError(Exception):
     - status_code: HTTP mapping (used by API layer)
     - details: optional extra fields (safe, non-sensitive)
     """
+
     message: str
     code: str = "APP_ERROR"
     status_code: int = 500
@@ -40,6 +41,7 @@ class DatabaseQueryError(InfrastructureError):
     DB is reachable but the query fails (syntax, constraint, etc.)
     Usually it's a server bug -> 500.
     """
+
     code: str = "DB_QUERY_ERROR"
     status_code: int = 500
 
@@ -61,14 +63,18 @@ class ConflictError(DomainError):
     code: str = "CONFLICT"
     status_code: int = 409
 
+
 @dataclass
 class UnapprovedBehaviorError(DomainError):
     """
     Used when a user tries an action that is not allowed by the business rules.
     Example: buyer tries to rate their own listing.
     """
+
     code: str = "UNAPPROVED_BEHAVIOR"
     status_code: int = 403
+
+
 # -----------------------------
 # Account-specific errors (domain layer friendly)
 # -----------------------------
@@ -76,6 +82,8 @@ class UnapprovedBehaviorError(DomainError):
 class ConfigurationError(InfrastructureError):
     code: str = "CONFIGURATION_ERROR"
     status_code: int = 500
+
+
 @dataclass
 class AccountError(DomainError):
     code: str = "ACCOUNT_ERROR"
@@ -126,6 +134,7 @@ class EmailVerificationError(TokenError):
     code: str = "EMAIL_VERIFICATION_ERROR"
     status_code: int = 400
 
+
 # -----------------------------
 # Listing-specific errors (domain layer friendly)
 # -----------------------------
@@ -134,7 +143,23 @@ class ListingError(DomainError):
     code: str = "LISTING_ERROR"
     status_code: int = 400
 
+
 @dataclass
 class ListingNotFoundError(ListingError):
     code: str = "LISTING_NOT_FOUND"
+    status_code: int = 404
+
+
+# -----------------------------
+# Comment-specific errors (domain layer friendly)
+# -----------------------------
+@dataclass
+class CommentError(DomainError):
+    code: str = "COMMENT_ERROR"
+    status_code: int = 400
+
+
+@dataclass
+class CommentNotFoundError(CommentError):
+    code: str = "COMMENT_NOT_FOUND"
     status_code: int = 404
