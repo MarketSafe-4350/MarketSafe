@@ -6,13 +6,16 @@ import { LoginComponent } from './features/login/login.component';
 import { MainPageComponent } from './features/main-page/main-page.component';
 import { MyListingsPageComponent } from './features/my-listings-page/my-listings-page.component';
 import { VerifyEmailComponent } from './features/verify-email/verify-email.component';
+import { authGuard } from './shared/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'profile', component: ProfilePageComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'main-page', component: MainPageComponent },
-  { path: 'my-listings', component: MyListingsPageComponent },
   { path: 'verify-email', component: VerifyEmailComponent },
+
+  // Protected routes
+  { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard]},
+  { path: 'main-page', component: MainPageComponent, canActivate: [authGuard]},
+  { path: 'my-listings', component: MyListingsPageComponent, canActivate: [authGuard]},
 ];

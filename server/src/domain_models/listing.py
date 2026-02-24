@@ -4,7 +4,6 @@ from src.utils import ValidationError, UnapprovedBehaviorError, Validation
 from typing import List
 from src.domain_models.comment import Comment
 
-
 class Listing:
     """
     Domain Entity: Listing

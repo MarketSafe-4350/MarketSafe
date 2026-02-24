@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from typing import List, Optional
 
-from src.business_logic.managers.listing.abstract_listing_manager import IListingManager, CommentDB
+from src.business_logic.managers.listing.abstract_listing_manager import IListingManager
 from src.db.listing import ListingDB
+from src.db.comment import CommentDB
 from src.domain_models import Listing, Account
 from src.utils import Validation, ListingNotFoundError, UnapprovedBehaviorError
 
@@ -20,10 +21,6 @@ class ListingManager(IListingManager):
     Dependencies:
     - listing_db: ListingDB (required)
     - comment_db: CommentDB-like dependency (required for get_listing_with_comments)
-
-      NOTE: CommentDB is not implemented yet. This manager expects an injected object
-      that provides:
-          get_for_listing(listing_id: int) -> list[Comment]
     """
 
     def __init__(self, listing_db: ListingDB, comment_db: CommentDB) -> None:
@@ -98,7 +95,7 @@ class ListingManager(IListingManager):
         if listing is None:
             return None
 
-        comments = self._comment_db.get_for_listing(listing_id)
+        comments = self._comment_db.get_by_listing_id(listing_id)
         # Listing.comments setter validates list[Comment]
         listing.comments = comments
         return listing

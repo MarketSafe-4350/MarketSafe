@@ -22,16 +22,42 @@ from src.domain_models import Listing
 from src.api.converter.listing_converter import ListingCreate, ListingResponse
 from src.business_logic.services.listing_service import ListingService
 from src.utils import ListingNotFoundError, UnapprovedBehaviorError
+from src.domain_models.comment import Comment
 
 router = APIRouter(prefix="/listings")
 security = HTTPBearer()
+
+
+class _NoOpCommentDB(CommentDB):
+    """Temporary concrete comment DB stub so listing routes work before comments are wired."""
+
+    def __init__(self, db):
+        super().__init__(db)
+
+    def add(self, comment: Comment) -> Comment:
+        raise NotImplementedError("Comment persistence is not implemented yet.")
+
+    def get_by_id(self, comment_id: int):
+        return None
+
+    def get_by_listing_id(self, listing_id: int):
+        return []
+
+    def get_by_author_id(self, author_id: int):
+        return []
+
+    def update_body(self, comment_id: int, body: str | None) -> None:
+        raise NotImplementedError("Comment persistence is not implemented yet.")
+
+    def remove(self, comment_id: int) -> bool:
+        return False
 
 
 def _get_service() -> ListingService:
     db = DBUtility.instance()
     listing_db = MySQLListingDB(db=db)
     # placeholder for now, will change when comment db is implemented
-    comment_db = CommentDB()
+    comment_db = _NoOpCommentDB(db=db)
     listing_manager = ListingManager(listing_db=listing_db, comment_db=comment_db)
     return ListingService(listing_manager=listing_manager)
 
