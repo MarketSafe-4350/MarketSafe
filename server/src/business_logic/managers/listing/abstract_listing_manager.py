@@ -42,6 +42,7 @@ class IListingManager(ABC):
         self._listing_db = listing_db
         self._comment_db = comment_db
 
+
     # --------------------------------------------------
     # CREATE
     # --------------------------------------------------

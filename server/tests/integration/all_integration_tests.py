@@ -12,7 +12,12 @@ from tests.integration.account.test_account_service import (
 )
 from tests.integration.db import TestDBUtility
 from tests.helpers import IntegrationDBContext
-from tests.integration.listing import TestListingManagerIntegration, TestMySQLListingDB
+from tests.integration.listing import (
+    TestListingManagerIntegration,
+    TestMySQLListingDB,
+    TestListingRouteIntegration,
+    TestListingServiceIntegration,
+)
 
 
 def load_tests(
@@ -24,6 +29,8 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestAccountManagerIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestAccountServiceIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestListingManagerIntegration))
+    suite.addTest(loader.loadTestsFromTestCase(TestListingRouteIntegration))
+    suite.addTest(loader.loadTestsFromTestCase(TestListingServiceIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLListingDB))
     return suite
 

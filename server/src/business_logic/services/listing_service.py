@@ -1,13 +1,35 @@
 from src.domain_models.listing import Listing
-from src.utils.errors import ValidationError, DatabaseUnavailableError
+from src.utils.errors import (
+    ValidationError,
+    DatabaseUnavailableError,
+    DatabaseQueryError,
+)
 from urllib.parse import urlparse
+from typing import List
+from src.business_logic.managers.listing.abstract_listing_manager import IListingManager
 
 
 class ListingService:
     """Service class for handling listing-related business logic."""
 
-    def __init__(self, listing_manager):
-        self.listing_manager = listing_manager
+    def __init__(self, listing_manager: IListingManager):
+        self._listing_manager = listing_manager
+
+    def get_all_listing(self) -> List[Listing]:
+        """Get all listing
+
+        Returns:
+            List[Listing]: list of Listing
+        """
+        return self._listing_manager.list_listings()
+
+    def get_listing_by_user_id(self, user_id) -> List[Listing]:
+        """Get current user listing
+
+        Returns:
+            List[Listing]: list of Listing
+        """
+        return self._listing_manager.list_listings_by_seller(user_id)
 
     def create_listing(
         self,
@@ -44,11 +66,7 @@ class ListingService:
             image_url=image_url,
         )
 
-        # created = self.listing_manager.create_listing(listing)
-        # return created if created is not None else listing
-
-        # waiting for manager to be implemented, for now just return the listing (after validation)
-        return listing
+        return self._listing_manager.create_listing(listing)
 
     def _validate_listing(
         self,
