@@ -13,7 +13,7 @@ from src.utils import (
 )
 
 
-class TestAccountService(unittest.TestCase):
+class TestAccountTokenService(unittest.TestCase):
     """Unit tests for AccountService."""
 
     def setUp(self) -> None:
