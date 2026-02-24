@@ -9,11 +9,13 @@ from src.db.email_verification_token.mysql import MySQLEmailVerificationTokenDB
 from src.domain_models import VerificationToken
 from src.utils import (
     TokenGenerator,
-    TokenNotFoundError,
+
     TokenExpiredError,
     TokenAlreadyUsedError,
 )
 from tests.helpers import integration_db
+from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
+from tests.helpers.integration_db_session import acquire, get_db, release
 
 
 class TestEmailVerificationServiceIntegration(unittest.TestCase):
@@ -22,17 +24,25 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """Set up database connection."""
-        cls.db = integration_db.get_db_instance()
-        integration_db.setup_tokens_table(cls.db)
+        cls._session = acquire(timeout_s=60)
+        cls._db = get_db()
 
+        ensure_tables_exist(cls._db, timeout_s=60)
+        reset_all_tables(cls._db)
+
+    @classmethod
     def setUp(self) -> None:
         """Clear tokens, create test accounts, and initialize service."""
-        integration_db.clear_tokens_table(self.db)
+        integration_db.clear_tokens_table(self._db)
         # Create test accounts for foreign key constraints
-        integration_db.create_test_account(self.db, account_id=1, email="test1@example.com")
-        integration_db.create_test_account(self.db, account_id=2, email="test2@example.com")
-        self.token_db = MySQLEmailVerificationTokenDB(db=self.db)
+        integration_db.create_test_account(self._db, account_id=1, email="test1@example.com")
+        integration_db.create_test_account(self._db, account_id=2, email="test2@example.com")
+        self.token_db = MySQLEmailVerificationTokenDB(db=self._db)
         self.service = AccountService(token_db=self.token_db)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        release(cls._session, remove_volumes=False)
 
     # -------------------------
     # Full Verification Workflow Tests

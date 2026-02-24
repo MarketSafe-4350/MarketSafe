@@ -3,11 +3,14 @@ from __future__ import annotations
 import unittest
 from datetime import datetime, timedelta
 
-from src.db import DBUtility
+from src.business_logic.managers.account import AccountManager
+from src.db.account.mysql import MySQLAccountDB
 from src.db.email_verification_token.mysql import MySQLEmailVerificationTokenDB
-from src.domain_models import VerificationToken
+from src.domain_models import VerificationToken, Account
 from src.utils import TokenGenerator, DatabaseQueryError, TokenNotFoundError
 from tests.helpers import integration_db
+from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
+from tests.helpers.integration_db_session import get_db, acquire
 
 
 class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
@@ -16,17 +19,31 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         """Set up database connection for all tests."""
-        cls.db = integration_db.get_db_instance()
-        # Create the table if it doesn't exist
-        integration_db.setup_tokens_table(cls.db)
+        cls._session = acquire(timeout_s=60)
+        cls._db = get_db()
+
+        ensure_tables_exist(cls._db, timeout_s=60)
+        reset_all_tables(cls._db)
+
+        cls._account_db = MySQLAccountDB(cls._db)
+        cls._manager_no_listing = AccountManager(cls._account_db, listing_db=None)
+        cls.token_db = MySQLEmailVerificationTokenDB(cls._db)
+
+        cls.acc = cls._manager_no_listing.create_account(Account(
+            account_id=None,
+            email=f"m_test@example.com",
+            password="hashed_password",
+            fname=" Test ",
+            lname=" User ",
+            verified=False,
+        ))
+
+
 
     def setUp(self) -> None:
         """Clear tokens table and create test accounts before each test."""
-        integration_db.clear_tokens_table(self.db)
-        # Create test accounts for foreign key constraints
-        integration_db.create_test_account(self.db, account_id=1, email="test1@example.com")
-        integration_db.create_test_account(self.db, account_id=2, email="test2@example.com")
-        self.token_db = MySQLEmailVerificationTokenDB(db=self.db)
+        integration_db.clear_tokens_table(self._db)
+
 
     # -------------------------
     # add (INSERT) Tests
@@ -34,7 +51,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     def test_add_ShouldInsertTokenIntoDatabase(self) -> None:
         """Should successfully insert a new token."""
         token = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="test-hash-123",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
@@ -42,18 +59,18 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         result = self.token_db.add(token)
 
         self.assertIsNotNone(result.id)
-        self.assertEqual(result.account_id, 1)
+        self.assertEqual(result.account_id, self.acc.id)
         self.assertEqual(result.token_hash, "test-hash-123")
 
     def test_add_ShouldAssignAutoIncrementID(self) -> None:
         """Inserted token should have auto-assigned ID."""
         token1 = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="hash-1",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
         token2 = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="hash-2",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
@@ -71,7 +88,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     def test_get_by_hash_ShouldRetrieveTokenByHash(self) -> None:
         """Should retrieve a token using its hash."""
         token = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="test-hash-123",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
@@ -95,12 +112,12 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         """Should return the most recently created token for an account."""
         # Create two tokens for the same account
         token1 = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="hash-1",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
         token2 = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="hash-2",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
@@ -108,7 +125,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         self.token_db.add(token1)
         self.token_db.add(token2)
 
-        latest = self.token_db.get_latest_by_account(account_id=1)
+        latest = self.token_db.get_latest_by_account(self.acc.id)
 
         self.assertIsNotNone(latest)
         self.assertEqual(latest.token_hash, "hash-2")
@@ -124,7 +141,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     def test_mark_used_ShouldUpdateTokenStatus(self) -> None:
         """Marking token as used should update the database."""
         token = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="test-hash",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
@@ -148,12 +165,12 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         """Should delete all used tokens for an account."""
         # Create and mark multiple tokens as used
         token1 = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="hash-1",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
         token2 = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="hash-2",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
@@ -164,7 +181,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         self.token_db.mark_used(inserted1.id)
         self.token_db.mark_used(inserted2.id)
 
-        deleted_count = self.token_db.clear_used_tokens(account_id=1)
+        deleted_count = self.token_db.clear_used_tokens(account_id=self.acc.id)
 
         self.assertEqual(deleted_count, 2)
         self.assertIsNone(self.token_db.get_by_hash("hash-1"))
@@ -173,12 +190,12 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     def test_clear_used_tokens_ShouldNotDeleteUnusedTokens(self) -> None:
         """Should only delete used tokens, not unused ones."""
         token_used = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="hash-used",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
         token_unused = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash="hash-unused",
             expires_at=datetime.now() + timedelta(minutes=5),
         )
@@ -188,7 +205,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
 
         self.token_db.mark_used(inserted_used.id)
 
-        deleted_count = self.token_db.clear_used_tokens(account_id=1)
+        deleted_count = self.token_db.clear_used_tokens(account_id=self.acc.id)
 
         self.assertEqual(deleted_count, 1)
         self.assertIsNone(self.token_db.get_by_hash("hash-used"))
@@ -204,7 +221,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
 
         # Store token
         token = VerificationToken(
-            account_id=1,
+            account_id=self.acc.id,
             token_hash=token_hash,
             expires_at=expires_at,
         )
