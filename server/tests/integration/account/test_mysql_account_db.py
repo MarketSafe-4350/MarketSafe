@@ -17,12 +17,13 @@ class TestMySQLAccountDB(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls._session = acquire(timeout_s=60)
         cls._db = get_db()
-        cls._account_db = MySQLAccountDB(cls._db)
-
         # Ensure schema needed by this test class exists
 
         ensure_tables_exist(cls._db,  timeout_s=60)
         reset_all_tables(cls._db)
+
+        cls._account_db = MySQLAccountDB(cls._db)
+
 
     @classmethod
     def tearDownClass(cls) -> None:

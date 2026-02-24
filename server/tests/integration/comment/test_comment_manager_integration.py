@@ -24,25 +24,28 @@ from tests.helpers.integration_db_session import acquire, get_db, release
 class TestCommentManagerIntegration(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
+
         cls._session = acquire(timeout_s=60)
         cls._db = get_db()
+
+        ensure_tables_exist(cls._db, timeout_s=60)
+        reset_all_tables(cls._db)
+
 
         cls._account_db = MySQLAccountDB(cls._db)
         cls._listing_db = MySQLListingDB(cls._db)
         cls._comment_db = MySQLCommentDB(cls._db)
-
         cls._mgr = CommentManager(cls._comment_db)
 
-        ensure_tables_exist(cls._db, timeout_s=60)
+    @classmethod
+    def setUp(cls) -> None:
+        # Keep tests independent
         reset_all_tables(cls._db)
 
     @classmethod
     def tearDownClass(cls) -> None:
         release(cls._session, remove_volumes=False)
 
-    def setUp(self) -> None:
-        # Keep tests independent
-        reset_all_tables(self._db)
 
     # -----------------------------
     # helpers
