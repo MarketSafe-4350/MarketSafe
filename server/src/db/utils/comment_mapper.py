@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Any, Mapping, Optional, List
-from src.domain_models.comment import Comment
+from src.domain_models import Comment
 
 
 class CommentMapper:

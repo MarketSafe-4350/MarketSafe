@@ -5,7 +5,7 @@ from typing import List, Optional, Protocol
 
 from src.db.listing import ListingDB
 from src.domain_models import Listing, Account
-from src.domain_models.comment import Comment
+from src.domain_models import Comment
 from src.utils import Validation
 
 
@@ -16,8 +16,8 @@ class CommentDB(Protocol):
     Expected method(s):
         - get_for_listing(listing_id: int) -> list[Comment]
     """
-    def get_for_listing(self, listing_id: int) -> List[Comment]:
-        ...
+
+    def get_for_listing(self, listing_id: int) -> List[Comment]: ...
 
 
 class IListingManager(ABC):
@@ -53,6 +53,7 @@ class IListingManager(ABC):
         Validation.require_not_none(comment_db, "comment_db")
         self._listing_db = listing_db
         self._comment_db = comment_db
+
     # --------------------------------------------------
     # CREATE
     # --------------------------------------------------
@@ -199,7 +200,9 @@ class IListingManager(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def list_unsold_by_location_and_max_price(self, location: str, max_price: float) -> List[Listing]:
+    def list_unsold_by_location_and_max_price(
+        self, location: str, max_price: float
+    ) -> List[Listing]:
         """
         PURPOSE:
             Filter unsold listings by location and max price.
@@ -214,7 +217,9 @@ class IListingManager(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 50, offset: int = 0) -> List[Listing]:
+    def find_unsold_by_title_keyword(
+        self, keyword: str, limit: int = 50, offset: int = 0
+    ) -> List[Listing]:
         """
         PURPOSE:
             Find unsold listings by title keyword (LIKE).
@@ -320,26 +325,28 @@ class IListingManager(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def mark_listing_sold(self, actor: Account, listing: Listing, buyer: Account) -> None:
+    def mark_listing_sold(
+        self, actor: Account, listing: Listing, buyer: Account
+    ) -> None:
         """
-        PURPOSE:
-            Mark listing as sold to a buyer.
+         PURPOSE:
+             Mark listing as sold to a buyer.
 
-        EXPECTED BEHAVIOR:
-            - Orchestrates sold state update.
-            - Calls listing_db.set_sold(listing_id, True, buyer_id).
+         EXPECTED BEHAVIOR:
+             - Orchestrates sold state update.
+             - Calls listing_db.set_sold(listing_id, True, buyer_id).
 
-       Business Rules:
-        - Actor must be the seller.
-        - Listing must be persisted.
-        - Buyer must be persisted.
-        - Seller cannot buy their own listing.
-        - Listing must not already be sold.
+        Business Rules:
+         - Actor must be the seller.
+         - Listing must be persisted.
+         - Buyer must be persisted.
+         - Seller cannot buy their own listing.
+         - Listing must not already be sold.
 
-        RAISES (typical):
-            - ValidationError
-            - ListingNotFoundError
-            - DatabaseUnavailableError / DatabaseQueryError
+         RAISES (typical):
+             - ValidationError
+             - ListingNotFoundError
+             - DatabaseUnavailableError / DatabaseQueryError
         """
         raise NotImplementedError
 
@@ -382,4 +389,3 @@ class IListingManager(ABC):
             - DatabaseUnavailableError / DatabaseQueryError
         """
         raise NotImplementedError
-

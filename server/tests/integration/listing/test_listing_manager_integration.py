@@ -9,7 +9,7 @@ from src.business_logic.managers.listing.listing_manager import ListingManager
 from src.db.account.mysql import MySQLAccountDB
 from src.db.listing.mysql.mysql_listing_db import MySQLListingDB
 from src.domain_models import Account, Listing
-from src.domain_models.comment import Comment
+from src.domain_models import Comment
 from src.utils import ListingNotFoundError, UnapprovedBehaviorError
 
 from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
@@ -25,6 +25,7 @@ class FakeCommentDB(CommentDB):
 
     CommentDB isn't implemented yet, so we return empty list.
     """
+
     def get_for_listing(self, listing_id: int) -> List[Comment]:
         return []
 
@@ -70,7 +71,9 @@ class TestListingManagerIntegration(unittest.TestCase):
         self.assertIsNotNone(created.id)
         return created
 
-    def _new_listing(self, seller_id: int, *, title: str | None = None, price: float = 123.45) -> Listing:
+    def _new_listing(
+        self, seller_id: int, *, title: str | None = None, price: float = 123.45
+    ) -> Listing:
         uniq = uuid4().hex[:10]
         # IMPORTANT: create UNSOLD listing (valid domain state)
         return Listing(
@@ -136,7 +139,9 @@ class TestListingManagerIntegration(unittest.TestCase):
         not_persisted = self._new_listing(seller.id)  # id=None
 
         with self.assertRaises(ListingNotFoundError):
-            self._mgr.mark_listing_sold(actor=seller, listing=not_persisted, buyer=buyer)
+            self._mgr.mark_listing_sold(
+                actor=seller, listing=not_persisted, buyer=buyer
+            )
 
     def test_mark_listing_sold_seller_cannot_buy_own_listing(self) -> None:
         seller = self._create_account("seller")
@@ -169,4 +174,6 @@ class TestListingManagerIntegration(unittest.TestCase):
 
         # Second sale should fail
         with self.assertRaises(UnapprovedBehaviorError):
-            self._mgr.mark_listing_sold(actor=seller, listing=sold_listing, buyer=buyer2)
+            self._mgr.mark_listing_sold(
+                actor=seller, listing=sold_listing, buyer=buyer2
+            )
