@@ -49,6 +49,8 @@ class TestListingRouteIntegration(unittest.TestCase):
         created_at = datetime(2026, 2, 22, tzinfo=timezone.utc)
         mock_service.get_all_listing.return_value = [
             SimpleNamespace(
+                id=1,
+                seller_id=999,
                 title="T1",
                 description="D1",
                 price=10.0,
@@ -64,6 +66,8 @@ class TestListingRouteIntegration(unittest.TestCase):
 
         data = resp.json()
         self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]["id"], 1)
+        self.assertEqual(data[0]["seller_id"], 999)
         self.assertEqual(data[0]["created_at"], created_at.isoformat())
 
     @patch("src.api.routes.listing_routes._get_service")
@@ -73,6 +77,8 @@ class TestListingRouteIntegration(unittest.TestCase):
 
         mock_service.get_listing_by_user_id.return_value = [
             SimpleNamespace(
+                id=2,
+                seller_id=999,
                 title="Mine",
                 description="My desc",
                 price=99.99,
@@ -85,6 +91,9 @@ class TestListingRouteIntegration(unittest.TestCase):
 
         resp = self.client.get("/listings/me")
         self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data[0]["id"], 2)
+        self.assertEqual(data[0]["seller_id"], 999)
 
         mock_service.get_listing_by_user_id.assert_called_once_with(user_id=999)
 
@@ -97,6 +106,8 @@ class TestListingRouteIntegration(unittest.TestCase):
 
         created_at = datetime(2026, 2, 22, tzinfo=timezone.utc)
         mock_service.create_listing.return_value = SimpleNamespace(
+            id=3,
+            seller_id=999,
             title="A",
             description="B",
             price=10.0,
@@ -116,6 +127,9 @@ class TestListingRouteIntegration(unittest.TestCase):
 
         resp = self.client.post("/listings", json=payload)
         self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["id"], 3)
+        self.assertEqual(data["seller_id"], 999)
 
         mock_service.create_listing.assert_called_once_with(
             seller_id=999,

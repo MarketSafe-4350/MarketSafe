@@ -6,11 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { HeaderComponent } from '../../components/header/header.component';
 import { LeftNavigationComponent } from '../left-navigation/left-navigation.component';
 import { ListingCardComponent } from '../../components/listing-card/listing-card.component';
-import { Listing } from '../../shared/models/listing.models';
 import { ListingsSidebarActionsBase } from '../../shared/helpers/listings-sidebar-actions.base';
 
 @Component({
-  selector: 'app-main-page',
+  selector: 'app-my-listings-page',
   standalone: true,
   imports: [
     CommonModule,
@@ -20,10 +19,10 @@ import { ListingsSidebarActionsBase } from '../../shared/helpers/listings-sideba
     MatButtonModule,
     MatIconModule,
   ],
-  templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.scss'],
+  templateUrl: './my-listings-page.component.html',
+  styleUrls: ['./my-listings-page.component.scss'],
 })
-export class MainPageComponent
+export class MyListingsPageComponent
   extends ListingsSidebarActionsBase
   implements OnInit
 {
@@ -31,27 +30,23 @@ export class MainPageComponent
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
-    this.loadListings();
+    this.loadMyListings();
   }
 
-  private loadListings(): void {
+  private loadMyListings(): void {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.listingsApi.getAll().subscribe({
+    this.listingsApi.getMine().subscribe({
       next: (listings) => {
         this.listings = listings;
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Failed to load listings:', error);
-        this.errorMessage = 'Failed to load listings.';
+        console.error('Failed to load my listings:', error);
+        this.errorMessage = 'Failed to load your listings.';
         this.isLoading = false;
       },
     });
-  }
-
-  protected override getSidebarSourceListings(): Listing[] {
-    return this.listings.filter((listing) => this.canDelete(listing));
   }
 }

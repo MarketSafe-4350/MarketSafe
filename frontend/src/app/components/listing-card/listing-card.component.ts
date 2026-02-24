@@ -27,6 +27,10 @@ export class ListingCardComponent {
       : 'Price Unavailable';
   }
 
+  get description(): string {
+    return this.listing?.description || 'No description provided.';
+  }
+
   get location(): string {
     return this.listing?.location || 'Location Unavailable';
   }

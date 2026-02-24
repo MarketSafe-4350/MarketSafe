@@ -31,6 +31,9 @@ class ListingService:
         """
         return self._listing_manager.list_listings_by_seller(user_id)
 
+    def get_listing_by_id(self, listing_id: int) -> Listing | None:
+        return self._listing_manager.get_listing_by_id(listing_id)
+
     def create_listing(
         self,
         seller_id: int,
@@ -67,6 +70,9 @@ class ListingService:
         )
 
         return self._listing_manager.create_listing(listing)
+
+    def delete_listing(self, listing_id: int) -> bool:
+        return self._listing_manager.delete_listing(listing_id)
 
     def _validate_listing(
         self,
@@ -236,6 +242,10 @@ class ListingService:
                 errors, "image_url", "Image URL cannot be empty if provided."
             )
             return None
+
+        # Allow locally-served uploaded images (e.g. /uploads/listings/<file>)
+        if image_url.startswith("/"):
+            return image_url
 
         parse = urlparse(image_url)
 

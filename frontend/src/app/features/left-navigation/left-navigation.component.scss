@@ -79,9 +79,10 @@
 }
 
 .listing {
-  display: flex;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
+  gap: 12px;
   padding: 10px 10px;
   border-radius: 12px;
 
