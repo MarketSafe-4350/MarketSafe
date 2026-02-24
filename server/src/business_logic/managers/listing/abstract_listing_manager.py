@@ -4,21 +4,9 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Protocol
 
 from src.db.listing import ListingDB
+from src.db.comment import CommentDB
 from src.domain_models import Listing, Account
-from src.domain_models import Comment
 from src.utils import Validation
-
-
-class CommentDB(Protocol):
-    """
-    Planned persistence dependency for comments (not implemented yet).
-
-    Expected method(s):
-        - get_for_listing(listing_id: int) -> list[Comment]
-    """
-
-    def get_for_listing(self, listing_id: int) -> List[Comment]: ...
-
 
 class IListingManager(ABC):
     """
@@ -276,7 +264,7 @@ class IListingManager(ABC):
         EXPECTED BEHAVIOR:
             - Fetch listing using listing_db.get_by_id(listing_id).
             - If listing is None -> return None.
-            - Fetch comments using comment_db.get_for_listing(listing_id).
+            - Fetch comments using comment_db.get_by_listing_id(listing_id).
             - Attach comments:
                   listing.comments = comments
             - Return the listing.
