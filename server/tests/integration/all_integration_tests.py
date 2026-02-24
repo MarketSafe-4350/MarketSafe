@@ -12,6 +12,8 @@ from tests.integration.account.test_account_service import (
 )
 from tests.integration.db import TestDBUtility
 from tests.helpers import IntegrationDBContext
+from tests.integration.email_verification import TestEmailVerificationServiceIntegration, \
+    TestMySQLEmailVerificationTokenDB
 from tests.integration.listing import (
     TestListingManagerIntegration,
     TestMySQLListingDB,
@@ -38,6 +40,9 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLListingDB))
     suite.addTest(loader.loadTestsFromTestCase(TestMySQLCommentDB))
     suite.addTest(loader.loadTestsFromTestCase(TestCommentManagerIntegration))
+    suite.addTests(loader.loadTestsFromTestCase(TestEmailVerificationServiceIntegration))
+    suite.addTest(loader.loadTestsFromTestCase(TestMySQLEmailVerificationTokenDB))
+
     return suite
 
 
