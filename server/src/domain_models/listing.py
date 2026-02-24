@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from src.utils import ValidationError, UnapprovedBehaviorError, Validation
 from typing import List
-from src.domain_models import Comment
-
+from src.domain_models.comment import Comment
 
 class Listing:
     """

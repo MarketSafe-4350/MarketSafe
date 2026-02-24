@@ -1,1 +1,2 @@
-from src.business_logic.managers.comment.abstract_comment_manager import ICommentManager
+from .abstract_comment_manager import ICommentManager
+from .comment_manager import CommentManager
