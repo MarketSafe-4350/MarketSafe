@@ -20,7 +20,8 @@ from tests.integration.listing import (
 )
 
 from tests.integration.comment import (
-    TestMySQLCommentDB
+    TestMySQLCommentDB,
+    TestCommentManagerIntegration
 )
 
 def load_tests(
@@ -36,6 +37,7 @@ def load_tests(
     suite.addTest(loader.loadTestsFromTestCase(TestListingServiceIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLListingDB))
     suite.addTest(loader.loadTestsFromTestCase(TestMySQLCommentDB))
+    suite.addTest(loader.loadTestsFromTestCase(TestCommentManagerIntegration))
     return suite
 
 
