@@ -97,7 +97,7 @@ def _normalized_image_extension(upload: UploadFile) -> str:
     }
     return by_content_type.get(upload.content_type or "", ".jpg")
 
-
+# TODO: please change this 
 def _save_uploaded_image(upload: UploadFile, request: Request) -> str:
     if not (upload.content_type or "").startswith("image/"):
         raise ValueError("Uploaded file must be an image.")
