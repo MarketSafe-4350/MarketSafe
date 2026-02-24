@@ -16,7 +16,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from src.domain_models import Comment
 from src.db import DBUtility, CommentMapper
-from src.utils import Validation, DatabaseQueryError, ListingNotFoundError
+from src.utils import Validation, DatabaseQueryError, CommentNotFoundError
 from src.db.comment import CommentDB
 
 
@@ -172,7 +172,7 @@ class MySQLCommentDB(CommentDB):
             with self._db.transaction() as conn:
                 result = conn.execute(sql, {"id": comment_id, "body": body})
                 if int(result.rowcount or 0) == 0:
-                    raise ListingNotFoundError(
+                    raise CommentNotFoundError(
                         message=f"Comment not found for id: {comment_id}",
                         details={"comment_id": comment_id},
                     )

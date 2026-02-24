@@ -19,6 +19,9 @@ from tests.integration.listing import (
     TestListingServiceIntegration,
 )
 
+from tests.integration.comment import (
+    TestMySQLCommentDB
+)
 
 def load_tests(
     loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str
@@ -32,6 +35,7 @@ def load_tests(
     suite.addTest(loader.loadTestsFromTestCase(TestListingRouteIntegration))
     suite.addTest(loader.loadTestsFromTestCase(TestListingServiceIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLListingDB))
+    suite.addTest(loader.loadTestsFromTestCase(TestMySQLCommentDB))
     return suite
 
 
