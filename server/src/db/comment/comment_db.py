@@ -43,10 +43,11 @@ class CommentDB(ABC):
 
     def __init__(self, db: DBUtility) -> None:
         """
-        DBUtility must be injected to:
-        - Reuse connection pooling
-        - Enable mocking in tests
-        - Maintain separation of concerns
+        The DBUtility instance must be injected.
+        This allows:
+        - Connection pooling reuse
+        - Easier testing (mock DBUtility)
+        - Clear separation of concerns
         """
         self._db = db
 
