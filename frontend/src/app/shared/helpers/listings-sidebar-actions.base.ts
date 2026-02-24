@@ -7,6 +7,12 @@ import { ListingsApiService } from '../services/listings-api.service';
 
 export abstract class ListingsSidebarActionsBase {
   protected readonly listingsApi = inject(ListingsApiService);
+  protected readonly createListingErrorMessage: string | null =
+    'Failed to create listing.';
+  protected readonly deleteListingErrorMessage: string | null =
+    'Failed to delete listing.';
+  protected readonly unauthorizedDeleteErrorMessage: string | null =
+    'You can only delete your own listings.';
 
   listings: Listing[] = [];
   currentUserId: number | null = null;
@@ -98,18 +104,6 @@ export abstract class ListingsSidebarActionsBase {
     if (message !== null) {
       this.errorMessage = message;
     }
-  }
-
-  protected get createListingErrorMessage(): string | null {
-    return 'Failed to create listing.';
-  }
-
-  protected get deleteListingErrorMessage(): string | null {
-    return 'Failed to delete listing.';
-  }
-
-  protected get unauthorizedDeleteErrorMessage(): string | null {
-    return 'You can only delete your own listings.';
   }
 
   private getCurrentUserIdFromToken(): number | null {

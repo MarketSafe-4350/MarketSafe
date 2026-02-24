@@ -5,6 +5,7 @@ import {
 } from '@angular/common/http/testing';
 
 import { ListingsApiService } from './listings-api.service';
+import { Listing } from '../models/listing.models';
 
 describe('ListingsApiService', () => {
   let service: ListingsApiService;
@@ -28,7 +29,7 @@ describe('ListingsApiService', () => {
   });
 
   it('getAll_ShouldMapRelativeUploadImageUrlToBackendHost', () => {
-    let result: any[] = [];
+    let result: Listing[] = [];
 
     service.getAll().subscribe((listings) => {
       result = listings;
@@ -55,7 +56,7 @@ describe('ListingsApiService', () => {
   });
 
   it('getAll_ShouldPreserveAbsoluteImageUrl', () => {
-    let result: any[] = [];
+    let result: Listing[] = [];
 
     service.getAll().subscribe((listings) => {
       result = listings;
