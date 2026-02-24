@@ -4,7 +4,7 @@ import unittest
 
 from tests.integration.listing import TestMySQLListingDB
 from tests.unit.listing import TestListingManagerUnit
-from tests.unit.listings.test_listing_service import TestListingService
+from tests.unit.listing.test_listing_service import TestListingService
 from tests.unit.account_mangers import TestAccountManager, TestAccountService
 
 
