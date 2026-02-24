@@ -37,5 +37,11 @@ describe('HeaderComponent', () => {
       headerComponent.goToProfile();
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/profile']);
     });
+    
+    it('onLogout_ShouldRemoveAccessToken', () => {
+      localStorage.setItem('access_token', 'fakeToken');
+      headerComponent.onLogout();
+      expect(localStorage.getItem('access_token')).toBeNull();
+    });
   });
 });
