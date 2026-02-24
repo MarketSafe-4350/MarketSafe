@@ -37,31 +37,33 @@ class ICommentManager(ABC):
 
     @abstractmethod
     def create_comment(
-        self, actor: Account, listing: Listing, body: str | None
+        self, actor: Account, listing: Listing, comment: Comment
     ) -> Comment:
         """
         PURPOSE:
             Create a new comment for a listing.
 
         EXPECTED BEHAVIOR:
-            - Validate actor/listing are present and persisted (ids exist).
-            - Enforce commenting rules (business rules), e.g.:
-                - actor must be authenticated / verified
-                - cannot comment on sold listings
-            - Create Comment(domain object)
-            - Persist via comment_db.add(comment)
+            - listing must be persisted
+            - actor must be persisted
+            - comment must be a new comment (comment.id is None)
+            - comment.author_id must match actor.id
+            - comment.listing_id must match listing.id
+            - checks: verified, listing not sold, etc.
+            - Persist the comment using CommentDB.add().
+            - Return the created Listing with generated database ID.
 
         INPUTS:
             actor: Account (the author)
             listing: Listing (the target listing)
-            body: str | None  (nullable per schema)
+            body: comments
 
         RETURNS:
             Created Comment (with generated id and created_date)
 
         RAISES (typical):
             - ValidationError
-            - UnapprovedBehaviorError (can't let not verified user comments)
+            - UnapprovedBehaviorError (not verified user can't comments)
             - DatabaseUnavailableError / DatabaseQueryError
         """
         raise NotImplementedError
@@ -136,7 +138,7 @@ class ICommentManager(ABC):
     # --------------------------------------------------
 
     @abstractmethod
-    def update_comment_body(self, actor: Account, comment_id: int, body: str | None) -> Comment:
+    def update_comment_body(self, actor: Account, comment: Comment) -> Comment:
         """
         PURPOSE:
             Update the body of a comment.
@@ -144,7 +146,6 @@ class ICommentManager(ABC):
         EXPECTED BEHAVIOR:
             - Enforce business rules:
                 - only the author (or admin) can edit
-            - Calls comment_db.update_body(comment_id, body)
 
         IMPLEMENTATION NOTES:
             - Calls comment_db.update_body(comment_id, body)

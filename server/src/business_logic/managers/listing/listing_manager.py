@@ -21,10 +21,6 @@ class ListingManager(IListingManager):
     Dependencies:
     - listing_db: ListingDB (required)
     - comment_db: CommentDB-like dependency (required for get_listing_with_comments)
-
-      NOTE: CommentDB is not implemented yet. This manager expects an injected object
-      that provides:
-          get_for_listing(listing_id: int) -> list[Comment]
     """
 
     def __init__(self, listing_db: ListingDB, comment_db: CommentDB) -> None:
