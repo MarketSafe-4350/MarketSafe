@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from src.utils.errors import AppError
+from src.config import CORS_ALLOWED_ORIGINS
 from src.api.errors.exception_handlers import (
     api_error_handler,
     app_error_handler,
@@ -72,7 +73,7 @@ def create_app() -> FastAPI:
     # CORS middleware
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:4200", "http://localhost:3000"],
+        allow_origins=CORS_ALLOWED_ORIGINS,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

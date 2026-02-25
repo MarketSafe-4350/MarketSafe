@@ -17,12 +17,6 @@
               <div class="profile-info">
                 <div class="profile-name">{{fullName}}</div>
                 <div class="profile-email">{{account?.email ?? '-'}}</div>
-                <div class="profile-verified">
-                  <mat-icon [color]="isVerified ? 'primary' : undefined">
-                    {{ isVerified ? 'verified' : 'info' }}
-                  </mat-icon>
-                  {{ isVerified ? 'Verified Student' : 'Not Verified' }}
-                </div>
               </div>
             </div>
           </mat-card-header>

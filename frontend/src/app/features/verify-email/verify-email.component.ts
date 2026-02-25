@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { API_URLS } from '../../shared/app-urls';
 
 @Component({
   standalone: true,
@@ -56,7 +57,7 @@ export class VerifyEmailComponent implements OnInit {
       }
 
       // Call the backend API to verify the email (GET request)
-      const apiUrl = `http://localhost:8000/accounts/verify-email?token=${encodeURIComponent(token)}`;
+      const apiUrl = `${API_URLS.accounts}/verify-email?token=${encodeURIComponent(token)}`;
 
       this.http.get<{ message?: string }>(apiUrl).subscribe({
         next: () => {

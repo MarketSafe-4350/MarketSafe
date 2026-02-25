@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import { Listing } from '../models/listing.models';
+import { API_URLS, APP_URLS } from '../app-urls';
 
 interface ListingApiResponse {
   id: number | null;
@@ -28,8 +29,8 @@ export interface CreateListingRequest {
 @Injectable({ providedIn: 'root' })
 export class ListingsApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8000/listings';
-  private readonly backendBaseUrl = 'http://localhost:8000';
+  private readonly apiUrl = API_URLS.listings;
+  private readonly backendBaseUrl = APP_URLS.backendBaseUrl;
 
   getAll(): Observable<Listing[]> {
     return this.http

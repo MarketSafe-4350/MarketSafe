@@ -18,7 +18,7 @@ export class ListingCardComponent {
   }
 
   get imageUrl(): string {
-    return this.listing?.imageUrl || 'assets/images/computer.png';
+    return this.listing?.imageUrl || '';
   }
 
   get price(): string {

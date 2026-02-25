@@ -4,6 +4,7 @@ from src.utils.errors import (
     DatabaseUnavailableError,
     DatabaseQueryError,
 )
+from src.utils import ListingNotFoundError, UnapprovedBehaviorError
 from urllib.parse import urlparse
 from typing import List
 from src.business_logic.managers.listing.abstract_listing_manager import IListingManager
@@ -71,7 +72,24 @@ class ListingService:
 
         return self._listing_manager.create_listing(listing)
 
-    def delete_listing(self, listing_id: int) -> bool:
+    def delete_listing(self, listing_id: int, actor_user_id: int) -> bool:
+        listing = self._listing_manager.get_listing_by_id(listing_id)
+        if listing is None:
+            raise ListingNotFoundError(
+                message=f"Listing not found for id: {listing_id}",
+                details={"listing_id": listing_id},
+            )
+
+        if listing.seller_id != actor_user_id:
+            raise UnapprovedBehaviorError(
+                message="Only the seller can delete this listing.",
+                details={
+                    "listing_id": listing_id,
+                    "seller_id": listing.seller_id,
+                    "actor_id": actor_user_id,
+                },
+            )
+
         return self._listing_manager.delete_listing(listing_id)
 
     def _validate_listing(

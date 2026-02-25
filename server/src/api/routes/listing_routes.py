@@ -21,7 +21,6 @@ from src.db.email_verification_token.mysql.mysql_email_verification_token_db imp
 from src.domain_models import Listing
 from src.api.converter.listing_converter import ListingCreate, ListingResponse
 from src.business_logic.services.listing_service import ListingService
-from src.utils import ListingNotFoundError, UnapprovedBehaviorError
 from src.domain_models.comment import Comment
 
 router = APIRouter(prefix="/listings")
@@ -215,18 +214,5 @@ def delete_listing(
     """Deletes a listing owned by the current user."""
     service = _get_service()
 
-    listing = service.get_listing_by_id(listing_id)
-    if listing is None:
-        raise ListingNotFoundError(
-            message=f"Listing not found for id: {listing_id}",
-            details={"listing_id": listing_id},
-        )
-
-    if listing.seller_id != user_id:
-        raise UnapprovedBehaviorError(
-            message="Only the seller can delete this listing.",
-            details={"listing_id": listing_id, "seller_id": listing.seller_id, "actor_id": user_id},
-        )
-
-    service.delete_listing(listing_id)
+    service.delete_listing(listing_id=listing_id, actor_user_id=user_id)
     return None

@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import { Account } from '../models/account.models';
+import { API_URLS } from '../app-urls';
 
 interface AccountMeResponse {
   email: string;
@@ -13,7 +14,7 @@ interface AccountMeResponse {
 @Injectable({ providedIn: 'root' })
 export class AccountsApiService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8000/accounts';
+  private readonly apiUrl = API_URLS.accounts;
 
   getMe(): Observable<Account> {
     return this.http
