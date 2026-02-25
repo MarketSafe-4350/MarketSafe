@@ -68,6 +68,10 @@ describe('ListingCardComponent', () => {
       expect(listingCardComponent.price).toBe(`$${mockListing.price}`);
     });
 
+    it('getDescription_ListingProvided_ShouldBeExpectedDescription', () => {
+      expect(listingCardComponent.description).toBe(mockListing.description);
+    });
+
     it('getLocation_ListingProvided_ShouldBeExpectedLocation', () => {
       expect(listingCardComponent.location).toBe(mockListing.location);
     });

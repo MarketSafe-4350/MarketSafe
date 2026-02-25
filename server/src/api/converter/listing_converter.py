@@ -14,6 +14,8 @@ class ListingCreate(BaseModel):
 class ListingResponse(BaseModel):
     """Data model for listing response."""
 
+    id: int | None = None
+    seller_id: int
     title: str
     description: str
     price: float

@@ -4,6 +4,7 @@ import { ProfilePageComponent } from './features/profile-page/profile.page';
 import { LandingComponent } from './features/landing/landing.component';
 import { LoginComponent } from './features/login/login.component';
 import { MainPageComponent } from './features/main-page/main-page.component';
+import { MyListingsPageComponent } from './features/my-listings-page/my-listings-page.component';
 import { VerifyEmailComponent } from './features/verify-email/verify-email.component';
 import { authGuard } from './shared/auth.guard';
 
@@ -16,4 +17,5 @@ export const routes: Routes = [
   // Protected routes
   { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard]},
   { path: 'main-page', component: MainPageComponent, canActivate: [authGuard]},
+  { path: 'my-listings', component: MyListingsPageComponent, canActivate: [authGuard]},
 ];

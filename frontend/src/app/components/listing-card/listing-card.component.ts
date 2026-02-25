@@ -18,13 +18,17 @@ export class ListingCardComponent {
   }
 
   get imageUrl(): string {
-    return this.listing?.imageUrl || 'assets/images/computer.png';
+    return this.listing?.imageUrl || '';
   }
 
   get price(): string {
     return this.listing
       ? `$${this.listing.price.toFixed(2)}`
       : 'Price Unavailable';
+  }
+
+  get description(): string {
+    return this.listing?.description || 'No description provided.';
   }
 
   get location(): string {

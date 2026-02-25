@@ -4,7 +4,11 @@
   }
   <div class="list-row">
     <div class="thumbnail">
-      <img [src]="imageUrl" [alt]="title" />
+      @if (imageUrl) {
+        <img [src]="imageUrl" [alt]="title" />
+      } @else {
+        <div class="thumbnail-placeholder" aria-hidden="true"></div>
+      }
     </div>
 
     <div class="list-content">
@@ -14,6 +18,10 @@
 
       <div class="list-price">
         {{ price }}
+      </div>
+
+      <div class="list-description">
+        {{ description }}
       </div>
 
       <div class="list-meta">

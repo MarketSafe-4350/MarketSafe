@@ -4,6 +4,7 @@
  */
 export interface Listing {
   id: number;
+  sellerId?: number;
   title: string;
   description: string;
   imageUrl: string;

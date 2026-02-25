@@ -26,6 +26,7 @@ import {
   UNIVERSITY_EMAIL_REGEX,
   PASSWORD_REGEX,
 } from '../../shared/auth-validation.constants';
+import { API_URLS } from '../../shared/app-urls';
 
 type Messages = Record<string, Record<string, string>>;
 
@@ -155,7 +156,7 @@ export class SignupComponent {
     };
 
     // Use the backend API URL - adjust based on your environment
-    const apiUrl = 'http://localhost:8000/accounts'; // Change this for production
+    const apiUrl = API_URLS.accounts;
 
     this.http.post<{ verification_link?: string }>(apiUrl, formData).subscribe({
       next: (response) => {

@@ -4,7 +4,7 @@
   </div>
 
   <mat-nav-list class="nav">
-    <a mat-list-item routerLink="/home" routerLinkActive="active">
+    <a mat-list-item routerLink="/main-page" routerLinkActive="active">
       <mat-icon matListItemIcon>home</mat-icon>
       <span matListItemTitle>Home</span>
     </a>
@@ -19,10 +19,6 @@
       <span matListItemTitle>Search</span>
     </a>
 
-    <a mat-list-item routerLink="/settings" routerLinkActive="active">
-      <mat-icon matListItemIcon>settings</mat-icon>
-      <span matListItemTitle>Settings</span>
-    </a>
   </mat-nav-list>
 
   <mat-divider class="divider"></mat-divider>
@@ -43,7 +39,7 @@
 
     <span
       class="badge"
-      matBadge="{{ listingsCount }}"
+      [matBadge]="listingsCount"
       matBadgeColor="warn"
       matBadgeSize="small"
       matBadgeOverlap="false"
@@ -52,7 +48,7 @@
 </div>
 
   <div class="listing-list">
-    @for (item of listings; track item.title) {
+    @for (item of listings; track item.id) {
       <div class="listing">
         <div class="thumb">
           @if (item.imageUrl) {
@@ -64,14 +60,28 @@
 
         <div class="meta">
           <div class="name">{{ item.title }}</div>
-          <div class="sub">{{ item.comments }} comments</div>
+          <div class="sub">{{ item.comments ?? 0 }} comments</div>
         </div>
+
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Delete listing"
+          (click)="onDeleteListing($event, item.id)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
     }
   </div>
 
   <div class="see-all">
-    <button mat-stroked-button class="see-all-btn" type="button">
+    <button
+      mat-stroked-button
+      class="see-all-btn"
+      type="button"
+      routerLink="/my-listings"
+    >
       See All
     </button>
   </div>

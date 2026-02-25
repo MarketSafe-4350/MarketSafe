@@ -11,6 +11,7 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
+import { API_URLS } from '../../shared/app-urls';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -122,7 +123,7 @@ export class LoginComponent {
       Accept: 'application/json',
     });
 
-    const apiUrl = 'http://localhost:8000/accounts/login';
+    const apiUrl = `${API_URLS.accounts}/login`;
 
     this.http
       .post<{

@@ -12,16 +12,16 @@
     <main class="content">
       <section class="feed">
         <div class="feed-header">
-          <h2>Marketplace Listings</h2>
+          <h2>My Listings</h2>
           <p>{{ listings.length }} listing{{ listings.length === 1 ? '' : 's' }}</p>
         </div>
 
         @if (isLoading) {
-          <p class="status">Loading listings...</p>
+          <p class="status">Loading your listings...</p>
         } @else if (errorMessage) {
           <p class="status error">{{ errorMessage }}</p>
         } @else if (listings.length === 0) {
-          <p class="status">No listings yet. Create one from the left panel.</p>
+          <p class="status">You have not created any listings yet.</p>
         } @else {
           <div class="cards">
             @for (listing of listings; track listing.id) {

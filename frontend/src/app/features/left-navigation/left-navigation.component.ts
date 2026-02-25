@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -10,9 +10,10 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateListingDialogComponent, CreateListingPayload } from '../create-listing/create-listing.component';
 
-interface Listing {
+export interface SidebarListing {
+  id: number;
   title: string;
-  comments: number;
+  comments?: number;
   imageUrl?: string;
 }
 
@@ -35,12 +36,11 @@ interface Listing {
 export class LeftNavigationComponent {
   private readonly dialog = inject(MatDialog);
 
-  @Input() listingsCount = 19;
+  @Input() listingsCount = 0;
 
-  @Input() listings: Listing[] = [
-    { title: 'Table', comments: 50, imageUrl: 'assets/table.png' },
-    { title: 'Brand new couch', comments: 0, imageUrl: 'assets/couch.png' },
-  ];
+  @Input() listings: SidebarListing[] = [];
+  @Output() createListing = new EventEmitter<CreateListingPayload>();
+  @Output() deleteListing = new EventEmitter<number>();
 
   openCreateListing(): void {
     const ref = this.dialog.open(CreateListingDialogComponent, {
@@ -51,11 +51,12 @@ export class LeftNavigationComponent {
 
     ref.afterClosed().subscribe((result: CreateListingPayload | null) => {
       if (!result) return;
-      console.log('Create listing payload:', result);
-
-      // Coming up
-      // this.listings = [{ title: result.title, comments: 0 }, ...this.listings];
-      // this.listingsCount++;
+      this.createListing.emit(result);
     });
+  }
+
+  onDeleteListing(event: MouseEvent, listingId: number): void {
+    event.stopPropagation();
+    this.deleteListing.emit(listingId);
   }
 }
