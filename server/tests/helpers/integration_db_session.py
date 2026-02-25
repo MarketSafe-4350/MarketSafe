@@ -65,7 +65,7 @@ def acquire(timeout_s: int = 60) -> SessionHandle:
         return SessionHandle(started_by_caller=True)
 
 
-def get_db():
+def get_db() -> DBUtility:
     """Access the live DB client/engine created by IntegrationDBContext."""
     with _lock:
         if _ctx is None:
