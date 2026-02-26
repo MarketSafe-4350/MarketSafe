@@ -10,9 +10,13 @@
     transform 0.18s ease,
     box-shadow 0.18s ease;
 
-  &:hover {
+  &:not(.is-sold):hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  &.is-sold {
+    cursor: default;
   }
 }
 
@@ -92,4 +96,9 @@
 
 .dot {
   color: #bbb;
+}
+
+.comment-count {
+  font-weight: 600;
+  color: #374151;
 }

@@ -26,7 +26,24 @@
           <div class="cards">
             @for (listing of listings; track listing.id) {
               <div class="listing-item">
-                <app-listing-card [listing]="listing"></app-listing-card>
+                <div
+                  class="listing-click-target"
+                  [class.is-disabled]="isListingDisabled(listing)"
+                  role="button"
+                  tabindex="0"
+                  [attr.aria-disabled]="isListingDisabled(listing)"
+                  [attr.aria-expanded]="isCommentPanelOpen(listing.id)"
+                  (click)="onListingClick(listing)"
+                  (keydown)="onListingKeydown($event, listing)"
+                >
+                  <app-listing-card
+                    [listing]="listing"
+                    [commentCount]="getComments(listing.id).length"
+                  ></app-listing-card>
+                </div>
+                @if (listing.isSold) {
+                  <p class="comment-disabled-note">Comments are disabled for sold listings.</p>
+                }
                 @if (canDelete(listing)) {
                   <button
                     mat-stroked-button
@@ -39,6 +56,68 @@
                     <mat-icon>delete</mat-icon>
                     {{ isDeleting(listing.id) ? 'Deleting...' : 'Delete' }}
                   </button>
+                }
+
+                @if (isCommentPanelOpen(listing.id)) {
+                  <section class="comment-panel" aria-label="Listing comments">
+                    <div class="comment-panel-header">
+                      <h3>Comments</h3>
+                      <p>
+                        {{ getComments(listing.id).length }}
+                        comment{{ getComments(listing.id).length === 1 ? '' : 's' }}
+                      </p>
+                    </div>
+
+                    <div class="comment-form">
+                      <label class="comment-label" [for]="'comment-' + listing.id">
+                        Add a comment
+                      </label>
+                      <textarea
+                        class="comment-input"
+                        [id]="'comment-' + listing.id"
+                        rows="3"
+                        maxlength="500"
+                        [value]="getCommentDraft(listing.id)"
+                        (input)="setCommentDraft(listing.id, $any($event.target).value)"
+                        placeholder="Write a comment about this listing..."
+                      ></textarea>
+                      <div class="comment-form-footer">
+                        <span
+                          class="comment-meta"
+                          [class.error]="getRemainingCharacters(listing.id) < 0"
+                        >
+                          {{ getRemainingCharacters(listing.id) }} characters left
+                        </span>
+                        <button
+                          mat-flat-button
+                          type="button"
+                          [disabled]="isCommentSubmitDisabled(listing.id)"
+                          (click)="submitComment(listing)"
+                        >
+                          Post Comment
+                        </button>
+                      </div>
+                      @if (getCommentError(listing.id); as commentError) {
+                        <p class="comment-error">{{ commentError }}</p>
+                      }
+                    </div>
+
+                    @if (getComments(listing.id).length === 0) {
+                      <p class="comment-empty">No comments yet.</p>
+                    } @else {
+                      <div class="comment-list">
+                        @for (comment of getComments(listing.id); track comment.id) {
+                          <article class="comment-item">
+                            <div class="comment-item-meta">
+                              <span>{{ comment.authorLabel }}</span>
+                              <span>{{ formatCommentTimestamp(comment.createdAt) }}</span>
+                            </div>
+                            <p>{{ comment.body }}</p>
+                          </article>
+                        }
+                      </div>
+                    }
+                  </section>
                 }
               </div>
             }

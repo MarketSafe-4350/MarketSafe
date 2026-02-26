@@ -117,4 +117,50 @@ describe('MainPageComponent', () => {
     const deleteButtons = fixture.nativeElement.querySelectorAll('button.delete-btn');
     expect(deleteButtons.length).toBe(1);
   });
+
+  it('submitComment_WhitespaceOnly_ShouldSetErrorAndNotCreateComment', () => {
+    fixture.detectChanges();
+
+    component.setCommentDraft(ownedListing.id, '   ');
+    component.submitComment(ownedListing);
+
+    expect(component.getComments(ownedListing.id).length).toBe(0);
+    expect(component.getCommentError(ownedListing.id)).toBe('Comment cannot be empty.');
+  });
+
+  it('submitComment_ValidComment_ShouldTrimStoreAndUpdateSidebarCount', () => {
+    fixture.detectChanges();
+
+    component.setCommentDraft(ownedListing.id, '  Great listing  ');
+    component.submitComment(ownedListing);
+
+    const comments = component.getComments(ownedListing.id);
+    expect(comments.length).toBe(1);
+    expect(comments[0].body).toBe('Great listing');
+    expect(comments[0].authorLabel).toBe('Test User');
+    expect(component.sidebarListings[0].comments).toBe(1);
+  });
+
+  it('onListingClick_SoldListing_ShouldNotOpenCommentPanel', () => {
+    fixture.detectChanges();
+
+    const soldListing: Listing = { ...ownedListing, id: 77, isSold: true };
+    component.onListingClick(soldListing);
+
+    expect(component.isCommentPanelOpen(soldListing.id)).toBeFalse();
+  });
+
+  it('template_ShouldShowUpdatedCommentCountOnListingCardBeforePanelOpens', () => {
+    fixture.detectChanges();
+
+    component.setCommentDraft(ownedListing.id, 'First');
+    component.submitComment(ownedListing);
+    fixture.detectChanges();
+
+    const commentCountTexts = Array.from(
+      fixture.nativeElement.querySelectorAll('.comment-count') as NodeListOf<HTMLElement>
+    ).map((element) => element.textContent?.trim());
+
+    expect(commentCountTexts).toContain('1 comment');
+  });
 });

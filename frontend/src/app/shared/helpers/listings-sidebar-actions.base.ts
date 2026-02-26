@@ -24,7 +24,7 @@ export abstract class ListingsSidebarActionsBase {
       id: listing.id,
       title: listing.title,
       imageUrl: listing.imageUrl,
-      comments: 0,
+      comments: this.getCommentCountForSidebarListing(listing),
     }));
   }
 
@@ -94,6 +94,10 @@ export abstract class ListingsSidebarActionsBase {
 
   protected getSidebarSourceListings(): Listing[] {
     return this.listings;
+  }
+
+  protected getCommentCountForSidebarListing(_listing: Listing): number {
+    return 0;
   }
 
   protected beforeListingMutation(): void {

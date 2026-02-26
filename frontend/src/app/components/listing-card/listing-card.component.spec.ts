@@ -92,5 +92,21 @@ describe('ListingCardComponent', () => {
     it('getIsSold_ListingProvided_ShouldBeExpectedIsSold', () => {
       expect(listingCardComponent.isSold).toBe(mockListing.isSold);
     });
+
+    it('getCommentCountLabel_SingularAndPlural_ShouldMatchCount', () => {
+      listingCardComponent.commentCount = 1;
+      expect(listingCardComponent.commentCountLabel).toBe('1 comment');
+
+      listingCardComponent.commentCount = 2;
+      expect(listingCardComponent.commentCountLabel).toBe('2 comments');
+    });
+
+    it('template_ShouldRenderCommentCount', () => {
+      fixture.componentRef.setInput('commentCount', 3);
+      fixture.detectChanges();
+
+      const commentCount = fixture.nativeElement.querySelector('.comment-count');
+      expect(commentCount?.textContent?.trim()).toBe('3 comments');
+    });
   });
 });
