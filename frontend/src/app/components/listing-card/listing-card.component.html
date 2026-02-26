@@ -1,4 +1,8 @@
-<mat-card class="listing-list-card" appearance="outlined">
+<mat-card
+  class="listing-list-card"
+  [class.is-sold]="isSold"
+  appearance="outlined"
+>
   @if (isSold) {
     <div class="sold-badge">SOLD</div>
   }
@@ -28,6 +32,8 @@
         <span>{{ location }}</span>
         <span class="dot">•</span>
         <span>{{ createdAt }}</span>
+        <span class="dot">•</span>
+        <span class="comment-count">{{ commentCountLabel }}</span>
       </div>
     </div>
   </div>

@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class ListingCardComponent {
   @Input({ required: true }) listing: Listing | null = null;
+  @Input() commentCount = 0;
 
   get title(): string {
     return this.listing?.title || 'Untitled Listing';
@@ -47,5 +48,9 @@ export class ListingCardComponent {
 
   get isSold(): boolean {
     return this.listing?.isSold ?? false;
+  }
+
+  get commentCountLabel(): string {
+    return `${this.commentCount} comment${this.commentCount === 1 ? '' : 's'}`;
   }
 }
