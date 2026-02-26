@@ -97,6 +97,7 @@ export abstract class ListingsSidebarActionsBase {
   }
 
   protected getCommentCountForSidebarListing(_listing: Listing): number {
+    void _listing;
     return 0;
   }
 
