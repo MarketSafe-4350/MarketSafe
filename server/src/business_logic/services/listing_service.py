@@ -35,6 +35,52 @@ class ListingService:
     def get_listing_by_id(self, listing_id: int) -> Listing | None:
         return self._listing_manager.get_listing_by_id(listing_id)
 
+    def search_listings(self, query: str) -> List[Listing]:
+        """Search listings by keywords across title, description, and location.
+
+        Results are ranked by simple relevance, prioritizing title matches.
+        """
+        if query is None:
+            return []
+
+        normalized_query = query.strip().lower()
+        if not normalized_query:
+            return []
+
+        keywords = [token for token in normalized_query.split() if token]
+        if not keywords:
+            return []
+
+        listings = self._listing_manager.list_listings()
+        scored_results: list[tuple[int, Listing]] = []
+
+        for listing in listings:
+            title = (listing.title or "").lower()
+            description = (listing.description or "").lower()
+            location = (listing.location or "").lower()
+            searchable_text = f"{title} {description} {location}"
+
+            # Weighted scoring: title matches count more than description/location.
+            score = 0
+            for keyword in keywords:
+                if keyword in title:
+                    score += 3
+                elif keyword in searchable_text:
+                    score += 1
+
+            if score > 0:
+                scored_results.append((score, listing))
+
+        scored_results.sort(
+            key=lambda item: (
+                -item[0],
+                -(item[1].created_at.timestamp() if item[1].created_at else 0),
+                -(item[1].id or 0),
+            )
+        )
+
+        return [listing for _, listing in scored_results]
+
     def create_listing(
         self,
         seller_id: int,

@@ -2,7 +2,7 @@ import shutil
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile, status
 from fastapi.security import (
     HTTPAuthorizationCredentials,
     HTTPBearer,
@@ -142,6 +142,17 @@ def get_my_listing(user_id: int = Depends(get_current_user_id)):
 
     listings: List[Listing] = service.get_listing_by_user_id(user_id=user_id)
 
+    return [_to_listing_response(listing) for listing in listings]
+
+
+@router.get("/search", response_model=List[ListingResponse])
+def search_listings(
+    q: str = Query(..., min_length=1),
+    _: int = Depends(get_current_user_id),
+):
+    """Search listings using keyword(s) in title, description, or location."""
+    service = _get_service()
+    listings: List[Listing] = service.search_listings(query=q)
     return [_to_listing_response(listing) for listing in listings]
 
 

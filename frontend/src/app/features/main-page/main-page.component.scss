@@ -59,6 +59,13 @@
 .listing-item {
   display: grid;
   gap: 8px;
+  border-radius: 14px;
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.listing-item.highlighted {
+  background: #eff6ff;
+  box-shadow: 0 0 0 2px #60a5fa;
 }
 
 .listing-click-target {
