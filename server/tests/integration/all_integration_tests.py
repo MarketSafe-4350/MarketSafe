@@ -12,8 +12,10 @@ from tests.integration.account.test_account_service import (
 )
 from tests.integration.db import TestDBUtility
 from tests.helpers import IntegrationDBContext
-from tests.integration.email_verification import TestEmailVerificationServiceIntegration, \
-    TestMySQLEmailVerificationTokenDB
+from tests.integration.email_verification import (
+    TestEmailVerificationServiceIntegration,
+    TestMySQLEmailVerificationTokenDB,
+)
 from tests.integration.listing import (
     TestListingManagerIntegration,
     TestMySQLListingDB,
@@ -23,8 +25,10 @@ from tests.integration.listing import (
 
 from tests.integration.comment import (
     TestMySQLCommentDB,
-    TestCommentManagerIntegration
+    TestCommentManagerIntegration,
+    TestCommentServiceIntegration,
 )
+
 
 def load_tests(
     loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str
@@ -35,13 +39,16 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestAccountManagerIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestAccountServiceIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestListingManagerIntegration))
-    suite.addTest(loader.loadTestsFromTestCase(TestListingRouteIntegration))
-    suite.addTest(loader.loadTestsFromTestCase(TestListingServiceIntegration))
+    suite.addTests(loader.loadTestsFromTestCase(TestListingRouteIntegration))
+    suite.addTests(loader.loadTestsFromTestCase(TestListingServiceIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLListingDB))
-    suite.addTest(loader.loadTestsFromTestCase(TestMySQLCommentDB))
-    suite.addTest(loader.loadTestsFromTestCase(TestCommentManagerIntegration))
-    suite.addTests(loader.loadTestsFromTestCase(TestEmailVerificationServiceIntegration))
-    suite.addTest(loader.loadTestsFromTestCase(TestMySQLEmailVerificationTokenDB))
+    suite.addTests(loader.loadTestsFromTestCase(TestMySQLCommentDB))
+    suite.addTests(loader.loadTestsFromTestCase(TestCommentManagerIntegration))
+    suite.addTests(loader.loadTestsFromTestCase(TestCommentServiceIntegration))
+    suite.addTests(
+        loader.loadTestsFromTestCase(TestEmailVerificationServiceIntegration)
+    )
+    suite.addTests(loader.loadTestsFromTestCase(TestMySQLEmailVerificationTokenDB))
 
     return suite
 

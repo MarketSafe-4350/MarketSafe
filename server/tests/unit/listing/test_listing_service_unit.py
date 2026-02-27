@@ -7,7 +7,7 @@ from src.domain_models.listing import Listing
 from src.utils import ValidationError
 
 
-class TestListingService(unittest.TestCase):
+class TestListingServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
         self.manager: MagicMock = MagicMock()
         self.service = ListingService(listing_manager=self.manager)

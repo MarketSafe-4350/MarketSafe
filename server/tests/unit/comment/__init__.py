@@ -1,1 +1,2 @@
 from .test_comment_manager_unit import TestCommentManagerUnit
+from .test_comment_service_unit import TestCommentServiceUnit

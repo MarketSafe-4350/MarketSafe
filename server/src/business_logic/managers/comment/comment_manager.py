@@ -62,10 +62,6 @@ class CommentManager(ICommentManager):
         if int(comment.listing_id) != int(listing.id):
             raise ValidationError("comment.listing_id must match listing.id.")
 
-        # # verified required
-        # if not bool(actor.verified):
-        #     raise UnapprovedBehaviorError("Only verified users can create comments.")
-
         # cannot comment on sold listings
         if bool(listing.is_sold):
             raise UnapprovedBehaviorError("Cannot comment on a sold listing.")

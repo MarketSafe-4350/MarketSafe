@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 from src.api.routes import listing_routes
 from src.auth.dependencies import get_current_user_id
 
-from src.api.dependencies import get_listing_service
+from src.api.dependencies import get_listing_service, get_comment_service
 from src.utils.errors import (
     ValidationError,
     DatabaseUnavailableError,
@@ -36,8 +36,13 @@ class TestListingRouteIntegration(unittest.TestCase):
         self.app.dependency_overrides[get_current_user_id] = fake_auth_user_id
 
         self.mock_listing_service = MagicMock()
+        self.mock_comment_service = MagicMock()
 
         # default service override
+        self.app.dependency_overrides[get_comment_service] = (
+            lambda: self.mock_comment_service
+        )
+
         self.app.dependency_overrides[get_listing_service] = (
             lambda: self.mock_listing_service
         )
@@ -196,3 +201,77 @@ class TestListingRouteIntegration(unittest.TestCase):
 
         resp = self.client.get("/listings")
         self.assertEqual(resp.status_code, 401)
+
+    def test_get_listing_comments_returns_list(self) -> None:
+        listing_id = 123
+        created = datetime(2026, 2, 22, tzinfo=timezone.utc)
+
+        self.mock_comment_service.get_all_comments_listing.return_value = [
+            SimpleNamespace(
+                id=1,
+                listing_id=listing_id,
+                author_id=999,
+                body="First!",
+                created_date=created,
+            ),
+            SimpleNamespace(
+                id=2,
+                listing_id=listing_id,
+                author_id=888,
+                body="Still available?",
+                created_date=None,
+            ),
+        ]
+
+        resp = self.client.get(f"/listings/{listing_id}/comments")
+        self.assertEqual(resp.status_code, 200)
+
+        data = resp.json()
+        self.assertEqual(len(data), 2)
+
+        self.assertEqual(data[0]["id"], 1)
+        self.assertEqual(data[0]["listing_id"], listing_id)
+        self.assertEqual(data[0]["author_id"], 999)
+        self.assertEqual(data[0]["body"], "First!")
+        self.assertEqual(data[0]["created_date"], created.isoformat())
+
+        self.assertEqual(data[1]["id"], 2)
+        self.assertEqual(data[1]["created_date"], None)
+
+        self.mock_comment_service.get_all_comments_listing.assert_called_once_with(
+            listing_id=listing_id
+        )
+
+    def test_create_listing_comment_returns_created_comment(self) -> None:
+        listing_id = 123
+        created = datetime(2026, 2, 22, tzinfo=timezone.utc)
+
+        # what the service returns (domain-like object)
+        self.mock_comment_service.create_comment.return_value = SimpleNamespace(
+            id=10,
+            listing_id=listing_id,
+            author_id=999,
+            body="Is it still available?",
+            created_date=created,
+        )
+
+        payload = {"body": "Is it still available?"}
+
+        resp = self.client.post(f"/listings/{listing_id}/comments", json=payload)
+        self.assertEqual(resp.status_code, 200)
+
+        data = resp.json()
+        self.assertEqual(data["id"], 10)
+        self.assertEqual(data["listing_id"], listing_id)
+        self.assertEqual(data["author_id"], 999)
+        self.assertEqual(data["body"], "Is it still available?")
+        self.assertEqual(data["created_date"], created.isoformat())
+
+        args, kwargs = self.mock_comment_service.create_comment.call_args
+        self.assertEqual(kwargs["actor_id"], 999)
+        self.assertEqual(kwargs["listing_id"], listing_id)
+
+        sent_comment = kwargs["comment"]
+        self.assertEqual(sent_comment.listing_id, listing_id)
+        self.assertEqual(sent_comment.author_id, 999)
+        self.assertEqual(sent_comment.body, payload["body"])
