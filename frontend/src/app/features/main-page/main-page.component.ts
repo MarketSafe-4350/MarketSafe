@@ -54,6 +54,7 @@ export class MainPageComponent
     this.listingsApi.getAll().subscribe({
       next: (listings) => {
         this.listings = listings;
+        this.preloadCommentsForListings(listings);
         this.isLoading = false;
       },
       error: (error) => {
@@ -62,6 +63,12 @@ export class MainPageComponent
         this.isLoading = false;
       },
     });
+  }
+
+  private preloadCommentsForListings(listings: Listing[]): void {
+    for (const listing of listings) {
+      this.loadComments(listing.id);
+    }
   }
 
   private loadComments(listingId: number): void {

@@ -54,6 +54,7 @@ export class MyListingsPageComponent
     this.listingsApi.getMine().subscribe({
       next: (listings) => {
         this.listings = listings;
+        this.preloadCommentsForListings(listings);
         this.isLoading = false;
       },
       error: (error) => {
@@ -62,6 +63,12 @@ export class MyListingsPageComponent
         this.isLoading = false;
       },
     });
+  }
+
+  private preloadCommentsForListings(listings: Listing[]): void {
+    for (const listing of listings) {
+      this.loadComments(listing.id);
+    }
   }
 
   private loadComments(listingId: number): void {
