@@ -42,14 +42,6 @@ router = APIRouter(prefix="/listings")
 security = HTTPBearer()
 
 
-def _get_service() -> ListingService:
-    db = DBUtility.instance()
-    listing_db = MySQLListingDB(db=db)
-    comment_db = MySQLCommentDB(db=db)
-    listing_manager = ListingManager(listing_db=listing_db, comment_db=comment_db)
-    return ListingService(listing_manager=listing_manager)
-
-
 def _to_listing_response(listing: Listing) -> ListingResponse:
     return ListingResponse(
         id=listing.id,
@@ -102,7 +94,10 @@ def _save_uploaded_image(upload: UploadFile, request: Request) -> str:
 
 
 @router.get("", response_model=List[ListingResponse])
-def get_all_listing(_: int = Depends(get_current_user_id)):
+def get_all_listing(
+    _: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
+):
     """Get all listings
 
     Args:
@@ -111,15 +106,16 @@ def get_all_listing(_: int = Depends(get_current_user_id)):
     Returns:
         _type_: list of ListingResponse
     """
-    service = _get_service()
-
-    listings: List[Listing] = service.get_all_listing()
+    listings: List[Listing] = listing_service.get_all_listing()
 
     return [_to_listing_response(listing) for listing in listings]
 
 
 @router.get("/me", response_model=List[ListingResponse])
-def get_my_listing(user_id: int = Depends(get_current_user_id)):
+def get_my_listing(
+    user_id: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
+):
     """Get current user listings
 
     Args:
@@ -128,9 +124,7 @@ def get_my_listing(user_id: int = Depends(get_current_user_id)):
     Returns:
         _type_:  list of ListingResponse
     """
-    service = _get_service()
-
-    listings: List[Listing] = service.get_listing_by_user_id(user_id=user_id)
+    listings: List[Listing] = listing_service.get_listing_by_user_id(user_id=user_id)
 
     return [_to_listing_response(listing) for listing in listings]
 
@@ -139,6 +133,7 @@ def get_my_listing(user_id: int = Depends(get_current_user_id)):
 def create_listing(
     request: ListingCreate,
     user_id: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
 ):
     """Creates a new listing.
 
@@ -148,9 +143,7 @@ def create_listing(
     Returns:
         ListingResponse: The response model for the newly created listing.
     """
-    service = _get_service()
-
-    listing: Listing = service.create_listing(
+    listing: Listing = listing_service.create_listing(
         seller_id=user_id,
         title=request.title,
         description=request.description,
@@ -171,10 +164,9 @@ async def create_listing_with_upload(
     location: str = Form(...),
     image: UploadFile | None = File(default=None),
     user_id: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
 ):
     """Creates a listing using multipart/form-data and stores the uploaded image locally."""
-    service = _get_service()
-
     image_url = None
     if image is not None:
         try:
@@ -186,7 +178,7 @@ async def create_listing_with_upload(
         finally:
             await image.close()
 
-    listing: Listing = service.create_listing(
+    listing: Listing = listing_service.create_listing(
         seller_id=user_id,
         title=title,
         description=description,
@@ -202,11 +194,10 @@ async def create_listing_with_upload(
 def delete_listing(
     listing_id: int,
     user_id: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
 ):
     """Deletes a listing owned by the current user."""
-    service = _get_service()
-
-    service.delete_listing(listing_id=listing_id, actor_user_id=user_id)
+    listing_service.delete_listing(listing_id=listing_id, actor_user_id=user_id)
     return None
 
 
