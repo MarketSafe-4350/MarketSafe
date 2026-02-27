@@ -18,7 +18,7 @@ services:
 
   db-init:
     build:
-      context: ./persistence/db
+      context: assets/db
       dockerfile: init/Dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -29,6 +29,45 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    restart: "no"
+
+  # ------------------------
+  # MinIO (DEV)
+  # ------------------------
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+    ports:
+      - "9100:9000"  # S3 API (host 9100 -> container 9000)
+      - "9101:9001"  # Console UI (host 9101 -> container 9001)
+    volumes:
+      - minio_dev_data:/data
+    healthcheck:
+      # NOTE: 'curl' might not exist in minio image. See alternative below if this fails.
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  # Seeds bucket + uploads default images from repo folder
+  minio-seed:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    volumes:
+      - ../assets/default_pics:/seed-images:ro
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-minioadmin} ${MINIO_ROOT_PASSWORD:-minioadmin123} &&
+      mc mb -p local/media || true &&
+      mc anonymous set none local/media || true &&
+      mc mirror --overwrite /seed-images local/media &&
+      echo 'MinIO seeded with default pics.'
+      "
     restart: "no"
 
   api:
@@ -45,8 +84,16 @@ services:
       DB_USER: marketsafe
       DB_PASSWORD: marketsafe
       APP_ENV: ${APP_ENV:-dev}
+
+      # MinIO settings for backend (inside compose network uses service name + container port)
+      MINIO_ENDPOINT: minio:9000
+      MINIO_PUBLIC_BASE_URL: http://localhost:9100
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
     depends_on:
       db-init:
+        condition: service_completed_successfully
+      minio-seed:
         condition: service_completed_successfully
 
   frontend:
@@ -64,3 +111,4 @@ services:
 
 volumes:
   mysql_data:
+  minio_dev_data:
