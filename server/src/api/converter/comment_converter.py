@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from src.domain_models.comment import Comment
+from src.domain_models.account import Account
 
 
 class CommentCreate(BaseModel):
@@ -21,15 +22,17 @@ class CommentResponse(BaseModel):
     id: int | None = None
     listing_id: int
     author_id: int
+    author_name: str
     body: str | None = None
     created_date: str | None = None
 
     @staticmethod
-    def from_domain(comment: Comment) -> "CommentResponse":
+    def from_domain(comment: Comment, author: Account) -> "CommentResponse":
         return CommentResponse(
             id=comment.id,
             listing_id=comment.listing_id,
             author_id=comment.author_id,
+            author_name=author.fname + " " + author.lname,
             body=comment.body,
             created_date=(
                 comment.created_date.isoformat() if comment.created_date else None

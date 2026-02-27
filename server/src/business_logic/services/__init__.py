@@ -1,3 +1,3 @@
 from .account_service import AccountService
-from .comment_service import CommentService
+from .comment_service import CommentService, CommentWithAuthor
 from .listing_service import ListingService

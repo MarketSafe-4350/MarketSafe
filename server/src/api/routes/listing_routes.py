@@ -27,10 +27,15 @@ from src.db.utils.db_utils import DBUtility
 from src.db.email_verification_token.mysql.mysql_email_verification_token_db import (
     MySQLEmailVerificationTokenDB,
 )
-from src.domain_models import Listing
+from src.domain_models import Listing, Comment, Account
 from src.api.converter.listing_converter import ListingCreate, ListingResponse
 from src.api.converter.comment_converter import CommentCreate, CommentResponse
-from src.business_logic.services import ListingService, CommentService
+from src.business_logic.services import (
+    ListingService,
+    CommentService,
+    AccountService,
+    CommentWithAuthor,
+)
 from src.domain_models.comment import Comment
 from src.api.dependencies import (
     get_account_service,
@@ -201,11 +206,17 @@ def get_listing_comment(
         user_id (int, optional): user id. Defaults to Depends(get_current_user_id).
         comment_service (CommentService, optional): DI for comment service. Defaults to Depends(get_comment_service).
     """
-    comments: List[Comment] = comment_service.get_all_comments_listing(
+    comments_author: List[CommentWithAuthor] = comment_service.get_all_comments_listing(
         listing_id=listing_id
     )
 
-    return [CommentResponse.from_domain(comment=comment) for comment in comments]
+    return [
+        CommentResponse.from_domain(
+            comment=c.comment,
+            author=c.author,
+        )
+        for c in comments_author
+    ]
 
 
 @router.post("/{listing_id}/comments", response_model=CommentResponse)
@@ -223,11 +234,18 @@ def create_listing_comment(
         user_id (int, optional): user id. Defaults to Depends(get_current_user_id).
         comment_service (CommentService, optional): Defaults to Depends(get_comment_service).
     """
-    comment_request: Comment = comment_request.to_domain(
-        listing_id=listing_id, author_id=user_id
-    )
-    comment_result: Comment = comment_service.create_comment(
-        actor_id=user_id, listing_id=listing_id, comment=comment_request
+    comment_domain: Comment = comment_request.to_domain(
+        listing_id=listing_id,
+        author_id=user_id,
     )
 
-    return CommentResponse.from_domain(comment=comment_result)
+    item: CommentWithAuthor = comment_service.create_comment(
+        actor_id=user_id,
+        listing_id=listing_id,
+        comment=comment_domain,
+    )
+
+    return CommentResponse.from_domain(
+        comment=item.comment,
+        author=item.author,
+    )
