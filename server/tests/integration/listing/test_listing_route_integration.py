@@ -98,6 +98,40 @@ class TestListingRouteIntegration(unittest.TestCase):
         mock_service.get_listing_by_user_id.assert_called_once_with(user_id=999)
 
     @patch("src.api.routes.listing_routes._get_service")
+    def test_search_listings_returns_matching_results(
+        self, mock_get_service: MagicMock
+    ) -> None:
+        mock_service = MagicMock()
+        mock_get_service.return_value = mock_service
+
+        created_at = datetime(2026, 2, 25, tzinfo=timezone.utc)
+        mock_service.search_listings.return_value = [
+            SimpleNamespace(
+                id=20,
+                seller_id=12,
+                title="Gaming Laptop",
+                description="RTX laptop",
+                price=850.0,
+                location="Winnipeg",
+                image_url=None,
+                created_at=created_at,
+                is_sold=False,
+            )
+        ]
+
+        resp = self.client.get("/listings/search", params={"q": "laptop gaming"})
+        self.assertEqual(resp.status_code, 200)
+
+        data = resp.json()
+        self.assertEqual(len(data), 1)
+        self.assertEqual(data[0]["title"], "Gaming Laptop")
+        mock_service.search_listings.assert_called_once_with(query="laptop gaming")
+
+    def test_search_listings_missing_query_returns_422(self) -> None:
+        resp = self.client.get("/listings/search")
+        self.assertEqual(resp.status_code, 422)
+
+    @patch("src.api.routes.listing_routes._get_service")
     def test_create_listing_returns_created_listing(
         self, mock_get_service: MagicMock
     ) -> None:

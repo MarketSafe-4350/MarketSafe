@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
@@ -44,6 +44,15 @@ export class ListingsApiService {
     return this.http
       .get<ListingApiResponse[]>(`${this.apiUrl}/me`, {
         headers: this.authHeaders(false),
+      })
+      .pipe(map((items) => items.map((item) => this.toListing(item))));
+  }
+
+  search(query: string): Observable<Listing[]> {
+    return this.http
+      .get<ListingApiResponse[]>(`${this.apiUrl}/search`, {
+        headers: this.authHeaders(false),
+        params: new HttpParams().set('q', query),
       })
       .pipe(map((items) => items.map((item) => this.toListing(item))));
   }
