@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -16,6 +18,7 @@ describe('MainPageComponent', () => {
   let listingsApiSpy: jasmine.SpyObj<ListingsApiService>;
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
   let matDialogSpy: jasmine.SpyObj<MatDialog>;
+  let activatedRouteStub: { snapshot: { queryParamMap: ReturnType<typeof convertToParamMap> } };
 
   const ownedListing: Listing = {
     id: 1,
@@ -66,6 +69,11 @@ describe('MainPageComponent', () => {
     );
 
     matDialogSpy = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
+    activatedRouteStub = {
+      snapshot: {
+        queryParamMap: convertToParamMap({}),
+      },
+    };
 
     await TestBed.configureTestingModule({
       imports: [MainPageComponent, RouterTestingModule],
@@ -73,6 +81,7 @@ describe('MainPageComponent', () => {
         provideNoopAnimations(),
         { provide: ListingsApiService, useValue: listingsApiSpy },
         { provide: AccountsApiService, useValue: accountsApiSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteStub },
       ],
     })
       .overrideComponent(MainPageComponent, {
@@ -163,4 +172,31 @@ describe('MainPageComponent', () => {
 
     expect(commentCountTexts).toContain('1 comment');
   });
+
+  it('ngOnInit_WithListingIdQueryParam_ShouldScrollAndHighlightListing', fakeAsync(() => {
+    activatedRouteStub.snapshot.queryParamMap = convertToParamMap({
+      listingId: String(otherListing.id),
+    });
+
+    const scrollIntoView = jasmine.createSpy('scrollIntoView');
+    spyOn(document, 'getElementById').and.returnValue({
+      scrollIntoView,
+    } as unknown as HTMLElement);
+
+    fixture = TestBed.createComponent(MainPageComponent);
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+
+    tick(0);
+    expect(component.highlightedListingId).toBe(otherListing.id);
+    expect(document.getElementById).toHaveBeenCalledWith(`listing-${otherListing.id}`);
+    expect(scrollIntoView).toHaveBeenCalledWith({
+      behavior: 'smooth',
+      block: 'center',
+    });
+
+    tick(2200);
+    expect(component.highlightedListingId).toBeNull();
+  }));
 });

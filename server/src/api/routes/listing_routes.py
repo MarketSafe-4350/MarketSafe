@@ -1,6 +1,11 @@
 # src/api/routes/listing_routes.py
 from __future__ import annotations
 
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile, status
+from fastapi.security import (
+    HTTPAuthorizationCredentials,
+    HTTPBearer,
+)
 from typing import List
 
 from fastapi import APIRouter, Depends, File, Form, UploadFile
@@ -60,6 +65,7 @@ def _get_service() -> ListingService:
     """
     db = DBUtility.instance()
     listing_db = MySQLListingDB(db=db)
+    # placeholder for now, will change when comment db is implemented
     comment_db = _NoOpCommentDB(db=db)
     listing_manager = ListingManager(listing_db=listing_db, comment_db=comment_db)
     return ListingService(listing_manager=listing_manager)
@@ -100,6 +106,19 @@ def get_my_listing(
     listings: List[Listing] = service.get_listing_by_user_id(user_id=user_id)
     return [assembler.to_response(l) for l in listings]
 
+@router.get("/search", response_model=List[ListingResponse])
+def search_listings(
+    q: str = Query(..., min_length=1),
+    _: int = Depends(get_current_user_id),
+    media: MediaStorageUtility = Depends(get_media_storage),
+
+):
+    """Search listings using keyword(s) in title, description, or location."""
+    service = _get_service()
+
+    assembler = ListingResponseAssembler(media)
+    listings: List[Listing] = service.search_listings(query=q)
+    return [assembler.to_response(l) for l in listings]
 
 @router.post("", response_model=ListingResponse)
 def create_listing(
@@ -168,12 +187,13 @@ async def create_listing_with_upload(
     return assembler.to_response(listing)
 
 
-@router.delete("/{listing_id}", status_code=204)
+@router.delete("/{listing_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_listing(
     listing_id: int,
     user_id: int = Depends(get_current_user_id),
 ):
-    """Delete a listing owned by the current user."""
+    """Deletes a listing owned by the current user."""
     service = _get_service()
+
     service.delete_listing(listing_id=listing_id, actor_user_id=user_id)
     return None
