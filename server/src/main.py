@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from src.media_storage import MediaStorageUtility
 from src.utils.errors import AppError
 from src.config import CORS_ALLOWED_ORIGINS
 from src.api.errors.exception_handlers import (
@@ -42,6 +43,15 @@ def create_app() -> FastAPI:
         driver="mysql+pymysql",
     )
 
+    media=  MediaStorageUtility(
+            endpoint=os.getenv("MINIO_ENDPOINT", "localhost:9100"),
+            access_key=os.getenv("MINIO_ROOT_USER", "minioadmin"),
+            secret_key=os.getenv("MINIO_ROOT_PASSWORD", "minioadmin123"),
+            secure=False,
+            public_base_url=os.getenv("MINIO_PUBLIC_BASE_URL", "http://localhost:9000"),
+            ensure_bucket_on_startup=True,
+       )
+
     db = DBUtility.instance()
 
     account_db = MySQLAccountDB(db=db)
@@ -66,6 +76,8 @@ def create_app() -> FastAPI:
     account_router = create_account_router(account_service)
 
     app = FastAPI(title="MarketSafe API")
+
+    app.state.media_storage = media
 
     uploads_dir = Path(__file__).resolve().parents[1] / "uploads"
     uploads_dir.mkdir(parents=True, exist_ok=True)

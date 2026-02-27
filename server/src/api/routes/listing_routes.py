@@ -1,27 +1,27 @@
-import shutil
-import uuid
-from pathlib import Path
+# src/api/routes/listing_routes.py
+from __future__ import annotations
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
-from fastapi.security import (
-    HTTPAuthorizationCredentials,
-    HTTPBearer,
-)
+import os
 from typing import List
+
+from fastapi import APIRouter, Depends, File, Form, UploadFile
+from fastapi.security import HTTPBearer
+from fastapi import Request
+
+from src.api.routes.listing_utils import ListingResponseAssembler, ListingImageUploader
 from src.auth.dependencies import get_current_user_id
-from src.business_logic.managers.listing.listing_manager import ListingManager
-from src.db.listing.mysql.mysql_listing_db import MySQLListingDB
 from src.business_logic.managers.listing.abstract_listing_manager import CommentDB
-from src.business_logic.managers.account.account_manager import AccountManager
-from src.db.account.mysql.mysql_account_db import MySQLAccountDB
-from src.db.utils.db_utils import DBUtility
-from src.db.email_verification_token.mysql.mysql_email_verification_token_db import (
-    MySQLEmailVerificationTokenDB,
-)
-from src.domain_models import Listing
-from src.api.converter.listing_converter import ListingCreate, ListingResponse
+from src.business_logic.managers.listing.listing_manager import ListingManager
 from src.business_logic.services.listing_service import ListingService
+from src.db.listing.mysql.mysql_listing_db import MySQLListingDB
+from src.db.utils.db_utils import DBUtility
+from src.domain_models import Listing
 from src.domain_models.comment import Comment
+from src.api.converter.listing_converter import ListingCreate, ListingResponse
+from src.api.dependencies import get_media_storage
+from src.media_storage import MediaStorageUtility
+
+
 
 router = APIRouter(prefix="/listings")
 security = HTTPBearer()
@@ -53,112 +53,72 @@ class _NoOpCommentDB(CommentDB):
 
 
 def _get_service() -> ListingService:
+    """
+    Construct ListingService.
+
+    Note:TODO: use Depends() provider.
+    This mirrors your existing pattern. If you later switch to FastAPI dependency injection,
+    you can convert this into a Depends() provider.
+    """
     db = DBUtility.instance()
     listing_db = MySQLListingDB(db=db)
-    # placeholder for now, will change when comment db is implemented
     comment_db = _NoOpCommentDB(db=db)
     listing_manager = ListingManager(listing_db=listing_db, comment_db=comment_db)
     return ListingService(listing_manager=listing_manager)
 
 
-def _to_listing_response(listing: Listing) -> ListingResponse:
-    return ListingResponse(
-        id=listing.id,
-        seller_id=listing.seller_id,
-        title=listing.title,
-        description=listing.description,
-        price=listing.price,
-        image_url=listing.image_url,
-        location=listing.location,
-        created_at=listing.created_at.isoformat() if listing.created_at else None,
-        is_sold=listing.is_sold,
-    )
-
-
-def _listing_uploads_dir() -> Path:
-    # server/uploads/listings
-    path = Path(__file__).resolve().parents[3] / "uploads" / "listings"
-    path.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def _normalized_image_extension(upload: UploadFile) -> str:
-    allowed = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
-    suffix = Path(upload.filename or "").suffix.lower()
-    if suffix in allowed:
-        return suffix
-
-    by_content_type = {
-        "image/jpeg": ".jpg",
-        "image/png": ".png",
-        "image/gif": ".gif",
-        "image/webp": ".webp",
-    }
-    return by_content_type.get(upload.content_type or "", ".jpg")
-
-# TODO: please change this 
-def _save_uploaded_image(upload: UploadFile, request: Request) -> str:
-    if not (upload.content_type or "").startswith("image/"):
-        raise ValueError("Uploaded file must be an image.")
-
-    ext = _normalized_image_extension(upload)
-    filename = f"{uuid.uuid4().hex}{ext}"
-    filepath = _listing_uploads_dir() / filename
-
-    with filepath.open("wb") as out_file:
-        shutil.copyfileobj(upload.file, out_file)
-
-    return f"/uploads/listings/{filename}"
-
 
 @router.get("", response_model=List[ListingResponse])
-def get_all_listing(_: int = Depends(get_current_user_id)):
-    """Get all listings
+def get_all_listing(
+    _: int = Depends(get_current_user_id),
+    media: MediaStorageUtility = Depends(get_media_storage),
+):
+    """
+    Get all listings.
 
-    Args:
-        _ (int, optional): Jwt auth token. Defaults to Depends(get_current_user_id).
-
-    Returns:
-        _type_: list of ListingResponse
+    Listing.image_url is stored as a MinIO object key.
+    This endpoint converts image keys into signed URLs for the response.
     """
     service = _get_service()
+    assembler = ListingResponseAssembler(media)
 
     listings: List[Listing] = service.get_all_listing()
+    return [assembler.to_response(l) for l in listings]
 
-    return [_to_listing_response(listing) for listing in listings]
 
 
 @router.get("/me", response_model=List[ListingResponse])
-def get_my_listing(user_id: int = Depends(get_current_user_id)):
-    """Get current user listings
+def get_my_listing(
+    user_id: int = Depends(get_current_user_id),
+    media: MediaStorageUtility = Depends(get_media_storage),
+):
+    """
+    Get current user's listings.
 
-    Args:
-        _ (int, optional): Jwt auth token. Defaults to Depends(get_current_user_id).
-
-    Returns:
-        _type_:  list of ListingResponse
+    Listing.image_url is stored as a MinIO object key.
+    This endpoint converts image keys into signed URLs for the response.
     """
     service = _get_service()
+    assembler = ListingResponseAssembler(media)
 
     listings: List[Listing] = service.get_listing_by_user_id(user_id=user_id)
+    return [assembler.to_response(l) for l in listings]
 
-    return [_to_listing_response(listing) for listing in listings]
 
 
 @router.post("", response_model=ListingResponse)
 def create_listing(
     request: ListingCreate,
     user_id: int = Depends(get_current_user_id),
+    media: MediaStorageUtility = Depends(get_media_storage),
 ):
-    """Creates a new listing.
+    """
+    Create a listing from JSON.
 
-    Args:
-        request (ListingCreate): The listing creation request data.
-
-    Returns:
-        ListingResponse: The response model for the newly created listing.
+    If request.image_url is provided, it must be a MinIO key (not a signed URL).
     """
     service = _get_service()
+    assembler = ListingResponseAssembler(media)
 
     listing: Listing = service.create_listing(
         seller_id=user_id,
@@ -166,31 +126,39 @@ def create_listing(
         description=request.description,
         price=request.price,
         location=request.location,
-        image_url=request.image_url,
+        image_url=request.image_url,  # MinIO key
     )
 
-    return _to_listing_response(listing)
+    return assembler.to_response(listing)
+
 
 
 @router.post("/upload", response_model=ListingResponse)
 async def create_listing_with_upload(
-    request: Request,
     title: str = Form(...),
     description: str = Form(...),
     price: float = Form(...),
     location: str = Form(...),
     image: UploadFile | None = File(default=None),
     user_id: int = Depends(get_current_user_id),
+    media: MediaStorageUtility = Depends(get_media_storage),
 ):
-    """Creates a listing using multipart/form-data and stores the uploaded image locally."""
-    service = _get_service()
+    """
+    Create a listing using multipart/form-data.
 
-    image_url = None
+    If an image is provided:
+    - It is uploaded to MinIO bucket "media"
+    - The returned object key is stored in Listing.image_url
+    - The response returns a signed URL (temporary) for the client
+    """
+    service = _get_service()
+    uploader = ListingImageUploader(media)
+    assembler = ListingResponseAssembler(media)
+
+    image_key = None
     if image is not None:
         try:
-            image_url = _save_uploaded_image(image, request)
-        except ValueError as exc:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+            image_key = uploader.save(image)
         finally:
             await image.close()
 
@@ -200,19 +168,18 @@ async def create_listing_with_upload(
         description=description,
         price=price,
         location=location,
-        image_url=image_url,
+        image_url=image_key,  # store key in DB
     )
 
-    return _to_listing_response(listing)
+    return assembler.to_response(listing)
 
 
-@router.delete("/{listing_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{listing_id}", status_code=204)
 def delete_listing(
     listing_id: int,
     user_id: int = Depends(get_current_user_id),
 ):
-    """Deletes a listing owned by the current user."""
+    """Delete a listing owned by the current user."""
     service = _get_service()
-
     service.delete_listing(listing_id=listing_id, actor_user_id=user_id)
     return None
