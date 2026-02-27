@@ -42,20 +42,6 @@ router = APIRouter(prefix="/listings")
 security = HTTPBearer()
 
 
-def _to_listing_response(listing: Listing) -> ListingResponse:
-    return ListingResponse(
-        id=listing.id,
-        seller_id=listing.seller_id,
-        title=listing.title,
-        description=listing.description,
-        price=listing.price,
-        image_url=listing.image_url,
-        location=listing.location,
-        created_at=listing.created_at.isoformat() if listing.created_at else None,
-        is_sold=listing.is_sold,
-    )
-
-
 def _listing_uploads_dir() -> Path:
     # server/uploads/listings
     path = Path(__file__).resolve().parents[3] / "uploads" / "listings"
@@ -108,7 +94,7 @@ def get_all_listing(
     """
     listings: List[Listing] = listing_service.get_all_listing()
 
-    return [_to_listing_response(listing) for listing in listings]
+    return [ListingResponse.from_domain(listing) for listing in listings]
 
 
 @router.get("/me", response_model=List[ListingResponse])
@@ -126,7 +112,7 @@ def get_my_listing(
     """
     listings: List[Listing] = listing_service.get_listing_by_user_id(user_id=user_id)
 
-    return [_to_listing_response(listing) for listing in listings]
+    return [ListingResponse.from_domain(listing) for listing in listings]
 
 
 @router.post("", response_model=ListingResponse)
@@ -152,7 +138,7 @@ def create_listing(
         image_url=request.image_url,
     )
 
-    return _to_listing_response(listing)
+    return ListingResponse.from_domain(listing)
 
 
 @router.post("/upload", response_model=ListingResponse)
@@ -187,7 +173,7 @@ async def create_listing_with_upload(
         image_url=image_url,
     )
 
-    return _to_listing_response(listing)
+    return ListingResponse.from_domain(listing)
 
 
 @router.delete("/{listing_id}", status_code=status.HTTP_204_NO_CONTENT)
