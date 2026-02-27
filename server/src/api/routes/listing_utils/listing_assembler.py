@@ -1,4 +1,3 @@
-# src/api/assemblers/listing_response_assembler.py
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -6,19 +5,19 @@ from dataclasses import dataclass
 from src.api.converter.listing_converter import ListingResponse
 from src.domain_models import Listing
 from src.media_storage import MediaStorageUtility
-from src.utils import MediaNotFoundError, StorageUnavailableError
 
 
 @dataclass(frozen=True)
 class ListingResponseAssembler:
     """
-    Converts domain Listing objects into API ListingResponse objects.
+     Converts domain Listing -> API ListingResponse.
 
-    Important:
-    - Listing.image_url is treated as a MinIO object KEY (stored in DB)
+    Conventions:
+    - listing.image_url (domain + DB) stores the MinIO object KEY
       e.g. "uploads/listings/<uuid>.png"
-    - The API response's image_url is a *signed URL* generated on demand.
-      Signed URLs expire, so they are never stored in DB.
+    - ListingResponse.image_url returns the raw key (for backward compatibility / debugging)
+    - ListingResponse.minio_url returns a short-lived signed URL for clients
+
     """
 
     media: MediaStorageUtility
@@ -34,14 +33,13 @@ class ListingResponseAssembler:
           (You can change this to raise if you want strict behavior.)
         """
         signed_url = None
-
         if listing.image_url:
             try:
                 signed_url = self.media.presigned_get_url(
                     listing.image_url,
                     expires_seconds=self.expires_seconds,
                 )
-            except (MediaNotFoundError, StorageUnavailableError):
+            except Exception:
                 signed_url = None
 
         return ListingResponse(
@@ -50,7 +48,10 @@ class ListingResponseAssembler:
             title=listing.title,
             description=listing.description,
             price=listing.price,
-            image_url=signed_url,
+
+            image_url=listing.image_url,  # raw key
+            minio_url=signed_url,  # signed URL
+
             location=listing.location,
             created_at=listing.created_at.isoformat() if listing.created_at else None,
             is_sold=listing.is_sold,

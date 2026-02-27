@@ -19,7 +19,10 @@ class ListingResponse(BaseModel):
     title: str
     description: str
     price: float
-    image_url: str | None = None
+
+    image_url: str | None = None      # raw DB value (MinIO key)
+    minio_url: str | None = None      # signed temporary URL
+
     location: str | None = None
     created_at: str | None = None
     is_sold: bool

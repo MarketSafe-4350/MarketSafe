@@ -1,12 +1,10 @@
 # src/api/routes/listing_routes.py
 from __future__ import annotations
 
-import os
 from typing import List
 
 from fastapi import APIRouter, Depends, File, Form, UploadFile
 from fastapi.security import HTTPBearer
-from fastapi import Request
 
 from src.api.routes.listing_utils import ListingResponseAssembler, ListingImageUploader
 from src.auth.dependencies import get_current_user_id
@@ -67,7 +65,6 @@ def _get_service() -> ListingService:
     return ListingService(listing_manager=listing_manager)
 
 
-
 @router.get("", response_model=List[ListingResponse])
 def get_all_listing(
     _: int = Depends(get_current_user_id),
@@ -76,15 +73,14 @@ def get_all_listing(
     """
     Get all listings.
 
-    Listing.image_url is stored as a MinIO object key.
-    This endpoint converts image keys into signed URLs for the response.
+    - Listing.image_url (DB) holds the MinIO object key.
+    - ListingResponse.minio_url returns a short-lived signed URL for clients.
     """
     service = _get_service()
     assembler = ListingResponseAssembler(media)
 
     listings: List[Listing] = service.get_all_listing()
     return [assembler.to_response(l) for l in listings]
-
 
 
 @router.get("/me", response_model=List[ListingResponse])
@@ -95,15 +91,14 @@ def get_my_listing(
     """
     Get current user's listings.
 
-    Listing.image_url is stored as a MinIO object key.
-    This endpoint converts image keys into signed URLs for the response.
+    - Listing.image_url (DB) holds the MinIO object key.
+    - ListingResponse.minio_url returns a short-lived signed URL for clients.
     """
     service = _get_service()
     assembler = ListingResponseAssembler(media)
 
     listings: List[Listing] = service.get_listing_by_user_id(user_id=user_id)
     return [assembler.to_response(l) for l in listings]
-
 
 
 @router.post("", response_model=ListingResponse)
@@ -115,7 +110,7 @@ def create_listing(
     """
     Create a listing from JSON.
 
-    If request.image_url is provided, it must be a MinIO key (not a signed URL).
+    If request.image_url is provided, it must be a MinIO object key (not a signed URL).
     """
     service = _get_service()
     assembler = ListingResponseAssembler(media)
@@ -126,11 +121,10 @@ def create_listing(
         description=request.description,
         price=request.price,
         location=request.location,
-        image_url=request.image_url,  # MinIO key
+        image_url=request.image_url,  # key stored in DB field image_url
     )
 
     return assembler.to_response(listing)
-
 
 
 @router.post("/upload", response_model=ListingResponse)
@@ -148,8 +142,8 @@ async def create_listing_with_upload(
 
     If an image is provided:
     - It is uploaded to MinIO bucket "media"
-    - The returned object key is stored in Listing.image_url
-    - The response returns a signed URL (temporary) for the client
+    - The returned object key is stored in Listing.image_url (DB)
+    - The response returns minio_url (signed URL) for client use
     """
     service = _get_service()
     uploader = ListingImageUploader(media)
@@ -168,7 +162,7 @@ async def create_listing_with_upload(
         description=description,
         price=price,
         location=location,
-        image_url=image_key,  # store key in DB
+        image_url=image_key,
     )
 
     return assembler.to_response(listing)
