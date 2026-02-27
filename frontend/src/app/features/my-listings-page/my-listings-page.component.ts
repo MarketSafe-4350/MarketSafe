@@ -63,14 +63,17 @@ export class MyListingsPageComponent
     });
   }
 
-  protected override getCommentCountForSidebarListing(listing: Listing): number {
+  protected override getCommentCountForSidebarListing(
+    listing: Listing,
+  ): number {
     return this.getComments(listing.id).length;
   }
 
   onListingClick(listing: Listing): void {
     if (listing.isSold) return;
     const listingId = listing.id;
-    this.selectedListingId = this.selectedListingId === listingId ? null : listingId;
+    this.selectedListingId =
+      this.selectedListingId === listingId ? null : listingId;
     this.clearCommentError(listingId);
   }
 

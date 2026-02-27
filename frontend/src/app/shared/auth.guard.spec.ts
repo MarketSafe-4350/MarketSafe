@@ -1,5 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import {
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { authGuard } from './auth.guard';
 
 describe('authGuard', () => {
@@ -24,7 +28,7 @@ describe('authGuard', () => {
     localStorage.setItem('access_token', 'fakeToken');
 
     const result = TestBed.runInInjectionContext(() =>
-      authGuard(mockRoute, mockState)
+      authGuard(mockRoute, mockState),
     );
 
     expect(result).toBeTrue();
@@ -33,7 +37,7 @@ describe('authGuard', () => {
 
   it('should block access and redirect to /login when no token', () => {
     const result = TestBed.runInInjectionContext(() =>
-      authGuard(mockRoute, mockState)
+      authGuard(mockRoute, mockState),
     );
 
     expect(result).toBeFalse();

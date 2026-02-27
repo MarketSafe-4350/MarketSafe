@@ -10,7 +10,7 @@ import { Listing } from '../../shared/models/listing.models';
 import { ListingComment } from '../../shared/models/comment.models';
 import { ListingsSidebarActionsBase } from '../../shared/helpers/listings-sidebar-actions.base';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
-
+import { CommentApiService } from '../../shared/services/comments-api.service';
 @Component({
   selector: 'app-main-page',
   standalone: true,
@@ -30,6 +30,7 @@ export class MainPageComponent
   implements OnInit
 {
   private readonly accountsApi = inject(AccountsApiService);
+  private readonly commentsApi = inject(CommentApiService);
   readonly maxCommentLength = 500;
   isLoading = false;
   selectedListingId: number | null = null;
@@ -63,19 +64,42 @@ export class MainPageComponent
     });
   }
 
+  private loadComments(listingId: number): void {
+    if (this.commentsByListingId.has(listingId)) return;
+
+    this.commentsApi.getComment(listingId).subscribe({
+      next: (comments) => {
+        this.commentsByListingId.set(listingId, comments);
+      },
+      error: (err) => {
+        console.error('Failed to load comments', err);
+        this.commentErrors.set(listingId, 'Failed to load comments.');
+      },
+    });
+  }
+
   protected override getSidebarSourceListings(): Listing[] {
     return this.listings.filter((listing) => this.canDelete(listing));
   }
 
-  protected override getCommentCountForSidebarListing(listing: Listing): number {
+  protected override getCommentCountForSidebarListing(
+    listing: Listing,
+  ): number {
     return this.getComments(listing.id).length;
   }
 
   onListingClick(listing: Listing): void {
     if (listing.isSold) return;
     const listingId = listing.id;
-    this.selectedListingId = this.selectedListingId === listingId ? null : listingId;
+
+    const willOpen = this.selectedListingId !== listingId;
+    this.selectedListingId = willOpen ? listingId : null;
+
     this.clearCommentError(listingId);
+
+    if (willOpen) {
+      this.loadComments(listingId);
+    }
   }
 
   onListingKeydown(event: KeyboardEvent, listing: Listing): void {
@@ -110,40 +134,41 @@ export class MainPageComponent
   }
 
   submitComment(listing: Listing): void {
-    const draft = this.getCommentDraft(listing.id);
+    const listingId = listing.id;
+    const draft = this.getCommentDraft(listingId);
     const normalized = draft.trim();
 
     if (!this.currentUserId) {
-      this.commentErrors.set(listing.id, 'You must be signed in to comment.');
+      this.commentErrors.set(listingId, 'You must be signed in to comment.');
       return;
     }
 
     if (!normalized) {
-      this.commentErrors.set(listing.id, 'Comment cannot be empty.');
+      this.commentErrors.set(listingId, 'Comment cannot be empty.');
       return;
     }
 
     if (normalized.length > this.maxCommentLength) {
       this.commentErrors.set(
-        listing.id,
+        listingId,
         `Comment must be ${this.maxCommentLength} characters or fewer.`,
       );
       return;
     }
 
-    const comments = this.getComments(listing.id);
-    const newComment: ListingComment = {
-      id: this.nextLocalCommentId++,
-      listingId: listing.id,
-      authorId: this.currentUserId,
-      authorLabel: this.currentCommentAuthorLabel,
-      body: normalized,
-      createdAt: new Date().toISOString(),
-    };
+    this.commentsApi.create({ body: normalized }, listingId).subscribe({
+      next: (created) => {
+        const existing = this.getComments(listingId);
+        this.commentsByListingId.set(listingId, [...existing, created]);
 
-    this.commentsByListingId.set(listing.id, [...comments, newComment]);
-    this.commentDrafts.set(listing.id, '');
-    this.clearCommentError(listing.id);
+        this.commentDrafts.set(listingId, '');
+        this.clearCommentError(listingId);
+      },
+      error: (err) => {
+        console.error('Failed to create comment', err);
+        this.commentErrors.set(listingId, 'Failed to post comment.');
+      },
+    });
   }
 
   isCommentSubmitDisabled(listingId: number): boolean {
