@@ -1,10 +1,16 @@
-from src.business_logic.managers.comment import ICommentManager 
+from src.business_logic.managers.comment import ICommentManager
 from src.db.comment import CommentDB
 from src.domain_models import Account, Listing, Comment
-from src.utils import Validation, ValidationError, UnapprovedBehaviorError, CommentNotFoundError
+from src.utils import (
+    Validation,
+    ValidationError,
+    UnapprovedBehaviorError,
+    CommentNotFoundError,
+)
 
 from typing_extensions import override
 from typing import List, Optional
+
 
 class CommentManager(ICommentManager):
     """
@@ -13,10 +19,10 @@ class CommentManager(ICommentManager):
     Responsibilities:
     - Orchestrate listing operations (no SQL here).
     - Validate inputs at the manager boundary (optional but recommended).
-    
+
     Dependencies:
     - comment_db: CommentDB (required)
-    
+
     Notes:
     - Assumes routing/service layer already authenticated the user (JWT -> Account).
     - Enforces authorization + business rules here.
@@ -30,7 +36,9 @@ class CommentManager(ICommentManager):
     # CREATE
     # --------------------------------------------------
     @override
-    def create_comment(self, actor: Account, listing: Listing, comment: Comment) -> Comment:
+    def create_comment(
+        self, actor: Account, listing: Listing, comment: Comment
+    ) -> Comment:
         Validation.require_not_none(actor, "actor")
         Validation.require_not_none(listing, "listing")
         Validation.require_not_none(comment, "comment")
@@ -42,24 +50,27 @@ class CommentManager(ICommentManager):
             raise ValidationError("listing must be persisted (listing.id is None).")
 
         if comment.id is not None:
-            raise ValidationError("comment must be new (comment.id must be None on create).")
+            raise ValidationError(
+                "comment must be new (comment.id must be None on create)."
+            )
 
         if int(comment.author_id) != int(actor.id):
-            raise UnapprovedBehaviorError("Cannot create a comment on behalf of another user.")
+            raise UnapprovedBehaviorError(
+                "Cannot create a comment on behalf of another user."
+            )
 
         if int(comment.listing_id) != int(listing.id):
             raise ValidationError("comment.listing_id must match listing.id.")
 
-        # verified required
-        if not bool(actor.verified):
-            raise UnapprovedBehaviorError("Only verified users can create comments.")
+        # # verified required
+        # if not bool(actor.verified):
+        #     raise UnapprovedBehaviorError("Only verified users can create comments.")
 
         # cannot comment on sold listings
         if bool(listing.is_sold):
             raise UnapprovedBehaviorError("Cannot comment on a sold listing.")
 
         return self._comment_db.add(comment)
-
 
     # --------------------------------------------------
     # READ
@@ -78,7 +89,7 @@ class CommentManager(ICommentManager):
     def list_comments_for_author(self, author_id: int) -> List[Comment]:
         author_id = Validation.require_int(author_id, "author_id")
         return self._comment_db.get_by_author_id(author_id)
-    
+
     # --------------------------------------------------
     # UPDATE
     # --------------------------------------------------
@@ -99,7 +110,9 @@ class CommentManager(ICommentManager):
 
         # Authorization: only author can edit
         if int(comment.author_id) != int(actor.id):
-            raise UnapprovedBehaviorError("Only the comment author can edit this comment.")
+            raise UnapprovedBehaviorError(
+                "Only the comment author can edit this comment."
+            )
 
         # Persist update
         self._comment_db.update_body(comment.id, comment.body)
@@ -113,7 +126,7 @@ class CommentManager(ICommentManager):
             )
 
         return updated
-    
+
     # --------------------------------------------------
     # DELETE
     # --------------------------------------------------
@@ -135,6 +148,8 @@ class CommentManager(ICommentManager):
 
         # Authorization: only author can delete
         if int(existing.author_id) != int(actor.id):
-            raise UnapprovedBehaviorError("Only the comment author can delete this comment.")
+            raise UnapprovedBehaviorError(
+                "Only the comment author can delete this comment."
+            )
 
         return self._comment_db.remove(comment_id)

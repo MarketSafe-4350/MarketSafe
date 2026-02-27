@@ -153,10 +153,3 @@ def verify_email(token: str = Query(..., min_length=10)):
             status_code=500,
             content={"error_message": "An error occurred during verification"},
         )
-
-
-def create_account_router(service: AccountService):
-    """
-    We ignore the passed-in service for now because this module already uses _get_service().
-    """
-    return router

@@ -11,9 +11,8 @@ from src.api.errors.exception_handlers import (
     api_error_handler,
     app_error_handler,
 )
-from src.api.routes.account_routes import create_account_router
 from src.api.routes.listing_routes import router as listing_router
-
+from src.api.routes.account_routes import router as account_router
 from src.business_logic.services.account_service import AccountService
 from src.business_logic.services.listing_service import ListingService
 
@@ -41,30 +40,6 @@ def create_app() -> FastAPI:
         password="marketsafe",
         driver="mysql+pymysql",
     )
-
-    db = DBUtility.instance()
-
-    account_db = MySQLAccountDB(db=db)
-
-    """
-    AccountManager is the sole gateway to the account table.
-
-    All account-related operations must go through this manager.
-    Direct database access outside this layer is prohibited.
-
-    This centralizes validation, business rules, and error handling,
-    and keeps the architecture clean and testable.
-    
-    pass it to wherever you need it
-    """
-    acc_db_manager = AccountManager(account_db=account_db)
-
-    # build service that uses the manager
-    account_service = AccountService(account_manager=acc_db_manager)
-
-    # create router bound to that service and include it
-    account_router = create_account_router(account_service)
-
     app = FastAPI(title="MarketSafe API")
 
     uploads_dir = Path(__file__).resolve().parents[1] / "uploads"
