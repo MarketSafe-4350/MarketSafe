@@ -123,4 +123,113 @@ describe('SearchPageComponent', () => {
       queryParams: { listingId: searchResult.id },
     });
   });
+
+  it('changeSortType_ShouldUpdateSortOptionAndCallSortResults', () => {
+    spyOn(component, 'sortResults');
+    component.changeSortType('price');
+    expect(component.selectedSortOption).toBe('price');
+    expect(component.sortResults).toHaveBeenCalled();
+  });
+
+  it('toggleSortDirection_ShouldToggleSortDirectionAndCallSortResults', () => {
+    spyOn(component, 'sortResults');
+
+    component.toggleSortDirection();
+    expect(component.sortDirection).toBe('desc');
+    expect(component.sortResults).toHaveBeenCalled();
+
+    component.toggleSortDirection();
+    expect(component.sortDirection).toBe('asc');
+    expect(component.sortResults).toHaveBeenCalled();
+  });
+
+  it('sortResults_ShouldSortByDateAscending', () => {
+    const listings: Listing[] = [
+      { ...searchResult, createdAt: new Date('2026-01-01').toISOString() },
+      { ...searchResult, createdAt: new Date('2026-02-25').toISOString() },
+    ];
+
+    component.searchResults = listings;
+    component.selectedSortOption = 'date';
+    component.sortDirection = 'asc';
+    component.sortResults();
+
+    expect(component.searchResults[0].createdAt).toBe(new Date('2026-01-01').toISOString());
+    expect(component.searchResults[1].createdAt).toBe(new Date('2026-02-25').toISOString());
+  });
+
+  it('sortResults_ShouldSortByDateDescending', () => {
+    const listings: Listing[] = [
+      { ...searchResult, createdAt: new Date('2026-01-01').toISOString() },
+      { ...searchResult, createdAt: new Date('2026-02-25').toISOString() },
+    ];
+
+    component.searchResults = listings;
+    component.selectedSortOption = 'date';
+    component.sortDirection = 'desc';
+    component.sortResults();
+
+    expect(component.searchResults[0].createdAt).toBe(new Date('2026-02-25').toISOString());
+    expect(component.searchResults[1].createdAt).toBe(new Date('2026-01-01').toISOString());
+  });
+
+  it('sortResults_ShouldSortByPriceAscending', () => {
+    const listings: Listing[] = [
+      { ...searchResult, price: 1000 },
+      { ...searchResult, price: 500 },
+    ];
+
+    component.searchResults = listings;
+    component.selectedSortOption = 'price';
+    component.sortDirection = 'asc';
+    component.sortResults();
+
+    expect(component.searchResults[0].price).toBe(500);
+    expect(component.searchResults[1].price).toBe(1000);
+  });
+
+  it('sortResults_ShouldSortByPriceDescending', () => {
+    const listings: Listing[] = [
+      { ...searchResult, price: 1000 },
+      { ...searchResult, price: 500 },
+    ];
+
+    component.searchResults = listings;
+    component.selectedSortOption = 'price';
+    component.sortDirection = 'desc';
+    component.sortResults();
+
+    expect(component.searchResults[0].price).toBe(1000);
+    expect(component.searchResults[1].price).toBe(500);
+  });
+
+  it('sortResults_ShouldSortByTitleAscending', () => {
+    const listings: Listing[] = [
+      { ...searchResult, title: 'B' },
+      { ...searchResult, title: 'A' },
+    ];
+
+    component.searchResults = listings;
+    component.selectedSortOption = 'title';
+    component.sortDirection = 'asc';
+    component.sortResults();
+
+    expect(component.searchResults[0].title).toBe('A');
+    expect(component.searchResults[1].title).toBe('B');
+  });
+
+  it('sortResults_ShouldSortByTitleDescending', () => {
+    const listings: Listing[] = [
+      { ...searchResult, title: 'B' },
+      { ...searchResult, title: 'A' },
+    ];
+
+    component.searchResults = listings;
+    component.selectedSortOption = 'title';
+    component.sortDirection = 'desc';
+    component.sortResults();
+
+    expect(component.searchResults[0].title).toBe('B');
+    expect(component.searchResults[1].title).toBe('A');
+  });
 });

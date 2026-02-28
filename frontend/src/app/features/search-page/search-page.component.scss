@@ -69,6 +69,23 @@
   border-radius: 12px;
 }
 
+.sort-options {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+}
+
+.sort-direction button {
+  border: none;
+  background: transparent;
+  cursor: default;
+  font-size: 24px;
+  position: relative;
+  top: -10px;
+  left: -10px;
+}
+
 @media (max-width: 960px) {
   .layout {
     grid-template-columns: 1fr;

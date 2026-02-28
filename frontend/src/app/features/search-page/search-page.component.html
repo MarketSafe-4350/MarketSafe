@@ -39,6 +39,23 @@
           </button>
         </form>
 
+        <div class="sort-options">
+          <mat-form-field appearance="outline" class="sort-select">
+            <mat-label>Sort By</mat-label>
+            <mat-select [(ngModel)]="selectedSortOption" (selectionChange)="changeSortType($event.value)">
+              <mat-option value="date">Sort by Date</mat-option>
+              <mat-option value="price">Sort by Price</mat-option>
+              <mat-option value="title">Sort by Title</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="sort-direction">
+            <button mat-icon-button (click)="toggleSortDirection()">
+              <mat-icon>{{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+            </button>
+          </div>
+        </div>
+
         @if (searchErrorMessage) {
           <p class="status error">{{ searchErrorMessage }}</p>
         } @else if (isLoading) {
