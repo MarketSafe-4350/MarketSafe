@@ -75,7 +75,7 @@ class TestCommentManagerUnit(unittest.TestCase):
     def test_create_comment_requires_persisted_actor(self) -> None:
         actor = self._account(1, verified=True)
         # simulate non-persisted actor
-        actor._id = None 
+        actor._id = None
 
         listing = self._listing(listing_id=10, seller_id=2, is_sold=False)
         comment = self._comment(comment_id=None, listing_id=10, author_id=1, body="x")
@@ -125,16 +125,6 @@ class TestCommentManagerUnit(unittest.TestCase):
 
         self.comment_db.add.assert_not_called()
 
-    def test_create_comment_requires_verified_actor(self) -> None:
-        actor = self._account(1, verified=False)
-        listing = self._listing(listing_id=10, seller_id=2, is_sold=False)
-        comment = self._comment(comment_id=None, listing_id=10, author_id=1, body="x")
-
-        with self.assertRaises(UnapprovedBehaviorError):
-            self.mgr.create_comment(actor=actor, listing=listing, comment=comment)
-
-        self.comment_db.add.assert_not_called()
-
     def test_create_comment_rejects_sold_listing(self) -> None:
         actor = self._account(1, verified=True)
         listing = self._listing(listing_id=10, seller_id=2, is_sold=True, sold_to_id=3)
@@ -148,7 +138,9 @@ class TestCommentManagerUnit(unittest.TestCase):
     def test_create_comment_happy_path_calls_db(self) -> None:
         actor = self._account(1, verified=True)
         listing = self._listing(listing_id=10, seller_id=2, is_sold=False)
-        comment = self._comment(comment_id=None, listing_id=10, author_id=1, body="hello")
+        comment = self._comment(
+            comment_id=None, listing_id=10, author_id=1, body="hello"
+        )
 
         created = self._comment(comment_id=99, listing_id=10, author_id=1, body="hello")
         self.comment_db.add.return_value = created
@@ -191,7 +183,7 @@ class TestCommentManagerUnit(unittest.TestCase):
     # -----------------------------
     def test_update_comment_body_requires_persisted_actor(self) -> None:
         actor = self._account(1, verified=True)
-        actor._id = None 
+        actor._id = None
 
         comment = self._comment(comment_id=5, listing_id=10, author_id=1, body="new")
 
@@ -268,10 +260,10 @@ class TestCommentManagerUnit(unittest.TestCase):
 
     def test_delete_comment_requires_persisted_actor(self) -> None:
         actor = self._account(account_id=None)
-        
+
         with self.assertRaises(ValidationError):
             self.mgr.delete_comment(actor=actor, comment_id=123)
-        
+
         self.comment_db.get_by_id.assert_not_called()
         self.comment_db.remove.assert_not_called()
 

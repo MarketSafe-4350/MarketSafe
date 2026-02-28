@@ -22,13 +22,14 @@ class IAccountManager(ABC):
         - account_db: AccountDB (required)
     """
 
-    def __init__(self, account_db: AccountDB, listing_db: Optional[ListingDB] = None) -> None:
+    def __init__(
+        self, account_db: AccountDB, listing_db: Optional[ListingDB] = None
+    ) -> None:
         Validation.require_not_none(account_db, "account_db")
         self._account_db = account_db
 
         # Optional dependency (used only by specific methods)
         self._listing_db = listing_db
-
 
     @abstractmethod
     def create_account(self, account: Account) -> Account:
@@ -198,4 +199,3 @@ class IAccountManager(ABC):
             - DatabaseUnavailableError / DatabaseQueryError
         """
         raise NotImplementedError
-

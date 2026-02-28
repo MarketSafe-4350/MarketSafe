@@ -7,7 +7,7 @@ from src.utils.errors import (
 from src.utils import ListingNotFoundError, UnapprovedBehaviorError
 from urllib.parse import urlparse
 from typing import List
-from src.business_logic.managers.listing.abstract_listing_manager import IListingManager
+from src.business_logic.managers.listing import IListingManager
 
 
 class ListingService:

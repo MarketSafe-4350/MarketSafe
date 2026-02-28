@@ -1,2 +1,3 @@
 from .test_mysql_comment_db import TestMySQLCommentDB
 from .test_comment_manager_integration import TestCommentManagerIntegration
+from .test_comment_service_integration import TestCommentServiceIntegration
