@@ -11,6 +11,7 @@ import { MainPageComponent } from './main-page.component';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { Listing } from '../../shared/models/listing.models';
+import { CommentApiService } from '../../shared/services/comments-api.service';
 
 describe('MainPageComponent', () => {
   let fixture: ComponentFixture<MainPageComponent>;
@@ -18,7 +19,10 @@ describe('MainPageComponent', () => {
   let listingsApiSpy: jasmine.SpyObj<ListingsApiService>;
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
   let matDialogSpy: jasmine.SpyObj<MatDialog>;
-  let activatedRouteStub: { snapshot: { queryParamMap: ReturnType<typeof convertToParamMap> } };
+  let commentApiSpy: jasmine.SpyObj<CommentApiService>;
+  let activatedRouteStub: {
+    snapshot: { queryParamMap: ReturnType<typeof convertToParamMap> };
+  };
 
   const ownedListing: Listing = {
     id: 1,
@@ -49,15 +53,16 @@ describe('MainPageComponent', () => {
     const payload = btoa(JSON.stringify({ sub: '123' }));
     localStorage.setItem('access_token', `x.${payload}.y`);
 
-    listingsApiSpy = jasmine.createSpyObj<ListingsApiService>('ListingsApiService', [
-      'getAll',
-      'getMine',
-      'create',
-      'delete',
-    ]);
+    listingsApiSpy = jasmine.createSpyObj<ListingsApiService>(
+      'ListingsApiService',
+      ['getAll', 'getMine', 'create', 'delete'],
+    );
     listingsApiSpy.getAll.and.returnValue(of([ownedListing, otherListing]));
 
-    accountsApiSpy = jasmine.createSpyObj<AccountsApiService>('AccountsApiService', ['getMe']);
+    accountsApiSpy = jasmine.createSpyObj<AccountsApiService>(
+      'AccountsApiService',
+      ['getMe'],
+    );
     accountsApiSpy.getMe.and.returnValue(
       of({
         id: 0,
@@ -65,7 +70,7 @@ describe('MainPageComponent', () => {
         fname: 'Test',
         lname: 'User',
         verified: false,
-      })
+      }),
     );
 
     matDialogSpy = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
@@ -75,12 +80,30 @@ describe('MainPageComponent', () => {
       },
     };
 
+    commentApiSpy = jasmine.createSpyObj<CommentApiService>(
+      'CommentApiService',
+      ['getComment', 'create'],
+    );
+
+    commentApiSpy.getComment.and.returnValue(of([]));
+    commentApiSpy.create.and.returnValue(
+      of({
+        id: 1,
+        listingId: ownedListing.id,
+        authorId: 123,
+        authorLabel: 'Test User',
+        body: 'Great listing',
+        createdAt: new Date().toISOString(),
+      }),
+    );
+
     await TestBed.configureTestingModule({
       imports: [MainPageComponent, RouterTestingModule],
       providers: [
         provideNoopAnimations(),
         { provide: ListingsApiService, useValue: listingsApiSpy },
         { provide: AccountsApiService, useValue: accountsApiSpy },
+        { provide: CommentApiService, useValue: commentApiSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
       ],
     })
@@ -123,7 +146,8 @@ describe('MainPageComponent', () => {
   it('template_ShouldShowDeleteButtonOnlyForOwnedListingsInFeed', () => {
     fixture.detectChanges();
 
-    const deleteButtons = fixture.nativeElement.querySelectorAll('button.delete-btn');
+    const deleteButtons =
+      fixture.nativeElement.querySelectorAll('button.delete-btn');
     expect(deleteButtons.length).toBe(1);
   });
 
@@ -134,7 +158,9 @@ describe('MainPageComponent', () => {
     component.submitComment(ownedListing);
 
     expect(component.getComments(ownedListing.id).length).toBe(0);
-    expect(component.getCommentError(ownedListing.id)).toBe('Comment cannot be empty.');
+    expect(component.getCommentError(ownedListing.id)).toBe(
+      'Comment cannot be empty.',
+    );
   });
 
   it('submitComment_ValidComment_ShouldTrimStoreAndUpdateSidebarCount', () => {
@@ -167,7 +193,9 @@ describe('MainPageComponent', () => {
     fixture.detectChanges();
 
     const commentCountTexts = Array.from(
-      fixture.nativeElement.querySelectorAll('.comment-count') as NodeListOf<HTMLElement>
+      fixture.nativeElement.querySelectorAll(
+        '.comment-count',
+      ) as NodeListOf<HTMLElement>,
     ).map((element) => element.textContent?.trim());
 
     expect(commentCountTexts).toContain('1 comment');
@@ -190,7 +218,9 @@ describe('MainPageComponent', () => {
 
     tick(0);
     expect(component.highlightedListingId).toBe(otherListing.id);
-    expect(document.getElementById).toHaveBeenCalledWith(`listing-${otherListing.id}`);
+    expect(document.getElementById).toHaveBeenCalledWith(
+      `listing-${otherListing.id}`,
+    );
     expect(scrollIntoView).toHaveBeenCalledWith({
       behavior: 'smooth',
       block: 'center',

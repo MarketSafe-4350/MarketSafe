@@ -32,6 +32,7 @@ export class MainPageComponent
 {
   private readonly accountsApi = inject(AccountsApiService);
   private readonly commentsApi = inject(CommentApiService);
+  private readonly route = inject(ActivatedRoute);
   readonly maxCommentLength = 500;
   isLoading = false;
   selectedListingId: number | null = null;
