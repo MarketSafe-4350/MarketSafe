@@ -128,7 +128,6 @@ class TestCommentServiceIntegration(unittest.TestCase):
         self.assertEqual(len(result), 2)
         self.assertTrue(all(isinstance(x, CommentWithAuthor) for x in result))
 
-        # Validate each wrapper has both comment + author
         for item in result:
             self.assertIsNotNone(item.comment)
             self.assertIsNotNone(item.author)
@@ -161,11 +160,9 @@ class TestCommentServiceIntegration(unittest.TestCase):
         self.assertEqual(created.comment.author_id, actor_id)
         self.assertEqual(created.comment.body, "Is this available?")
 
-        # author should be the actor
         self.assertIsNotNone(created.author)
         self.assertEqual(created.author.id, actor_id)
 
-        # And it should be visible when listing comments
         fetched = self._service.get_all_comments_listing(listing_id=listing_id)
         self.assertEqual(len(fetched), 1)
         self.assertEqual(fetched[0].comment.body, "Is this available?")

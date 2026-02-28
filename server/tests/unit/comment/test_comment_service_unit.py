@@ -3,7 +3,10 @@ from unittest.mock import MagicMock
 from typing import List
 from types import SimpleNamespace
 
-from src.business_logic.services.comment_service import CommentService
+from src.business_logic.services.comment_service import (
+    CommentService,
+    CommentWithAuthor,
+)
 
 
 class TestCommentServiceUnit(unittest.TestCase):
@@ -21,37 +24,49 @@ class TestCommentServiceUnit(unittest.TestCase):
     # -----------------------------
     # get_all_comments_listing - happy path
     # -----------------------------
-    def test_get_all_comments_listing_delegates_to_manager(self) -> None:
+    def test_get_all_comments_listing_wraps_with_authors(self) -> None:
         listing_id = 123
 
-        expected_result: List[object] = [
-            SimpleNamespace(id=1, listing_id=listing_id, author_id=999, body="hi"),
-            SimpleNamespace(id=2, listing_id=listing_id, author_id=888, body="yo"),
-        ]
+        c1 = SimpleNamespace(id=1, listing_id=listing_id, author_id=999, body="hi")
+        c2 = SimpleNamespace(id=2, listing_id=listing_id, author_id=888, body="yo")
 
-        self.comment_manager.list_comments_for_listing.return_value = expected_result
+        self.comment_manager.list_comments_for_listing.return_value = [c1, c2]
+
+        a1 = SimpleNamespace(id=999, fname="A", lname="One", verified=True)
+        a2 = SimpleNamespace(id=888, fname="B", lname="Two", verified=True)
+
+        def fake_get_account_by_id(*, account_id: int):
+            return {999: a1, 888: a2}[account_id]
+
+        self.account_manager.get_account_by_id.side_effect = fake_get_account_by_id
 
         result = self.service.get_all_comments_listing(listing_id=listing_id)
 
         self.comment_manager.list_comments_for_listing.assert_called_once_with(
             listing_id=listing_id
         )
-        self.assertEqual(result, expected_result)
 
-        self.account_manager.get_account_by_id.assert_not_called()
+        self.assertEqual(len(result), 2)
+
+        self.assertIsInstance(result[0], CommentWithAuthor)
+        self.assertEqual(result[0].comment, c1)
+        self.assertEqual(result[0].author, a1)
+
+        self.assertIsInstance(result[1], CommentWithAuthor)
+        self.assertEqual(result[1].comment, c2)
+        self.assertEqual(result[1].author, a2)
+
         self.listing_manager.get_listing_by_id.assert_not_called()
         self.comment_manager.create_comment.assert_not_called()
 
     # -----------------------------
     # create_comment - happy path
     # -----------------------------
-    def test_create_comment_loads_actor_and_listing_then_delegates_to_manager(
-        self,
-    ) -> None:
+    def test_create_comment_returns_comment_with_author(self) -> None:
         actor_id = 999
         listing_id = 123
 
-        actor = SimpleNamespace(id=actor_id, verified=True)
+        actor = SimpleNamespace(id=actor_id, fname="F", lname="L", verified=True)
         listing = SimpleNamespace(id=listing_id, is_sold=False)
 
         comment = SimpleNamespace(
@@ -61,7 +76,7 @@ class TestCommentServiceUnit(unittest.TestCase):
             body="Is this available?",
         )
 
-        expected_result = SimpleNamespace(
+        created_comment = SimpleNamespace(
             id=10,
             listing_id=listing_id,
             author_id=actor_id,
@@ -71,7 +86,7 @@ class TestCommentServiceUnit(unittest.TestCase):
 
         self.account_manager.get_account_by_id.return_value = actor
         self.listing_manager.get_listing_by_id.return_value = listing
-        self.comment_manager.create_comment.return_value = expected_result
+        self.comment_manager.create_comment.return_value = created_comment
 
         result = self.service.create_comment(
             actor_id=actor_id,
@@ -91,8 +106,10 @@ class TestCommentServiceUnit(unittest.TestCase):
             comment=comment,
         )
 
-        self.assertEqual(result, expected_result)
-        self.assertEqual(result.id, 10)
+        self.assertIsInstance(result, CommentWithAuthor)
+        self.assertEqual(result.comment, created_comment)
+        self.assertEqual(result.author, actor)
+        self.assertEqual(result.comment.id, 10)
 
     # -----------------------------
     # create_comment - error paths
