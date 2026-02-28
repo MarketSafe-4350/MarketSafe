@@ -173,9 +173,34 @@ class TestListingRouteIntegration(unittest.TestCase):
 
         data = resp.json()
         self.assertIsInstance(data, list)
+
+        # only current user's listing should appear
         self.assertEqual(len(data), 1)
         self.assertEqual(data[0]["seller_id"], self.user_id)
         self.assertEqual(data[0]["title"], "Mine1")
+
+    def test_search_listings_returns_matching_results(self) -> None:
+        """
+        Integration version: requires that /listings/search exists and is wired
+        to real service/manager/db.
+
+        If your API returns multiple matches, we assert at least one contains "Laptop".
+        """
+        # Seed some listings
+        self._create_listing(seller_id=self.user_id, title="Gaming Laptop")
+        self._create_listing(seller_id=self.user_id, title="Desk Chair")
+        self._create_listing(seller_id=self.user_id, title="Laptop Stand")
+
+        resp = self.client.get("/listings/search", params={"q": "laptop"})
+        self.assertEqual(resp.status_code, 200)
+
+        data = resp.json()
+        self.assertIsInstance(data, list)
+        self.assertGreaterEqual(len(data), 1)
+
+        titles = [item["title"] for item in data]
+        # At least one should match the query idea
+        self.assertTrue(any("laptop" in t.lower() for t in titles))
 
     def test_create_listing_returns_created_listing(self) -> None:
         payload = {
@@ -190,10 +215,13 @@ class TestListingRouteIntegration(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
 
         data = resp.json()
-        self.assertIsNotNone(data["id"])
+        self.assertIsNotNone(data.get("id"))
         self.assertEqual(data["seller_id"], self.user_id)
         self.assertEqual(data["title"], "A")
+        self.assertEqual(data["description"], "B")
         self.assertEqual(data["price"], 10.0)
+        self.assertEqual(data["location"], "Winnipeg")
+        self.assertEqual(data["image_url"], None)
 
     def test_get_listing_comments_returns_list(self) -> None:
         listing_id = self._create_listing(seller_id=self.user_id, title="WithComments")

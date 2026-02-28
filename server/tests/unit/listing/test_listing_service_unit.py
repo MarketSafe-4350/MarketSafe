@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from typing import List
+from datetime import datetime, timezone
 
 from src.business_logic.services.listing_service import ListingService
 from src.domain_models.listing import Listing
@@ -52,6 +53,56 @@ class TestListingServiceUnit(unittest.TestCase):
         result = self.service.get_listing_by_user_id(user_id=user_id)
         self.manager.list_listings_by_seller.assert_called_once()
         self.assertEqual(result, expected_result)
+
+    def test_search_listings_filters_and_ranks_relevant_results(self) -> None:
+        laptop_title_match = Listing(
+            listing_id=1,
+            seller_id=10,
+            title="Gaming Laptop",
+            description="Powerful and clean",
+            price=900.0,
+            location="Winnipeg",
+            image_url=None,
+            created_at=datetime(2026, 2, 25, tzinfo=timezone.utc),
+        )
+
+        laptop_description_match = Listing(
+            listing_id=2,
+            seller_id=11,
+            title="Desktop PC",
+            description="Includes laptop bag and monitor",
+            price=700.0,
+            location="Winnipeg",
+            image_url=None,
+            created_at=datetime(2026, 2, 24, tzinfo=timezone.utc),
+        )
+
+        unrelated = Listing(
+            listing_id=3,
+            seller_id=12,
+            title="Bike",
+            description="Mountain bike",
+            price=300.0,
+            location="Brandon",
+            image_url=None,
+            created_at=datetime(2026, 2, 23, tzinfo=timezone.utc),
+        )
+
+        self.manager.list_listings.return_value = [
+            unrelated,
+            laptop_description_match,
+            laptop_title_match,
+        ]
+
+        result = self.service.search_listings("laptop")
+
+        self.assertEqual([listing.id for listing in result], [1, 2])
+        self.manager.list_listings.assert_called_once()
+
+    def test_search_listings_blank_query_returns_empty_list(self) -> None:
+        result = self.service.search_listings("   ")
+        self.assertEqual(result, [])
+        self.manager.list_listings.assert_not_called()
 
     # -----------------------------
     # create_listing - happy path

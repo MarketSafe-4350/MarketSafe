@@ -142,4 +142,37 @@ describe('ListingsApiService', () => {
       is_sold: false,
     });
   });
+
+  it('search_ShouldSendQueryParamAndMapResults', () => {
+    let result: Listing[] = [];
+
+    service.search('gaming laptop').subscribe((listings) => {
+      result = listings;
+    });
+
+    const req = httpMock.expectOne(
+      (request) =>
+        request.url === 'http://localhost:8000/listings/search' &&
+        request.params.get('q') === 'gaming laptop'
+    );
+
+    expect(req.request.method).toBe('GET');
+
+    req.flush([
+      {
+        id: 42,
+        seller_id: 9,
+        title: 'Gaming Laptop',
+        description: 'RTX 4060',
+        price: 900,
+        image_url: null,
+        location: 'Winnipeg',
+        created_at: '2026-02-25T12:00:00Z',
+        is_sold: false,
+      },
+    ]);
+
+    expect(result.length).toBe(1);
+    expect(result[0].title).toBe('Gaming Laptop');
+  });
 });

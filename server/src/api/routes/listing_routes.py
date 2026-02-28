@@ -12,6 +12,17 @@ from fastapi import (
     UploadFile,
     status,
 )
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    HTTPException,
+    Query,
+    Request,
+    UploadFile,
+    status,
+)
 from fastapi.security import (
     HTTPAuthorizationCredentials,
     HTTPBearer,
@@ -116,6 +127,18 @@ def get_my_listing(
         _type_:  list of ListingResponse
     """
     listings: List[Listing] = listing_service.get_listing_by_user_id(user_id=user_id)
+
+    return [ListingResponse.from_domain(listing) for listing in listings]
+
+
+@router.get("/search", response_model=List[ListingResponse])
+def search_listings(
+    q: str = Query(..., min_length=1),
+    _: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
+):
+    """Search listings using keyword(s) in title, description, or location."""
+    listings = listing_service.search_listings(query=q)
 
     return [ListingResponse.from_domain(listing) for listing in listings]
 

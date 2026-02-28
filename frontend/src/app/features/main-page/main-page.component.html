@@ -25,7 +25,11 @@
         } @else {
           <div class="cards">
             @for (listing of listings; track listing.id) {
-              <div class="listing-item">
+              <div
+                class="listing-item"
+                [attr.id]="'listing-' + listing.id"
+                [class.highlighted]="highlightedListingId === listing.id"
+              >
                 <div
                   class="listing-click-target"
                   [class.is-disabled]="isListingDisabled(listing)"

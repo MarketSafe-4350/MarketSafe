@@ -36,6 +36,7 @@ describe('LeftNavigationComponent', () => {
         RouterTestingModule.withRoutes([
           { path: 'main-page', component: DummyRouteComponent },
           { path: 'profile', component: DummyRouteComponent },
+          { path: 'search', component: DummyRouteComponent },
           { path: 'my-listings', component: DummyRouteComponent },
         ]),
       ],

@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute } from '@angular/router';
 
 import { HeaderComponent } from '../../components/header/header.component';
 import { LeftNavigationComponent } from '../left-navigation/left-navigation.component';
@@ -34,14 +35,21 @@ export class MainPageComponent
   readonly maxCommentLength = 500;
   isLoading = false;
   selectedListingId: number | null = null;
+  highlightedListingId: number | null = null;
   currentCommentAuthorLabel = 'You';
   private nextLocalCommentId = 1;
+  private pendingListingIdToFocus: number | null = null;
   private readonly commentsByListingId = new Map<number, ListingComment[]>();
   private readonly commentDrafts = new Map<number, string>();
   private readonly commentErrors = new Map<number, string>();
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
+    const listingIdParam = this.route.snapshot.queryParamMap.get('listingId');
+    const listingId = Number(listingIdParam);
+    this.pendingListingIdToFocus = Number.isFinite(listingId)
+      ? listingId
+      : null;
     this.currentCommentAuthorLabel = this.resolveCurrentCommentAuthorLabel();
     this.loadCommentAuthorLabel();
     this.loadListings();
@@ -56,6 +64,7 @@ export class MainPageComponent
         this.listings = listings;
         this.preloadCommentsForListings(listings);
         this.isLoading = false;
+        this.focusRequestedListing();
       },
       error: (error) => {
         console.error('Failed to load listings:', error);
@@ -254,5 +263,32 @@ export class MainPageComponent
     }
 
     return this.currentUserId ? `User #${this.currentUserId}` : 'You';
+  }
+
+  private focusRequestedListing(): void {
+    if (this.pendingListingIdToFocus === null) return;
+
+    const listingId = this.pendingListingIdToFocus;
+    const targetExists = this.listings.some(
+      (listing) => listing.id === listingId,
+    );
+    if (!targetExists) {
+      this.pendingListingIdToFocus = null;
+      return;
+    }
+
+    this.highlightedListingId = listingId;
+    this.pendingListingIdToFocus = null;
+
+    setTimeout(() => {
+      const target = document.getElementById(`listing-${listingId}`);
+      target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      setTimeout(() => {
+        if (this.highlightedListingId === listingId) {
+          this.highlightedListingId = null;
+        }
+      }, 2200);
+    }, 0);
   }
 }
