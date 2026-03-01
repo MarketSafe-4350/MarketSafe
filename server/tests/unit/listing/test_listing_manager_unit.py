@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock
 
 from src.business_logic.managers.listing.listing_manager import ListingManager
 from src.domain_models import Account, Listing, Comment
@@ -142,3 +142,178 @@ class TestListingManagerUnit(unittest.TestCase):
             is_sold=True,
             sold_to_id=buyer.id,
         )
+
+    def test_list_unsold_listings_delegates(self):
+        expected = []
+        self.listing_db.get_unsold.return_value = expected
+
+        result = self.mgr.list_unsold_listings()
+
+        self.listing_db.get_unsold.assert_called_once_with()
+        self.assertIs(result, expected)
+
+    # ---- list_recent_unsold ----
+    def test_list_recent_unsold_defaults_delegates(self):
+        expected = []
+        self.listing_db.get_recent_unsold.return_value = expected
+
+        result = self.mgr.list_recent_unsold()
+
+        self.listing_db.get_recent_unsold.assert_called_once_with(limit=50, offset=0)
+        self.assertIs(result, expected)
+
+    def test_list_recent_unsold_invalid_limit_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.list_recent_unsold(limit="bad")  # type: ignore[arg-type]
+
+    def test_list_recent_unsold_invalid_offset_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.list_recent_unsold(offset="bad")  # type: ignore[arg-type]
+
+    # ---- list_unsold_by_location ----
+    def test_list_unsold_by_location_delegates(self):
+        expected = []
+        self.listing_db.get_unsold_by_location.return_value = expected
+
+        result = self.mgr.list_unsold_by_location("Winnipeg")
+
+        self.listing_db.get_unsold_by_location.assert_called_once_with("Winnipeg")
+        self.assertIs(result, expected)
+
+    def test_list_unsold_by_location_invalid_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.list_unsold_by_location(None)  # type: ignore[arg-type]
+
+    # ---- list_unsold_by_max_price ----
+    def test_list_unsold_by_max_price_delegates(self):
+        expected = []
+        self.listing_db.get_unsold_by_max_price.return_value = expected
+
+        result = self.mgr.list_unsold_by_max_price(100.0)
+
+        self.listing_db.get_unsold_by_max_price.assert_called_once_with(100.0)
+        self.assertIs(result, expected)
+
+    def test_list_unsold_by_max_price_invalid_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.list_unsold_by_max_price(-1)
+
+    # ---- list_unsold_by_location_and_max_price ----
+    def test_list_unsold_by_location_and_max_price_delegates(self):
+        expected = []
+        self.listing_db.get_unsold_by_location_and_max_price.return_value = expected
+
+        result = self.mgr.list_unsold_by_location_and_max_price("Winnipeg", 50.0)
+
+        self.listing_db.get_unsold_by_location_and_max_price.assert_called_once_with("Winnipeg", 50.0)
+        self.assertIs(result, expected)
+
+    def test_list_unsold_by_location_and_max_price_invalid_location_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.list_unsold_by_location_and_max_price(None, 50.0)  # type: ignore[arg-type]
+
+    def test_list_unsold_by_location_and_max_price_invalid_price_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.list_unsold_by_location_and_max_price("Winnipeg", -1)
+
+    # ---- find_unsold_by_title_keyword ----
+    def test_find_unsold_by_title_keyword_defaults_delegates(self):
+        expected = []
+        self.listing_db.find_unsold_by_title_keyword.return_value = expected
+
+        result = self.mgr.find_unsold_by_title_keyword("desk")
+
+        self.listing_db.find_unsold_by_title_keyword.assert_called_once_with("desk", limit=50, offset=0)
+        self.assertIs(result, expected)
+
+    def test_find_unsold_by_title_keyword_invalid_keyword_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.find_unsold_by_title_keyword(None)  # type: ignore[arg-type]
+
+    def test_find_unsold_by_title_keyword_invalid_limit_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.find_unsold_by_title_keyword("desk", limit="bad")  # type: ignore[arg-type]
+
+    def test_find_unsold_by_title_keyword_invalid_offset_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.find_unsold_by_title_keyword("desk", offset="bad")  # type: ignore[arg-type]
+
+    # ---- list_listings_by_seller ----
+    def test_list_listings_by_seller_delegates(self):
+        expected = []
+        self.listing_db.get_by_seller_id.return_value = expected
+
+        result = self.mgr.list_listings_by_seller(123)
+
+        self.listing_db.get_by_seller_id.assert_called_once_with(123)
+        self.assertIs(result, expected)
+
+    def test_list_listings_by_seller_invalid_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.list_listings_by_seller("bad")  # type: ignore[arg-type]
+
+    # ---- list_listings_by_buyer ----
+    def test_list_listings_by_buyer_delegates(self):
+        expected = []
+        self.listing_db.get_by_buyer_id.return_value = expected
+
+        result = self.mgr.list_listings_by_buyer(456)
+
+        self.listing_db.get_by_buyer_id.assert_called_once_with(456)
+        self.assertIs(result, expected)
+
+    def test_list_listings_by_buyer_invalid_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.list_listings_by_buyer("bad")  # type: ignore[arg-type]
+
+    def test_update_listing_delegates_to_db_update(self):
+        listing = MagicMock(spec=Listing)
+        listing.id = 123
+
+        self.listing_db.update.return_value = listing
+
+        result = self.mgr.update_listing(listing)
+
+        self.listing_db.update.assert_called_once_with(listing)
+        self.assertIs(result, listing)
+
+    def test_update_listing_none_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.update_listing(None) 
+    def test_update_listing_missing_id_raises(self):
+        listing = MagicMock(spec=Listing)
+        listing.id = None
+
+        with self.assertRaises(Exception):
+            self.mgr.update_listing(listing)
+
+    # -----------------------------
+    # update_listing_price
+    # -----------------------------
+    def test_update_listing_price_delegates_to_set_price(self):
+        self.mgr.update_listing_price(10, 25.0)
+
+        self.listing_db.set_price.assert_called_once_with(10, 25.0)
+
+    def test_update_listing_price_invalid_listing_id_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.update_listing_price("bad", 25.0) 
+
+    def test_update_listing_price_invalid_price_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.update_listing_price(10, -1)
+
+    # -----------------------------
+    # delete_listing
+    # -----------------------------
+    def test_delete_listing_delegates_to_remove_and_returns_value(self):
+        self.listing_db.remove.return_value = True
+
+        result = self.mgr.delete_listing(999)
+
+        self.listing_db.remove.assert_called_once_with(999)
+        self.assertTrue(result)
+
+    def test_delete_listing_invalid_id_raises(self):
+        with self.assertRaises(Exception):
+            self.mgr.delete_listing("bad") 
