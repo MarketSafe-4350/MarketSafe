@@ -17,7 +17,7 @@ class TestAccountManager(unittest.TestCase):
     def test_init_calls_super(self):
         with patch.object(IAccountManager, "__init__", return_value=None) as parent_init:
             AccountManager(self.db)
-            parent_init.assert_called_once_with(self.db)
+            parent_init.assert_called_once_with(self.db, None)
 
     def _account(self, *, email: str = "test@example.com") -> Account:
         return Account(
