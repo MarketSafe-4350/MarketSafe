@@ -103,7 +103,7 @@ def get_all_listing(
     """Get all listings
 
     Args:
-        _ (int, optional): Jwt auth token. Defaults to Depends(get_current_user_id).
+        _ (int, optional): Jwt auth auth_token. Defaults to Depends(get_current_user_id).
 
     Returns:
         _type_: list of ListingResponse
@@ -121,7 +121,7 @@ def get_my_listing(
     """Get current user listings
 
     Args:
-        _ (int, optional): Jwt auth token. Defaults to Depends(get_current_user_id).
+        _ (int, optional): Jwt auth auth_token. Defaults to Depends(get_current_user_id).
 
     Returns:
         _type_:  list of ListingResponse

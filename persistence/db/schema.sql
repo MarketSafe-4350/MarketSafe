@@ -276,7 +276,7 @@ CREATE TABLE email_verification_tokens (
 
   PRIMARY KEY (id),
 
-  -- Index for fast token lookups
+  -- Index for fast auth_token lookups
   KEY idx_email_token_hash (token_hash),
   -- Index for finding unused tokens by account
   KEY idx_email_token_account (account_id, used),

@@ -34,16 +34,16 @@ class TestJWTAuth(unittest.TestCase):
         self.assertEqual(user_id, 1)
 
     def test_get_user_id_from_token_missing_token_raises_401(self) -> None:
-        # Empty token should fail immediately
+        # Empty auth_token should fail immediately
         with self.assertRaises(ApiError) as ctx:
             get_user_id_from_token("")
 
         self.assertEqual(ctx.exception.status_code, 401)
 
     def test_get_user_id_from_token_invalid_token_raises_401(self) -> None:
-        # Completely invalid token string
+        # Completely invalid auth_token string
         with self.assertRaises(ApiError) as ctx:
-            get_user_id_from_token("invalid.token.value")
+            get_user_id_from_token("invalid.auth_token.value")
 
         self.assertEqual(ctx.exception.status_code, 401)
 
@@ -86,9 +86,9 @@ class TestJWTAuth(unittest.TestCase):
 
         # Fake credentials object
         credentials = MagicMock()
-        credentials.credentials = "valid.token"
+        credentials.credentials = "valid.auth_token"
 
         result = get_current_user_id(credentials)
 
         self.assertEqual(result, 5)
-        mock_get_user_id.assert_called_once_with("valid.token")
+        mock_get_user_id.assert_called_once_with("valid.auth_token")
