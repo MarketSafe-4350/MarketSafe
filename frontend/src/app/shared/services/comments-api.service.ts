@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { API_URLS, APP_URLS } from '../app-urls';
+import { API_URLS } from '../app-urls';
 import { map, Observable } from 'rxjs';
 import { ListingComment } from '../models/comment.models';
 
@@ -21,7 +21,6 @@ export interface CreateCommentRequest {
 export class CommentApiService {
   private readonly http = inject(HttpClient);
   private readonly listingApiUrl = API_URLS.listings;
-  private readonly backendBaseUrl = APP_URLS.backendBaseUrl;
 
   getComment(listingId: number): Observable<ListingComment[]> {
     return this.http

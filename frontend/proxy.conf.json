@@ -2,6 +2,14 @@
   "/api": {
     "target": "http://api:8000",
     "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  },
+  "/uploads": {
+    "target": "http://api:8000",
+    "secure": false,
     "changeOrigin": true
   }
 }

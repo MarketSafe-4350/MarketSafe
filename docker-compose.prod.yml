@@ -4,14 +4,20 @@ services:
     environment:
       MYSQL_DATABASE: marketsafe
       MYSQL_USER: marketsafe
-      MYSQL_PASSWORD: marketsafe
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3306:3306"
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-p${MYSQL_ROOT_PASSWORD}",
+        ]
       interval: 5s
       timeout: 3s
       retries: 30
@@ -21,11 +27,11 @@ services:
       context: ./persistence/db
       dockerfile: init/Dockerfile
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       DB_HOST: db
       DB_PORT: 3306
       DB_NAME: marketsafe
-      DB_MODE: ${DB_MODE:-dev} # dev seeds, prod skips
+      DB_MODE: prod
     depends_on:
       db:
         condition: service_healthy
@@ -35,21 +41,19 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-      target: dev
+      target: prod
     ports:
       - "8000:8000"
-    volumes:
-      - ./server:/app
-      - ./persistence/stub:/opt/stub:ro
-    env_file:
-      - ./.env
     environment:
       DB_HOST: db
       DB_PORT: 3306
       DB_NAME: marketsafe
       DB_USER: marketsafe
-      DB_PASSWORD: marketsafe
-      APP_ENV: ${APP_ENV:-dev}
+      DB_PASSWORD: ${DB_PASSWORD}
+      APP_ENV: prod
+      SECRET_KEY: ${SECRET_KEY}
+      FRONTEND_URL: ${FRONTEND_URL}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
     depends_on:
       db-init:
         condition: service_completed_successfully
@@ -58,14 +62,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: dev
+      target: prod
     ports:
-      - "4200:4200"
+      - "8090:80"
     depends_on:
       - api
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
 
 volumes:
   mysql_data:

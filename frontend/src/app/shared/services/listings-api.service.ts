@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import { Listing } from '../models/listing.models';
-import { API_URLS, APP_URLS } from '../app-urls';
+import { API_URLS } from '../app-urls';
 
 interface ListingApiResponse {
   id: number | null;
@@ -30,7 +30,7 @@ export interface CreateListingRequest {
 export class ListingsApiService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = API_URLS.listings;
-  private readonly backendBaseUrl = APP_URLS.backendBaseUrl;
+  private readonly backendBaseUrl = window.location.origin;
 
   getAll(): Observable<Listing[]> {
     return this.http
@@ -83,7 +83,7 @@ export class ListingsApiService {
           location: payload.location,
           image_url: payload.imageUrl ?? null,
         },
-        { headers: this.authHeaders(true) }
+        { headers: this.authHeaders(true) },
       )
       .pipe(map((item) => this.toListing(item)));
   }
