@@ -205,14 +205,6 @@ class TestAccountService(unittest.TestCase):
         self.assertEqual(result, account)
         self.manager.get_account_by_id.assert_called_once_with(5)
 
-    # def test_get_account_userid_none_raises_400(self) -> None:
-    #     # Act + Assert: None should fail validation
-    #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.get_account_userid(None)
-
-    #     self.assertEqual(ctx.exception.status_code, 400)
-    #     self.assertEqual(ctx.exception._message, "User ID cannot be None")
-    #     self.manager.get_account_by_id.assert_not_called()
     def test_get_account_by_userid_none_raises_400(self):
         with self.assertRaises(ApiError) as ctx:
             self.service.get_account_by_userid(None)  # type: ignore[arg-type]
