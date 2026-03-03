@@ -48,8 +48,8 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
     # Full Verification Workflow Tests
     # -------------------------
     def test_complete_verification_flow_Success(self) -> None:
-        """Test full flow: generate token -> store -> verify."""
-        # Step 1: Generate token
+        """Test full flow: generate auth_token -> store -> verify."""
+        # Step 1: Generate auth_token
         raw_token = self.service.generate_and_store_verification_token(account_id=1)
         self.assertEqual(len(raw_token), 64)
 
@@ -59,22 +59,22 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
         self.assertIsNotNone(db_token)
         self.assertFalse(db_token.used)
 
-        # Step 3: Verify the token successfully
+        # Step 3: Verify the auth_token successfully
         account = self.service.verify_email_token(raw_token)
         self.assertTrue(account.verified)
 
-        # Step 4: Verify token is now marked as used
+        # Step 4: Verify auth_token is now marked as used
         final_token = self.token_db.get_by_hash(token_hash)
         self.assertTrue(final_token.used)
         self.assertIsNotNone(final_token.used_at)
 
     def test_expired_token_cannot_be_verified(self) -> None:
         """Test that expired tokens cannot be verified."""
-        # Generate a proper raw token and hash it
+        # Generate a proper raw auth_token and hash it
         raw_token = TokenGenerator.generate_token()
         token_hash = TokenGenerator.hash_token(raw_token)
         
-        # Create expired token directly in DB with the proper hash
+        # Create expired auth_token directly in DB with the proper hash
         expired_token = VerificationToken(
             account_id=1,
             token_hash=token_hash,
@@ -87,8 +87,8 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
             self.service.verify_email_token(raw_token)
 
     def test_token_cannot_be_used_twice(self) -> None:
-        """Test that a token cannot be verified twice."""
-        # Generate and store token
+        """Test that a auth_token cannot be verified twice."""
+        # Generate and store auth_token
         raw_token = self.service.generate_and_store_verification_token(account_id=1)
 
         # First verification should succeed
@@ -121,7 +121,7 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
         self.assertEqual(db_token_2.account_id, 2)
 
     def test_token_retrieval_by_account(self) -> None:
-        """Test getting the latest token for an account."""
+        """Test getting the latest auth_token for an account."""
         # Generate multiple tokens for same account
         raw_token_first = self.service.generate_and_store_verification_token(account_id=1)
         raw_token_latest = self.service.generate_and_store_verification_token(account_id=1)
@@ -130,7 +130,7 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
         latest = self.token_db.get_latest_by_account(account_id=1)
         self.assertIsNotNone(latest)
 
-        # Verify it's the most recent (should be the second token)
+        # Verify it's the most recent (should be the second auth_token)
         latest_hash = TokenGenerator.hash_token(raw_token_latest)
         self.assertEqual(latest.token_hash, latest_hash)
 
@@ -164,7 +164,7 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
         cleared = self.token_db.clear_used_tokens(account_id=1)
         self.assertEqual(cleared, 2)
 
-        # Third token should still exist
+        # Third auth_token should still exist
         latest = self.token_db.get_latest_by_account(account_id=1)
         self.assertIsNotNone(latest)
         hash_3 = TokenGenerator.hash_token(raw_token_3)

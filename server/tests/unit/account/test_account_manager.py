@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
-from src.business_logic.managers.account import AccountManager
+from src.business_logic.managers.account import AccountManager, IAccountManager
 from src.db.account import AccountDB
 from src.domain_models import Account
 from src.utils import AccountAlreadyExistsError, AccountNotFoundError
@@ -13,6 +13,11 @@ class TestAccountManager(unittest.TestCase):
     def setUp(self) -> None:
         self.db: MagicMock = MagicMock(spec=AccountDB)
         self.manager = AccountManager(self.db)
+
+    def test_init_calls_super(self):
+        with patch.object(IAccountManager, "__init__", return_value=None) as parent_init:
+            AccountManager(self.db)
+            parent_init.assert_called_once_with(self.db, None)
 
     def _account(self, *, email: str = "test@example.com") -> Account:
         return Account(

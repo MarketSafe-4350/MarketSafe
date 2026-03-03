@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import unittest
 
+from tests.unit.auth_token import TestTokenGenerator, TestJWTAuth, TestAccountTokenService
+from tests.unit.contracts import TestBusinessManagerContracts
 from tests.unit.listing import TestListingManagerUnit, TestListingServiceUnit
 from tests.unit.account import TestAccountManager, TestAccountService
 from tests.unit.comment import TestCommentManagerUnit, TestCommentServiceUnit
-from tests.unit.token import TestTokenGenerator, TestAccountTokenService, TestJWTAuth
 
 
 def load_tests(
@@ -21,6 +22,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestTokenGenerator))
     suite.addTests(loader.loadTestsFromTestCase(TestAccountTokenService))
     suite.addTests(loader.loadTestsFromTestCase(TestJWTAuth))
+    suite.addTests(loader.loadTestsFromTestCase(TestBusinessManagerContracts))
     return suite
 
 

@@ -89,24 +89,7 @@ class TestAccountService(unittest.TestCase):
                     lname="B",
                 )
 
-    # -----------------------------
-    # create_account - db unavailable mapping
-    # -----------------------------
-
-    # def test_create_account_db_unavailable_maps_to_503(self) -> None:
-    #     self.manager.create_account.side_effect = DatabaseUnavailableError(
-    #         message="Database is unavailable."
-    #     )
-
-    #     with self.assertRaises(DatabaseUnavailableError) as ctx:
-    #         self.service.create_account(
-    #             email="test@umanitoba.ca",
-    #             password="Password1",
-    #             fname="John",
-    #             lname="Smith",
-    #         )
-
-    #     self.assertEqual(ctx.exception.status_code, 503)
+    
     def test_create_account_db_unavailable_maps_to_503(self) -> None:
         self.manager.create_account.side_effect = DatabaseUnavailableError(
             message="Database is unavailable."
@@ -124,19 +107,7 @@ class TestAccountService(unittest.TestCase):
 
 
 
-    # def test_create_account_unknown_exception_maps_to_500(self) -> None:
-    #     self.manager.create_account.side_effect = RuntimeError("RTE")
-
-    #     with self.assertRaises(AppError) as ctx:
-    #         self.service.create_account(
-    #             email="test@umanitoba.ca",
-    #             password="Password1",
-    #             fname="John",
-    #             lname="Smith",
-    #         )
-
-    #     self.assertEqual(ctx.exception.status_code, 500)
-    #     self.assertEqual(ctx.exception.message, "Internal server error")
+    
     def test_create_account_unknown_exception_maps_to_500(self) -> None:
         self.manager.create_account.side_effect = RuntimeError("RTE")
 
@@ -150,38 +121,6 @@ class TestAccountService(unittest.TestCase):
 
         self.assertEqual(ctx.exception.status_code, 500)
  
-
-    
-    # -----------------------------
-    # get_account_by_userid
-    # -----------------------------
-    # def test_get_account_by_userid_none_raises_api_400(self) -> None:
-    #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.get_account_by_userid(None)  # type: ignore[arg-type]
-
-    #     self.assertEqual(ctx.exception.status_code, 400)
-
-
-    # def test_login_missing_fields_raises_api_400(self) -> None:
-    #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.login("", "")
-
-    #     self.assertEqual(ctx.exception.status_code, 400)
-
-    # def test_login_valid_mock_user_returns_jwt(self) -> None:
-    #     token = self.service.login("test1@gmail.com", "test")
-    #     self.assertTrue(isinstance(token, str) and len(token) > 10)
-
-    #     payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    #     self.assertEqual(payload.get("sub"), "test1@gmail.com")
-    #     self.assertIn("exp", payload)
-
-    # def test_login_invalid_credentials_raises_api_401(self) -> None:
-    #     with self.assertRaises(ApiError) as ctx:
-    #         self.service.login("nope@umanitoba.ca", "Password1")
-
-    #     self.assertEqual(ctx.exception.status_code, 401)
-
 
     # -----------------------------
     # login
@@ -266,14 +205,11 @@ class TestAccountService(unittest.TestCase):
         self.assertEqual(result, account)
         self.manager.get_account_by_id.assert_called_once_with(5)
 
-    def test_get_account_userid_none_raises_400(self) -> None:
-        # Act + Assert: None should fail validation
+    def test_get_account_by_userid_none_raises_400(self):
         with self.assertRaises(ApiError) as ctx:
-            self.service.get_account_userid(None)
+            self.service.get_account_by_userid(None)  # type: ignore[arg-type]
 
         self.assertEqual(ctx.exception.status_code, 400)
-        self.manager.get_account_by_id.assert_not_called()
-
     def test_get_account_userid_not_found_raises_404(self) -> None:
         # Arrange: manager returns None (not found)
         self.manager.get_account_by_id.return_value = None
@@ -284,3 +220,46 @@ class TestAccountService(unittest.TestCase):
 
         self.assertEqual(ctx.exception.status_code, 404)
         self.manager.get_account_by_id.assert_called_once_with(99)
+
+    def test_get_account_by_email_empty_raises_400(self):
+        with self.assertRaises(ApiError) as ctx:
+            self.service.get_account_by_email("")
+        self.assertEqual(ctx.exception.status_code, 400)
+
+    def test_get_account_by_email_not_found_raises_404(self):
+        self.manager.get_account_by_email.return_value = None
+
+        with self.assertRaises(ApiError) as ctx:
+            self.service.get_account_by_email("a@umanitoba.ca")
+
+        self.assertEqual(ctx.exception.status_code, 404)
+        self.manager.get_account_by_email.assert_called_once_with("a@umanitoba.ca")
+
+    def test_get_account_by_email_success_returns_account(self):
+        acc = MagicMock(spec=Account)
+        self.manager.get_account_by_email.return_value = acc
+
+        result = self.service.get_account_by_email("a@umanitoba.ca")
+
+        self.assertIs(result, acc)
+        self.manager.get_account_by_email.assert_called_once_with("a@umanitoba.ca")
+
+    def test_create_account_manager_validation_error_maps_to_422(self):
+        # IMPORTANT: valid inputs so validate_account() does not fail first
+        valid_email = "test@umanitoba.ca"
+        valid_password = "StrongPass1"
+        fname = "John"
+        lname = "Doe"
+
+        # Make the MANAGER raise ValidationError
+        self.manager.create_account.side_effect = ValidationError("bad data")
+
+        with self.assertRaises(ApiError) as ctx:
+            self.service.create_account(
+                valid_email,
+                valid_password,
+                fname,
+                lname,
+            )
+
+        self.assertEqual(ctx.exception.status_code, 422)

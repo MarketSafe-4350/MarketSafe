@@ -19,9 +19,9 @@ class AccountManager(IAccountManager):
     - Delegates SQL work to AccountDB
     """
 
-    class AccountManager(IAccountManager):
-        def __init__(self, account_db: AccountDB, listing_db: Optional[ListingDB] = None) -> None:
-            super().__init__(account_db, listing_db)
+
+    def __init__(self, account_db: AccountDB, listing_db: Optional[ListingDB] = None) -> None:
+        super().__init__(account_db, listing_db)
 
     @override
     def create_account(self, account: Account) -> Account:

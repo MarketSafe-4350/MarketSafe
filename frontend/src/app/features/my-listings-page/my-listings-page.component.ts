@@ -211,7 +211,7 @@ export class MyListingsPageComponent
         }
       },
       error: () => {
-        // Keep token/id fallback label.
+        // Keep auth_token/id fallback label.
       },
     });
   }

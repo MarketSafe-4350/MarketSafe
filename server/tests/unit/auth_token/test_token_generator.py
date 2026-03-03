@@ -33,7 +33,7 @@ class TestTokenGenerator(unittest.TestCase):
         self.assertEqual(len(hashed), 64)
 
     def test_hash_token_ShouldBeConsistent(self) -> None:
-        token = "test-token-123"
+        token = "test-auth_token-123"
         hash1 = TokenGenerator.hash_token(token)
         hash2 = TokenGenerator.hash_token(token)
         self.assertEqual(hash1, hash2)

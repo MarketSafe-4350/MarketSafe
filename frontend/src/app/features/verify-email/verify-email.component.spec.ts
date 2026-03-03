@@ -14,7 +14,7 @@ describe('VerifyEmailComponent', () => {
   beforeEach(async () => {
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
     activatedRouteMock = {
-      queryParams: new BehaviorSubject<Record<string, string>>({ token: 'test-token-123' }),
+      queryParams: new BehaviorSubject<Record<string, string>>({ token: 'test-auth_token-123' }),
     };
 
     await TestBed.configureTestingModule({
@@ -112,13 +112,13 @@ describe('VerifyEmailComponent', () => {
     );
 
     req.flush(
-      { error_message: 'Invalid or expired verification token' },
+      { error_message: 'Invalid or expired verification auth_token' },
       { status: 404, statusText: 'Not Found' }
     );
 
     expect(component.loading()).toBe(false);
     expect(component.success()).toBe(false);
-    expect(component.errorMessage()).toBe('Invalid or expired verification token');
+    expect(component.errorMessage()).toBe('Invalid or expired verification auth_token');
   });
 
   it('verifyEmail_TokenExpired_ShouldShowExpiredMessage', () => {
@@ -129,11 +129,11 @@ describe('VerifyEmailComponent', () => {
     );
 
     req.flush(
-      { error_message: 'This verification token has expired' },
+      { error_message: 'This verification auth_token has expired' },
       { status: 400, statusText: 'Bad Request' }
     );
 
-    expect(component.errorMessage()).toBe('This verification token has expired');
+    expect(component.errorMessage()).toBe('This verification auth_token has expired');
   });
 
   it('verifyEmail_ErrorResponse_ShouldRedirectToSignupAfterDelay', fakeAsync(() => {
@@ -161,7 +161,7 @@ describe('VerifyEmailComponent', () => {
     (component as { __origVerify?: () => void }).__origVerify?.(); // Trigger verifyEmail
 
     expect(component.loading()).toBe(false);
-    expect(component.errorMessage()).toBe('No verification token provided.');
+    expect(component.errorMessage()).toBe('No verification auth_token provided.');
 
     tick(2000);
 

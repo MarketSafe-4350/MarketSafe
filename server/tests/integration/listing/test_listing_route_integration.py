@@ -301,7 +301,7 @@ class TestListingRouteIntegration(unittest.TestCase):
         def fake_unauthorized() -> int:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid token",
+                detail="Invalid auth_token",
             )
 
         self.app.dependency_overrides[get_current_user_id] = fake_unauthorized

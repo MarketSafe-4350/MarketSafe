@@ -48,8 +48,7 @@ class ListingService:
             return []
 
         keywords = [token for token in normalized_query.split() if token]
-        if not keywords:
-            return []
+
 
         listings = self._listing_manager.list_listings()
         scored_results: list[tuple[int, Listing]] = []
