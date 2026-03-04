@@ -7,6 +7,8 @@ from tests.unit.contracts import TestBusinessManagerContracts
 from tests.unit.listing import TestListingManagerUnit, TestListingServiceUnit
 from tests.unit.account import TestAccountManager, TestAccountService
 from tests.unit.comment import TestCommentManagerUnit, TestCommentServiceUnit
+from tests.unit.api import TestAPIDependencies, TestAPIError, TestListingRoutes
+
 
 
 def load_tests(
@@ -23,6 +25,10 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestAccountTokenService))
     suite.addTests(loader.loadTestsFromTestCase(TestJWTAuth))
     suite.addTests(loader.loadTestsFromTestCase(TestBusinessManagerContracts))
+    suite.addTests(loader.loadTestsFromTestCase(TestAPIDependencies))
+    suite.addTests(loader.loadTestsFromTestCase(TestAPIError))
+    suite.addTests(loader.loadTestsFromTestCase(TestListingRoutes))
+
     return suite
 
 

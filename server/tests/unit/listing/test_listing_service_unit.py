@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from src.business_logic.services.listing_service import ListingService
 from src.domain_models.listing import Listing
 from src.utils import ValidationError, ListingNotFoundError, UnapprovedBehaviorError
-
+from src.api.converter.listing_converter import ListingCreate
 
 class TestListingServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
@@ -472,3 +472,18 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertTrue(result)
         self.manager.get_listing_by_id.assert_called_once_with(1)
         self.manager.delete_listing.assert_called_once_with(1)
+
+
+
+    def test_listingcreate_to_domain_allows_none_optionals(self):
+        dto = ListingCreate(
+            title="Desk lamp",
+            description="Works great",
+            price=10.0
+        )
+
+        listing = dto.to_domain(seller_id=7)
+
+        self.assertEqual(listing.seller_id, 7)
+        self.assertIsNone(listing.image_url)
+        self.assertIsNone(listing.location)
