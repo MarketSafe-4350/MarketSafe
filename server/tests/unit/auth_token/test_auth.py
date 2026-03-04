@@ -92,3 +92,17 @@ class TestJWTAuth(unittest.TestCase):
 
         self.assertEqual(result, 5)
         mock_get_user_id.assert_called_once_with("valid.auth_token")
+
+
+    @patch("src.auth.dependencies.jwt.get_user_id_from_token")
+    def test_expired_signature_error(self, decode_mock):
+        expiration = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=1)
+        token = pyjwt.encode(
+            {"sub": "abc", "exp": expiration},
+            SECRET_KEY,
+            algorithm="HS256",
+        )
+        with self.assertRaises(ApiError) as ctx:
+            get_user_id_from_token(token)
+
+        self.assertEqual(ctx.exception.status_code, 401)

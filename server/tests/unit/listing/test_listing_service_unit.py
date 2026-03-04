@@ -276,6 +276,23 @@ class TestListingServiceUnit(unittest.TestCase):
 
         self.manager.create_listing.assert_not_called()
 
+    def test_create_listing_price_above_max_raises_validation_error(self) -> None:
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.create_listing(
+                seller_id=1,
+                title="A",
+                description="B",
+                price=100_000_000.0,
+                location="Winnipeg",
+                image_url=None,
+            )
+
+        errors = ctx.exception.details["errors"]
+        self.assertIn("price", errors)
+        self.assertIn("Price cannot exceed 99999999.99.", errors["price"])
+
+        self.manager.create_listing.assert_not_called()
+
 
     def test_create_listing_location_empty_raises_validation_error(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
@@ -292,6 +309,23 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertIn("location", errors)
 
         self.assertIn("Location cannot be empty.", errors["location"])
+
+        self.manager.create_listing.assert_not_called()
+
+    def test_create_listing_location_above_max_raises_validation_error(self) -> None:
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.create_listing(
+                seller_id=1,
+                title="A",
+                description="B",
+                price=10.0,
+                location="x" * 121,
+                image_url=None,
+            )
+
+        errors = ctx.exception.details["errors"]
+        self.assertIn("location", errors)
+        self.assertIn("Location cannot exceed 120 characters.", errors["location"])
 
         self.manager.create_listing.assert_not_called()
 

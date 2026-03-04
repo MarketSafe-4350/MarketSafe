@@ -20,17 +20,24 @@
   <div class="row">
     <mat-form-field appearance="outline" class="half">
       <mat-label>Price</mat-label>
-      <input matInput type="number" formControlName="price" />
+      <input
+        matInput
+        type="number"
+        formControlName="price"
+        [max]="priceMax"
+        step="0.01"
+        (input)="onPriceInput($event)"
+      />
       @if (form.get('price')?.touched && form.get('price')?.invalid) {
-        <mat-error>Enter a valid price.</mat-error>
+        <mat-error>Enter a valid price (max {{ priceMax }}).</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="half">
       <mat-label>Location</mat-label>
-      <input matInput formControlName="location" />
+      <input matInput formControlName="location" [maxlength]="locationMaxLength" />
       @if (form.get('location')?.touched && form.get('location')?.invalid) {
-        <mat-error>Location is required.</mat-error>
+        <mat-error>Location is required (max {{ locationMaxLength }} chars).</mat-error>
       }
     </mat-form-field>
   </div>
