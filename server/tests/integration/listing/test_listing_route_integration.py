@@ -10,6 +10,8 @@ from src.api.routes import listing_routes
 from src.auth.dependencies import get_current_user_id
 from src.api.dependencies import get_listing_service, get_comment_service
 from src.api.errors.exception_handlers import AppError, app_error_handler
+from src.api.errors.exception_handlers import request_validation_error_handler
+from fastapi.exceptions import RequestValidationError
 
 from src.business_logic.services.listing_service import ListingService
 from src.business_logic.services.comment_service import CommentService
@@ -73,6 +75,9 @@ class TestListingRouteIntegration(unittest.TestCase):
         cls.app = FastAPI()
         cls.app.include_router(listing_routes.router)
         cls.app.add_exception_handler(AppError, app_error_handler)
+        cls.app.add_exception_handler(
+            RequestValidationError, request_validation_error_handler
+        )
 
         cls.app.dependency_overrides[get_listing_service] = lambda: cls._listing_service
         cls.app.dependency_overrides[get_comment_service] = lambda: cls._comment_service
