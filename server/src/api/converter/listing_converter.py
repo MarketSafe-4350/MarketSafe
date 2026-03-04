@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from src.domain_models import Listing
 
 
@@ -7,9 +7,9 @@ class ListingCreate(BaseModel):
 
     title: str
     description: str
-    price: float
+    price: float = Field(..., gt=0, le=99_999_999.99)
     image_url: str | None = None
-    location: str | None = None
+    location: str | None = Field(default=None, max_length=120)
 
     def to_domain(self, seller_id: int) -> Listing:
         return Listing(

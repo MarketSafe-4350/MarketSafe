@@ -14,7 +14,7 @@ describe('VerifyEmailComponent', () => {
   beforeEach(async () => {
     routerMock = jasmine.createSpyObj('Router', ['navigate']);
     activatedRouteMock = {
-      queryParams: new BehaviorSubject<Record<string, string>>({ token: 'test-auth_token-123' }),
+      queryParams: new BehaviorSubject<Record<string, string>>({ auth_token: 'test-auth_token-123' }),
     };
 
     await TestBed.configureTestingModule({
@@ -63,6 +63,9 @@ describe('VerifyEmailComponent', () => {
     const req = httpMock.expectOne(
       req => req.url.includes('/accounts/verify-email') && req.method === 'GET'
     );
+    expect(req.request.urlWithParams).toContain(
+      `auth_token=${encodeURIComponent('test-auth_token-123')}`
+    );
 
     expect(component.loading()).toBe(true);
 
@@ -100,6 +103,29 @@ describe('VerifyEmailComponent', () => {
 
     expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
   }));
+
+  it('verifyEmail_LegacyTokenParam_ShouldStillCallApi', () => {
+    activatedRouteMock.queryParams = new BehaviorSubject<Record<string, string>>({
+      token: 'legacy-token-12345',
+    });
+
+    (component as { __origVerify?: () => void }).__origVerify?.();
+
+    const req = httpMock.expectOne(
+      req => req.url.includes('/accounts/verify-email') && req.method === 'GET'
+    );
+    expect(req.request.urlWithParams).toContain(
+      `auth_token=${encodeURIComponent('legacy-token-12345')}`
+    );
+
+    req.flush({
+      email: 'test@umanitoba.ca',
+      fname: 'John',
+      lname: 'Doe',
+      verified: true,
+      message: 'Email verified successfully!',
+    });
+  });
 
   // -------------------------
   // Email Verification Failure Tests
