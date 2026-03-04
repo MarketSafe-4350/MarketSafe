@@ -71,6 +71,13 @@ class Validation:
         return value
 
     @staticmethod
+    def require_positive_int(value: Any, name: str) -> int:
+        value = Validation.require_int(value, name)
+        if value <= 0:
+            raise ValidationError(f"{name} must be a positive int")
+        return value
+
+    @staticmethod
     def require_not_none(value: Any, name: str) -> Any:
         if value is None:
             raise ValidationError(f"{name} is required and cannot be None")
