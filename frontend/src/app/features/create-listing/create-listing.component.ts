@@ -31,6 +31,9 @@ export interface CreateListingPayload {
   styleUrls: ['./create-listing.component.scss'],
 })
 export class CreateListingDialogComponent {
+  readonly priceMax = 99_999_999.99;
+  readonly locationMaxLength = 120;
+
   private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<CreateListingDialogComponent>);
 
@@ -39,9 +42,42 @@ export class CreateListingDialogComponent {
   readonly form = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
     description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
-    price: [null as number | null, [Validators.required, Validators.min(0)]],
-    location: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(120)]],
+    price: [null as number | null, [Validators.required, Validators.min(0), Validators.max(this.priceMax)]],
+    location: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(this.locationMaxLength)]],
   });
+
+  onPriceInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const sanitized = this.sanitizePriceInput(input.value);
+
+    if (input.value !== sanitized) {
+      input.value = sanitized;
+    }
+
+    const numericValue = sanitized === '' ? null : Number(sanitized);
+    this.form.get('price')?.setValue(numericValue, { emitEvent: false });
+  }
+
+  private sanitizePriceInput(rawValue: string): string {
+    const cleaned = rawValue.replace(/[^\d.]/g, '');
+    const [intPart = '', ...decimalParts] = cleaned.split('.');
+
+    const limitedInt = intPart.slice(0, 8);
+    const limitedDecimal = decimalParts.join('').slice(0, 2);
+    const hasDecimalPoint = cleaned.includes('.');
+    let normalized = hasDecimalPoint ? `${limitedInt}.${limitedDecimal}` : limitedInt;
+
+    if (normalized.startsWith('.')) {
+      normalized = `0${normalized}`;
+    }
+
+    const asNumber = Number(normalized);
+    if (Number.isFinite(asNumber) && asNumber > this.priceMax) {
+      return this.priceMax.toFixed(2);
+    }
+
+    return normalized;
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;

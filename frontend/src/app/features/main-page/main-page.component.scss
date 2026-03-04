@@ -187,10 +187,13 @@
   border-radius: 10px;
   padding: 10px 12px;
   background: #fafafa;
+  min-width: 0;
 
   p {
     margin: 6px 0 0;
     white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     color: #111827;
   }
 }
@@ -198,7 +201,14 @@
 .comment-item-meta {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
+  min-width: 0;
   color: #6b7280;
   font-size: 0.8rem;
+
+  span {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
 }
