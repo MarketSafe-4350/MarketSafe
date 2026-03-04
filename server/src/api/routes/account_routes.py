@@ -118,14 +118,24 @@ def get_account(
 
 
 @router.get("/verify-email", response_model=VerifyEmailResponse)
-def verify_email(token: str = Query(..., min_length=10)):
+def verify_email(
+    auth_token: str | None = Query(None, min_length=10),
+    token: str | None = Query(None, min_length=10),
+):
     """
     Email verification endpoint: /accounts/verify-email?auth_token=...
-    Verifies the auth_token and marks the user as verified.
+    Supports legacy token query parameter for backwards compatibility.
     """
     service = _get_service()
     try:
-        account = service.verify_email_token(token)
+        verification_token = auth_token or token
+        if not verification_token:
+            return JSONResponse(
+                status_code=400,
+                content={"error_message": "No verification auth_token provided."},
+            )
+
+        account = service.verify_email_token(verification_token)
 
         logger.info(f"Email verified for account {account.email}")
 
