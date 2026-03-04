@@ -39,11 +39,10 @@ INSERT INTO account (email, password, fname, lname, verified) VALUES
 -- - sold_to_id is NULL initially (not sold yet)
 -- =========================================
 
-INSERT INTO listing (title, description, image_url, price, location, seller_id)
+INSERT INTO listing (title, description, price, location, seller_id)
 SELECT
   'iPhone 13 Pro',
   'Great condition, barely used.',
-  'https://example.com/img1.jpg',
   850.00,
   'Winnipeg',
   a.id
@@ -51,11 +50,10 @@ FROM account a
 ORDER BY RAND()
 LIMIT 1;
 
-INSERT INTO listing (title, description, image_url, price, location, seller_id)
+INSERT INTO listing (title, description, price, location, seller_id)
 SELECT
   'Gaming Laptop',
   'RTX graphics, 16GB RAM.',
-  'https://example.com/img2.jpg',
   1200.00,
   'Toronto',
   a.id
@@ -63,11 +61,10 @@ FROM account a
 ORDER BY RAND()
 LIMIT 1;
 
-INSERT INTO listing (title, description, image_url, price, location, seller_id)
+INSERT INTO listing (title, description, price, location, seller_id)
 SELECT
   'Office Chair',
   'Ergonomic and comfortable.',
-  'https://example.com/img3.jpg',
   150.00,
   'Vancouver',
   a.id
@@ -75,11 +72,10 @@ FROM account a
 ORDER BY RAND()
 LIMIT 1;
 
-INSERT INTO listing (title, description, image_url, price, location, seller_id)
+INSERT INTO listing (title, description, price, location, seller_id)
 SELECT
   'Mountain Bike',
   'Lightweight aluminum frame.',
-  'https://example.com/img4.jpg',
   600.00,
   'Calgary',
   a.id
