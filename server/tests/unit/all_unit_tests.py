@@ -30,6 +30,7 @@ from tests.unit.email_verification import (
     TestEmailVerificationTokenDBABC,
 )
 from tests.unit.db_utils import TestDBUtility
+from tests.unit.api import TestAPIDependencies, TestAPIError, TestListingRoutes
 from tests.unit.domain_models import TestDomainModels
 from tests.unit.config import TestConfig
 
@@ -58,6 +59,9 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestListingDBABC))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLListingDB))
     suite.addTests(loader.loadTestsFromTestCase(TestDBUtility))
+    suite.addTests(loader.loadTestsFromTestCase(TestAPIDependencies))
+    suite.addTests(loader.loadTestsFromTestCase(TestAPIError))
+    suite.addTests(loader.loadTestsFromTestCase(TestListingRoutes))
     suite.addTests(loader.loadTestsFromTestCase(TestDomainModels))
     suite.addTests(loader.loadTestsFromTestCase(TestConfig))
     suite.addTests(loader.loadTestsFromTestCase(TestValidation))
