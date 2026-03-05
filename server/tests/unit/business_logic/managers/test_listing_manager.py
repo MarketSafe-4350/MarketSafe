@@ -25,12 +25,12 @@ class TestListingManagerUnit(unittest.TestCase):
         )
 
     def _listing(
-            self,
-            *,
-            listing_id: int | None,
-            seller_id: int,
-            is_sold: bool = False,
-            sold_to_id: int | None = None,
+        self,
+        *,
+        listing_id: int | None,
+        seller_id: int,
+        is_sold: bool = False,
+        sold_to_id: int | None = None,
     ) -> Listing:
         if is_sold and sold_to_id is None:
             sold_to_id = 999  # any positive int that is not the seller, for unit tests
@@ -48,7 +48,7 @@ class TestListingManagerUnit(unittest.TestCase):
             sold_to_id=sold_to_id,
             location="Winnipeg",
         )
-        
+
     def _comment(
         self,
         *,
@@ -63,6 +63,7 @@ class TestListingManagerUnit(unittest.TestCase):
             body=body,
             comment_id=comment_id,
         )
+
     # -----------------------------
     # orchestration
     # -----------------------------
@@ -78,7 +79,9 @@ class TestListingManagerUnit(unittest.TestCase):
     def test_get_listing_with_comments_attaches_comments(self) -> None:
         listing = self._listing(listing_id=10, seller_id=1)
         self.listing_db.get_by_id.return_value = listing
-        self.comment_db.get_by_listing_id.return_value = []  # can be fake Comment objects later
+        self.comment_db.get_by_listing_id.return_value = (
+            []
+        )  # can be fake Comment objects later
 
         out = self.mgr.get_listing_with_comments(10)
 
@@ -205,7 +208,9 @@ class TestListingManagerUnit(unittest.TestCase):
 
         result = self.mgr.list_unsold_by_location_and_max_price("Winnipeg", 50.0)
 
-        self.listing_db.get_unsold_by_location_and_max_price.assert_called_once_with("Winnipeg", 50.0)
+        self.listing_db.get_unsold_by_location_and_max_price.assert_called_once_with(
+            "Winnipeg", 50.0
+        )
         self.assertIs(result, expected)
 
     def test_list_unsold_by_location_and_max_price_invalid_location_raises(self):
@@ -223,7 +228,9 @@ class TestListingManagerUnit(unittest.TestCase):
 
         result = self.mgr.find_unsold_by_title_keyword("desk")
 
-        self.listing_db.find_unsold_by_title_keyword.assert_called_once_with("desk", limit=50, offset=0)
+        self.listing_db.find_unsold_by_title_keyword.assert_called_once_with(
+            "desk", limit=50, offset=0
+        )
         self.assertIs(result, expected)
 
     def test_find_unsold_by_title_keyword_invalid_keyword_raises(self):
@@ -279,7 +286,8 @@ class TestListingManagerUnit(unittest.TestCase):
 
     def test_update_listing_none_raises(self):
         with self.assertRaises(Exception):
-            self.mgr.update_listing(None) 
+            self.mgr.update_listing(None)
+
     def test_update_listing_missing_id_raises(self):
         listing = MagicMock(spec=Listing)
         listing.id = None
@@ -297,7 +305,7 @@ class TestListingManagerUnit(unittest.TestCase):
 
     def test_update_listing_price_invalid_listing_id_raises(self):
         with self.assertRaises(Exception):
-            self.mgr.update_listing_price("bad", 25.0) 
+            self.mgr.update_listing_price("bad", 25.0)
 
     def test_update_listing_price_invalid_price_raises(self):
         with self.assertRaises(Exception):
@@ -316,4 +324,101 @@ class TestListingManagerUnit(unittest.TestCase):
 
     def test_delete_listing_invalid_id_raises(self):
         with self.assertRaises(Exception):
-            self.mgr.delete_listing("bad") 
+            self.mgr.delete_listing("bad")
+
+        # -----------------------------
+
+    # create_listing
+    # -----------------------------
+    def test_create_listing_delegates_to_db_add(self) -> None:
+        listing = self._listing(listing_id=None, seller_id=1)
+        self.listing_db.add.return_value = listing
+
+        out = self.mgr.create_listing(listing)
+
+        self.assertIs(out, listing)
+        self.listing_db.add.assert_called_once_with(listing)
+
+    def test_create_listing_none_raises(self) -> None:
+        with self.assertRaises(Exception):
+            self.mgr.create_listing(None)
+
+    # -----------------------------
+    # get_listing_by_id
+    # -----------------------------
+    def test_get_listing_by_id_delegates(self) -> None:
+        self.listing_db.get_by_id.return_value = None
+
+        out = self.mgr.get_listing_by_id(10)
+
+        self.assertIsNone(out)
+        self.listing_db.get_by_id.assert_called_once_with(10)
+
+    def test_get_listing_by_id_invalid_raises(self) -> None:
+        with self.assertRaises(Exception):
+            self.mgr.get_listing_by_id("bad")
+
+    # -----------------------------
+    # list_listings
+    # -----------------------------
+    def test_list_listings_delegates(self) -> None:
+        expected = []
+        self.listing_db.get_all.return_value = expected
+
+        out = self.mgr.list_listings()
+
+        self.assertIs(out, expected)
+        self.listing_db.get_all.assert_called_once_with()
+
+    # -----------------------------
+    # get_listing_with_comments
+    # -----------------------------
+    def test_get_listing_with_comments_returns_none_when_missing_fixed(self) -> None:
+        self.listing_db.get_by_id.return_value = None
+
+        out = self.mgr.get_listing_with_comments(123)
+
+        self.assertIsNone(out)
+        self.listing_db.get_by_id.assert_called_once_with(123)
+        self.comment_db.get_by_listing_id.assert_not_called()
+
+    # -----------------------------
+    # mark_listing_sold: null checks
+    # -----------------------------
+    def test_mark_listing_sold_actor_none_raises(self) -> None:
+        buyer = self._account(2)
+        listing = self._listing(listing_id=5, seller_id=1)
+
+        with self.assertRaises(Exception):
+            self.mgr.mark_listing_sold(actor=None, listing=listing, buyer=buyer)
+
+        self.listing_db.set_sold.assert_not_called()
+
+    def test_mark_listing_sold_listing_none_raises(self) -> None:
+        actor = self._account(1)
+        buyer = self._account(2)
+
+        with self.assertRaises(Exception):
+            self.mgr.mark_listing_sold(actor=actor, listing=None, buyer=buyer)
+
+        self.listing_db.set_sold.assert_not_called()
+
+    def test_mark_listing_sold_buyer_none_raises(self) -> None:
+        actor = self._account(1)
+        listing = self._listing(listing_id=5, seller_id=1)
+
+        with self.assertRaises(Exception):
+            self.mgr.mark_listing_sold(actor=actor, listing=listing, buyer=None)
+
+        self.listing_db.set_sold.assert_not_called()
+
+    def test_mark_listing_sold_buyer_id_none_raises(self) -> None:
+        actor = self._account(1)
+        buyer = MagicMock(spec=Account)
+        buyer.id = None  # forces Validation.require_int to raise
+        listing = self._listing(listing_id=5, seller_id=actor.id)
+
+        with self.assertRaises(Exception):
+            self.mgr.mark_listing_sold(actor=actor, listing=listing, buyer=buyer)
+
+        self.listing_db.set_sold.assert_not_called()

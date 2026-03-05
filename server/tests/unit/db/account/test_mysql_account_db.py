@@ -17,11 +17,9 @@ from src.utils import (
 
 class TestMySQLAccountDB(unittest.TestCase):
     def setUp(self) -> None:
-        # DBUtility is a dependency; we mock it + the context managers it returns.
         self.db_util: MagicMock = MagicMock(spec=DBUtility)
         self.account_db = MySQLAccountDB(self.db_util)
 
-        # Common mocks for connect()/transaction() context managers
         self.conn: MagicMock = MagicMock()
         self.connect_cm: MagicMock = MagicMock()
         self.connect_cm.__enter__.return_value = self.conn

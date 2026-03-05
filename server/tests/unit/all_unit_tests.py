@@ -2,7 +2,16 @@ from __future__ import annotations
 
 import unittest
 
-from tests.unit.api import TestAPIDependencies, TestAPIError, TestListingRoutes
+from tests.unit.test_main import TestMainUnit
+from tests.unit.api import (
+    TestAPIDependencies,
+    TestAPIError,
+    TestListingRoutes,
+    TestCommentConverter,
+    TestListingConverter,
+    TestErrorHandlers,
+    TestAccountRoutes,
+)
 from tests.unit.auth import TestJWTAuth
 from tests.unit.business_logic import (
     TestAccountManagerUnit,
@@ -19,11 +28,13 @@ from tests.unit.db import (
     TestAccountDBABC,
     TestMySQLAccountDB,
     TestCommentDBABC,
+    TestMySQLCommentDB,
     TestEmailVerificationTokenDBABC,
     TestMySQLEmailVerificationTokenDB,
     TestListingDBABC,
     TestMySQLListingDB,
     TestDBUtility,
+    TestCommentMapper,
 )
 from tests.unit.domain_models import TestDomainModels
 from tests.unit.utils import TestValidation, TestTokenGenerator
@@ -57,6 +68,13 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestDomainModels))
     suite.addTests(loader.loadTestsFromTestCase(TestConfig))
     suite.addTests(loader.loadTestsFromTestCase(TestValidation))
+    suite.addTests(loader.loadTestsFromTestCase(TestCommentConverter))
+    suite.addTests(loader.loadTestsFromTestCase(TestListingConverter))
+    suite.addTests(loader.loadTestsFromTestCase(TestErrorHandlers))
+    suite.addTests(loader.loadTestsFromTestCase(TestAccountRoutes))
+    suite.addTests(loader.loadTestsFromTestCase(TestMySQLCommentDB))
+    suite.addTests(loader.loadTestsFromTestCase(TestCommentMapper))
+    suite.addTests(loader.loadTestsFromTestCase(TestMainUnit))
     return suite
 
 

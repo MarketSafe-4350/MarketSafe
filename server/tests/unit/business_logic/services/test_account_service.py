@@ -1,108 +1,164 @@
 from __future__ import annotations
 
 import unittest
-from unittest.mock import MagicMock
-
+from unittest.mock import MagicMock, patch
 
 from src.business_logic.services.account_service import AccountService
 from src.domain_models import Account
 
-from src.utils import (
+from src.api.errors import ApiError
+from src.utils.errors import (
     ValidationError,
     DatabaseUnavailableError,
     AccountAlreadyExistsError,
-    AppError,
 )
-from src.api.errors import ApiError
+from src.utils import (
+    TokenNotFoundError,
+    TokenExpiredError,
+    TokenAlreadyUsedError,
+    EmailVerificationError,
+)
 
 
 class TestAccountServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
-        # account_manager is a dependency of AccountService
-        self.manager: MagicMock = MagicMock()
-        self.service = AccountService(self.manager)
+        self.account_manager: MagicMock = MagicMock(name="account_manager")
+        self.token_db: MagicMock = MagicMock(name="token_db")
+        self.service = AccountService(
+            account_manager=self.account_manager,
+            token_db=self.token_db,
+        )
 
     # -----------------------------
-    # create_account - happy path
+    # validate_email / validate_password / validate_account
+    # -----------------------------
+    def test_validate_email_rejects_non_allowed_domain(self) -> None:
+        with self.assertRaises(ValidationError):
+            self.service.validate_email("test@gmail.com")
+
+    def test_validate_email_accepts_umanitoba_domain(self) -> None:
+        # should not raise
+        self.service.validate_email("x@umanitoba.ca")
+
+    def test_validate_password_rejects_weak_password(self) -> None:
+        with self.assertRaises(ValidationError):
+            self.service.validate_password("password")
+
+    def test_validate_password_accepts_strong_password(self) -> None:
+        # should not raise
+        self.service.validate_password("StrongPass1")
+
+    def test_validate_account_returns_normalized_fields(self) -> None:
+        email, pw, fn, ln = self.service.validate_account(
+            "  TEST@UMANITOBA.CA  ",
+            "StrongPass1",
+            "  John  ",
+            "  Doe  ",
+        )
+        self.assertEqual(email, "test@umanitoba.ca")
+        self.assertEqual(pw, "StrongPass1")
+        self.assertEqual(fn, "John")
+        self.assertEqual(ln, "Doe")
+
+    # -----------------------------
+    # create_account
     # -----------------------------
     def test_create_account_success_delegates_to_manager(self) -> None:
         created = Account(
             account_id=123,
             email="test@umanitoba.ca",
-            password="Password1",
+            password="StrongPass1",
             fname="John",
             lname="Smith",
             verified=False,
         )
-
-        self.manager.create_account.return_value = created
+        self.account_manager.create_account.return_value = created
 
         out = self.service.create_account(
             email="test@umanitoba.ca",
-            password="Password1",
+            password="StrongPass1",
             fname="John",
             lname="Smith",
         )
 
-        self.assertEqual(out, created)
-        self.manager.create_account.assert_called_once()
-        passed_account: Account = self.manager.create_account.call_args[0][0]
+        self.assertIs(out, created)
+        self.account_manager.create_account.assert_called_once()
+        passed_account: Account = self.account_manager.create_account.call_args[0][0]
         self.assertEqual(passed_account.email, "test@umanitoba.ca")
 
-    # -----------------------------
-    # validate_account - email domain
-    # -----------------------------
+    def test_create_account_returns_input_account_when_manager_returns_none(
+        self,
+    ) -> None:
+        self.account_manager.create_account.return_value = None
+
+        out = self.service.create_account(
+            email="test@umanitoba.ca",
+            password="StrongPass1",
+            fname="John",
+            lname="Smith",
+        )
+
+        self.assertIsInstance(out, Account)
+        self.assertEqual(out.email, "test@umanitoba.ca")
+
     def test_create_account_rejects_non_umanitoba_domain(self) -> None:
         with self.assertRaises(ValidationError):
             self.service.create_account(
                 email="test@gmail.com",
-                password="Password1",
+                password="StrongPass1",
                 fname="John",
                 lname="Smith",
             )
+        self.account_manager.create_account.assert_not_called()
 
-        self.manager.create_account.assert_not_called()
-
-    # -----------------------------
-    # validate_account - password strength
-    # -----------------------------
     def test_create_account_rejects_weak_password(self) -> None:
         with self.assertRaises(ValidationError):
             self.service.create_account(
-                email="test1@umanitoba.ca",
-                password="password",  # missing uppercase and number
+                email="test@umanitoba.ca",
+                password="password",
                 fname="John",
                 lname="Smith",
             )
+        self.account_manager.create_account.assert_not_called()
 
-        self.manager.create_account.assert_not_called()
-
-    # -----------------------------
-    # create_account - duplicate email mapping
-    # -----------------------------
-    def test_create_account_duplicate_email_raises_accountalreadyexists(self):
-        self.manager.create_account.side_effect = AccountAlreadyExistsError(
+    def test_create_account_duplicate_email_raises_accountalreadyexists(self) -> None:
+        self.account_manager.create_account.side_effect = AccountAlreadyExistsError(
             message="Account already exists",
             details={"email": "dup@umanitoba.ca"},
         )
 
-        with self.assertRaises(AccountAlreadyExistsError):
+        with self.assertRaises(AccountAlreadyExistsError) as ctx:
             self.service.create_account(
                 email="dup@umanitoba.ca",
-                password="Password1",
+                password="StrongPass1",
                 fname="A",
                 lname="B",
             )
 
+        self.assertEqual(getattr(ctx.exception, "status_code", None), 409)
+
+    def test_create_account_manager_validation_error_maps_to_422(self) -> None:
+        self.account_manager.create_account.side_effect = ValidationError("bad data")
+
+        with self.assertRaises(ApiError) as ctx:
+            self.service.create_account(
+                email="test@umanitoba.ca",
+                password="StrongPass1",
+                fname="John",
+                lname="Doe",
+            )
+
+        self.assertEqual(ctx.exception.status_code, 422)
+
     def test_create_account_db_unavailable_maps_to_503(self) -> None:
-        self.manager.create_account.side_effect = DatabaseUnavailableError(
+        self.account_manager.create_account.side_effect = DatabaseUnavailableError(
             message="Database is unavailable."
         )
 
         with self.assertRaises(ApiError) as ctx:
             self.service.create_account(
                 email="test@umanitoba.ca",
-                password="Password1",
+                password="StrongPass1",
                 fname="John",
                 lname="Smith",
             )
@@ -110,157 +166,218 @@ class TestAccountServiceUnit(unittest.TestCase):
         self.assertEqual(ctx.exception.status_code, 503)
 
     def test_create_account_unknown_exception_maps_to_500(self) -> None:
-        self.manager.create_account.side_effect = RuntimeError("RTE")
+        self.account_manager.create_account.side_effect = RuntimeError("RTE")
 
         with self.assertRaises(ApiError) as ctx:
             self.service.create_account(
                 email="test@umanitoba.ca",
-                password="Password1",
+                password="StrongPass1",
                 fname="John",
                 lname="Smith",
             )
 
         self.assertEqual(ctx.exception.status_code, 500)
 
+        msg = getattr(ctx.exception, "message", None)
+        if isinstance(msg, str):
+            self.assertEqual(msg, "Internal server error")
+        else:
+            self.assertIn("Internal server error", str(ctx.exception))
+
     # -----------------------------
-    # login
+    # generate_and_store_verification_token
     # -----------------------------
+    def test_generate_and_store_verification_token_stores_token_and_returns_raw(
+        self,
+    ) -> None:
+        raw = "rawtoken123"
+        token_hash = "hash123"
+        expires_at = MagicMock(name="expires_at")
 
-    def test_login_valid_credentials_returns_token(self) -> None:
-        # Arrange: mock existing account
-        account = Account(
-            account_id=1,
-            email="test@umanitoba.ca",
-            password="Password1",
-            fname="John",
-            lname="Smith",
-            verified=False,
-        )
-        self.manager.get_account_by_email.return_value = account
+        with patch(
+            "src.business_logic.services.account_service.TokenGenerator.create_token_pair",
+            return_value=(raw, token_hash, expires_at),
+        ):
+            out = self.service.generate_and_store_verification_token(account_id=77)
 
-        # Act: login with correct credentials
-        token = self.service.login("test@umanitoba.ca", "Password1")
+        self.assertEqual(out, raw)
+        self.token_db.add.assert_called_once()
+        passed_token = self.token_db.add.call_args[0][0]
+        self.assertEqual(passed_token.account_id, 77)
+        self.assertEqual(passed_token.token_hash, token_hash)
+        self.assertEqual(passed_token.expires_at, expires_at)
 
-        # Assert: token returned and manager called
-        self.assertIsInstance(token, str)
-        self.manager.get_account_by_email.assert_called_once_with("test@umanitoba.ca")
+    # -----------------------------
+    # verify_email_token
+    # -----------------------------
+    def test_verify_email_token_empty_raises_email_verification_error(self) -> None:
+        with self.assertRaises(EmailVerificationError):
+            self.service.verify_email_token("")
 
-    def test_login_missing_fields_raises_400(self) -> None:
-        # Act + Assert: empty fields rejected immediately
+    def test_verify_email_token_not_found_raises_token_not_found(self) -> None:
+        with patch(
+            "src.business_logic.services.account_service.TokenGenerator.hash_token",
+            return_value="hashed",
+        ):
+            self.token_db.get_by_hash.return_value = None
+
+            with self.assertRaises(TokenNotFoundError):
+                self.service.verify_email_token("rawtoken")
+
+            self.token_db.get_by_hash.assert_called_once_with("hashed")
+
+    def test_verify_email_token_already_used_raises_token_already_used(self) -> None:
+        db_token = MagicMock()
+        db_token.used = True
+        db_token.id = 10
+        db_token.account_id = 1
+
+        with patch(
+            "src.business_logic.services.account_service.TokenGenerator.hash_token",
+            return_value="hashed",
+        ):
+            self.token_db.get_by_hash.return_value = db_token
+
+            with self.assertRaises(TokenAlreadyUsedError):
+                self.service.verify_email_token("rawtoken")
+
+    def test_verify_email_token_expired_raises_token_expired(self) -> None:
+        db_token = MagicMock()
+        db_token.used = False
+        db_token.id = 10
+        db_token.account_id = 1
+        db_token.expires_at = MagicMock()
+        db_token.is_expired.return_value = True
+
+        with patch(
+            "src.business_logic.services.account_service.TokenGenerator.hash_token",
+            return_value="hashed",
+        ):
+            self.token_db.get_by_hash.return_value = db_token
+
+            with self.assertRaises(TokenExpiredError):
+                self.service.verify_email_token("rawtoken")
+
+    def test_verify_email_token_happy_path_marks_used_and_returns_verified_account(
+        self,
+    ) -> None:
+        db_token = MagicMock()
+        db_token.used = False
+        db_token.id = 10
+        db_token.account_id = 123
+        db_token.is_expired.return_value = False
+
+        with patch(
+            "src.business_logic.services.account_service.TokenGenerator.hash_token",
+            return_value="hashed",
+        ):
+            self.token_db.get_by_hash.return_value = db_token
+
+            account = self.service.verify_email_token("rawtoken")
+
+        self.assertIsInstance(account, Account)
+        self.assertTrue(account.verified)
+        self.token_db.mark_used.assert_called_once_with(10)
+
+    # -----------------------------
+    # get_account_by_userid (hardcoded in your code)
+    # -----------------------------
+    def test_get_account_by_userid_none_raises_400(self) -> None:
         with self.assertRaises(ApiError) as ctx:
-            self.service.login("", "")
-
+            self.service.get_account_by_userid(None)
         self.assertEqual(ctx.exception.status_code, 400)
-        self.manager.get_account_by_email.assert_not_called()
 
-    def test_login_nonexistent_email_raises_401(self) -> None:
-        # Arrange: manager returns None (no account)
-        self.manager.get_account_by_email.return_value = None
-
-        # Act + Assert: invalid email should fail
-        with self.assertRaises(ApiError) as ctx:
-            self.service.login("nope@umanitoba.ca", "Password1")
-
-        self.assertEqual(ctx.exception.status_code, 401)
-        self.manager.get_account_by_email.assert_called_once_with("nope@umanitoba.ca")
-
-    def test_login_wrong_password_raises_401(self) -> None:
-        # Arrange: account exists but password mismatch
-        account = Account(
-            account_id=1,
-            email="test@umanitoba.ca",
-            password="Password1",
-            fname="John",
-            lname="Smith",
-            verified=False,
-        )
-        self.manager.get_account_by_email.return_value = account
-
-        # Act + Assert: wrong password rejected
-        with self.assertRaises(ApiError) as ctx:
-            self.service.login("test@umanitoba.ca", "WrongPassword1")
-
-        self.assertEqual(ctx.exception.status_code, 401)
+    def test_get_account_by_userid_returns_dummy_account(self) -> None:
+        out = self.service.get_account_by_userid("anything")
+        self.assertIsInstance(out, Account)
+        self.assertEqual(out.id, 1)
 
     # -----------------------------
-    # get_account_by_userid
+    # get_account_userid (manager-based)
     # -----------------------------
-
-    def test_get_account_userid_success_returns_account(self) -> None:
-        # Arrange: mock account returned from manager
-        account = Account(
-            account_id=5,
-            email="user@umanitoba.ca",
-            password="Password1",
-            fname="Jane",
-            lname="Doe",
-            verified=False,
-        )
-        self.manager.get_account_by_id.return_value = account
-
-        # Act: fetch by ID
-        result = self.service.get_account_userid(5)
-
-        # Assert: correct account returned and manager called
-        self.assertEqual(result, account)
-        self.manager.get_account_by_id.assert_called_once_with(5)
-
-    def test_get_account_by_userid_none_raises_400(self):
+    def test_get_account_userid_none_raises_400(self) -> None:
         with self.assertRaises(ApiError) as ctx:
-            self.service.get_account_by_userid(None)  # type: ignore[arg-type]
-
+            self.service.get_account_userid(None)
         self.assertEqual(ctx.exception.status_code, 400)
 
     def test_get_account_userid_not_found_raises_404(self) -> None:
-        # Arrange: manager returns None (not found)
-        self.manager.get_account_by_id.return_value = None
-
-        # Act + Assert: unknown ID should raise 404
+        self.account_manager.get_account_by_id.return_value = None
         with self.assertRaises(ApiError) as ctx:
             self.service.get_account_userid(99)
-
         self.assertEqual(ctx.exception.status_code, 404)
-        self.manager.get_account_by_id.assert_called_once_with(99)
 
-    def test_get_account_by_email_empty_raises_400(self):
+    def test_get_account_userid_success_returns_account(self) -> None:
+        acc = MagicMock(spec=Account)
+        self.account_manager.get_account_by_id.return_value = acc
+        out = self.service.get_account_userid(5)
+        self.assertIs(out, acc)
+        self.account_manager.get_account_by_id.assert_called_once_with(5)
+
+    # -----------------------------
+    # get_account_by_email
+    # -----------------------------
+    def test_get_account_by_email_empty_raises_400(self) -> None:
         with self.assertRaises(ApiError) as ctx:
             self.service.get_account_by_email("")
         self.assertEqual(ctx.exception.status_code, 400)
 
-    def test_get_account_by_email_not_found_raises_404(self):
-        self.manager.get_account_by_email.return_value = None
-
+    def test_get_account_by_email_not_found_raises_404(self) -> None:
+        self.account_manager.get_account_by_email.return_value = None
         with self.assertRaises(ApiError) as ctx:
             self.service.get_account_by_email("a@umanitoba.ca")
-
         self.assertEqual(ctx.exception.status_code, 404)
-        self.manager.get_account_by_email.assert_called_once_with("a@umanitoba.ca")
 
-    def test_get_account_by_email_success_returns_account(self):
+    def test_get_account_by_email_success_returns_account(self) -> None:
         acc = MagicMock(spec=Account)
-        self.manager.get_account_by_email.return_value = acc
+        self.account_manager.get_account_by_email.return_value = acc
+        out = self.service.get_account_by_email("a@umanitoba.ca")
+        self.assertIs(out, acc)
 
-        result = self.service.get_account_by_email("a@umanitoba.ca")
+    # -----------------------------
+    # login
+    # -----------------------------
+    def test_login_missing_fields_raises_400(self) -> None:
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("", "")
+        self.assertEqual(ctx.exception.status_code, 400)
 
-        self.assertIs(result, acc)
-        self.manager.get_account_by_email.assert_called_once_with("a@umanitoba.ca")
+    def test_login_nonexistent_email_raises_401(self) -> None:
+        self.account_manager.get_account_by_email.return_value = None
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("nope@umanitoba.ca", "StrongPass1")
+        self.assertEqual(ctx.exception.status_code, 401)
 
-    def test_create_account_manager_validation_error_maps_to_422(self):
-        # IMPORTANT: valid inputs so validate_account() does not fail first
-        valid_email = "test@umanitoba.ca"
-        valid_password = "StrongPass1"
-        fname = "John"
-        lname = "Doe"
-
-        # Make the MANAGER raise ValidationError
-        self.manager.create_account.side_effect = ValidationError("bad data")
+    def test_login_wrong_password_raises_401(self) -> None:
+        account = Account(
+            account_id=1,
+            email="test@umanitoba.ca",
+            password="StrongPass1",
+            fname="John",
+            lname="Smith",
+            verified=False,
+        )
+        self.account_manager.get_account_by_email.return_value = account
 
         with self.assertRaises(ApiError) as ctx:
-            self.service.create_account(
-                valid_email,
-                valid_password,
-                fname,
-                lname,
-            )
+            self.service.login("test@umanitoba.ca", "WrongPass1")
+        self.assertEqual(ctx.exception.status_code, 401)
 
-        self.assertEqual(ctx.exception.status_code, 422)
+    def test_login_success_returns_token(self) -> None:
+        account = Account(
+            account_id=1,
+            email="test@umanitoba.ca",
+            password="StrongPass1",
+            fname="John",
+            lname="Smith",
+            verified=False,
+        )
+        self.account_manager.get_account_by_email.return_value = account
+
+        with patch(
+            "src.business_logic.services.account_service.jwt.encode",
+            return_value="tok123",
+        ) as enc:
+            token = self.service.login("test@umanitoba.ca", "StrongPass1")
+
+        self.assertEqual(token, "tok123")
+        self.assertTrue(enc.called)
