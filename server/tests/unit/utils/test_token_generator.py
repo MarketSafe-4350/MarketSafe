@@ -61,7 +61,9 @@ class TestTokenGenerator(unittest.TestCase):
         delta = expiry - now
         # Should be 5 minutes (allow 1 second margin)
         expected_delta = timedelta(minutes=5)
-        self.assertLessEqual(abs(delta.total_seconds() - expected_delta.total_seconds()), 1)
+        self.assertLessEqual(
+            abs(delta.total_seconds() - expected_delta.total_seconds()), 1
+        )
 
     # -------------------------
     # create_token_pair Tests
@@ -89,7 +91,9 @@ class TestTokenGenerator(unittest.TestCase):
         raw_token, token_hash, expires_at = TokenGenerator.create_token_pair()
         delta = expires_at - now
         expected_delta = timedelta(minutes=5)
-        self.assertLessEqual(abs(delta.total_seconds() - expected_delta.total_seconds()), 1)
+        self.assertLessEqual(
+            abs(delta.total_seconds() - expected_delta.total_seconds()), 1
+        )
 
 
 if __name__ == "__main__":

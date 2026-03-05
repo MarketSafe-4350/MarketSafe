@@ -1,3 +1,3 @@
 from .test_api_dependencies_unit import TestAPIDependencies
-from .test_api_errors_unit import TestAPIError
-from.test_api_listing_routes_unit import TestListingRoutes
+from .errors.test_errors_unit import TestAPIError
+from .routes.test_listing_routes_unit import TestListingRoutes

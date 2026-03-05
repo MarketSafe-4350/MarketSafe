@@ -7,11 +7,16 @@ from unittest.mock import MagicMock
 from src.business_logic.services.account_service import AccountService
 from src.domain_models import Account
 
-from src.utils import ValidationError, DatabaseUnavailableError, AccountAlreadyExistsError, AppError
+from src.utils import (
+    ValidationError,
+    DatabaseUnavailableError,
+    AccountAlreadyExistsError,
+    AppError,
+)
 from src.api.errors import ApiError
 
 
-class TestAccountService(unittest.TestCase):
+class TestAccountServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
         # account_manager is a dependency of AccountService
         self.manager: MagicMock = MagicMock()
@@ -76,20 +81,19 @@ class TestAccountService(unittest.TestCase):
     # create_account - duplicate email mapping
     # -----------------------------
     def test_create_account_duplicate_email_raises_accountalreadyexists(self):
-            self.manager.create_account.side_effect = AccountAlreadyExistsError(
-                message="Account already exists",
-                details={"email": "dup@umanitoba.ca"},
+        self.manager.create_account.side_effect = AccountAlreadyExistsError(
+            message="Account already exists",
+            details={"email": "dup@umanitoba.ca"},
+        )
+
+        with self.assertRaises(AccountAlreadyExistsError):
+            self.service.create_account(
+                email="dup@umanitoba.ca",
+                password="Password1",
+                fname="A",
+                lname="B",
             )
 
-            with self.assertRaises(AccountAlreadyExistsError):
-                self.service.create_account(
-                    email="dup@umanitoba.ca",
-                    password="Password1",
-                    fname="A",
-                    lname="B",
-                )
-
-    
     def test_create_account_db_unavailable_maps_to_503(self) -> None:
         self.manager.create_account.side_effect = DatabaseUnavailableError(
             message="Database is unavailable."
@@ -105,9 +109,6 @@ class TestAccountService(unittest.TestCase):
 
         self.assertEqual(ctx.exception.status_code, 503)
 
-
-
-    
     def test_create_account_unknown_exception_maps_to_500(self) -> None:
         self.manager.create_account.side_effect = RuntimeError("RTE")
 
@@ -120,7 +121,6 @@ class TestAccountService(unittest.TestCase):
             )
 
         self.assertEqual(ctx.exception.status_code, 500)
- 
 
     # -----------------------------
     # login
@@ -210,6 +210,7 @@ class TestAccountService(unittest.TestCase):
             self.service.get_account_by_userid(None)  # type: ignore[arg-type]
 
         self.assertEqual(ctx.exception.status_code, 400)
+
     def test_get_account_userid_not_found_raises_404(self) -> None:
         # Arrange: manager returns None (not found)
         self.manager.get_account_by_id.return_value = None

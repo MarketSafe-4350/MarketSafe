@@ -9,13 +9,15 @@ from src.domain_models import Account
 from src.utils import AccountAlreadyExistsError, AccountNotFoundError
 
 
-class TestAccountManager(unittest.TestCase):
+class TestAccountManagerUnit(unittest.TestCase):
     def setUp(self) -> None:
         self.db: MagicMock = MagicMock(spec=AccountDB)
         self.manager = AccountManager(self.db)
 
     def test_init_calls_super(self):
-        with patch.object(IAccountManager, "__init__", return_value=None) as parent_init:
+        with patch.object(
+            IAccountManager, "__init__", return_value=None
+        ) as parent_init:
             AccountManager(self.db)
             parent_init.assert_called_once_with(self.db, None)
 
@@ -74,7 +76,9 @@ class TestAccountManager(unittest.TestCase):
         inserted_account: Account = self.db.add.call_args[0][0]
 
         # The manager creates a NEW Account object and strips names
-        self.assertIsNone(inserted_account.id)  # or inserted_account._id; depends on your Account API
+        self.assertIsNone(
+            inserted_account.id
+        )  # or inserted_account._id; depends on your Account API
 
         self.assertEqual(inserted_account.email, "new@example.com")
         self.assertEqual(inserted_account.password, "hashed")
