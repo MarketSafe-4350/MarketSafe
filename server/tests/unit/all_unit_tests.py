@@ -33,6 +33,8 @@ from tests.unit.db_utils import TestDBUtility
 from tests.unit.domain_models import TestDomainModels
 from tests.unit.config import TestConfig
 
+from tests.unit.utils import TestValidation
+
 
 def load_tests(
     loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str
@@ -58,6 +60,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestDBUtility))
     suite.addTests(loader.loadTestsFromTestCase(TestDomainModels))
     suite.addTests(loader.loadTestsFromTestCase(TestConfig))
+    suite.addTests(loader.loadTestsFromTestCase(TestValidation))
     return suite
 
 
