@@ -11,10 +11,9 @@ describe('CreateListingDialogComponent', () => {
   let fixture: ComponentFixture<CreateListingDialogComponent>;
   let component: CreateListingDialogComponent;
 
-  const dialogRefSpy = jasmine.createSpyObj<MatDialogRef<CreateListingDialogComponent>>(
-    'MatDialogRef',
-    ['close']
-  );
+  const dialogRefSpy = jasmine.createSpyObj<
+    MatDialogRef<CreateListingDialogComponent>
+  >('MatDialogRef', ['close']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -120,14 +119,16 @@ describe('CreateListingDialogComponent', () => {
   });
 
   it('create_ValidForm_ShouldCloseDialogWithPayloadTrimmed', () => {
+    const file = new File(['x'], 'img.jpg', { type: 'image/jpeg' });
+
     component.form.setValue({
       title: '  Table  ',
       description: '  A nice wooden table for sale.  ',
       price: 150,
       location: '  Winnipeg  ',
+      picture: file,
     });
 
-    const file = new File(['x'], 'img.jpg', { type: 'image/jpeg' });
     component.selectedFile = file;
 
     component.create();
@@ -149,6 +150,7 @@ describe('CreateListingDialogComponent', () => {
       description: 'Comfortable chair in good condition',
       price: 20,
       location: 'UofM',
+      picture: null,
     });
 
     component.selectedFile = null;
@@ -156,7 +158,8 @@ describe('CreateListingDialogComponent', () => {
     component.create();
 
     expect(dialogRefSpy.close).toHaveBeenCalled();
-    const payload = dialogRefSpy.close.calls.mostRecent().args[0] as CreateListingPayload;
+    const payload = dialogRefSpy.close.calls.mostRecent()
+      .args[0] as CreateListingPayload;
 
     expect(payload.title).toBe('Chair');
     expect(payload.picture).toBeNull();

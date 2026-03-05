@@ -35,15 +35,45 @@ export class CreateListingDialogComponent {
   readonly locationMaxLength = 120;
 
   private readonly fb = inject(FormBuilder);
-  private readonly dialogRef = inject(MatDialogRef<CreateListingDialogComponent>);
+  private readonly dialogRef = inject(
+    MatDialogRef<CreateListingDialogComponent>,
+  );
+
+  private readonly allowedImageTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+  ];
+  private readonly allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 
   selectedFile: File | null = null;
 
   readonly form = this.fb.group({
-    title: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
-    description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
-    price: [null as number | null, [Validators.required, Validators.min(0), Validators.max(this.priceMax)]],
-    location: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(this.locationMaxLength)]],
+    title: [
+      '',
+      [Validators.required, Validators.minLength(2), Validators.maxLength(80)],
+    ],
+    description: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(1000),
+      ],
+    ],
+    price: [
+      null as number | null,
+      [Validators.required, Validators.min(0), Validators.max(this.priceMax)],
+    ],
+    location: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(this.locationMaxLength),
+      ],
+    ],
+    picture: [null as File | null],
   });
 
   onPriceInput(event: Event): void {
@@ -65,7 +95,9 @@ export class CreateListingDialogComponent {
     const limitedInt = intPart.slice(0, 8);
     const limitedDecimal = decimalParts.join('').slice(0, 2);
     const hasDecimalPoint = cleaned.includes('.');
-    let normalized = hasDecimalPoint ? `${limitedInt}.${limitedDecimal}` : limitedInt;
+    let normalized = hasDecimalPoint
+      ? `${limitedInt}.${limitedDecimal}`
+      : limitedInt;
 
     if (normalized.startsWith('.')) {
       normalized = `0${normalized}`;
@@ -79,9 +111,41 @@ export class CreateListingDialogComponent {
     return normalized;
   }
 
+  private isValidImageFile(file: File): boolean {
+    const fileName = file.name.toLowerCase();
+    const extensionValid = this.allowedExtensions.some((ext) =>
+      fileName.endsWith(ext),
+    );
+    const isValidMimeType = this.allowedImageTypes.includes(file.type);
+
+    return extensionValid && isValidMimeType;
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;
+
+    const pictureControl = this.form.get('picture');
+
+    if (!file) {
+      pictureControl?.reset(null);
+      this.selectedFile = null;
+      return;
+    }
+
+    if (!this.isValidImageFile(file)) {
+      pictureControl?.setErrors({ invalidImage: true });
+      pictureControl?.markAsTouched();
+      pictureControl?.markAsDirty();
+
+      input.value = '';
+      this.selectedFile = null;
+      return;
+    }
+
+    pictureControl?.setErrors(null);
+    pictureControl?.setValue(file);
+    pictureControl?.markAsTouched();
     this.selectedFile = file;
   }
 
