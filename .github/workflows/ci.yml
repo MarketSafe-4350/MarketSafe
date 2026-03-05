@@ -74,7 +74,7 @@ jobs:
         run: python -m compileall -q src
 
       - name: Run unit tests
-        run: coverage run -m unittest -v ./tests/unit/all_unit_tests.py
+        run: coverage run -m tests.unit.all_unit_tests
 
       - name: Run integration tests
         run: coverage run --append -m tests.integration.all_integration_tests
