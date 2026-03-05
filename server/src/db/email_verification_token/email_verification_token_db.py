@@ -31,13 +31,13 @@ class EmailVerificationTokenDB(ABC):
     @abstractmethod
     def add(self, token: VerificationToken) -> VerificationToken:
         """
-        Insert a new verification token.
+        Insert a new verification auth_token.
 
         Args:
-            token (VerificationToken): The token to persist
+            token (VerificationToken): The auth_token to persist
 
         Returns:
-            VerificationToken: The persisted token with assigned ID
+            VerificationToken: The persisted auth_token with assigned ID
 
         Raises:
             DatabaseQueryError: If insertion fails
@@ -47,13 +47,13 @@ class EmailVerificationTokenDB(ABC):
     @abstractmethod
     def get_by_hash(self, token_hash: str) -> Optional[VerificationToken]:
         """
-        Retrieve a token by its hash.
+        Retrieve a auth_token by its hash.
 
         Args:
-            token_hash (str): The hashed token value
+            token_hash (str): The hashed auth_token value
 
         Returns:
-            Optional[VerificationToken]: The token if found, None otherwise
+            Optional[VerificationToken]: The auth_token if found, None otherwise
 
         Raises:
             DatabaseQueryError: If query fails
@@ -63,13 +63,13 @@ class EmailVerificationTokenDB(ABC):
     @abstractmethod
     def get_latest_by_account(self, account_id: int) -> Optional[VerificationToken]:
         """
-        Retrieve the most recent token for an account.
+        Retrieve the most recent auth_token for an account.
 
         Args:
             account_id (int): The account ID
 
         Returns:
-            Optional[VerificationToken]: The latest token if found, None otherwise
+            Optional[VerificationToken]: The latest auth_token if found, None otherwise
 
         Raises:
             DatabaseQueryError: If query fails
@@ -79,13 +79,13 @@ class EmailVerificationTokenDB(ABC):
     @abstractmethod
     def mark_used(self, token_id: int) -> None:
         """
-        Mark a token as used.
+        Mark a auth_token as used.
 
         Args:
-            token_id (int): The token ID
+            token_id (int): The auth_token ID
 
         Raises:
-            TokenNotFoundError: If token not found
+            TokenNotFoundError: If auth_token not found
             DatabaseQueryError: If update fails
         """
         pass

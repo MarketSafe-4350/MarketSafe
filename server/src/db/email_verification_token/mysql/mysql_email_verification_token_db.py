@@ -14,7 +14,7 @@ from src.utils import (Validation, DatabaseQueryError, TokenNotFoundError)
 
 class MySQLEmailVerificationTokenDB(EmailVerificationTokenDB):
     """
-    MySQL implementation of email verification token persistence.
+    MySQL implementation of email verification auth_token persistence.
 
     Design:
     - Uses parameterized queries to prevent SQL injection
@@ -30,7 +30,7 @@ class MySQLEmailVerificationTokenDB(EmailVerificationTokenDB):
     # -------------------------
     @override
     def add(self, token: VerificationToken) -> VerificationToken:
-        Validation.require_not_none(token, "token")
+        Validation.require_not_none(token, "auth_token")
 
         sql = text("""
                    INSERT INTO email_verification_tokens
@@ -51,7 +51,7 @@ class MySQLEmailVerificationTokenDB(EmailVerificationTokenDB):
 
                 new_id = int(result.lastrowid)
 
-                # Return the token with the assigned ID
+                # Return the auth_token with the assigned ID
                 return VerificationToken(
                     account_id=token.account_id,
                     token_hash=token.token_hash,
@@ -64,7 +64,7 @@ class MySQLEmailVerificationTokenDB(EmailVerificationTokenDB):
 
         except SQLAlchemyError as e:
             raise DatabaseQueryError(
-                message="Failed to insert verification token.",
+                message="Failed to insert verification auth_token.",
                 details={"op": "add", "table": "email_verification_tokens"},
             ) from e
 
@@ -87,7 +87,7 @@ class MySQLEmailVerificationTokenDB(EmailVerificationTokenDB):
                 return None if row is None else self._map_to_token(row)
         except SQLAlchemyError as e:
             raise DatabaseQueryError(
-                message="Failed to fetch token by hash.",
+                message="Failed to fetch auth_token by hash.",
                 details={"op": "get_by_hash", "table": "email_verification_tokens"},
             ) from e
 
@@ -109,7 +109,7 @@ class MySQLEmailVerificationTokenDB(EmailVerificationTokenDB):
                 return None if row is None else self._map_to_token(row)
         except SQLAlchemyError as e:
             raise DatabaseQueryError(
-                message="Failed to fetch latest token by account.",
+                message="Failed to fetch latest auth_token by account.",
                 details={"op": "get_latest_by_account", "table": "email_verification_tokens"},
             ) from e
 
@@ -136,7 +136,7 @@ class MySQLEmailVerificationTokenDB(EmailVerificationTokenDB):
                     )
         except SQLAlchemyError as e:
             raise DatabaseQueryError(
-                message="Failed to mark token as used.",
+                message="Failed to mark auth_token as used.",
                 details={"op": "mark_used", "table": "email_verification_tokens"},
             ) from e
 

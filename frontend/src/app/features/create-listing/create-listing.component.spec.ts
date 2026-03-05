@@ -11,10 +11,9 @@ describe('CreateListingDialogComponent', () => {
   let fixture: ComponentFixture<CreateListingDialogComponent>;
   let component: CreateListingDialogComponent;
 
-  const dialogRefSpy = jasmine.createSpyObj<MatDialogRef<CreateListingDialogComponent>>(
-    'MatDialogRef',
-    ['close']
-  );
+  const dialogRefSpy = jasmine.createSpyObj<
+    MatDialogRef<CreateListingDialogComponent>
+  >('MatDialogRef', ['close']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -56,10 +55,24 @@ describe('CreateListingDialogComponent', () => {
     expect(control.invalid).toBeTrue();
   });
 
+  it('form_PriceAboveMax_ShouldBeInvalid', () => {
+    const control = component.form.get('price')!;
+    control.setValue(component.priceMax + 1);
+    expect(control.hasError('max')).toBeTrue();
+    expect(control.invalid).toBeTrue();
+  });
+
   it('form_LocationEmpty_ShouldBeInvalid', () => {
     const control = component.form.get('location')!;
     control.setValue('');
     expect(control.hasError('required')).toBeTrue();
+    expect(control.invalid).toBeTrue();
+  });
+
+  it('form_LocationAboveMax_ShouldBeInvalid', () => {
+    const control = component.form.get('location')!;
+    control.setValue('a'.repeat(component.locationMaxLength + 1));
+    expect(control.hasError('maxlength')).toBeTrue();
     expect(control.invalid).toBeTrue();
   });
 
@@ -87,6 +100,15 @@ describe('CreateListingDialogComponent', () => {
     expect(component.selectedFile).toBe(file);
   });
 
+  it('onPriceInput_AboveMax_ShouldClampValue', () => {
+    const input = document.createElement('input');
+    input.value = '999999999999.99';
+
+    component.onPriceInput({ target: input } as unknown as Event);
+
+    expect(input.value).toBe('99999999.99');
+  });
+
   // -------------------------
   // create() tests
   // -------------------------
@@ -97,14 +119,16 @@ describe('CreateListingDialogComponent', () => {
   });
 
   it('create_ValidForm_ShouldCloseDialogWithPayloadTrimmed', () => {
+    const file = new File(['x'], 'img.jpg', { type: 'image/jpeg' });
+
     component.form.setValue({
       title: '  Table  ',
       description: '  A nice wooden table for sale.  ',
       price: 150,
       location: '  Winnipeg  ',
+      picture: file,
     });
 
-    const file = new File(['x'], 'img.jpg', { type: 'image/jpeg' });
     component.selectedFile = file;
 
     component.create();
@@ -126,6 +150,7 @@ describe('CreateListingDialogComponent', () => {
       description: 'Comfortable chair in good condition',
       price: 20,
       location: 'UofM',
+      picture: null,
     });
 
     component.selectedFile = null;
@@ -133,7 +158,8 @@ describe('CreateListingDialogComponent', () => {
     component.create();
 
     expect(dialogRefSpy.close).toHaveBeenCalled();
-    const payload = dialogRefSpy.close.calls.mostRecent().args[0] as CreateListingPayload;
+    const payload = dialogRefSpy.close.calls.mostRecent()
+      .args[0] as CreateListingPayload;
 
     expect(payload.title).toBe('Chair');
     expect(payload.picture).toBeNull();

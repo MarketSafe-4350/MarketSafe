@@ -31,7 +31,6 @@ class TestAccountManagerIntegration(unittest.TestCase):
 
         cls._manager_no_listing = AccountManager(cls._account_db, listing_db=None)
 
-
     @classmethod
     def tearDownClass(cls) -> None:
         release(cls._session, remove_volumes=False)

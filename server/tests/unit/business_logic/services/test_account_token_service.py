@@ -24,7 +24,7 @@ class TestAccountTokenService(unittest.TestCase):
     # generate_and_store_verification_token Tests
     # -------------------------
     def test_generate_and_store_verification_token_ShouldStoreTokenInDB(self) -> None:
-        """Verify that token is stored in database."""
+        """Verify that auth_token is stored in database."""
         self.token_db_mock.add.return_value = VerificationToken(
             account_id=1,
             token_hash="test-hash",
@@ -38,7 +38,7 @@ class TestAccountTokenService(unittest.TestCase):
         self.token_db_mock.add.assert_called_once()
 
     def test_generate_and_store_verification_token_ShouldReturnRawToken(self) -> None:
-        """Raw token should be returned, not the hash."""
+        """Raw auth_token should be returned, not the hash."""
         self.token_db_mock.add.return_value = VerificationToken(
             account_id=1,
             token_hash="test-hash",
@@ -48,26 +48,32 @@ class TestAccountTokenService(unittest.TestCase):
 
         raw_token = self.service.generate_and_store_verification_token(account_id=1)
 
-        # Raw token should be 64 chars (hex)
+        # Raw auth_token should be 64 chars (hex)
         self.assertEqual(len(raw_token), 64)
 
     # -------------------------
     # verify_email_token Tests
     # -------------------------
-    def test_verify_email_token_EmptyToken_ShouldRaiseEmailVerificationError(self) -> None:
-        """Attempting to verify empty token should raise error."""
+    def test_verify_email_token_EmptyToken_ShouldRaiseEmailVerificationError(
+        self,
+    ) -> None:
+        """Attempting to verify empty auth_token should raise error."""
         with self.assertRaises(EmailVerificationError):
             self.service.verify_email_token("")
 
-    def test_verify_email_token_TokenNotFound_ShouldRaiseTokenNotFoundError(self) -> None:
-        """When token hash doesn't exist in DB, should raise TokenNotFoundError."""
+    def test_verify_email_token_TokenNotFound_ShouldRaiseTokenNotFoundError(
+        self,
+    ) -> None:
+        """When auth_token hash doesn't exist in DB, should raise TokenNotFoundError."""
         self.token_db_mock.get_by_hash.return_value = None
 
         with self.assertRaises(TokenNotFoundError):
-            self.service.verify_email_token("nonexistent-token")
+            self.service.verify_email_token("nonexistent-auth_token")
 
-    def test_verify_email_token_TokenAlreadyUsed_ShouldRaiseTokenAlreadyUsedError(self) -> None:
-        """When token is already marked used, should raise TokenAlreadyUsedError."""
+    def test_verify_email_token_TokenAlreadyUsed_ShouldRaiseTokenAlreadyUsedError(
+        self,
+    ) -> None:
+        """When auth_token is already marked used, should raise TokenAlreadyUsedError."""
         used_token = VerificationToken(
             account_id=1,
             token_hash="used-hash",
@@ -79,10 +85,10 @@ class TestAccountTokenService(unittest.TestCase):
         self.token_db_mock.get_by_hash.return_value = used_token
 
         with self.assertRaises(TokenAlreadyUsedError):
-            self.service.verify_email_token("test-token")
+            self.service.verify_email_token("test-auth_token")
 
     def test_verify_email_token_TokenExpired_ShouldRaiseTokenExpiredError(self) -> None:
-        """When token has expired, should raise TokenExpiredError."""
+        """When auth_token has expired, should raise TokenExpiredError."""
         expired_token = VerificationToken(
             account_id=1,
             token_hash="expired-hash",
@@ -93,10 +99,10 @@ class TestAccountTokenService(unittest.TestCase):
         self.token_db_mock.get_by_hash.return_value = expired_token
 
         with self.assertRaises(TokenExpiredError):
-            self.service.verify_email_token("test-token")
+            self.service.verify_email_token("test-auth_token")
 
     def test_verify_email_token_Valid_ShouldMarkTokenUsed(self) -> None:
-        """When token is valid, should mark it as used."""
+        """When auth_token is valid, should mark it as used."""
         valid_token = VerificationToken(
             account_id=1,
             token_hash="valid-hash",
@@ -107,7 +113,7 @@ class TestAccountTokenService(unittest.TestCase):
         self.token_db_mock.get_by_hash.return_value = valid_token
 
         # Mock the account retrieval
-        with patch.object(self.service, 'get_account_by_userid') as mock_get_account:
+        with patch.object(self.service, "get_account_by_userid") as mock_get_account:
             mock_get_account.return_value = Account(
                 email="test@umanitoba.ca",
                 password="hashed",
@@ -115,13 +121,13 @@ class TestAccountTokenService(unittest.TestCase):
                 lname="User",
             )
 
-            account = self.service.verify_email_token("test-token")
+            account = self.service.verify_email_token("test-auth_token")
 
             # Check that mark_used was called
             self.token_db_mock.mark_used.assert_called_once_with(1)
 
     def test_verify_email_token_Valid_ShouldReturnVerifiedAccount(self) -> None:
-        """When token is valid, should return an account with verified=True."""
+        """When auth_token is valid, should return an account with verified=True."""
         valid_token = VerificationToken(
             account_id=1,
             token_hash="valid-hash",
@@ -138,10 +144,10 @@ class TestAccountTokenService(unittest.TestCase):
             lname="User",
         )
 
-        with patch.object(self.service, 'get_account_by_userid') as mock_get_account:
+        with patch.object(self.service, "get_account_by_userid") as mock_get_account:
             mock_get_account.return_value = test_account
 
-            account = self.service.verify_email_token("test-token")
+            account = self.service.verify_email_token("test-auth_token")
 
             self.assertTrue(account.verified)
 
@@ -156,7 +162,7 @@ class TestAccountTokenService(unittest.TestCase):
         )
         self.token_db_mock.get_by_hash.return_value = valid_token
 
-        with patch.object(self.service, 'get_account_by_userid') as mock_get_account:
+        with patch.object(self.service, "get_account_by_userid") as mock_get_account:
             mock_get_account.return_value = Account(
                 email="test@umanitoba.ca",
                 password="hashed",
@@ -166,7 +172,7 @@ class TestAccountTokenService(unittest.TestCase):
 
             # Verify that mark_used is called last
             call_count_before = self.token_db_mock.mark_used.call_count
-            self.service.verify_email_token("test-token")
+            self.service.verify_email_token("test-auth_token")
             call_count_after = self.token_db_mock.mark_used.call_count
 
             self.assertEqual(call_count_after - call_count_before, 1)

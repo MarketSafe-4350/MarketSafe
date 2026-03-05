@@ -128,20 +128,20 @@ class AccountService:
 
     def generate_and_store_verification_token(self, account_id: int) -> str:
         """
-        Generate a verification token and store it in the database.
+        Generate a verification auth_token and store it in the database.
 
         This should be called immediately after creating a new account.
 
         Args:
-            account_id (int): The ID of the account to generate token for
+            account_id (int): The ID of the account to generate auth_token for
 
         Returns:
-            str: The raw token (to be sent in email)
+            str: The raw auth_token (to be sent in email)
 
         Raises:
-            DatabaseQueryError: If token storage fails
+            DatabaseQueryError: If auth_token storage fails
         """
-        # Generate token pair: raw token, hash, and expiry
+        # Generate auth_token pair: raw auth_token, hash, and expiry
         raw_token, token_hash, expires_at = TokenGenerator.create_token_pair()
 
         # Create VerificationToken domain model
@@ -154,56 +154,56 @@ class AccountService:
         # Store in database
         self.token_db.add(verification_token)
 
-        logger.info(f"Generated verification token for account {account_id}")
+        logger.info(f"Generated verification auth_token for account {account_id}")
 
         return raw_token
 
     def verify_email_token(self, token: str) -> Account:
         """
-        Verify an email token and mark the account as verified.
+        Verify an email auth_token and mark the account as verified.
 
         This is called when the user clicks the verification link.
 
         Args:
-            token (str): The raw verification token from the email link
+            token (str): The raw verification auth_token from the email link
 
         Returns:
             Account: The verified account
 
         Raises:
-            TokenNotFoundError: If token doesn't exist
-            TokenExpiredError: If token has expired
-            TokenAlreadyUsedError: If token was already used
+            TokenNotFoundError: If auth_token doesn't exist
+            TokenExpiredError: If auth_token has expired
+            TokenAlreadyUsedError: If auth_token was already used
             AccountNotFoundError: If account not found
         """
         if not token:
             raise EmailVerificationError(
-                message="Token cannot be empty", details={"token": token}
+                message="Token cannot be empty", details={"auth_token": token}
             )
 
-        # Hash the provided token to look it up
+        # Hash the provided auth_token to look it up
         token_hash = TokenGenerator.hash_token(token)
 
-        # Try to find the token in database
+        # Try to find the auth_token in database
         db_token = self.token_db.get_by_hash(token_hash)
 
         if db_token is None:
             raise TokenNotFoundError(
-                message="Invalid or expired verification token",
+                message="Invalid or expired verification auth_token",
                 details={"token_hash": token_hash},
             )
 
-        # Check if token has been used already
+        # Check if auth_token has been used already
         if db_token.used:
             raise TokenAlreadyUsedError(
-                message="This verification token has already been used",
+                message="This verification auth_token has already been used",
                 details={"token_id": db_token.id},
             )
 
-        # Check if token has expired
+        # Check if auth_token has expired
         if db_token.is_expired():
             raise TokenExpiredError(
-                message="This verification token has expired",
+                message="This verification auth_token has expired",
                 details={
                     "token_id": db_token.id,
                     "expires_at": str(db_token.expires_at),
@@ -217,7 +217,7 @@ class AccountService:
         # For now, we'll return the account (real implementation will update DB)
         account.verified = True
 
-        # Mark token as used ONLY after successful verification
+        # Mark auth_token as used ONLY after successful verification
         self.token_db.mark_used(db_token.id)
 
         logger.info(f"Account {db_token.account_id} verified successfully")
@@ -276,14 +276,14 @@ class AccountService:
         return account
 
     def login(self, email: str, password: str) -> str:
-        """Authenticates a user and returns a JWT token.
+        """Authenticates a user and returns a JWT auth_token.
 
         Args:
             email (str): The email of the user.
             password (str): The password of the user.
 
         Returns:
-            str: A JWT token for the authenticated user.
+            str: A JWT auth_token for the authenticated user.
         """
 
         if not email or not password:

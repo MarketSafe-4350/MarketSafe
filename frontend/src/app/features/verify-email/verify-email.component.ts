@@ -42,13 +42,13 @@ export class VerifyEmailComponent implements OnInit {
   }
 
   verifyEmail(): void {
-    // Extract the token from the query parameter
+    // Support both auth_token (current) and token (legacy) links.
     this.route.queryParams.subscribe((params) => {
-      const token = params['token'];
+      const token = params['auth_token'] || params['token'];
 
       if (!token) {
         this.loading.set(false);
-        this.errorMessage.set('No verification token provided.');
+        this.errorMessage.set('No verification auth_token provided.');
         // Redirect to signup after a delay
         setTimeout(() => {
           this.router.navigate(['/signup']);
@@ -57,7 +57,7 @@ export class VerifyEmailComponent implements OnInit {
       }
 
       // Call the backend API to verify the email (GET request)
-      const apiUrl = `${API_URLS.accounts}/verify-email?token=${encodeURIComponent(token)}`;
+      const apiUrl = `${API_URLS.accounts}/verify-email?auth_token=${encodeURIComponent(token)}`;
 
       this.http.get<{ message?: string }>(apiUrl).subscribe({
         next: () => {
@@ -76,7 +76,7 @@ export class VerifyEmailComponent implements OnInit {
           this.errorMessage.set(
             err.error?.error_message || 'Email verification failed. Please try again or contact support.'
           );
-          
+
           // Redirect to signup after showing error
           setTimeout(() => {
             this.router.navigate(['/signup']);

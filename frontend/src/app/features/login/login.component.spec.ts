@@ -63,7 +63,7 @@ describe('LoginComponent', () => {
       password: 'Password1',
     });
 
-    // Respond with token
+    // Respond with auth_token
     req.flush({ access_token: 'token123', token_type: 'bearer' });
 
     expect(localStorage.getItem('access_token')).toBe('token123');

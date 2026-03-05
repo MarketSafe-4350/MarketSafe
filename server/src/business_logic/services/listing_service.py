@@ -12,6 +12,8 @@ from src.business_logic.managers.listing import IListingManager
 
 class ListingService:
     """Service class for handling listing-related business logic."""
+    MAX_LISTING_PRICE: float = 99_999_999.99
+    MAX_LOCATION_LENGTH: int = 120
 
     def __init__(self, listing_manager: IListingManager):
         self._listing_manager = listing_manager
@@ -48,8 +50,7 @@ class ListingService:
             return []
 
         keywords = [token for token in normalized_query.split() if token]
-        if not keywords:
-            return []
+
 
         listings = self._listing_manager.list_listings()
         scored_results: list[tuple[int, Listing]] = []
@@ -257,6 +258,14 @@ class ListingService:
             self._add_error(errors, "price", "Price must be a non-negative number.")
             return default_price
 
+        if price > self.MAX_LISTING_PRICE:
+            self._add_error(
+                errors,
+                "price",
+                f"Price cannot exceed {self.MAX_LISTING_PRICE}.",
+            )
+            return default_price
+
         return price
 
     def _validate_location(self, location: str, errors: dict[str, list[str]]) -> str:
@@ -274,7 +283,17 @@ class ListingService:
         if not location:
             self._add_error(errors, "location", "Location cannot be empty.")
             return ""
-        return location
+
+        normalized_location = location.strip()
+        if len(normalized_location) > self.MAX_LOCATION_LENGTH:
+            self._add_error(
+                errors,
+                "location",
+                f"Location cannot exceed {self.MAX_LOCATION_LENGTH} characters.",
+            )
+            return ""
+
+        return normalized_location
 
     def _validate_image_url(
         self, image_url: str | None, errors: dict[str, list[str]]

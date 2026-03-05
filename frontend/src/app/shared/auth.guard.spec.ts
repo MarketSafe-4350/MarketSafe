@@ -24,7 +24,7 @@ describe('authGuard', () => {
 
   afterEach(() => localStorage.clear());
 
-  it('should allow access when token exists', () => {
+  it('should allow access when auth_token exists', () => {
     localStorage.setItem('access_token', 'fakeToken');
 
     const result = TestBed.runInInjectionContext(() =>
@@ -35,7 +35,7 @@ describe('authGuard', () => {
     expect(routerSpy.navigate).not.toHaveBeenCalled();
   });
 
-  it('should block access and redirect to /login when no token', () => {
+  it('should block access and redirect to /login when no auth_token', () => {
     const result = TestBed.runInInjectionContext(() =>
       authGuard(mockRoute, mockState),
     );

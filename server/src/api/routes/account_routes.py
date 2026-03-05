@@ -63,13 +63,13 @@ def create_account(request: AccountSignup):
             lname=request.lname,
         )
 
-        # Generate verification token and create link
+        # Generate verification auth_token and create link
         # NOTE: In production, this would be done after saving to DB
         # For now, using a mock account_id for demonstration
         raw_token = service.generate_and_store_verification_token(account_id=1)
 
         # Create verification link
-        verification_link = f"{FRONTEND_URL}/verify-email?token={raw_token}"
+        verification_link = f"{FRONTEND_URL}/verify-email?auth_token={raw_token}"
 
         logger.info(f"Account created for {account.email}")
         logger.info(f"Verification link: {verification_link}")
@@ -89,13 +89,13 @@ def create_account(request: AccountSignup):
 @router.post("/login", response_model=Token)
 def login_account(request: LoginRequest):
     """
-    Authenticates a user and returns a JWT token.
+    Authenticates a user and returns a JWT auth_token.
 
     Args:
         form_data (OAuth2PasswordRequestForm): The user login credentials (username and password).
 
     Returns:
-        dict: A JSON object containing the access token and token type.
+        dict: A JSON object containing the access auth_token and auth_token type.
     """
     service = _get_service()
 
@@ -118,14 +118,24 @@ def get_account(
 
 
 @router.get("/verify-email", response_model=VerifyEmailResponse)
-def verify_email(token: str = Query(..., min_length=10)):
+def verify_email(
+    auth_token: str | None = Query(None, min_length=10),
+    token: str | None = Query(None, min_length=10),
+):
     """
-    Email verification endpoint: /accounts/verify-email?token=...
-    Verifies the token and marks the user as verified.
+    Email verification endpoint: /accounts/verify-email?auth_token=...
+    Supports legacy token query parameter for backwards compatibility.
     """
     service = _get_service()
     try:
-        account = service.verify_email_token(token)
+        verification_token = auth_token or token
+        if not verification_token:
+            return JSONResponse(
+                status_code=400,
+                content={"error_message": "No verification auth_token provided."},
+            )
+
+        account = service.verify_email_token(verification_token)
 
         logger.info(f"Email verified for account {account.email}")
 

@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -10,6 +11,7 @@ from src.config import CORS_ALLOWED_ORIGINS
 from src.api.errors.exception_handlers import (
     api_error_handler,
     app_error_handler,
+    request_validation_error_handler,
 )
 from src.api.routes.listing_routes import router as listing_router
 from src.api.routes.account_routes import router as account_router
@@ -62,6 +64,7 @@ def create_app() -> FastAPI:
     # exception handlers
     app.add_exception_handler(ApiError, api_error_handler)
     app.add_exception_handler(AppError, app_error_handler)
+    app.add_exception_handler(RequestValidationError, request_validation_error_handler)
 
     return app
 

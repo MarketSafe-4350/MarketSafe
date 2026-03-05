@@ -225,7 +225,7 @@ export class MainPageComponent
         }
       },
       error: () => {
-        // Keep token/id fallback label.
+        // Keep auth_token/id fallback label.
       },
     });
   }

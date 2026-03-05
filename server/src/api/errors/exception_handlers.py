@@ -1,4 +1,5 @@
 from fastapi import Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from src.api.errors import ApiError
@@ -42,4 +43,17 @@ async def app_error_handler(request: Request, error: AppError) -> JSONResponse:
     return JSONResponse(
         status_code=error.status_code,
         content=payload,
+    )
+
+
+async def request_validation_error_handler(
+    request: Request, error: RequestValidationError
+) -> JSONResponse:
+    """Global handler for FastAPI/Pydantic request validation errors."""
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error_message": "Request validation failed.",
+            "details": error.errors(),
+        },
     )

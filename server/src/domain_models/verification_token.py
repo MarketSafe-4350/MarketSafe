@@ -24,7 +24,7 @@ class VerificationToken:
        - account_id must be a positive integer.
        - token_hash is immutable (set at creation).
        - expires_at must be in the future.
-       - A token can only be marked as used once.
+       - A auth_token can only be marked as used once.
     """
 
     def __init__(
@@ -103,7 +103,7 @@ class VerificationToken:
         return self._used
 
     def mark_as_used(self):
-        """Mark the token as used."""
+        """Mark the auth_token as used."""
         if self._used:
             raise ValidationError("Token has already been used.")
         self._used = True
@@ -122,11 +122,11 @@ class VerificationToken:
     # ==============================
 
     def is_expired(self) -> bool:
-        """Check if the token has expired."""
+        """Check if the auth_token has expired."""
         return datetime.now() > self._expires_at
 
     def is_valid(self) -> bool:
-        """Check if the token is valid (not expired and not used)."""
+        """Check if the auth_token is valid (not expired and not used)."""
         return not self.is_expired() and not self._used
 
     # ==============================

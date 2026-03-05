@@ -49,7 +49,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     # add (INSERT) Tests
     # -------------------------
     def test_add_ShouldInsertTokenIntoDatabase(self) -> None:
-        """Should successfully insert a new token."""
+        """Should successfully insert a new auth_token."""
         token = VerificationToken(
             account_id=self.acc.id,
             token_hash="test-hash-123",
@@ -63,7 +63,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         self.assertEqual(result.token_hash, "test-hash-123")
 
     def test_add_ShouldAssignAutoIncrementID(self) -> None:
-        """Inserted token should have auto-assigned ID."""
+        """Inserted auth_token should have auto-assigned ID."""
         token1 = VerificationToken(
             account_id=self.acc.id,
             token_hash="hash-1",
@@ -86,7 +86,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     # get_by_hash (READ) Tests
     # -------------------------
     def test_get_by_hash_ShouldRetrieveTokenByHash(self) -> None:
-        """Should retrieve a token using its hash."""
+        """Should retrieve a auth_token using its hash."""
         token = VerificationToken(
             account_id=self.acc.id,
             token_hash="test-hash-123",
@@ -101,7 +101,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         self.assertEqual(retrieved.token_hash, "test-hash-123")
 
     def test_get_by_hash_NonexistentHash_ShouldReturnNone(self) -> None:
-        """Getting nonexistent token should return None."""
+        """Getting nonexistent auth_token should return None."""
         result = self.token_db.get_by_hash("nonexistent-hash")
         self.assertIsNone(result)
 
@@ -109,7 +109,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     # get_latest_by_account (READ) Tests
     # -------------------------
     def test_get_latest_by_account_ShouldReturnMostRecentToken(self) -> None:
-        """Should return the most recently created token for an account."""
+        """Should return the most recently created auth_token for an account."""
         # Create two tokens for the same account
         token1 = VerificationToken(
             account_id=self.acc.id,
@@ -139,7 +139,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     # mark_used (UPDATE) Tests
     # -------------------------
     def test_mark_used_ShouldUpdateTokenStatus(self) -> None:
-        """Marking token as used should update the database."""
+        """Marking auth_token as used should update the database."""
         token = VerificationToken(
             account_id=self.acc.id,
             token_hash="test-hash",
@@ -154,7 +154,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         self.assertIsNotNone(retrieved.used_at)
 
     def test_mark_used_NonexistentToken_ShouldRaiseTokenNotFoundError(self) -> None:
-        """Marking nonexistent token as used should raise error."""
+        """Marking nonexistent auth_token as used should raise error."""
         with self.assertRaises(TokenNotFoundError):
             self.token_db.mark_used(token_id=999)
 
@@ -215,11 +215,11 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
     # Full Workflow Tests
     # -------------------------
     def test_full_verification_workflow(self) -> None:
-        """Test the complete token lifecycle: create -> verify -> mark used."""
-        # Generate token pair
+        """Test the complete auth_token lifecycle: create -> verify -> mark used."""
+        # Generate auth_token pair
         raw_token, token_hash, expires_at = TokenGenerator.create_token_pair()
 
-        # Store token
+        # Store auth_token
         token = VerificationToken(
             account_id=self.acc.id,
             token_hash=token_hash,
@@ -227,7 +227,7 @@ class TestMySQLEmailVerificationTokenDB(unittest.TestCase):
         )
         inserted = self.token_db.add(token)
 
-        # Retrieve token
+        # Retrieve auth_token
         retrieved = self.token_db.get_by_hash(token_hash)
         self.assertIsNotNone(retrieved)
         self.assertFalse(retrieved.used)
