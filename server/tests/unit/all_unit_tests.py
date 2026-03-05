@@ -31,6 +31,7 @@ from tests.unit.email_verification import (
 )
 from tests.unit.db_utils import TestDBUtility
 from tests.unit.domain_models import TestDomainModels
+from tests.unit.config import TestConfig
 
 
 def load_tests(
@@ -56,6 +57,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLListingDB))
     suite.addTests(loader.loadTestsFromTestCase(TestDBUtility))
     suite.addTests(loader.loadTestsFromTestCase(TestDomainModels))
+    suite.addTests(loader.loadTestsFromTestCase(TestConfig))
     return suite
 
 
