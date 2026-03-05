@@ -5,8 +5,9 @@ import sys
 import types
 import unittest
 
-# src/__init__.py imports load_dotenv from python-dotenv; tests only need domain models.
-sys.modules.setdefault("dotenv", types.SimpleNamespace(load_dotenv=lambda *args, **kwargs: None))
+sys.modules.setdefault(
+    "dotenv", types.SimpleNamespace(load_dotenv=lambda *args, **kwargs: None)
+)
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 os.environ.setdefault("SECRET_KEY", "test-secret-key")
 
@@ -90,7 +91,9 @@ class TestDomainModels(unittest.TestCase):
             account.add_listing(None)
 
         with self.assertRaises(UnapprovedBehaviorError):
-            account.add_listing(Listing(2, "Title", "Desc", 5.0, listing_id=7, comments=[]))
+            account.add_listing(
+                Listing(2, "Title", "Desc", 5.0, listing_id=7, comments=[])
+            )
 
     def test_account_remove_listing_rejects_unknown_id(self):
         account = Account("user@example.com", "hash", "First", "Last", account_id=1)
@@ -99,7 +102,9 @@ class TestDomainModels(unittest.TestCase):
 
     def test_comment_properties_mutators_repr_and_mark_persisted(self):
         created = datetime(2026, 1, 1, 12, 0, 0)
-        comment = Comment(listing_id=5, author_id=7, body=" hello ", created_date=created)
+        comment = Comment(
+            listing_id=5, author_id=7, body=" hello ", created_date=created
+        )
 
         self.assertIsNone(comment.id)
         self.assertEqual(comment.listing_id, 5)
@@ -324,3 +329,41 @@ class TestDomainModels(unittest.TestCase):
             used=True,
         )
         self.assertFalse(used.is_valid())
+
+    def test_account_remove_listing_success_removes_when_present(self):
+        listing1 = Listing(1, "T1", "D1", 5.0, listing_id=11, comments=[])
+        listing2 = Listing(1, "T2", "D2", 6.0, listing_id=22, comments=[])
+
+        account = Account(
+            email="user@example.com",
+            password="hash",
+            fname="First",
+            lname="Last",
+            account_id=1,
+            listings=[listing1, listing2],
+        )
+
+        self.assertEqual([l.id for l in account.listings], [11, 22])
+
+        account.remove_listing(11)
+
+        self.assertEqual([l.id for l in account.listings], [22])
+
+    def test_account_remove_listing_invalid_or_missing_raises(self):
+        listing = Listing(1, "T", "D", 5.0, listing_id=11, comments=[])
+        account = Account(
+            email="user@example.com",
+            password="hash",
+            fname="First",
+            lname="Last",
+            account_id=1,
+            listings=[listing],
+        )
+
+        with self.assertRaises(ValidationError):
+            account.remove_listing(0)
+
+        with self.assertRaises(ValidationError) as ctx:
+            account.remove_listing(999)
+
+        self.assertIn("not found in this account", str(ctx.exception).lower())

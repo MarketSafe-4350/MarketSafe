@@ -54,19 +54,25 @@ class TestAccountTokenService(unittest.TestCase):
     # -------------------------
     # verify_email_token Tests
     # -------------------------
-    def test_verify_email_token_EmptyToken_ShouldRaiseEmailVerificationError(self) -> None:
+    def test_verify_email_token_EmptyToken_ShouldRaiseEmailVerificationError(
+        self,
+    ) -> None:
         """Attempting to verify empty auth_token should raise error."""
         with self.assertRaises(EmailVerificationError):
             self.service.verify_email_token("")
 
-    def test_verify_email_token_TokenNotFound_ShouldRaiseTokenNotFoundError(self) -> None:
+    def test_verify_email_token_TokenNotFound_ShouldRaiseTokenNotFoundError(
+        self,
+    ) -> None:
         """When auth_token hash doesn't exist in DB, should raise TokenNotFoundError."""
         self.token_db_mock.get_by_hash.return_value = None
 
         with self.assertRaises(TokenNotFoundError):
             self.service.verify_email_token("nonexistent-auth_token")
 
-    def test_verify_email_token_TokenAlreadyUsed_ShouldRaiseTokenAlreadyUsedError(self) -> None:
+    def test_verify_email_token_TokenAlreadyUsed_ShouldRaiseTokenAlreadyUsedError(
+        self,
+    ) -> None:
         """When auth_token is already marked used, should raise TokenAlreadyUsedError."""
         used_token = VerificationToken(
             account_id=1,
@@ -107,7 +113,7 @@ class TestAccountTokenService(unittest.TestCase):
         self.token_db_mock.get_by_hash.return_value = valid_token
 
         # Mock the account retrieval
-        with patch.object(self.service, 'get_account_by_userid') as mock_get_account:
+        with patch.object(self.service, "get_account_by_userid") as mock_get_account:
             mock_get_account.return_value = Account(
                 email="test@umanitoba.ca",
                 password="hashed",
@@ -138,7 +144,7 @@ class TestAccountTokenService(unittest.TestCase):
             lname="User",
         )
 
-        with patch.object(self.service, 'get_account_by_userid') as mock_get_account:
+        with patch.object(self.service, "get_account_by_userid") as mock_get_account:
             mock_get_account.return_value = test_account
 
             account = self.service.verify_email_token("test-auth_token")
@@ -156,7 +162,7 @@ class TestAccountTokenService(unittest.TestCase):
         )
         self.token_db_mock.get_by_hash.return_value = valid_token
 
-        with patch.object(self.service, 'get_account_by_userid') as mock_get_account:
+        with patch.object(self.service, "get_account_by_userid") as mock_get_account:
             mock_get_account.return_value = Account(
                 email="test@umanitoba.ca",
                 password="hashed",
