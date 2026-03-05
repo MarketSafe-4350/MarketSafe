@@ -166,15 +166,13 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertIn("location", errors)
         self.assertIn("image_url", errors)
 
-
         self.manager.create_listing.assert_not_called()
-
 
     def test_create_listing_title_none_raises_validation_error(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
             self.service.create_listing(
                 seller_id=456,
-                title=None, 
+                title=None,
                 description="Valid description",
                 price=10.0,
                 location="Valid location",
@@ -204,7 +202,6 @@ class TestListingServiceUnit(unittest.TestCase):
 
         self.manager.create_listing.assert_not_called()
 
-
     def test_create_listing_description_none_raises_validation_error(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
             self.service.create_listing(
@@ -227,7 +224,7 @@ class TestListingServiceUnit(unittest.TestCase):
             self.service.create_listing(
                 seller_id=456,
                 title="Valid title",
-                description="", 
+                description="",
                 price=10.0,
                 location="Valid location",
                 image_url=None,
@@ -238,7 +235,6 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertIn("Description cannot be empty.", errors["description"])
 
         self.manager.create_listing.assert_not_called()
-
 
     def test_create_listing_price_less_zero_raises_validation_error(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
@@ -293,7 +289,6 @@ class TestListingServiceUnit(unittest.TestCase):
 
         self.manager.create_listing.assert_not_called()
 
-
     def test_create_listing_location_empty_raises_validation_error(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
             self.service.create_listing(
@@ -301,7 +296,7 @@ class TestListingServiceUnit(unittest.TestCase):
                 title="A",
                 description="B",
                 price=10.0,
-                location="", 
+                location="",
                 image_url=None,
             )
 
@@ -328,7 +323,6 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertIn("Location cannot exceed 120 characters.", errors["location"])
 
         self.manager.create_listing.assert_not_called()
-
 
     def test_create_listing_image_url_valid(self) -> None:
         expected = Listing(
@@ -393,7 +387,7 @@ class TestListingServiceUnit(unittest.TestCase):
                 description="B",
                 price=10.0,
                 location="Winnipeg",
-                image_url="   ", 
+                image_url="   ",
             )
 
         errors = ctx.exception.details["errors"]
@@ -432,7 +426,6 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertEqual(result.title, "Test Listing")
         self.assertEqual(result.price, 10.0)
 
-
     def test_create_listing_image_url_invalid_domain_raises_validation_error(
         self,
     ) -> None:
@@ -453,7 +446,6 @@ class TestListingServiceUnit(unittest.TestCase):
 
         self.manager.create_listing.assert_not_called()
 
-
     def test_get_listing_by_id_delegates_and_returns_value(self):
         listing = MagicMock()
         self.manager.get_listing_by_id.return_value = listing
@@ -461,12 +453,10 @@ class TestListingServiceUnit(unittest.TestCase):
         self.manager.get_listing_by_id.assert_called_once_with(123)
         self.assertIs(result, listing)
 
-
     def test_search_listings_query_none_returns_empty_list(self):
         result = self.service.search_listings(None)
         self.assertEqual(result, [])
         self.manager.list_listings.assert_not_called()
-
 
     def test_validate_image_url_local_path_allowed(self):
         errors = {}
@@ -474,7 +464,7 @@ class TestListingServiceUnit(unittest.TestCase):
         result = self.service._validate_image_url(path, errors)
         self.assertEqual(result, path)
         self.assertEqual(errors, {})
-    
+
     # test delete listing
 
     def test_delete_listing_not_found_raises(self):
