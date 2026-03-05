@@ -5,17 +5,24 @@ from unittest.mock import MagicMock, patch
 
 from src.business_logic.managers.account import AccountManager, IAccountManager
 from src.db.account import AccountDB
+from src.db.listing import ListingDB
 from src.domain_models import Account
-from src.utils import AccountAlreadyExistsError, AccountNotFoundError
+from src.utils import (
+    AccountAlreadyExistsError,
+    AccountNotFoundError,
+    ConfigurationError,
+)
 
 
-class TestAccountManager(unittest.TestCase):
+class TestAccountManagerUnit(unittest.TestCase):
     def setUp(self) -> None:
         self.db: MagicMock = MagicMock(spec=AccountDB)
         self.manager = AccountManager(self.db)
 
     def test_init_calls_super(self):
-        with patch.object(IAccountManager, "__init__", return_value=None) as parent_init:
+        with patch.object(
+            IAccountManager, "__init__", return_value=None
+        ) as parent_init:
             AccountManager(self.db)
             parent_init.assert_called_once_with(self.db, None)
 
@@ -74,7 +81,9 @@ class TestAccountManager(unittest.TestCase):
         inserted_account: Account = self.db.add.call_args[0][0]
 
         # The manager creates a NEW Account object and strips names
-        self.assertIsNone(inserted_account.id)  # or inserted_account._id; depends on your Account API
+        self.assertIsNone(
+            inserted_account.id
+        )  # or inserted_account._id; depends on your Account API
 
         self.assertEqual(inserted_account.email, "new@example.com")
         self.assertEqual(inserted_account.password, "hashed")
@@ -156,3 +165,117 @@ class TestAccountManager(unittest.TestCase):
 
         out = self.manager.require_account_by_id(7)
         self.assertEqual(out, acc)
+
+    # -----------------------------
+    # get_account_with_listings
+    # -----------------------------
+    def test_get_account_with_listings_raises_when_listing_db_missing(self) -> None:
+        mgr = AccountManager(account_db=self.db, listing_db=None)
+
+        with self.assertRaises(ConfigurationError):
+            mgr.get_account_with_listings(1)
+
+    def test_get_account_with_listings_returns_none_when_account_missing(self) -> None:
+        listing_db = MagicMock(spec=ListingDB)
+        mgr = AccountManager(account_db=self.db, listing_db=listing_db)
+
+        self.db.get_by_id.return_value = None
+
+        out = mgr.get_account_with_listings(5)
+        self.assertIsNone(out)
+
+        self.db.get_by_id.assert_called_once_with(5)
+        listing_db.get_by_seller_id.assert_not_called()
+
+    def test_get_account_with_listings_attaches_listings_and_returns_account(
+        self,
+    ) -> None:
+        listing_db = MagicMock(spec=ListingDB)
+        mgr = AccountManager(account_db=self.db, listing_db=listing_db)
+
+        # account returned from account_db
+        acc = MagicMock(spec=Account)
+        acc.id = 7  # manager uses account.id later in other wrappers
+        self.db.get_by_id.return_value = acc
+
+        # listings returned from listing_db
+        l1 = MagicMock()
+        l2 = MagicMock()
+        listing_db.get_by_seller_id.return_value = [l1, l2]
+
+        out = mgr.get_account_with_listings(7)
+
+        self.assertIs(out, acc)
+        listing_db.get_by_seller_id.assert_called_once_with(7)
+
+        # ensure it attached via domain method
+        self.assertEqual(acc.add_listing.call_count, 2)
+        acc.add_listing.assert_any_call(l1)
+        acc.add_listing.assert_any_call(l2)
+
+    # -----------------------------
+    # get_account_with_listings_by_email
+    # -----------------------------
+    def test_get_account_with_listings_by_email_returns_none_when_email_not_found(
+        self,
+    ) -> None:
+        listing_db = MagicMock(spec=ListingDB)
+        mgr = AccountManager(account_db=self.db, listing_db=listing_db)
+
+        self.db.get_by_email.return_value = None
+
+        out = mgr.get_account_with_listings_by_email("TEST@EXAMPLE.COM")
+        self.assertIsNone(out)
+
+        # Should have normalized email and queried account_db
+        self.assertTrue(self.db.get_by_email.called)
+        listing_db.get_by_seller_id.assert_not_called()
+
+    def test_get_account_with_listings_by_email_delegates_when_found(self) -> None:
+        listing_db = MagicMock(spec=ListingDB)
+        mgr = AccountManager(account_db=self.db, listing_db=listing_db)
+
+        acc = MagicMock(spec=Account)
+        acc.id = 10
+        self.db.get_by_email.return_value = acc
+
+        with patch.object(mgr, "get_account_with_listings", return_value=acc) as gwl:
+            out = mgr.get_account_with_listings_by_email("test@example.com")
+
+        self.assertIs(out, acc)
+        gwl.assert_called_once_with(10)
+
+    # -----------------------------
+    # get_account_with_listings_for
+    # -----------------------------
+    def test_get_account_with_listings_for_raises_when_account_none(self) -> None:
+        listing_db = MagicMock(spec=ListingDB)
+        mgr = AccountManager(account_db=self.db, listing_db=listing_db)
+
+        with self.assertRaises(Exception):
+            mgr.get_account_with_listings_for(None)  # type: ignore[arg-type]
+
+    def test_get_account_with_listings_for_returns_none_when_account_unpersisted(
+        self,
+    ) -> None:
+        listing_db = MagicMock(spec=ListingDB)
+        mgr = AccountManager(account_db=self.db, listing_db=listing_db)
+
+        acc = MagicMock(spec=Account)
+        acc.id = None  # unpersisted
+
+        out = mgr.get_account_with_listings_for(acc)
+        self.assertIsNone(out)
+
+    def test_get_account_with_listings_for_delegates_when_account_has_id(self) -> None:
+        listing_db = MagicMock(spec=ListingDB)
+        mgr = AccountManager(account_db=self.db, listing_db=listing_db)
+
+        acc = MagicMock(spec=Account)
+        acc.id = 77
+
+        with patch.object(mgr, "get_account_with_listings", return_value=acc) as gwl:
+            out = mgr.get_account_with_listings_for(acc)
+
+        self.assertIs(out, acc)
+        gwl.assert_called_once_with(77)

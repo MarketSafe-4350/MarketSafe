@@ -74,12 +74,16 @@ jobs:
         run: python -m compileall -q src
 
       - name: Run unit tests
-        run: coverage run -m unittest -v ./tests/unit/all_unit_tests.py
+        run: coverage run -m tests.unit.all_unit_tests
+
+      - name: Generate coverage report unit tests (terminal)
+        run: |
+          coverage report -m
 
       - name: Run integration tests
         run: coverage run --append -m tests.integration.all_integration_tests
 
-      - name: Generate coverage report (terminal)
+      - name: Generate coverage report unit + integration tests (terminal)
         run: |
           coverage report -m
 

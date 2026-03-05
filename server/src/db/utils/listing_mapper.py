@@ -43,14 +43,17 @@ class ListingMapper:
             comments=None,  # loaded separately (join or another query)
         )
 
-    @staticmethod
-    def from_mapping_with_comments(
-        m: Mapping[str, Any],
-        comments: Optional[List[Comment]],
-    ) -> Listing:
-        """
-        Convenience helper if your DB layer loads listing + comments separately.
-        """
-        listing = ListingMapper.from_mapping(m)
-        listing.comments = comments  # runs your validation + shallow copy
-        return listing
+
+## Commented out for now since we are not currently using this,
+## Purpose of commenting: 100% code coverage
+# @staticmethod
+# def from_mapping_with_comments(
+#     m: Mapping[str, Any],
+#     comments: Optional[List[Comment]],
+# ) -> Listing:
+#     """
+#     Convenience helper if your DB layer loads listing + comments separately.
+#     """
+#     listing = ListingMapper.from_mapping(m)
+#     listing.comments = comments  # runs your validation + shallow copy
+#     return listing

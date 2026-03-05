@@ -13,3 +13,5 @@ server/.env
 .env
 
 .coverage
+
+server/uploads
