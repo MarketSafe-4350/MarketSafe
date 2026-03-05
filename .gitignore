@@ -1,6 +1,6 @@
 # general
 .vscode/
-
+.idea/
 # frontend angular
 .angular
 .cache
@@ -9,3 +9,9 @@
 __pycache__
 .venv/
 venv/
+server/.env
+.env
+
+.coverage
+
+server/uploads

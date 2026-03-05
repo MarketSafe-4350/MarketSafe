@@ -34,9 +34,11 @@ MarketSafe makes buying and selling easier, safer, and more convenient while sup
 
 ## Others
 
+- [How To Contribute](./docs/CONTRIBUTING.md)
 - [MarketSafe Wiki](https://github.com/MarketSafe-4350/MarketSafe/wiki)
   - Consist of design diagrams & meeting minutes.
 - [Project Proposal Presentation](https://www.canva.com/design/DAG-yAiONts/6fduYGLEpoFRmz69pPE8Bw/view?utm_content=DAG-yAiONts&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hfe609d86c8)
+- [ER Diagram](./docs/ERDiagram-MarketSafe.png)
 
 ## User Stories & Acceptance Criteria
 

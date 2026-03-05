@@ -1,0 +1,1 @@
+from .all_integration_tests import load_tests

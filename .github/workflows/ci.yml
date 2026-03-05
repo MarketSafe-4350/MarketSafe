@@ -2,17 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: ["dev", "main"]
-    paths:
-      - "frontend/**"
-      - "server/**"
-      - ".github/workflows/**"
+    branches: ["production", "main"]
   push:
-    branches: ["dev", "main"]
-    paths:
-      - "frontend/**"
-      - "server/**"
-      - ".github/workflows/**"
+    branches: ["production", "main"]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -40,15 +32,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Test (Angular unit tests)
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+
       - name: Build
         run: npm run build -- --configuration=production
-
-      # -----------------------------
-      # FUTURE: Frontend tests here
-      # Example:
-      # - name: Run frontend tests
-      #   run: npm test -- --watch=false
-      # -----------------------------
 
   backend-ci:
     name: Backend CI
@@ -56,6 +47,10 @@ jobs:
     defaults:
       run:
         working-directory: server
+
+    env:
+      APP_ENV: test
+      SECRET_KEY: ci-test_secret_key
 
     steps:
       - name: Checkout
@@ -72,14 +67,32 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install coverage
 
       # Quick syntax check
       - name: Compile check
         run: python -m compileall -q src
 
-      # -----------------------------
-      # FUTURE: Backend tests here
-      # Example:
-      # - name: Run backend tests
-      #   run: pytest
-      # -----------------------------
+      - name: Run unit tests
+        run: coverage run -m tests.unit.all_unit_tests
+
+      - name: Generate coverage report unit tests (terminal)
+        run: |
+          coverage report -m
+
+      - name: Run integration tests
+        run: coverage run --append -m tests.integration.all_integration_tests
+
+      - name: Generate coverage report unit + integration tests (terminal)
+        run: |
+          coverage report -m
+
+      - name: Generate coverage report (HTML)
+        run: |
+          coverage html
+
+      - name: Upload coverage HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-html
+          path: server/htmlcov

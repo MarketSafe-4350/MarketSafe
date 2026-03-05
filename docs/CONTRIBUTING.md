@@ -23,13 +23,13 @@ All contributors are expected to read and follow this guide.
 ## 2. Branch Naming Convention
 
 ```
-MSF-{ticket#}:short-description
+MSF-{ticket#}/short-description
 ```
 
 Example:
 
 ```
-MSF-231:add-login-endpoint
+MSF-231/add-login-endpoint
 ```
 
 ---

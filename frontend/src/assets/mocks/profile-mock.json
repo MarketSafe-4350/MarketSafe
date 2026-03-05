@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "email": "test@myumanitoba.ca",
+  "fname": "First",
+  "lname": "Last",
+  "verified": true,
+  "ratingAvg": 3.5,
+  "ratingCount": 271
+}

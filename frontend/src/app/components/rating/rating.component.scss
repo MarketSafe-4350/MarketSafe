@@ -1,0 +1,22 @@
+.rating-title {
+  margin: 0 0 8px 0;
+}
+
+.rating-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rating-value {
+  margin-left: 8px;
+  font-weight: 550;
+}
+
+.rating-count {
+  color: #777;
+}
+
+.rating-star {
+  color: #d19303;
+}

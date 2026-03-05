@@ -1,0 +1,50 @@
+<div class="layout">
+  <app-left-navigation
+    [listings]="sidebarListings"
+    [listingsCount]="sidebarListings.length"
+    (createListing)="onCreateListing($event)"
+    (deleteListing)="onDeleteListing($event)"
+  ></app-left-navigation>
+
+  <div class="right">
+    <app-header></app-header>
+
+    <main class="content">
+      <div class="page-body">
+        <mat-card class="signup-page" appearance="outlined">
+          <mat-card-header>
+            <div class="profile-header">
+              <div class="profile-info">
+                <div class="profile-name">{{fullName}}</div>
+                <div class="profile-email">{{account?.email ?? '-'}}</div>
+              </div>
+            </div>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content class="section">
+            <div class="section-header">
+              <h3 class="section-title">Account Details</h3>
+            </div>
+
+            <p><strong>First Name:</strong> {{ firstName }}</p>
+            <p><strong>Last Name:</strong> {{ lastName }}</p>
+            <p><strong>Email:</strong> {{ account?.email ?? '—' }}</p>
+          </mat-card-content>
+
+          <mat-divider></mat-divider>
+          <mat-card-content class="section">
+            <div class="section-header">
+              <h3 class="section-title">My Rating</h3>
+            </div>
+
+            <app-rating
+              [average]="ratingAvg"
+              [reviewCount]="ratingCount"
+            ></app-rating>
+          </mat-card-content>
+
+        </mat-card>
+      </div>
+    </main>
+  </div>
+</div>

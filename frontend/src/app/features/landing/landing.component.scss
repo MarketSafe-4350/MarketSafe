@@ -1,0 +1,49 @@
+.landing-container {
+    height: 100vh;
+    width: 100%;
+    background-color: #f4f5f7;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.landing-card {
+    background-color: #FFFFFF;
+    padding: 40px 32px;
+    width: 360px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.title {
+    margin-bottom: 32px;
+    color: #F0394F;
+    font-weight: 600;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.login-btn {
+    flex: 1;
+}
+
+.signup-btn {
+    flex: 1;
+    border-color: #F0394F;
+    color: #F0394F;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}

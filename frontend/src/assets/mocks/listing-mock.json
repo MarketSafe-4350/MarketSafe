@@ -1,0 +1,102 @@
+[
+  {
+    "id": 101,
+    "title": "Calculus Textbook",
+    "description": "Good condition.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 45,
+    "location": "University of Manitoba",
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "isSold": false
+  },
+  {
+    "id": 102,
+    "title": "Dell Monitor",
+    "description": "Works perfectly.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 120,
+    "location": "Fort Garry",
+    "createdAt": "2026-01-02T00:00:00.000Z",
+    "isSold": true
+  },
+  {
+    "id": 103,
+    "title": "Office Chair",
+    "description": "Comfortable and adjustable.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 80,
+    "location": "Fort Garry",
+    "createdAt": "2026-01-03T00:00:00.000Z",
+    "isSold": false
+  },
+  {
+    "id": 104,
+    "title": "Graphing Calculator",
+    "description": "Barely used.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 60,
+    "location": "University of Manitoba",
+    "createdAt": "2026-01-04T00:00:00.000Z",
+    "isSold": false
+  },
+  {
+    "id": 104,
+    "title": "Graphing Calculator",
+    "description": "Barely used.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 60,
+    "location": "University of Manitoba",
+    "createdAt": "2026-01-04T00:00:00.000Z",
+    "isSold": false
+  },
+  {
+    "id": 104,
+    "title": "Graphing Calculator",
+    "description": "Barely used.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 60,
+    "location": "University of Manitoba",
+    "createdAt": "2026-01-04T00:00:00.000Z",
+    "isSold": false
+  },
+  {
+    "id": 104,
+    "title": "Graphing Calculator",
+    "description": "Barely used.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 60,
+    "location": "University of Manitoba",
+    "createdAt": "2026-01-04T00:00:00.000Z",
+    "isSold": false
+  },
+  {
+    "id": 104,
+    "title": "Graphing Calculator",
+    "description": "Barely used.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 60,
+    "location": "University of Manitoba",
+    "createdAt": "2026-01-04T00:00:00.000Z",
+    "isSold": false
+  },
+  {
+    "id": 104,
+    "title": "Graphing Calculator",
+    "description": "Barely used.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 60,
+    "location": "University of Manitoba",
+    "createdAt": "2026-01-04T00:00:00.000Z",
+    "isSold": false
+  },
+  {
+    "id": 104,
+    "title": "Graphing Calculator",
+    "description": "Barely used.",
+    "imageUrl": "assets/images/computer.png",
+    "price": 60,
+    "location": "University of Manitoba",
+    "createdAt": "2026-01-04T00:00:00.000Z",
+    "isSold": false
+  }
+]

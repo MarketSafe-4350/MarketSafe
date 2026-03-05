@@ -1,0 +1,11 @@
+[run]
+source = src
+branch = True
+
+[report]
+omit =
+    */tests/*
+    */__init__.py
+show_missing = True
+skip_covered = False
+fail_under = 100

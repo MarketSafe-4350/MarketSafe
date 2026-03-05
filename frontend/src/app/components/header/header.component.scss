@@ -1,0 +1,132 @@
+/* scss created by genAI */
+
+.top-header {
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e53935;
+  letter-spacing: 0.5px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-right button[aria-label="Notifications"] {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f3f4f6;
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.header-right button[aria-label="Notifications"]:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.header-right button[aria-label="Notifications"] mat-icon {
+  font-size: 20px;
+  color: #444;
+}
+
+.user-profile-btn {
+  border-radius: 8px;
+  padding: 6px 10px;
+
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  transition: background 0.2s ease;
+}
+
+.user-profile-btn:hover {
+  background: #f3f4f6;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.user-dropdown-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f3f4f6;
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.user-dropdown-btn:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.user-dropdown-btn mat-icon {
+  font-size: 20px;
+  color: #444;
+}
+
+.header-right button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  .top-header {
+    padding: 0 16px;
+  }
+
+  .logo-text {
+    font-size: 1.1rem;
+  }
+
+  .user-profile-btn {
+    padding: 6px 8px;
+  }
+}

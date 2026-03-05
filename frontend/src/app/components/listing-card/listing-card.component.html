@@ -1,0 +1,40 @@
+<mat-card
+  class="listing-list-card"
+  [class.is-sold]="isSold"
+  appearance="outlined"
+>
+  @if (isSold) {
+    <div class="sold-badge">SOLD</div>
+  }
+  <div class="list-row">
+    <div class="thumbnail">
+      @if (imageUrl) {
+        <img [src]="imageUrl" [alt]="title" />
+      } @else {
+        <div class="thumbnail-placeholder" aria-hidden="true"></div>
+      }
+    </div>
+
+    <div class="list-content">
+      <div class="list-title">
+        {{ title }}
+      </div>
+
+      <div class="list-price">
+        {{ price }}
+      </div>
+
+      <div class="list-description">
+        {{ description }}
+      </div>
+
+      <div class="list-meta">
+        <span>{{ location }}</span>
+        <span class="dot">•</span>
+        <span>{{ createdAt }}</span>
+        <span class="dot">•</span>
+        <span class="comment-count">{{ commentCountLabel }}</span>
+      </div>
+    </div>
+  </div>
+</mat-card>
