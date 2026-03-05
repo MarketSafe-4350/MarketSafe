@@ -499,33 +499,6 @@ As a user, I want to be able to search through listing so I can quickly find spe
 - Code is reviewed and merged
 - Feature is tested and does not break existing functionality
 
-##### User Story: Filter by Tags
-
-As a user, I want to be able to filter listings through tags to narrow down results.
-
-- Priority: Medium
-- Estimate: 2 days
-
-###### Acceptance Criteria
-
-- AC1  
-  Given I am viewing marketplace listings
-  When I select one or more tags
-  Then only listings with the selected tags should be displayed
-
-- AC2  
-  Given I am viewing marketplace listings
-  When I remove a selected tag
-  Then the listings should update to reflect the change
-
-###### Definition of Done (DoD)
-
-- Users can filter listings by tags
-- Multiple tags can be applied and removed
-- Acceptance Criteria are met
-- Code is reviewed and merged
-- Feature is tested and does not break existing functionality
-
 ##### User Story: Sort Listings
 
 As a user, I want to be able to sort marketplace listings to customize the order of my listings view.
