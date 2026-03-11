@@ -163,3 +163,19 @@ class CommentError(DomainError):
 class CommentNotFoundError(CommentError):
     code: str = "COMMENT_NOT_FOUND"
     status_code: int = 404
+
+
+# -----------------------------
+# Rating-specific errors (domain layer friendly)
+# -----------------------------
+
+
+@dataclass
+class RatingError(DomainError):
+    code: str = "RATING_ERROR"
+    status_code: int = 400
+
+@dataclass
+class RatingNotFoundError(RatingError):
+    code: str = "RATING_NOT_FOUND"
+    status_code: int = 404
