@@ -115,46 +115,7 @@ class RatingDB(BaseRatingDB):
         """
         raise NotImplementedError
 
-    @abstractmethod
-    def get_by_listing_id(self, listing_id: int) -> Optional[Rating]:
-        """
-        Fetch the rating for a listing.
 
-        Expected behavior:
-        - Return Rating if one exists for the listing.
-        - Return None if the listing has no rating.
-        - Must NOT raise exception for "not found".
-        - Must raise exception if a database error occurs.
-
-        Constraints / notes:
-        - Because rating.listing_id is UNIQUE, this returns at most one row.
-
-        Raises:
-            ValidationError
-            DatabaseQueryError
-            DatabaseUnavailableError
-        """
-        raise NotImplementedError
-
-    @abstractmethod
-    def get_by_rater_id(self, rater_id: int) -> List[Rating]:
-        """
-        Fetch all ratings created by a given account.
-
-        Expected behavior:
-        - Return empty list if none exist.
-        - Must raise exception if a database error occurs.
-
-        Constraints / notes:
-        - Intended for account history/profile usage.
-        - Higher layers should enforce authorization when needed.
-
-        Raises:
-            ValidationError
-            DatabaseQueryError
-            DatabaseUnavailableError
-        """
-        raise NotImplementedError
 
     @abstractmethod
     def get_all(self) -> List[Rating]:
