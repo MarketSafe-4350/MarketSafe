@@ -83,6 +83,34 @@ class MySQLRatingDB(RatingDB):
                 details={"op": "get_sum_of_ratings_given_by_account_id", "table": "rating"},
             ) from e
 
+    @override
+    def get_sum_of_ratings_received_by_account_id(self, account_id: int) -> int:
+        """
+        Sum of ratings received by a seller across all their listings.
+        """
+
+        Validation.require_int(account_id, "account_id")
+
+        sql = text("""
+            SELECT COALESCE(SUM(r.transaction_rating), 0) AS total_rating_sum
+            FROM rating r
+            INNER JOIN listing l ON l.id = r.listing_id
+            WHERE l.seller_id = :account_id
+        """)
+
+        try:
+            with self._db.connect() as conn:
+                row = conn.execute(sql, {"account_id": account_id}).mappings().first()
+                return int(row["total_rating_sum"] or 0)
+
+        except SQLAlchemyError as e:
+            raise DatabaseQueryError(
+                message="Failed to fetch sum of ratings received by account.",
+                details={
+                    "op": "get_sum_of_ratings_received_by_account_id",
+                    "table": "rating"
+                },
+            ) from e
     # -----------------------------
     # CREATE
     # -----------------------------

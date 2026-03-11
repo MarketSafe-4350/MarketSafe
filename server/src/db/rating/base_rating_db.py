@@ -50,3 +50,29 @@ class BaseRatingDB(ABC):
         - 0 if the rater has not rated anything
         """
         raise NotImplementedError
+
+    @abstractmethod
+    def get_sum_of_ratings_received_by_account_id(self, account_id: int) -> int:
+        """
+        Return the total sum of ratings received by a seller.
+
+        The sum is calculated across all ratings associated with listings
+        posted by the given account.
+
+        IMPORTANT:
+        - Only listings that actually have ratings are considered.
+        - Listings without ratings are ignored.
+
+        Example:
+            Listing A rating = 5
+            Listing B rating = 4
+            Listing C has no rating
+
+            Result = 9
+
+        Expected behavior:
+        - Return the sum of transaction_rating values for the seller.
+        - Return 0 if the seller has no ratings.
+        - Raise exception on validation or database failure.
+        """
+        raise NotImplementedError
