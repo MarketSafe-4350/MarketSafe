@@ -11,7 +11,7 @@ sys.modules.setdefault(
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 os.environ.setdefault("SECRET_KEY", "test-secret-key")
 
-from src.domain_models import Account, Listing, Comment, VerificationToken
+from src.domain_models import Account, Listing, Comment, VerificationToken, Rating
 from src.utils import ValidationError, UnapprovedBehaviorError
 
 
@@ -367,3 +367,377 @@ class TestDomainModels(unittest.TestCase):
             account.remove_listing(999)
 
         self.assertIn("not found in this account", str(ctx.exception).lower())
+
+    def test_init_sets_fields(self) -> None:
+        rating = Rating(
+            listing_id=10,
+            rater_id=20,
+            transaction_rating=5,
+            rating_id=1,
+            created_at="2026-03-12"
+        )
+
+        self.assertEqual(rating.id, 1)
+        self.assertEqual(rating.listing_id, 10)
+        self.assertEqual(rating.rater_id, 20)
+        self.assertEqual(rating.transaction_rating, 5)
+        self.assertEqual(rating.created_at, "2026-03-12")
+
+        # -----------------------------
+        # mark_persisted
+        # -----------------------------
+
+    def test_mark_persisted_sets_id_when_not_already_set(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        rating.mark_persisted(99)
+
+        self.assertEqual(rating.id, 99)
+
+    def test_mark_persisted_raises_when_rating_id_is_none(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        with self.assertRaises(ValidationError):
+            rating.mark_persisted(None)
+
+    def test_mark_persisted_raises_when_id_already_assigned(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3, rating_id=10)
+
+        with self.assertRaises(UnapprovedBehaviorError):
+            rating.mark_persisted(20)
+
+        # -----------------------------
+        # listing_id setter
+        # -----------------------------
+
+    def test_listing_id_setter_updates_value(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        rating.listing_id = 50
+
+        self.assertEqual(rating.listing_id, 50)
+
+    def test_listing_id_setter_raises_when_not_int(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        with self.assertRaises(ValidationError):
+            rating.listing_id = "50"
+
+        # -----------------------------
+        # rater_id setter
+        # -----------------------------
+
+    def test_rater_id_setter_updates_value(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        rating.rater_id = 70
+
+        self.assertEqual(rating.rater_id, 70)
+
+    def test_rater_id_setter_raises_when_not_int(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        with self.assertRaises(ValidationError):
+            rating.rater_id = "70"
+
+        # -----------------------------
+        # transaction_rating setter
+        # -----------------------------
+
+    def test_transaction_rating_setter_updates_value(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        rating.transaction_rating = 5
+
+        self.assertEqual(rating.transaction_rating, 5)
+
+    def test_transaction_rating_setter_raises_when_below_range(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        with self.assertRaises(ValidationError):
+            rating.transaction_rating = 0
+
+    def test_transaction_rating_setter_raises_when_above_range(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        with self.assertRaises(ValidationError):
+            rating.transaction_rating = 6
+
+    def test_transaction_rating_setter_raises_when_not_int(self) -> None:
+        rating = Rating(listing_id=1, rater_id=2, transaction_rating=3)
+
+        with self.assertRaises(ValidationError):
+            rating.transaction_rating = "5"
+
+        # -----------------------------
+        # init validation path
+        # -----------------------------
+
+    def test_init_raises_when_transaction_rating_out_of_range(self) -> None:
+        with self.assertRaises(ValidationError):
+            Rating(listing_id=1, rater_id=2, transaction_rating=7)
+
+        # -----------------------------
+        # created_at property
+        # -----------------------------
+
+    def test_created_at_property_returns_value(self) -> None:
+        rating = Rating(
+            listing_id=1,
+            rater_id=2,
+            transaction_rating=4,
+            created_at="2026-03-12 10:00:00"
+        )
+
+        self.assertEqual(rating.created_at, "2026-03-12 10:00:00")
+
+        # -----------------------------
+        # repr
+        # -----------------------------
+
+    def test_repr_contains_fields(self) -> None:
+        rating = Rating(
+            listing_id=11,
+            rater_id=22,
+            transaction_rating=4,
+            rating_id=33,
+            created_at="2026-03-12"
+        )
+
+        out = repr(rating)
+
+        self.assertIn("Rating(", out)
+        self.assertIn("id=33", out)
+        self.assertIn("listing_id=11", out)
+        self.assertIn("rater_id=22", out)
+        self.assertIn("transaction_rating=4", out)
+        self.assertIn("created_at='2026-03-12'", out)
+
+    def test_mark_persisted_sets_id(self):
+        rating = Rating(1, 2, 3)
+        rating.mark_persisted(10)
+        self.assertEqual(rating.id, 10)
+
+    def test_mark_persisted_raises_when_none(self):
+        rating = Rating(1, 2, 3)
+        with self.assertRaises(ValidationError):
+            rating.mark_persisted(None)
+
+    def test_mark_persisted_raises_when_already_set(self):
+        rating = Rating(1, 2, 3, rating_id=5)
+        with self.assertRaises(UnapprovedBehaviorError):
+            rating.mark_persisted(10)
+
+    def test_listing_id_setter(self):
+        rating = Rating(1, 2, 3)
+        rating.listing_id = 9
+        self.assertEqual(rating.listing_id, 9)
+
+    def test_rater_id_setter(self):
+        rating = Rating(1, 2, 3)
+        rating.rater_id = 8
+        self.assertEqual(rating.rater_id, 8)
+
+    def test_transaction_rating_setter(self):
+        rating = Rating(1, 2, 3)
+        rating.transaction_rating = 5
+        self.assertEqual(rating.transaction_rating, 5)
+
+    def test_transaction_rating_out_of_range(self):
+        rating = Rating(1, 2, 3)
+        with self.assertRaises(ValidationError):
+            rating.transaction_rating = 0
+
+    def test_created_at_property(self):
+        rating = Rating(1, 2, 3, created_at="x")
+        self.assertEqual(rating.created_at, "x")
+
+    def test_repr(self):
+        rating = Rating(1, 2, 3, rating_id=4, created_at="x")
+        self.assertIn("Rating(", repr(rating))
+
+    def test_listing_rating_property_returns_none_by_default(self):
+        listing = Listing(1, "t", "d", 1.0, comments=[])
+        self.assertIsNone(listing.rating)
+
+    def test_listing_rating_setter_accepts_none(self):
+        listing = Listing(1, "t", "d", 1.0, comments=[])
+        listing.rating = None
+        self.assertIsNone(listing.rating)
+
+    def test_listing_rating_setter_raises_when_listing_not_sold(self):
+        rating = Rating(listing_id=10, rater_id=2, transaction_rating=5)
+        listing = Listing(1, "t", "d", 1.0, listing_id=10, comments=[])
+
+        with self.assertRaises(ValidationError):
+            listing.rating = rating
+
+    def test_listing_rating_setter_accepts_when_sold_and_matching_listing_id(self):
+        rating = Rating(listing_id=10, rater_id=2, transaction_rating=5)
+        listing = Listing(
+            1, "t", "d", 1.0,
+            listing_id=10,
+            is_sold=True,
+            sold_to_id=2,
+            comments=[]
+        )
+
+        listing.rating = rating
+
+        self.assertIs(listing.rating, rating)
+
+    def test_listing_rating_setter_raises_when_rating_listing_id_mismatch(self):
+        rating = Rating(listing_id=999, rater_id=2, transaction_rating=5)
+        listing = Listing(
+            1, "t", "d", 1.0,
+            listing_id=10,
+            is_sold=True,
+            sold_to_id=2,
+            comments=[]
+        )
+
+        with self.assertRaises(ValidationError):
+            listing.rating = rating
+
+    def test_listing_add_rating_success(self):
+        rating = Rating(listing_id=10, rater_id=2, transaction_rating=5)
+        listing = Listing(
+            1, "t", "d", 1.0,
+            listing_id=10,
+            is_sold=True,
+            sold_to_id=2,
+            comments=[]
+        )
+
+        listing.add_rating(rating)
+
+        self.assertIs(listing.rating, rating)
+
+    def test_listing_add_rating_raises_when_none(self):
+        listing = Listing(
+            1, "t", "d", 1.0,
+            listing_id=10,
+            is_sold=True,
+            sold_to_id=2,
+            comments=[]
+        )
+
+        with self.assertRaises(ValidationError):
+            listing.add_rating(None)
+
+    def test_listing_add_rating_raises_when_already_exists(self):
+        rating1 = Rating(listing_id=10, rater_id=2, transaction_rating=5)
+        rating2 = Rating(listing_id=10, rater_id=2, transaction_rating=4)
+        listing = Listing(
+            1, "t", "d", 1.0,
+            listing_id=10,
+            is_sold=True,
+            sold_to_id=2,
+            comments=[]
+        )
+
+        listing.add_rating(rating1)
+
+        with self.assertRaises(UnapprovedBehaviorError):
+            listing.add_rating(rating2)
+
+    def test_listing_remove_rating_clears_rating(self):
+        rating = Rating(listing_id=10, rater_id=2, transaction_rating=5)
+        listing = Listing(
+            1, "t", "d", 1.0,
+            listing_id=10,
+            is_sold=True,
+            sold_to_id=2,
+            comments=[]
+        )
+
+        listing.add_rating(rating)
+        self.assertIsNotNone(listing.rating)
+
+        listing.remove_rating()
+
+        self.assertIsNone(listing.rating)
+
+    def test_listing_mark_persisted_rechecks_rating_invariants(self):
+        rating = Rating(listing_id=999, rater_id=2, transaction_rating=5)
+        listing = Listing(
+            1, "t", "d", 1.0,
+            is_sold=True,
+            sold_to_id=2,
+            rating=rating,
+            comments=[]
+        )
+
+        with self.assertRaises(ValidationError):
+            listing.mark_persisted(10)
+
+    def test_account_rating_fields_init_getters_and_setters(self):
+        account = Account(
+            email="user@example.com",
+            password="hash",
+            fname="First",
+            lname="Last",
+            average_rating_received=4.5,
+            sum_of_ratings_received=7,
+        )
+
+        self.assertEqual(account.average_rating_received, 4.5)
+        self.assertEqual(account.sum_of_ratings_received, 7)
+
+        account.average_rating_received = 3.8
+        account.sum_of_ratings_received = 9
+
+        self.assertEqual(account.average_rating_received, 3.8)
+        self.assertEqual(account.sum_of_ratings_received, 9)
+
+    def test_account_average_rating_received_accepts_none(self):
+        account = Account(
+            email="user@example.com",
+            password="hash",
+            fname="First",
+            lname="Last",
+        )
+
+        account.average_rating_received = None
+        self.assertIsNone(account.average_rating_received)
+
+    def test_account_average_rating_received_raises_when_negative(self):
+        account = Account(
+            email="user@example.com",
+            password="hash",
+            fname="First",
+            lname="Last",
+        )
+
+        with self.assertRaises(ValidationError):
+            account.average_rating_received = -1
+
+    def test_account_sum_of_ratings_received_raises_when_negative(self):
+        account = Account(
+            email="user@example.com",
+            password="hash",
+            fname="First",
+            lname="Last",
+        )
+
+        with self.assertRaises(ValidationError):
+            account.sum_of_ratings_received = -1
+
+    def test_account_init_rejects_invalid_rating_fields(self):
+        with self.assertRaises(ValidationError):
+            Account(
+                email="user@example.com",
+                password="hash",
+                fname="First",
+                lname="Last",
+                average_rating_received=-1,
+            )
+
+        with self.assertRaises(ValidationError):
+            Account(
+                email="user@example.com",
+                password="hash",
+                fname="First",
+                lname="Last",
+                sum_of_ratings_received=-1,
+            )

@@ -1,1 +1,2 @@
 from .test_rating_manager_contract_abc import TestRatingManagerABC
+from .test_listing_manager_rating_paths import TestListingManagerRatingPathsUnit

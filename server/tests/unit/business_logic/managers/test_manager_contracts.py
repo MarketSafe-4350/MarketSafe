@@ -189,6 +189,17 @@ class TestBusinessManagerContracts(unittest.TestCase):
         with self.assertRaises(NotImplementedError):
             mgr.get_account_with_listings(1)
 
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_listings_by_email("a@b.com")
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_listings_for(account=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.fill_account_rating_values(account=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_rating_values_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_rating_values_by_email("a@b.com")
+
     # -------------------------
     # ICommentManager
     # -------------------------
@@ -259,3 +270,37 @@ class TestBusinessManagerContracts(unittest.TestCase):
             mgr.update_listing_price(listing_id=1, price=99.99)
         with self.assertRaises(NotImplementedError):
             mgr.delete_listing(1)
+
+        with self.assertRaises(NotImplementedError):
+            mgr.fill_listing_rating_value(listing=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_listing_with_rating_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_listing_with_comments_and_rating(1)
+
+    def test_account_manager_rating_and_listing_extension_methods_raise_not_implemented(self):
+        mgr = AccountManagerContractStub(account_db=DummyAccountDB())
+
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_listings_by_email("a@b.com")
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_listings_for(account=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.fill_account_rating_values(account=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_rating_values_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_rating_values_by_email("a@b.com")
+
+    def test_listing_manager_rating_extension_methods_raise_not_implemented(self):
+        mgr = ListingManagerContractStub(
+            listing_db=DummyListingDB(),
+            comment_db=DummyCommentDB(),
+        )
+
+        with self.assertRaises(NotImplementedError):
+            mgr.fill_listing_rating_value(listing=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_listing_with_rating_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_listing_with_comments_and_rating(1)
