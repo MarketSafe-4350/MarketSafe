@@ -1,0 +1,1 @@
+from .test_mysql_rating_db import TestMySQLRatingDB
