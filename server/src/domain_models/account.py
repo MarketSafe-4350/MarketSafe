@@ -51,6 +51,12 @@ class Account:
             verified: bool = False,
             listings: Optional[List[Listing]] = None,
 
+            average_rating_received: Optional[float] = None,
+            sum_of_ratings_received: int = 0,
+
+
+
+
     ):
         # Internal state (protected by convention)
         self._id = account_id
@@ -62,6 +68,8 @@ class Account:
 
         self._listings: List[Listing] = list(listings) if listings is not None else []
 
+        self._average_rating_received = Validation.rating_average(average_rating_received)
+        self._sum_of_ratings_received = Validation.rating_sum(sum_of_ratings_received)
     # ==============================
     # ID (read-only, may be None before DB insert)
     # ==============================
@@ -141,6 +149,34 @@ class Account:
         if value is None:
             raise ValidationError("verified cannot be None")
         self._verified = value
+
+    # ==============================
+    # SUM OF RATINGS RECEIVED
+    # ==============================
+
+    @property
+    def sum_of_ratings_received(self) -> int:
+        return self._sum_of_ratings_received
+
+    @sum_of_ratings_received.setter
+    def sum_of_ratings_received(self, value: int) -> None:
+        self._sum_of_ratings_received = Validation.rating_sum(value)
+
+
+
+
+
+    # ==============================
+    # AVERAGE RATING RECEIVED
+    # ==============================
+
+    @property
+    def average_rating_received(self) -> float | None:
+        return self._average_rating_received
+
+    @average_rating_received.setter
+    def average_rating_received(self, value: float | None) -> None:
+        self._average_rating_received = Validation.rating_average(value)
 
     # ==============================
     # LISTINGS (owned by this account)
