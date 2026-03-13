@@ -1,0 +1,14 @@
+[cosmic-ray]
+module-path = [
+        "src/auth",
+        "src/business_logic/managers/account",
+        "src/business_logic/services/account_service.py",
+        "src/db/account",
+        "src/domain_models/account.py",
+    ]
+timeout = 60.0
+excluded-modules = []
+test-command = "python -m tests.unit.all_unit_tests"
+
+[cosmic-ray.distributor]
+name = "local"
