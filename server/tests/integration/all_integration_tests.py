@@ -28,7 +28,7 @@ from tests.integration.comment import (
     TestCommentManagerIntegration,
     TestCommentServiceIntegration,
 )
-from tests.integration.rating import TestMySQLRatingDB
+from tests.integration.rating import TestMySQLRatingDB, TestRatingManagerIntegration
 
 
 def load_tests(
@@ -51,6 +51,7 @@ def load_tests(
     )
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLEmailVerificationTokenDB))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLRatingDB))
+    suite.addTests(loader.loadTestsFromTestCase(TestRatingManagerIntegration))
 
     return suite
 
