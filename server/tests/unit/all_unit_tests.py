@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 
+from tests.unit.business_logic.managers import TestRatingManagerABC
 from tests.unit.db.rating import TestBaseRatingDBABC, TestRatingDBABC
 from tests.unit.test_main import TestMainUnit
 from tests.unit.api import (
@@ -78,6 +79,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestMainUnit))
     suite.addTests(loader.loadTestsFromTestCase(TestBaseRatingDBABC))
     suite.addTests(loader.loadTestsFromTestCase(TestRatingDBABC))
+    suite.addTests(loader.loadTestsFromTestCase(TestRatingManagerABC))
     return suite
 
 

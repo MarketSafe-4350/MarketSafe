@@ -1,0 +1,1 @@
+from .test_rating_manager_contract_abc import TestRatingManagerABC
