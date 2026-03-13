@@ -158,3 +158,33 @@ class TestValidation(unittest.TestCase):
     def test_require_not_none_raises_when_none(self) -> None:
         with self.assertRaises(ValidationError):
             Validation.require_not_none(None, "obj")
+
+    # -----------------------------
+    # rating_average
+    # -----------------------------
+    def test_rating_average_returns_none_when_none(self) -> None:
+        out = Validation.rating_average(None)
+        self.assertIsNone(out)
+
+    def test_rating_average_accepts_float(self) -> None:
+        out = Validation.rating_average(4.5)
+        self.assertEqual(out, 4.5)
+
+    def test_rating_average_raises_when_not_number(self) -> None:
+        with self.assertRaises(ValidationError):
+            Validation.rating_average("bad")
+
+    def test_rating_average_raises_when_negative(self) -> None:
+        with self.assertRaises(ValidationError):
+            Validation.rating_average(-1.0)
+
+    # -----------------------------
+    # rating_sum
+    # -----------------------------
+    def test_rating_sum_returns_value_when_valid(self) -> None:
+        out = Validation.rating_sum(5)
+        self.assertEqual(out, 5)
+
+    def test_rating_sum_raises_when_negative(self) -> None:
+        with self.assertRaises(ValidationError):
+            Validation.rating_sum(-1)
