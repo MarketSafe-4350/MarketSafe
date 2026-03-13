@@ -24,7 +24,7 @@ class TestAccountManagerUnit(unittest.TestCase):
             IAccountManager, "__init__", return_value=None
         ) as parent_init:
             AccountManager(self.db)
-            parent_init.assert_called_once_with(self.db, None)
+            parent_init.assert_called_once_with(self.db, None, None)
 
     def _account(self, *, email: str = "test@example.com") -> Account:
         return Account(

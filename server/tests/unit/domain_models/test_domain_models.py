@@ -210,7 +210,7 @@ class TestDomainModels(unittest.TestCase):
         listing = Listing(1, "t", "d", 1.0, comments=[])
 
         listing.comments = None
-        self.assertIsNone(listing.comments)
+        self.assertEqual(listing.comments, [])
 
         with self.assertRaises(ValidationError):
             listing.comments = "not-a-list"
