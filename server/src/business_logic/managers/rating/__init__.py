@@ -1,0 +1,1 @@
+from .abstract_rating_manager import IRatingManager
