@@ -1,1 +1,2 @@
 from .abstract_rating_manager import IRatingManager
+from .rating_manager import RatingManager
