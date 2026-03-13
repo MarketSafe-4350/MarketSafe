@@ -30,6 +30,6 @@ for module in modules:
     ], check=True)
 
     subprocess.run([
-        "cosmic-ray", "report",
+        "cosmic-ray", "dump",
         session
     ])
