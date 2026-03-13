@@ -206,4 +206,3 @@ class MySQLAccountDB(AccountDB):
                 message="Failed to delete account.",
                 details={"op": "remove", "table": "account"},
             ) from e
-
