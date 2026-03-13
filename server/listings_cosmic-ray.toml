@@ -1,7 +1,8 @@
 [cosmic-ray]
 module-path = [
-
-
+        "src/api/converter/listing_converter.py",
+        "src/business_logic/managers/listing/listing_manager.py",
+        "src/business_logic/services/listing_service.py",
     ]
 timeout = 60.0
 excluded-modules = []

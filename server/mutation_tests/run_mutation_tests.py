@@ -6,9 +6,9 @@ from pathlib import Path
 os.chdir(Path(__file__).resolve().parents[1])
 
 features = [
-    "account_authentication_cosmic-ray.toml",
+    # "account_authentication_cosmic-ray.toml",
     # "listings_cosmic-ray.toml",
-    # "search_cosmic-ray.toml",
+    "search_cosmic-ray.toml",
 ]
 
 # Create reports directory
@@ -75,7 +75,8 @@ for feature in features:
     print(f"HTML report saved to: {html_report}")
 
 
-
+# "src/db/listing/listing_db.py",
+# "src/domain_models/listing.py",
 
 
 

@@ -1,9 +1,9 @@
 [cosmic-ray]
 module-path = [
-        "src/auth",
-        "src/business_logic/managers/account",
+        "src/auth/jwt.py",
+        "src/business_logic/managers/account/account_manager.py",
         "src/business_logic/services/account_service.py",
-        "src/db/account",
+        "src/db/account/account_db.py",
         "src/domain_models/account.py",
     ]
 timeout = 60.0
