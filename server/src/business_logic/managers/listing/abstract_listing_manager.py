@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Protocol
+from typing import List, Optional
 
 from src.db.listing import ListingDB
 from src.db.comment import CommentDB
+from src.db.rating import BaseRatingDB
 from src.domain_models import Listing, Account
 from src.utils import Validation
+
 
 class IListingManager(ABC):
     """
@@ -14,34 +16,32 @@ class IListingManager(ABC):
 
     Responsibilities:
         - Contains business logic and orchestration.
-        - Calls persistence layer (ListingDB, CommentDB) to read/write data.
-        - Combines/aggregates domain objects when needed (e.g., listing + comments).
+        - Calls persistence layer (ListingDB, CommentDB, BaseRatingDB) to read/write data.
+        - Combines/aggregates domain objects when needed
+          (e.g., listing + comments, listing + rating).
         - Decides which domain errors to raise (404/409/422/etc.).
         - Does NOT write SQL.
 
     Dependency contract:
-        - Implementations are expected to be constructed with:
-            - listing_db: ListingDB
-            - comment_db: CommentDB  (not implemented yet)
-        - comment_db is required for "get_listing_with_comments" orchestration.
-
-    CommentDB expectation (planned interface):
-        - comment_db.get_for_listing(listing_id: int) -> list[Comment]
-            Returns comments for a listing (empty list if none).
-            Raises DatabaseUnavailableError / DatabaseQueryError on DB failures.
-            May raise ValidationError if listing_id invalid.
-
-    Dependency contract:
         - listing_db: ListingDB (required)
-        - comment_db: CommentDB (required for orchestration)
+        - comment_db: CommentDB (required for comment orchestration)
+        - rating_db: BaseRatingDB (optional, used for rating enrichment)
     """
 
-    def __init__(self, listing_db: ListingDB, comment_db: CommentDB) -> None:
+    def __init__(
+            self,
+            listing_db: ListingDB,
+            comment_db: CommentDB,
+            rating_db: Optional[BaseRatingDB] = None,
+    ) -> None:
         Validation.require_not_none(listing_db, "listing_db")
         Validation.require_not_none(comment_db, "comment_db")
+
         self._listing_db = listing_db
         self._comment_db = comment_db
 
+        # Optional dependency (used only for rating-related operations)
+        self._rating_db = rating_db
 
     # --------------------------------------------------
     # CREATE
@@ -58,6 +58,8 @@ class IListingManager(ABC):
             - Enforce any listing creation business rules (if applicable).
             - Persist the listing using ListingDB.add().
             - Return the created Listing with generated database ID.
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
 
         RETURNS:
             Listing
@@ -82,6 +84,8 @@ class IListingManager(ABC):
             - Return Listing if it exists.
             - Return None if not found.
             - Must NOT raise ListingNotFoundError for not found (reads are optional).
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
 
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_by_id(listing_id)
@@ -104,6 +108,9 @@ class IListingManager(ABC):
         EXPECTED BEHAVIOR:
             - Return list of listings (empty if none).
             - Never return None.
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
 
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_all()
@@ -124,6 +131,9 @@ class IListingManager(ABC):
 
         EXPECTED BEHAVIOR:
             - Return list (empty if none).
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
 
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_unsold()
@@ -145,6 +155,9 @@ class IListingManager(ABC):
         EXPECTED BEHAVIOR:
             - Return list (empty if none).
             - Validate limit/offset if manager chooses to enforce bounds.
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
 
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_recent_unsold(limit, offset)
@@ -164,6 +177,11 @@ class IListingManager(ABC):
         PURPOSE:
             Filter unsold listings by location.
 
+        EXPECTED BEHAVIOR:
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
+
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_unsold_by_location(location)
 
@@ -178,6 +196,11 @@ class IListingManager(ABC):
         """
         PURPOSE:
             Filter unsold listings by max price.
+
+        EXPECTED BEHAVIOR:
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
 
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_unsold_by_max_price(max_price)
@@ -196,6 +219,11 @@ class IListingManager(ABC):
         PURPOSE:
             Filter unsold listings by location and max price.
 
+        EXPECTED BEHAVIOR:
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
+
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_unsold_by_location_and_max_price(location, max_price)
 
@@ -213,6 +241,11 @@ class IListingManager(ABC):
         PURPOSE:
             Find unsold listings by title keyword (LIKE).
 
+        EXPECTED BEHAVIOR:
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
+
         IMPLEMENTATION NOTES:
             - Calls listing_db.find_unsold_by_title_keyword(keyword, limit, offset)
 
@@ -228,6 +261,11 @@ class IListingManager(ABC):
         PURPOSE:
             List all listings for a seller.
 
+        EXPECTED BEHAVIOR:
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
+
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_by_seller_id(seller_id)
 
@@ -242,6 +280,11 @@ class IListingManager(ABC):
         """
         PURPOSE:
             List all listings purchased by a buyer (sold_to_id).
+
+        EXPECTED BEHAVIOR:
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
+              for each returned listing.
 
         IMPLEMENTATION NOTES:
             - Calls listing_db.get_by_buyer_id(buyer_id)
@@ -268,6 +311,8 @@ class IListingManager(ABC):
             - Fetch comments using comment_db.get_by_listing_id(listing_id).
             - Attach comments:
                   listing.comments = comments
+            - If rating_db is available, implementation may also populate:
+                  listing.rating
             - Return the listing.
 
         WHY THIS IS IN THE MANAGER:
@@ -277,7 +322,6 @@ class IListingManager(ABC):
 
         DEPENDENCIES:
             - Requires comment_db to be provided to the manager implementation.
-            - comment_db is not implemented yet, but this interface documents the expectation.
 
         RETURNS:
             Listing | None
@@ -285,6 +329,77 @@ class IListingManager(ABC):
         RAISES (typical):
             - ValidationError: invalid listing_id
             - DatabaseUnavailableError / DatabaseQueryError: DB failures from listing_db/comment_db
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def fill_listing_rating_value(self, listing: Listing) -> Listing:
+        """
+        PURPOSE:
+            Populate rating on an existing Listing instance.
+
+        EXPECTED BEHAVIOR:
+            - Validate the listing object.
+            - If listing is not persisted (id is None), return it unchanged.
+            - Populate:
+                - listing.rating
+              using BaseRatingDB.
+            - Return the same Listing instance after enrichment.
+
+        RETURNS:
+            Listing
+
+        RAISES:
+            - ValidationError
+            - ConfigurationError (if BaseRatingDB not provided)
+            - DatabaseUnavailableError / DatabaseQueryError
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_listing_with_rating_by_id(self, listing_id: int) -> Optional[Listing]:
+        """
+        PURPOSE:
+            Fetch a listing by ID and populate its rating.
+
+        EXPECTED BEHAVIOR:
+            - Validate listing_id.
+            - If listing does not exist -> return None.
+            - Populate:
+                - listing.rating
+              using BaseRatingDB.
+
+        RETURNS:
+            Listing | None
+
+        RAISES:
+            - ValidationError
+            - ConfigurationError (if BaseRatingDB not provided)
+            - DatabaseUnavailableError / DatabaseQueryError
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_listing_with_comments_and_rating(self, listing_id: int) -> Optional[Listing]:
+        """
+        PURPOSE:
+            Fetch a listing and populate both comments and rating.
+
+        EXPECTED BEHAVIOR:
+            - Validate listing_id.
+            - If listing does not exist -> return None.
+            - Populate:
+                - listing.comments
+                - listing.rating
+              using CommentDB and BaseRatingDB.
+
+        RETURNS:
+            Listing | None
+
+        RAISES:
+            - ValidationError
+            - ConfigurationError (if BaseRatingDB not provided)
+            - DatabaseUnavailableError / DatabaseQueryError
         """
         raise NotImplementedError
 
@@ -302,6 +417,8 @@ class IListingManager(ABC):
             - Requires listing.id to be present.
             - Calls listing_db.update(listing).
             - Raises ListingNotFoundError if listing does not exist.
+            - If rating_db is available, implementation may also populate:
+                - listing.rating
 
         RETURNS:
             Updated Listing (re-read)
@@ -325,12 +442,12 @@ class IListingManager(ABC):
              - Orchestrates sold state update.
              - Calls listing_db.set_sold(listing_id, True, buyer_id).
 
-        Business Rules:
-         - Actor must be the seller.
-         - Listing must be persisted.
-         - Buyer must be persisted.
-         - Seller cannot buy their own listing.
-         - Listing must not already be sold.
+         Business Rules:
+             - Actor must be the seller.
+             - Listing must be persisted.
+             - Buyer must be persisted.
+             - Seller cannot buy their own listing.
+             - Listing must not already be sold.
 
          RAISES (typical):
              - ValidationError

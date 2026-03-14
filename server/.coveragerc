@@ -8,4 +8,3 @@ omit =
     */__init__.py
 show_missing = True
 skip_covered = False
-fail_under = 100

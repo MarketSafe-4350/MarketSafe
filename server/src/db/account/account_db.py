@@ -140,4 +140,3 @@ class AccountDB(ABC):
         - Must raise exception for database errors.
         """
         raise NotImplementedError
-

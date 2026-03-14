@@ -1,0 +1,2 @@
+from .test_mysql_rating_db import TestMySQLRatingDB
+from .test_rating_manager_integration import TestRatingManagerIntegration
