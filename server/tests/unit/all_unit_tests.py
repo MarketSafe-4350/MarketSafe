@@ -2,10 +2,18 @@ from __future__ import annotations
 
 import unittest
 
-from tests.unit.business_logic.managers import TestRatingManagerABC, TestListingManagerRatingPathsUnit, \
-    TestRatingManagerUnit
-from tests.unit.db.rating import TestBaseRatingDBABC, TestRatingDBABC, TestMySQLRatingDBUnit, \
-    TestMySQLRatingDBEdgeCases, TestRatingMapper
+from tests.unit.business_logic.managers import (
+    TestRatingManagerABC,
+    TestListingManagerRatingPathsUnit,
+    TestRatingManagerUnit,
+)
+from tests.unit.db.rating import (
+    TestBaseRatingDBABC,
+    TestRatingDBABC,
+    TestMySQLRatingDBUnit,
+    TestMySQLRatingDBEdgeCases,
+    TestRatingMapper,
+)
 from tests.unit.test_main import TestMainUnit
 from tests.unit.api import (
     TestAPIDependencies,
@@ -40,7 +48,14 @@ from tests.unit.db import (
     TestDBUtility,
     TestCommentMapper,
 )
-from tests.unit.domain_models import TestDomainModels
+from tests.unit.domain_models import (
+    TestAccount,
+    TestComment,
+    TestRating,
+    TestVerificationToken,
+    TestListing,
+    TestOffer,
+)
 from tests.unit.utils import TestValidation, TestTokenGenerator
 
 
@@ -69,7 +84,6 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestAPIDependencies))
     suite.addTests(loader.loadTestsFromTestCase(TestAPIError))
     suite.addTests(loader.loadTestsFromTestCase(TestListingRoutes))
-    suite.addTests(loader.loadTestsFromTestCase(TestDomainModels))
     suite.addTests(loader.loadTestsFromTestCase(TestConfig))
     suite.addTests(loader.loadTestsFromTestCase(TestValidation))
     suite.addTests(loader.loadTestsFromTestCase(TestCommentConverter))
@@ -87,6 +101,12 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestRatingManagerUnit))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLRatingDBEdgeCases))
     suite.addTests(loader.loadTestsFromTestCase(TestRatingMapper))
+    suite.addTests(loader.loadTestsFromTestCase(TestAccount))
+    suite.addTests(loader.loadTestsFromTestCase(TestComment))
+    suite.addTests(loader.loadTestsFromTestCase(TestRating))
+    suite.addTests(loader.loadTestsFromTestCase(TestVerificationToken))
+    suite.addTests(loader.loadTestsFromTestCase(TestListing))
+    suite.addTests(loader.loadTestsFromTestCase(TestOffer))
     return suite
 
 
