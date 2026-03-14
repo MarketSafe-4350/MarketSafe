@@ -3,6 +3,8 @@ from __future__ import annotations
 import io
 import unittest
 import tempfile
+from fastapi import UploadFile
+from io import BytesIO
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -47,6 +49,37 @@ class TestListingRoutes(unittest.TestCase):
             self.assertTrue(path.exists())
             self.assertTrue(path.is_dir())
             self.assertTrue(str(path).endswith(str(Path("uploads") / "listings")))
+
+    def test_listing_uploads_dir_is_safe_if_directory_already_exists(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+
+            fake_file = tmp_root / "a" / "b" / "c" / "listing_routes.py"
+            fake_file.parent.mkdir(parents=True, exist_ok=True)
+            fake_file.write_text("# dummy")
+
+            with patch.object(listing_routes, "__file__", str(fake_file)):
+                first_path = listing_routes._listing_uploads_dir()
+                second_path = listing_routes._listing_uploads_dir()
+
+            self.assertEqual(first_path, second_path)
+            self.assertTrue(second_path.exists())
+            self.assertTrue(second_path.is_dir())
+
+    def test_search_listings_allows_single_character_query(self):
+        self.listing_service.search_listings.return_value = []
+
+        response = self.client.get("/search?q=a")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [])
+        self.listing_service.search_listings.assert_called_once_with("a")
+
+    def test_search_listings_rejects_empty_query(self):
+        response = self.client.get("/search?q=")
+
+        self.assertEqual(response.status_code, 422)
+        self.listing_service.search_listings.assert_not_called()
 
     def test_normalized_image_extension_uses_allowed_suffix(self):
         upload = MagicMock()
@@ -149,6 +182,41 @@ class TestListingRoutes(unittest.TestCase):
             image_url=None,
         )
 
+    def test_listing_uploads_dir_uses_correct_parent_depth(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+
+            fake_file = tmp_root / "a" / "b" / "c" / "listing_routes.py"
+            fake_file.parent.mkdir(parents=True)
+            fake_file.write_text("# dummy")
+
+            with patch.object(listing_routes, "__file__", str(fake_file)):
+                result = listing_routes._listing_uploads_dir()
+
+            expected = tmp_root / "uploads" / "listings"
+
+            self.assertEqual(result, expected)
+            self.assertTrue(result.exists())
+            self.assertTrue(result.is_dir())
+
+    def test_listing_uploads_dir_uses_correct_parent_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+
+            fake_file = tmp_root / "a" / "b" / "c" / "listing_routes.py"
+            fake_file.parent.mkdir(parents=True, exist_ok=True)
+            fake_file.write_text("# dummy")
+
+            with patch.object(listing_routes, "__file__", str(fake_file)):
+                path = listing_routes._listing_uploads_dir()
+
+            expected = tmp_root / "uploads" / "listings"
+
+            self.assertEqual(path, expected)
+            self.assertTrue(path.exists())
+            self.assertTrue(path.is_dir())
+
+   
     def test_create_listing_with_upload_image_success_closes_file(self):
         fake_listing = MagicMock()
         self.listing_service.create_listing.return_value = fake_listing
