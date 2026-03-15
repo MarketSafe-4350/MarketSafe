@@ -108,5 +108,29 @@ describe('ListingCardComponent', () => {
       const commentCount = fixture.nativeElement.querySelector('.comment-count');
       expect(commentCount?.textContent?.trim()).toBe('3 comments');
     });
+
+    it('template_ShouldRenderSellerProfileButtonWhenEnabled', () => {
+      fixture.componentRef.setInput('showSellerProfileButton', true);
+      fixture.detectChanges();
+
+      const sellerProfileButton =
+        fixture.nativeElement.querySelector('.seller-profile-btn');
+      expect(sellerProfileButton?.textContent?.trim()).toBe(
+        'View Seller Profile',
+      );
+    });
+
+    it('sellerProfileClick_ShouldEmitWhenButtonClicked', () => {
+      fixture.componentRef.setInput('showSellerProfileButton', true);
+      fixture.detectChanges();
+
+      const emitSpy = spyOn(listingCardComponent.sellerProfileClick, 'emit');
+      const sellerProfileButton: HTMLButtonElement | null =
+        fixture.nativeElement.querySelector('.seller-profile-btn');
+
+      sellerProfileButton?.click();
+
+      expect(emitSpy).toHaveBeenCalled();
+    });
   });
 });

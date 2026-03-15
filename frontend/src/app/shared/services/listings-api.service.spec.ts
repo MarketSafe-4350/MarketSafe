@@ -175,4 +175,32 @@ describe('ListingsApiService', () => {
     expect(result.length).toBe(1);
     expect(result[0].title).toBe('Gaming Laptop');
   });
+
+  it('getBySeller_ShouldFetchSellerListings', () => {
+    let result: Listing[] = [];
+
+    service.getBySeller(9).subscribe((listings) => {
+      result = listings;
+    });
+
+    const req = httpMock.expectOne('http://localhost:8000/listings/seller/9');
+    expect(req.request.method).toBe('GET');
+
+    req.flush([
+      {
+        id: 100,
+        seller_id: 9,
+        title: 'Monitor',
+        description: '27 inch',
+        price: 120,
+        image_url: null,
+        location: 'Winnipeg',
+        created_at: '2026-02-25T12:00:00Z',
+        is_sold: false,
+      },
+    ]);
+
+    expect(result.length).toBe(1);
+    expect(result[0].sellerId).toBe(9);
+  });
 });

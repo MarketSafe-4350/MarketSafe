@@ -3,7 +3,7 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -149,6 +149,24 @@ describe('MainPageComponent', () => {
     const deleteButtons =
       fixture.nativeElement.querySelectorAll('button.delete-btn');
     expect(deleteButtons.length).toBe(1);
+  });
+
+  it('openSellerProfile_ShouldNavigateToSellerProfileRoute', async () => {
+    fixture.detectChanges();
+
+    const router = TestBed.inject(Router);
+    const navigateSpy = spyOn(router, 'navigate').and.resolveTo(true);
+
+    component.openSellerProfile(otherListing);
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/profile', otherListing.sellerId]);
+  });
+
+  it('canViewSellerProfile_ShouldBeFalseForOwnedListing', () => {
+    fixture.detectChanges();
+
+    expect(component.canViewSellerProfile(ownedListing)).toBeFalse();
+    expect(component.canViewSellerProfile(otherListing)).toBeTrue();
   });
 
   it('submitComment_WhitespaceOnly_ShouldSetErrorAndNotCreateComment', () => {

@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { Account } from '../../shared/models/account.models';
+import { Listing } from '../../shared/models/listing.models';
 
 import { RatingComponent } from '../../components/rating/rating.component';
 import { ListingCardComponent } from '../../components/listing-card/listing-card.component';
@@ -38,16 +40,50 @@ export class ProfilePageComponent
   implements OnInit
 {
   private readonly accountsApi = inject(AccountsApiService);
+  private readonly route = inject(ActivatedRoute);
   readonly stars = [0, 1, 2, 3, 4];
 
   account: Account | null = null;
+  profileListings: Listing[] = [];
+  viewedSellerId: number | null = null;
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
-    this.loadProfile();
+    this.route.paramMap.subscribe((params) => {
+      const sellerIdParam = params.get('sellerId');
+      const sellerId = sellerIdParam === null ? Number.NaN : Number(sellerIdParam);
+      const isOwnProfileRoute =
+        Number.isFinite(sellerId) && this.currentUserId !== null && sellerId === this.currentUserId;
+
+      this.viewedSellerId =
+        Number.isFinite(sellerId) && !isOwnProfileRoute ? sellerId : null;
+      this.loadProfile();
+    });
   }
 
   private loadProfile(): void {
+    this.errorMessage = null;
+
+    if (this.isSellerProfile) {
+      forkJoin({
+        sidebarListings: this.listingsApi.getMine(),
+        account: this.accountsApi.getById(this.viewedSellerId as number),
+        profileListings: this.listingsApi.getBySeller(this.viewedSellerId as number),
+      }).subscribe({
+        next: ({ sidebarListings, account, profileListings }) => {
+          this.account = account;
+          this.listings = sidebarListings;
+          this.profileListings = this.getActiveListings(profileListings);
+        },
+        error: (err) => {
+          console.error('Failed to load seller profile:', err);
+          this.errorMessage = 'Failed to load seller profile.';
+        },
+      });
+
+      return;
+    }
+
     forkJoin({
       account: this.accountsApi.getMe(),
       listings: this.listingsApi.getMine(),
@@ -55,7 +91,7 @@ export class ProfilePageComponent
       next: ({ account, listings }) => {
         this.account = account;
         this.listings = listings;
-        this.errorMessage = null;
+        this.profileListings = this.getActiveListings(listings);
       },
       error: (err) => {
         console.error('Failed to load profile:', err);
@@ -81,11 +117,42 @@ export class ProfilePageComponent
     return this.account?.verified ?? false;
   }
 
+  get isSellerProfile(): boolean {
+    return this.viewedSellerId !== null;
+  }
+
+  get pageTitle(): string {
+    return this.isSellerProfile ? 'Seller Profile' : 'My Profile';
+  }
+
+  get ratingTitle(): string {
+    return this.isSellerProfile ? 'Seller Rating' : 'My Rating';
+  }
+
+  get listingsTitle(): string {
+    return this.isSellerProfile ? 'Seller Listings' : 'My Listings';
+  }
+
   get ratingAvg(): number {
     return this.account?.ratingAvg ?? 0;
   }
 
   get ratingCount(): number {
-    return this.account?.ratingCount ?? 0;
+    if (this.account?.ratingCount !== undefined) {
+      return this.account.ratingCount;
+    }
+
+    const ratingAvg = this.account?.ratingAvg ?? 0;
+    const ratingSum = this.account?.ratingSum ?? 0;
+
+    if (ratingAvg <= 0 || ratingSum <= 0) {
+      return 0;
+    }
+
+    return Math.max(0, Math.round(ratingSum / ratingAvg));
+  }
+
+  private getActiveListings(listings: Listing[]): Listing[] {
+    return listings.filter((listing) => !listing.isSold);
   }
 }
