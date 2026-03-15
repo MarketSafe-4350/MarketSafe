@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { HeaderComponent } from '../../components/header/header.component';
 import { LeftNavigationComponent } from '../left-navigation/left-navigation.component';
@@ -33,6 +33,7 @@ export class MainPageComponent
   private readonly accountsApi = inject(AccountsApiService);
   private readonly commentsApi = inject(CommentApiService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   readonly maxCommentLength = 500;
   isLoading = false;
   selectedListingId: number | null = null;
@@ -204,6 +205,22 @@ export class MainPageComponent
 
   formatCommentTimestamp(value: string): string {
     return new Date(value).toLocaleString();
+  }
+
+  openSellerProfile(listing: Listing): void {
+    if (!this.canViewSellerProfile(listing)) {
+      return;
+    }
+
+    void this.router.navigate(['/profile', listing.sellerId]);
+  }
+
+  canViewSellerProfile(listing: Listing): boolean {
+    return (
+      listing.sellerId !== undefined &&
+      this.currentUserId !== null &&
+      listing.sellerId !== this.currentUserId
+    );
   }
 
   private clearCommentError(listingId: number): void {

@@ -17,6 +17,7 @@ export const routes: Routes = [
 
   // Protected routes
   { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard]},
+  { path: 'profile/:sellerId', component: ProfilePageComponent, canActivate: [authGuard]},
   { path: 'main-page', component: MainPageComponent, canActivate: [authGuard]},
   { path: 'search', component: SearchPageComponent, canActivate: [authGuard]},
   { path: 'my-listings', component: MyListingsPageComponent, canActivate: [authGuard]},

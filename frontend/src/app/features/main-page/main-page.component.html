@@ -43,6 +43,8 @@
                   <app-listing-card
                     [listing]="listing"
                     [commentCount]="getComments(listing.id).length"
+                    [showSellerProfileButton]="canViewSellerProfile(listing)"
+                    (sellerProfileClick)="openSellerProfile(listing)"
                   ></app-listing-card>
                 </div>
                 @if (listing.isSold) {
