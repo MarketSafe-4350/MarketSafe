@@ -1,18 +1,16 @@
-# https://docs.docker.com/get-started/docker-concepts/building-images/writing-a-dockerfile/
-
 FROM python:3.13
 
 WORKDIR /app
 
+# Install dependencies
 COPY requirements.txt ./
-
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy application source
 COPY src ./src
 
+# Expose API port
 EXPOSE 8000
 
+# Start FastAPI app
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-
-# docker build -t marketsafe-api -f server/Dockerfile server (build image)
-# docker run --name marketsafe-api -p 8000:8000 marketsafe-api (run container)

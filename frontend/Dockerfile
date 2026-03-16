@@ -2,15 +2,15 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Install dependencies
 COPY package*.json ./
-
 RUN npm install
 
+# Copy application source
 COPY . .
 
+# Expose Angular dev server port
 EXPOSE 4200
 
+# Start frontend
 CMD ["npm", "start"]
-
-# docker build -t marketsafe-frontend -f frontend/Dockerfile frontend (build image)
-# docker run --name marketsafe-frontend -p 4200:4200 marketsafe-frontend (run container)

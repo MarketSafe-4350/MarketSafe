@@ -2,16 +2,16 @@ services:
   db:
     image: mysql:8.4
     environment:
-      MYSQL_DATABASE: marketsafe
-      MYSQL_USER: marketsafe
-      MYSQL_PASSWORD: marketsafe
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD"]
       interval: 5s
       timeout: 3s
       retries: 30
@@ -21,11 +21,11 @@ services:
       context: ./persistence/db
       dockerfile: init/Dockerfile
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_NAME: marketsafe
-      DB_MODE: ${DB_MODE:-dev} # dev seeds, prod skips
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME}
+      DB_MODE: ${DB_MODE:-dev}
     depends_on:
       db:
         condition: service_healthy
@@ -34,16 +34,16 @@ services:
   api:
     build: ./server
     ports:
-      - "8000:8000"
+      - "${API_PORT:-8000}:8000"
     volumes:
       - ./server:/app
       - ./persistence/stub:/opt/stub:ro
     environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_NAME: marketsafe
-      DB_USER: marketsafe
-      DB_PASSWORD: marketsafe
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
       APP_ENV: ${APP_ENV:-dev}
     depends_on:
       db-init:
@@ -54,12 +54,14 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "4200:4200"
+      - "${FRONTEND_PORT:-4200}:4200"
     depends_on:
       - api
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    environment:
+      API_BASE_URL: ${API_BASE_URL}
     command: npm run start:docker
 
 volumes:
