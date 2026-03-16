@@ -1,6 +1,8 @@
 services:
   db:
     image: mysql:8.4
+    env_file:
+      - ../.env
     environment:
       MYSQL_DATABASE: marketsafe
       MYSQL_USER: marketsafe
