@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
 import { ProfilePageComponent } from './profile.page';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
@@ -13,6 +14,9 @@ describe('ProfilePageComponent', () => {
   let fixture: ComponentFixture<ProfilePageComponent>;
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
   let listingsApiSpy: jasmine.SpyObj<ListingsApiService>;
+  let activatedRouteStub: {
+    paramMap: Observable<ParamMap>;
+  };
 
   const mockAccount: Account = {
     id: 1,
@@ -22,6 +26,7 @@ describe('ProfilePageComponent', () => {
     verified: true,
     ratingAvg: 4.5,
     ratingCount: 271,
+    ratingSum: 1220,
   };
 
   const mockListings: Listing[] = [
@@ -39,25 +44,43 @@ describe('ProfilePageComponent', () => {
   ];
 
   beforeEach(async () => {
-    accountsApiSpy = jasmine.createSpyObj<AccountsApiService>('AccountsApiService', ['getMe']);
+    localStorage.clear();
+    const payload = btoa(JSON.stringify({ sub: '123' }));
+    localStorage.setItem('access_token', `x.${payload}.y`);
+
+    accountsApiSpy = jasmine.createSpyObj<AccountsApiService>('AccountsApiService', [
+      'getMe',
+      'getById',
+    ]);
     accountsApiSpy.getMe.and.returnValue(of(mockAccount));
+    accountsApiSpy.getById.and.returnValue(of(mockAccount));
     listingsApiSpy = jasmine.createSpyObj<ListingsApiService>('ListingsApiService', [
       'getMine',
+      'getBySeller',
       'create',
       'delete',
     ]);
     listingsApiSpy.getMine.and.returnValue(of(mockListings));
+    listingsApiSpy.getBySeller.and.returnValue(of(mockListings));
+    activatedRouteStub = {
+      paramMap: of(convertToParamMap({})),
+    };
 
     await TestBed.configureTestingModule({
       imports: [ProfilePageComponent, RouterTestingModule],
       providers: [
         { provide: AccountsApiService, useValue: accountsApiSpy },
         { provide: ListingsApiService, useValue: listingsApiSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteStub },
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProfilePageComponent);
     profilePageComponent = fixture.componentInstance;
+  });
+
+  afterEach(() => {
+    localStorage.clear();
   });
 
   it('should create', () => {
@@ -91,5 +114,35 @@ describe('ProfilePageComponent', () => {
 
     expect(profilePageComponent.sidebarListings.length).toBe(1);
     expect(profilePageComponent.sidebarListings[0].title).toBe('Calculus Textbook');
+  });
+
+  it('sellerRoute_ShouldLoadSellerAccountAndListings', () => {
+    activatedRouteStub.paramMap = of(convertToParamMap({ sellerId: '9' }));
+
+    fixture = TestBed.createComponent(ProfilePageComponent);
+    profilePageComponent = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(accountsApiSpy.getById).toHaveBeenCalledWith(9);
+    expect(listingsApiSpy.getBySeller).toHaveBeenCalledWith(9);
+    expect(listingsApiSpy.getMine).toHaveBeenCalled();
+    expect(profilePageComponent.pageTitle).toBe('Seller Profile');
+    expect(profilePageComponent.listingsTitle).toBe('Seller Listings');
+  });
+
+  it('ownSellerRoute_ShouldFallBackToRegularProfile', () => {
+    localStorage.clear();
+    const payload = btoa(JSON.stringify({ sub: '9' }));
+    localStorage.setItem('access_token', `x.${payload}.y`);
+    activatedRouteStub.paramMap = of(convertToParamMap({ sellerId: '9' }));
+
+    fixture = TestBed.createComponent(ProfilePageComponent);
+    profilePageComponent = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(accountsApiSpy.getById).not.toHaveBeenCalled();
+    expect(listingsApiSpy.getBySeller).not.toHaveBeenCalled();
+    expect(accountsApiSpy.getMe).toHaveBeenCalled();
+    expect(profilePageComponent.pageTitle).toBe('My Profile');
   });
 });

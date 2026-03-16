@@ -71,14 +71,20 @@
 
           <div class="cards">
             @for (listing of searchResults; track listing.id) {
-              <button
-                type="button"
-                class="result-card-button"
-                (click)="openListingInMarketplace(listing.id)"
-                [attr.aria-label]="'Open listing ' + listing.title"
-              >
-                <app-listing-card [listing]="listing"></app-listing-card>
-              </button>
+              <div class="result-card">
+                <button
+                  type="button"
+                  class="result-card-button"
+                  (click)="openListingInMarketplace(listing.id)"
+                  [attr.aria-label]="'Open listing ' + listing.title"
+                >
+                  <app-listing-card
+                    [listing]="listing"
+                    [showSellerProfileButton]="canViewSellerProfile(listing.sellerId)"
+                    (sellerProfileClick)="openSellerProfile(listing.sellerId)"
+                  ></app-listing-card>
+                </button>
+              </div>
             }
           </div>
         }

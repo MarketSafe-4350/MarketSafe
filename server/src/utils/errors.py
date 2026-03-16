@@ -179,3 +179,18 @@ class RatingError(DomainError):
 class RatingNotFoundError(RatingError):
     code: str = "RATING_NOT_FOUND"
     status_code: int = 404
+
+
+# -----------------------------
+# Offer-specific errors (domain layer friendly)
+# -----------------------------
+@dataclass
+class OfferError(DomainError):
+    code: str = "OFFER_ERROR"
+    status_code: int = 400
+
+
+@dataclass
+class OfferNotFoundError(OfferError):
+    code: str = "OFFER_NOT_FOUND"
+    status_code: int = 404

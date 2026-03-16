@@ -48,6 +48,14 @@ export class ListingsApiService {
       .pipe(map((items) => items.map((item) => this.toListing(item))));
   }
 
+  getBySeller(sellerId: number): Observable<Listing[]> {
+    return this.http
+      .get<ListingApiResponse[]>(`${this.apiUrl}/seller/${sellerId}`, {
+        headers: this.authHeaders(false),
+      })
+      .pipe(map((items) => items.map((item) => this.toListing(item))));
+  }
+
   search(query: string): Observable<Listing[]> {
     return this.http
       .get<ListingApiResponse[]>(`${this.apiUrl}/search`, {

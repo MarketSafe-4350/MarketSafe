@@ -35,6 +35,19 @@
         <span class="dot">•</span>
         <span class="comment-count">{{ commentCountLabel }}</span>
       </div>
+
+      @if (showSellerProfileButton) {
+        <div class="list-actions">
+          <button
+            mat-stroked-button
+            type="button"
+            class="seller-profile-btn"
+            (click)="onSellerProfileClick($event)"
+          >
+            View Seller Profile
+          </button>
+        </div>
+      }
     </div>
   </div>
 </mat-card>

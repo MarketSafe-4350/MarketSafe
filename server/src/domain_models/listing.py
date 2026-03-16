@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from src.domain_models.offer import Offer
 from src.utils import ValidationError, UnapprovedBehaviorError, Validation
 from typing import List
 from src.domain_models.comment import Comment
@@ -19,6 +20,7 @@ class Listing:
     - sold_to_id must be set when is_sold is True (DB trigger enforces it too).
     - rating can only exist when the listing is sold.
     - id can only be assigned once (after DB persistence).
+    - offers is the list of Offer objects associated with this listing.
     """
 
     def __init__(
@@ -36,6 +38,7 @@ class Listing:
         sold_to_id: int | None = None,
         comments: List[Comment] | None = None,
         rating: Rating | None = None,
+        offers: List[Offer] | None = None,
     ):
         self._id = listing_id
         self._seller_id = Validation.require_int(seller_id, "seller_id")
@@ -60,6 +63,7 @@ class Listing:
 
         self._comments = list(comments) if comments is not None else []
         self._rating = None if rating is None else rating
+        self._offers = list(offers) if offers is not None else []
 
         self._enforce_sold_invariants()
         self._enforce_rating_invariants()
@@ -179,7 +183,9 @@ class Listing:
         return self._sold_to_id
 
     def mark_sold(self, buyer_account_id: int) -> None:
-        buyer_account_id = Validation.require_positive_int(buyer_account_id, "sold_to_id")
+        buyer_account_id = Validation.require_positive_int(
+            buyer_account_id, "sold_to_id"
+        )
         if self._is_sold:
             raise UnapprovedBehaviorError("Listing is already sold.")
         self._is_sold = True
@@ -217,7 +223,6 @@ class Listing:
 
     def remove_rating(self) -> None:
         self._rating = None
-
 
     def _enforce_rating_invariants(self) -> None:
         if self._rating is None:
@@ -279,6 +284,43 @@ class Listing:
             self._comments.append(comment)
 
     # ==============================
+    # OFFERS
+    # ==============================
+
+    @property
+    def offers(self) -> List[Offer]:
+        return list(self._offers)
+
+    @offers.setter
+    def offers(self, value: List[Offer] | None) -> None:
+        if value is None:
+            self._offers = []
+            return
+
+        if not isinstance(value, list):
+            raise ValidationError("offers must be a list of Offer.")
+
+        for i, offer in enumerate(value):
+            if not isinstance(offer, Offer):
+                raise ValidationError(f"offers[{i}] must be an Offer.")
+
+        self._offers = list(value)
+
+    def add_offer(self, offer: Offer) -> None:
+        Validation.require_not_none(offer, "offer")
+
+        if not isinstance(offer, Offer):
+            raise ValidationError("offer must be an Offer.")
+
+        if self._id is not None and offer.listing_id != self._id:
+            raise ValidationError(
+                f"offer.listing_id ({offer.listing_id}) "
+                f"does not match Listing.id ({self._id})."
+            )
+
+        self._offers.append(offer)
+
+    # ==============================
     # DEBUG REPRESENTATION
     # ==============================
 
@@ -292,5 +334,6 @@ class Listing:
             f"sold_to_id={self._sold_to_id}, "
             f"created_at={self._created_at!r}, "
             f"rating={self._rating}, "
-            f"comments={self._comments})"
+            f"comments={self._comments}, "
+            f"offers={self._offers})"
         )

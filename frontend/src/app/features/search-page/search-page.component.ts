@@ -85,6 +85,22 @@ export class SearchPageComponent extends ListingsSidebarActionsBase implements O
     });
   }
 
+  openSellerProfile(sellerId: number | undefined): void {
+    if (!this.canViewSellerProfile(sellerId)) {
+      return;
+    }
+
+    void this.router.navigate(['/profile', sellerId]);
+  }
+
+  canViewSellerProfile(sellerId: number | undefined): boolean {
+    return (
+      sellerId !== undefined &&
+      this.currentUserId !== null &&
+      sellerId !== this.currentUserId
+    );
+  }
+
   protected override getSidebarSourceListings(): Listing[] {
     return this.listings;
   }

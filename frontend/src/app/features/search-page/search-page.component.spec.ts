@@ -124,6 +124,29 @@ describe('SearchPageComponent', () => {
     });
   });
 
+  it('sellerProfileClick_ShouldNavigateToSellerProfile', () => {
+    fixture.detectChanges();
+    component.searchQuery = 'gaming laptop';
+    component.onSubmitSearch();
+    fixture.detectChanges();
+
+    const navigateSpy = spyOn(router, 'navigate').and.resolveTo(true);
+    const button: HTMLButtonElement | null =
+      fixture.nativeElement.querySelector('.seller-profile-btn');
+
+    expect(button).toBeTruthy();
+    button?.click();
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/profile', searchResult.sellerId]);
+  });
+
+  it('canViewSellerProfile_ShouldBeFalseForCurrentUser', () => {
+    fixture.detectChanges();
+
+    expect(component.canViewSellerProfile(123)).toBeFalse();
+    expect(component.canViewSellerProfile(searchResult.sellerId)).toBeTrue();
+  });
+
   it('changeSortType_ShouldUpdateSortOptionAndCallSortResults', () => {
     spyOn(component, 'sortResults');
     component.changeSortType('price');

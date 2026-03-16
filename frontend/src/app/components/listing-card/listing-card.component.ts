@@ -1,18 +1,27 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { Listing } from '../../shared/models/listing.models';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-listing-card',
   standalone: true,
   templateUrl: './listing-card.component.html',
   styleUrls: ['./listing-card.component.scss'],
-  imports: [MatCardModule],
+  imports: [MatCardModule, MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListingCardComponent {
   @Input({ required: true }) listing: Listing | null = null;
   @Input() commentCount = 0;
+  @Input() showSellerProfileButton = false;
+  @Output() sellerProfileClick = new EventEmitter<void>();
 
   get title(): string {
     return this.listing?.title || 'Untitled Listing';
@@ -52,5 +61,10 @@ export class ListingCardComponent {
 
   get commentCountLabel(): string {
     return `${this.commentCount} comment${this.commentCount === 1 ? '' : 's'}`;
+  }
+
+  onSellerProfileClick(event: Event): void {
+    event.stopPropagation();
+    this.sellerProfileClick.emit();
   }
 }

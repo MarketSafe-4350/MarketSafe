@@ -63,11 +63,16 @@
   cursor: pointer;
 }
 
+.result-card {
+  display: grid;
+}
+
 .result-card-button:focus-visible {
   outline: 3px solid #2563eb;
   outline-offset: 4px;
   border-radius: 12px;
 }
+
 
 .sort-options {
   display: flex;
