@@ -35,11 +35,11 @@ def create_app() -> FastAPI:
     host = os.getenv("DB_HOST", "127.0.0.1")
 
     DBUtility.initialize(
-        host=host,  # because you're running this on your Mac
-        port=3306,
-        database="marketsafe",
-        username="marketsafe",
-        password="marketsafe",
+        host=host,
+        port=int(os.getenv("DB_PORT", 3306)),
+        database=os.getenv("DB_NAME"),
+        username=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
         driver="mysql+pymysql",
     )
     app = FastAPI(title="MarketSafe API")

@@ -17,34 +17,29 @@ services:
       retries: 30
 
   db-init:
-    build:
-      context: ./persistence/db
-      dockerfile: init/Dockerfile
+    image: ${DOCKER_USERNAME}/marketsafe-db-init:latest
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       DB_HOST: ${DB_HOST:-db}
       DB_PORT: ${DB_PORT:-3306}
       DB_NAME: ${DB_NAME}
-      DB_MODE: ${DB_MODE:-dev}
+      DB_MODE: ${DB_MODE:-prod}
     depends_on:
       db:
         condition: service_healthy
     restart: "no"
 
   api:
-    build: ./server
+    image: ${DOCKER_USERNAME}/marketsafe-api:latest
     ports:
       - "${API_PORT:-8000}:8000"
-    volumes:
-      - ./server:/app
-      - ./persistence/stub:/opt/stub:ro
     environment:
       DB_HOST: ${DB_HOST:-db}
       DB_PORT: ${DB_PORT:-3306}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      APP_ENV: ${APP_ENV:-dev}
+      APP_ENV: ${APP_ENV:-prod}
       SECRET_KEY: ${SECRET_KEY}
       FRONTEND_URL: ${FRONTEND_URL}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
@@ -53,20 +48,14 @@ services:
         condition: service_completed_successfully
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/marketsafe-frontend:latest
     ports:
       - "${FRONTEND_PORT:-4200}:4200"
     depends_on:
       - api
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     environment:
       API_BASE_URL: ${API_BASE_URL}
       FRONTEND_URL: ${FRONTEND_URL}
-    command: npm run start:docker
 
 volumes:
   mysql_data:
