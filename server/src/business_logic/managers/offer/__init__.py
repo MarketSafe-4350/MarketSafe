@@ -1,0 +1,1 @@
+from abstract_offer_manager import IOfferManager
