@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +14,11 @@ import { ListingCardComponent } from '../../components/listing-card/listing-card
 import { LeftNavigationComponent } from '../left-navigation/left-navigation.component';
 import { ListingsSidebarActionsBase } from '../../shared/helpers/listings-sidebar-actions.base';
 import { Listing } from '../../shared/models/listing.models';
+import { OffersApiService } from '../../shared/services/offers-api.service';
+import {
+  SendOfferDialogComponent,
+  SendOfferPayload,
+} from '../send-offer/send-offer.component';
 
 @Component({
   selector: 'app-search-page',
@@ -34,11 +40,14 @@ import { Listing } from '../../shared/models/listing.models';
 })
 export class SearchPageComponent extends ListingsSidebarActionsBase implements OnInit {
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
+  private readonly offersApi = inject(OffersApiService);
   searchQuery = '';
   searchResults: Listing[] = [];
   isLoading = false;
   hasSearched = false;
   searchErrorMessage: string | null = null;
+  offerFeedbackMessage: string | null = null;
   selectedSortOption: 'date' | 'price' | 'title' = 'date';
   sortDirection: 'asc' | 'desc' = 'asc';
 
@@ -63,6 +72,7 @@ export class SearchPageComponent extends ListingsSidebarActionsBase implements O
     this.isLoading = true;
     this.hasSearched = true;
     this.searchErrorMessage = null;
+    this.offerFeedbackMessage = null;
 
     this.listingsApi.search(query).subscribe({
       next: (results) => {
@@ -101,6 +111,43 @@ export class SearchPageComponent extends ListingsSidebarActionsBase implements O
     );
   }
 
+  canSendOffer(listing: Listing): boolean {
+    return this.canViewSellerProfile(listing.sellerId) && !listing.isSold;
+  }
+
+  openSendOfferDialog(listing: Listing): void {
+    if (!this.canSendOffer(listing)) {
+      return;
+    }
+
+    const ref = this.dialog.open(SendOfferDialogComponent, {
+      width: '460px',
+      maxWidth: '92vw',
+    });
+
+    ref.afterClosed().subscribe((payload: SendOfferPayload | null) => {
+      if (!payload) {
+        return;
+      }
+
+      this.offersApi
+        .create({
+          listingId: listing.id,
+          offeredPrice: payload.offeredPrice,
+          locationOffered: payload.locationOffered,
+        })
+        .subscribe({
+          next: () => {
+            this.offerFeedbackMessage = `Offer sent for ${listing.title}.`;
+          },
+          error: (error) => {
+            console.error('Failed to send offer:', error);
+            this.offerFeedbackMessage = 'Failed to send offer.';
+          },
+        });
+    });
+  }
+
   protected override getSidebarSourceListings(): Listing[] {
     return this.listings;
   }
@@ -116,34 +163,33 @@ export class SearchPageComponent extends ListingsSidebarActionsBase implements O
     });
   }
 
- sortResults(): void {
-  if (this.selectedSortOption === 'date') {
-    this.searchResults.sort((a, b) =>
-      this.sortDirection === 'asc'
-        ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-  } else if (this.selectedSortOption === 'price') {
-    this.searchResults.sort((a, b) =>
-      this.sortDirection === 'asc' ? a.price - b.price : b.price - a.price
-    );
-  } else if (this.selectedSortOption === 'title') {
-    this.searchResults.sort((a, b) =>
-      this.sortDirection === 'asc'
-        ? a.title.localeCompare(b.title)
-        : b.title.localeCompare(a.title)
-    );
+  sortResults(): void {
+    if (this.selectedSortOption === 'date') {
+      this.searchResults.sort((a, b) =>
+        this.sortDirection === 'asc'
+          ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+    } else if (this.selectedSortOption === 'price') {
+      this.searchResults.sort((a, b) =>
+        this.sortDirection === 'asc' ? a.price - b.price : b.price - a.price,
+      );
+    } else if (this.selectedSortOption === 'title') {
+      this.searchResults.sort((a, b) =>
+        this.sortDirection === 'asc'
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title),
+      );
+    }
   }
-}
 
   changeSortType(sortType: 'date' | 'price' | 'title'): void {
     this.selectedSortOption = sortType;
-    this.sortResults(); 
+    this.sortResults();
   }
 
   toggleSortDirection(): void {
     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     this.sortResults();
   }
-
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +19,11 @@ import { LeftNavigationComponent } from '../left-navigation/left-navigation.comp
 
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { ListingsSidebarActionsBase } from '../../shared/helpers/listings-sidebar-actions.base';
+import { OffersApiService } from '../../shared/services/offers-api.service';
+import {
+  SendOfferDialogComponent,
+  SendOfferPayload,
+} from '../send-offer/send-offer.component';
 @Component({
   standalone: true,
   selector: 'app-profile-page',
@@ -40,12 +46,15 @@ export class ProfilePageComponent
   implements OnInit
 {
   private readonly accountsApi = inject(AccountsApiService);
+  private readonly offersApi = inject(OffersApiService);
+  private readonly dialog = inject(MatDialog);
   private readonly route = inject(ActivatedRoute);
   readonly stars = [0, 1, 2, 3, 4];
 
   account: Account | null = null;
   profileListings: Listing[] = [];
   viewedSellerId: number | null = null;
+  offerFeedbackMessage: string | null = null;
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
@@ -150,6 +159,48 @@ export class ProfilePageComponent
     }
 
     return Math.max(0, Math.round(ratingSum / ratingAvg));
+  }
+
+  canSendOffer(listing: Listing): boolean {
+    return (
+      this.isSellerProfile &&
+      this.currentUserId !== null &&
+      listing.sellerId !== this.currentUserId &&
+      !listing.isSold
+    );
+  }
+
+  openSendOfferDialog(listing: Listing): void {
+    if (!this.canSendOffer(listing)) {
+      return;
+    }
+
+    const ref = this.dialog.open(SendOfferDialogComponent, {
+      width: '460px',
+      maxWidth: '92vw',
+    });
+
+    ref.afterClosed().subscribe((payload: SendOfferPayload | null) => {
+      if (!payload) {
+        return;
+      }
+
+      this.offersApi
+        .create({
+          listingId: listing.id,
+          offeredPrice: payload.offeredPrice,
+          locationOffered: payload.locationOffered,
+        })
+        .subscribe({
+          next: () => {
+            this.offerFeedbackMessage = `Offer sent for ${listing.title}.`;
+          },
+          error: (error) => {
+            console.error('Failed to send offer:', error);
+            this.offerFeedbackMessage = 'Failed to send offer.';
+          },
+        });
+    });
   }
 
   private getActiveListings(listings: Listing[]): Listing[] {

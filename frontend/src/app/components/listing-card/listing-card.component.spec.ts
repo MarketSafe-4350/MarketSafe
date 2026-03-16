@@ -132,5 +132,27 @@ describe('ListingCardComponent', () => {
 
       expect(emitSpy).toHaveBeenCalled();
     });
+
+    it('template_ShouldRenderOfferButtonWhenEnabled', () => {
+      fixture.componentRef.setInput('showOfferButton', true);
+      fixture.detectChanges();
+
+      const offerButton =
+        fixture.nativeElement.querySelector('.send-offer-btn');
+      expect(offerButton?.textContent?.trim()).toBe('Send Offer');
+    });
+
+    it('offerClick_ShouldEmitWhenButtonClicked', () => {
+      fixture.componentRef.setInput('showOfferButton', true);
+      fixture.detectChanges();
+
+      const emitSpy = spyOn(listingCardComponent.offerClick, 'emit');
+      const offerButton: HTMLButtonElement | null =
+        fixture.nativeElement.querySelector('.send-offer-btn');
+
+      offerButton?.click();
+
+      expect(emitSpy).toHaveBeenCalled();
+    });
   });
 });
