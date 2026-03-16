@@ -12,3 +12,5 @@ from .email_verification_token.test_mysql_email_verification_token_db import (
 )
 from .utils.test_db_utils import TestDBUtility
 from .utils.test_comment_mapper import TestCommentMapper
+from .offer.test_offer_db_abc import TestOfferDBABC
+from .offer.test_mysql_offer_db import TestMySQLOfferDB

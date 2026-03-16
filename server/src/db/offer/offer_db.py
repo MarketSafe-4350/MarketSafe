@@ -1,13 +1,63 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from server.src.db.utils.db_utils import DBUtility
-from server.src.domain_models.offer import Offer
+from src.db.utils.db_utils import DBUtility
+from src.domain_models.offer import Offer
 
 
 class OfferDB(ABC):
+    """
+    Contract for Listing table persistence.
+
+    IMPORTANT DESIGN RULES:
+    - This layer is responsible ONLY for database access.
+    - It does NOT contain business logic (authorization, ownership rules, etc.).
+    - It does NOT decide HTTP responses.
+    - It does NOT decide authentication logic.
+    - It only performs CRUD + clearly-scoped queries.
+
+    SECURITY / API SURFACE RULE:
+    - Avoid "open-ended" search methods that accept many optional filters.
+      Even if parameterized (SQL-safe), broad search surfaces often cause
+      data-leak bugs at higher layers (e.g., forgetting authorization filters).
+    - Prefer narrow, intention-revealing query methods that match real UI use-cases.
+
+    Return conventions:
+    - Methods that fetch a single row return Optional[Listing]:
+        None is a valid state meaning "not found".
+    - Methods that fetch multiple rows return List[Listing]:
+        empty list is valid and MUST be returned when there are no results.
+
+
+    ======================================================
+    ERROR CONTRACT
+    ======================================================
+
+    All implementations MUST follow this error policy:
+
+    1. Parameter validation failures:
+       -> Raise ValidationError
+
+    2. Record not found (when contract requires raising):
+       -> Raise ListingNotFoundError
+
+    3. Query-level SQL failures:
+       -> Raise DatabaseQueryError
+
+    4. Connection-level failures:
+       -> Raised by DBUtility as DatabaseUnavailableError
+          (Implementations should NOT catch/re-wrap those)
+    """
+
     def __init__(self, db: DBUtility) -> None:
-        self.db = db
+        """
+        The DBUtility instance must be injected.
+        This allows:
+        - Connection pooling reuse
+        - Easier testing (mock DBUtility)
+        - Clear separation of concerns
+        """
+        self._db = db
 
     # --------------------------------------------------
     # CREATE
