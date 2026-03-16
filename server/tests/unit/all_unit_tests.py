@@ -47,6 +47,8 @@ from tests.unit.db import (
     TestMySQLListingDB,
     TestDBUtility,
     TestCommentMapper,
+    TestMySQLOfferDB,
+    TestOfferDBABC,
 )
 from tests.unit.domain_models import (
     TestAccount,
@@ -107,6 +109,8 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestVerificationToken))
     suite.addTests(loader.loadTestsFromTestCase(TestListing))
     suite.addTests(loader.loadTestsFromTestCase(TestOffer))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferDBABC))
+    suite.addTests(loader.loadTestsFromTestCase(TestMySQLOfferDB))
     return suite
 
 
