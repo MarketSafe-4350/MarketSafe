@@ -1,4 +1,4 @@
 window.__env = {
-  apiBaseUrl: 'http://localhost:8300',
-  frontendUrl: 'http://localhost:4300'
+  apiBaseUrl: 'http://localhost:8000',
+  frontendUrl: 'http://localhost:4200'
 };
