@@ -34,6 +34,8 @@ from tests.unit.business_logic import (
     TestCommentManagerUnit,
     TestCommentServiceUnit,
     TestBusinessManagerContracts,
+    TestOfferManagerUnit,
+    TestOfferServiceUnit,
 )
 from tests.unit.config import TestConfig
 from tests.unit.db import (
@@ -47,6 +49,8 @@ from tests.unit.db import (
     TestMySQLListingDB,
     TestDBUtility,
     TestCommentMapper,
+    TestMySQLOfferDB,
+    TestOfferDBABC,
 )
 from tests.unit.domain_models import (
     TestAccount,
@@ -107,6 +111,10 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestVerificationToken))
     suite.addTests(loader.loadTestsFromTestCase(TestListing))
     suite.addTests(loader.loadTestsFromTestCase(TestOffer))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferDBABC))
+    suite.addTests(loader.loadTestsFromTestCase(TestMySQLOfferDB))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferManagerUnit))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferServiceUnit))
     return suite
 
 
