@@ -5,4 +5,5 @@ from .errors import (AppError, InfrastructureError, DatabaseUnavailableError, Da
                      AccountAlreadyExistsError, AccountError, AccountNotFoundError,
                      TokenError, TokenNotFoundError, TokenExpiredError, TokenAlreadyUsedError,
                      EmailVerificationError, ListingError, ListingNotFoundError, CommentError, CommentNotFoundError
-                     , RatingError, RatingNotFoundError)
+                     , RatingError, RatingNotFoundError,
+                     OfferError, OfferNotFoundError)
