@@ -284,6 +284,34 @@ class IOffermanager(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def get_offer_sellers_unseen(self, seller_id: int) -> List[Offer]:
+        """
+        PURPOSE:
+            Fetch all unseen offers across all listings owned by a specific seller,
+            each enriched with its associated listing details.
+
+        EXPECTED BEHAVIOR:
+            - Fetch all listings belonging to seller_id from ListingDB.
+            - For each listing, fetch its unseen offers using OfferDB.get_unseen_by_listing_id().
+            - Attach the listing details to each Offer.
+            - Return empty list if the seller has no listings or no unseen offers.
+            - Never return None.
+
+        WHY THIS IS IN THE MANAGER:
+            - Aggregating offers with listing data is orchestration
+              (business layer responsibility), not persistence-layer responsibility.
+            - OfferDB should not depend on ListingDB or join across tables.
+
+        RETURNS:
+            list[Offer]
+
+        RAISES (typical):
+            - ValidationError
+            - DatabaseUnavailableError / DatabaseQueryError
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def get_pending_offers_with_listing_by_sender(self, sender_id: int) -> List[Offer]:
         """
         PURPOSE:
@@ -337,16 +365,20 @@ class IOffermanager(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def set_offer_accepted(self, offer_id: int, accepted: bool) -> None:
+    def set_offer_accepted(self, offer_id: int, accepted: bool, actor_id: int) -> None:
         """
         PURPOSE:
             Accept or decline an offer, transitioning it from pending to a resolved state.
 
         EXPECTED BEHAVIOR:
+            - Validate that actor_id is the seller of the listing the offer belongs to.
+            - Raise UnapprovedBehaviorError if actor is not the seller.
+            - Raise OfferNotFoundError if the offer does not exist.
+            - Raise UnapprovedBehaviorError if the offer is no longer pending.
             - Transition offer.accepted from None to True (accept) or False (decline).
-            - Calls OfferDB.set_accepted(offer_id, accepted).
-            - Raises OfferNotFoundError if the offer does not exist.
-            - Raises domain error if offer is no longer pending.
+            - If accepted=True:
+                - Reject all other pending offers for the same listing.
+                - Marking the listing as sold is handled by the service layer.
 
         RETURNS:
             None
@@ -354,6 +386,8 @@ class IOffermanager(ABC):
         RAISES (typical):
             - ValidationError
             - OfferNotFoundError
+            - ListingNotFoundError
+            - UnapprovedBehaviorError
             - DatabaseUnavailableError / DatabaseQueryError
         """
         raise NotImplementedError
