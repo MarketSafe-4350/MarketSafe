@@ -1,1 +1,1 @@
-from abstract_offer_manager import IOfferManager
+from .abstract_offer_manager import IOffermanager

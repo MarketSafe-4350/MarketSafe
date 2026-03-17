@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from typing_extensions import override
 
-from server.src.domain_models.listing import Listing
+from src.domain_models.listing import Listing
 from src.business_logic.managers.offer.abstract_offer_manager import IOffermanager
 from src.db.offer.offer_db import OfferDB
 from src.db.listing.listing_db import ListingDB
