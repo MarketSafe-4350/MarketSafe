@@ -5,13 +5,15 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { MainPageComponent } from './main-page.component';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { Listing } from '../../shared/models/listing.models';
 import { CommentApiService } from '../../shared/services/comments-api.service';
+import { OffersApiService } from '../../shared/services/offers-api.service';
+import { SendOfferDialogComponent } from '../send-offer/send-offer.component';
 
 describe('MainPageComponent', () => {
   let fixture: ComponentFixture<MainPageComponent>;
@@ -20,6 +22,8 @@ describe('MainPageComponent', () => {
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
   let matDialogSpy: jasmine.SpyObj<MatDialog>;
   let commentApiSpy: jasmine.SpyObj<CommentApiService>;
+  let offersApiSpy: jasmine.SpyObj<OffersApiService>;
+  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<SendOfferDialogComponent>>;
   let activatedRouteStub: {
     snapshot: { queryParamMap: ReturnType<typeof convertToParamMap> };
   };
@@ -97,6 +101,18 @@ describe('MainPageComponent', () => {
       }),
     );
 
+    offersApiSpy = jasmine.createSpyObj<OffersApiService>('OffersApiService', [
+      'create',
+    ]);
+    offersApiSpy.create.and.returnValue(of({}));
+
+    dialogRefSpy = jasmine.createSpyObj<MatDialogRef<SendOfferDialogComponent>>(
+      'MatDialogRef',
+      ['afterClosed'],
+    );
+    dialogRefSpy.afterClosed.and.returnValue(of(null));
+    matDialogSpy.open.and.returnValue(dialogRefSpy);
+
     await TestBed.configureTestingModule({
       imports: [MainPageComponent, RouterTestingModule],
       providers: [
@@ -104,6 +120,7 @@ describe('MainPageComponent', () => {
         { provide: ListingsApiService, useValue: listingsApiSpy },
         { provide: AccountsApiService, useValue: accountsApiSpy },
         { provide: CommentApiService, useValue: commentApiSpy },
+        { provide: OffersApiService, useValue: offersApiSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
       ],
     })
@@ -167,6 +184,14 @@ describe('MainPageComponent', () => {
 
     expect(component.canViewSellerProfile(ownedListing)).toBeFalse();
     expect(component.canViewSellerProfile(otherListing)).toBeTrue();
+  });
+
+  it('canSendOffer_ShouldOnlyBeTrueForOtherActiveListing', () => {
+    fixture.detectChanges();
+
+    expect(component.canSendOffer(ownedListing)).toBeFalse();
+    expect(component.canSendOffer({ ...otherListing, isSold: true })).toBeFalse();
+    expect(component.canSendOffer(otherListing)).toBeTrue();
   });
 
   it('submitComment_WhitespaceOnly_ShouldSetErrorAndNotCreateComment', () => {

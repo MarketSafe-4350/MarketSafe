@@ -58,6 +58,8 @@
 
         @if (searchErrorMessage) {
           <p class="status error">{{ searchErrorMessage }}</p>
+        } @else if (offerFeedbackMessage) {
+          <p class="status">{{ offerFeedbackMessage }}</p>
         } @else if (isLoading) {
           <p class="status">Searching listings...</p>
         } @else if (!hasSearched) {
@@ -72,18 +74,23 @@
           <div class="cards">
             @for (listing of searchResults; track listing.id) {
               <div class="result-card">
-                <button
-                  type="button"
+                <div
                   class="result-card-button"
                   (click)="openListingInMarketplace(listing.id)"
+                  (keydown.enter)="openListingInMarketplace(listing.id)"
+                  (keydown.space)="openListingInMarketplace(listing.id); $event.preventDefault()"
+                  tabindex="0"
+                  role="button"
                   [attr.aria-label]="'Open listing ' + listing.title"
                 >
                   <app-listing-card
                     [listing]="listing"
                     [showSellerProfileButton]="canViewSellerProfile(listing.sellerId)"
+                    [showOfferButton]="canSendOffer(listing)"
                     (sellerProfileClick)="openSellerProfile(listing.sellerId)"
+                    (offerClick)="openSendOfferDialog(listing)"
                   ></app-listing-card>
-                </button>
+                </div>
               </div>
             }
           </div>

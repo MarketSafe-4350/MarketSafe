@@ -21,7 +21,9 @@ export class ListingCardComponent {
   @Input({ required: true }) listing: Listing | null = null;
   @Input() commentCount = 0;
   @Input() showSellerProfileButton = false;
+  @Input() showOfferButton = false;
   @Output() sellerProfileClick = new EventEmitter<void>();
+  @Output() offerClick = new EventEmitter<void>();
 
   get title(): string {
     return this.listing?.title || 'Untitled Listing';
@@ -66,5 +68,10 @@ export class ListingCardComponent {
   onSellerProfileClick(event: Event): void {
     event.stopPropagation();
     this.sellerProfileClick.emit();
+  }
+
+  onOfferClick(event: Event): void {
+    event.stopPropagation();
+    this.offerClick.emit();
   }
 }
