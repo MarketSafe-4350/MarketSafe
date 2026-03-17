@@ -34,6 +34,8 @@ from tests.unit.business_logic import (
     TestCommentManagerUnit,
     TestCommentServiceUnit,
     TestBusinessManagerContracts,
+    TestOfferManagerUnit,
+    TestOfferServiceUnit,
 )
 from tests.unit.config import TestConfig
 from tests.unit.db import (
@@ -111,6 +113,8 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestOffer))
     suite.addTests(loader.loadTestsFromTestCase(TestOfferDBABC))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLOfferDB))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferManagerUnit))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferServiceUnit))
     return suite
 
 
