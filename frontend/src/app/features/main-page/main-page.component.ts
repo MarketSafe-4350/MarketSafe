@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,6 +13,11 @@ import { ListingComment } from '../../shared/models/comment.models';
 import { ListingsSidebarActionsBase } from '../../shared/helpers/listings-sidebar-actions.base';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { CommentApiService } from '../../shared/services/comments-api.service';
+import { OffersApiService } from '../../shared/services/offers-api.service';
+import {
+  SendOfferDialogComponent,
+  SendOfferPayload,
+} from '../send-offer/send-offer.component';
 @Component({
   selector: 'app-main-page',
   standalone: true,
@@ -32,6 +38,8 @@ export class MainPageComponent
 {
   private readonly accountsApi = inject(AccountsApiService);
   private readonly commentsApi = inject(CommentApiService);
+  private readonly offersApi = inject(OffersApiService);
+  private readonly dialog = inject(MatDialog);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   readonly maxCommentLength = 500;
@@ -44,6 +52,8 @@ export class MainPageComponent
   private readonly commentsByListingId = new Map<number, ListingComment[]>();
   private readonly commentDrafts = new Map<number, string>();
   private readonly commentErrors = new Map<number, string>();
+  private readonly offerMessages = new Map<number, string>();
+  private readonly submittingOfferIds = new Set<number>();
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
@@ -223,8 +233,62 @@ export class MainPageComponent
     );
   }
 
+  canSendOffer(listing: Listing): boolean {
+    return this.canViewSellerProfile(listing) && !listing.isSold;
+  }
+
+  getOfferMessage(listingId: number): string | null {
+    return this.offerMessages.get(listingId) ?? null;
+  }
+
+  isSubmittingOffer(listingId: number): boolean {
+    return this.submittingOfferIds.has(listingId);
+  }
+
+  openSendOfferDialog(listing: Listing): void {
+    if (!this.canSendOffer(listing)) {
+      return;
+    }
+
+    const ref = this.dialog.open(SendOfferDialogComponent, {
+      width: '460px',
+      maxWidth: '92vw',
+    });
+
+    ref.afterClosed().subscribe((payload: SendOfferPayload | null) => {
+      if (!payload) {
+        return;
+      }
+
+      this.submitOffer(listing, payload);
+    });
+  }
+
   private clearCommentError(listingId: number): void {
     this.commentErrors.delete(listingId);
+  }
+
+  private submitOffer(listing: Listing, payload: SendOfferPayload): void {
+    this.offerMessages.delete(listing.id);
+    this.submittingOfferIds.add(listing.id);
+
+    this.offersApi
+      .create({
+        listingId: listing.id,
+        offeredPrice: payload.offeredPrice,
+        locationOffered: payload.locationOffered,
+      })
+      .subscribe({
+        next: () => {
+          this.offerMessages.set(listing.id, 'Offer sent successfully.');
+          this.submittingOfferIds.delete(listing.id);
+        },
+        error: (error) => {
+          console.error('Failed to send offer:', error);
+          this.offerMessages.set(listing.id, 'Failed to send offer.');
+          this.submittingOfferIds.delete(listing.id);
+        },
+      });
   }
 
   private loadCommentAuthorLabel(): void {

@@ -5,12 +5,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { SearchPageComponent } from './search-page.component';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { Listing } from '../../shared/models/listing.models';
+import { OffersApiService } from '../../shared/services/offers-api.service';
+import { SendOfferDialogComponent } from '../send-offer/send-offer.component';
 
 @Component({ template: '' })
 class DummyRouteComponent {}
@@ -22,6 +24,8 @@ describe('SearchPageComponent', () => {
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
   let router: Router;
   let matDialogSpy: jasmine.SpyObj<MatDialog>;
+  let offersApiSpy: jasmine.SpyObj<OffersApiService>;
+  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<SendOfferDialogComponent>>;
 
   const searchResult: Listing = {
     id: 25,
@@ -50,6 +54,18 @@ describe('SearchPageComponent', () => {
     listingsApiSpy.search.and.returnValue(of([searchResult]));
 
     matDialogSpy = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
+    dialogRefSpy = jasmine.createSpyObj<MatDialogRef<SendOfferDialogComponent>>(
+      'MatDialogRef',
+      ['afterClosed'],
+    );
+    dialogRefSpy.afterClosed.and.returnValue(of(null));
+    matDialogSpy.open.and.returnValue(dialogRefSpy);
+
+    offersApiSpy = jasmine.createSpyObj<OffersApiService>('OffersApiService', [
+      'create',
+    ]);
+    offersApiSpy.create.and.returnValue(of({}));
+
     accountsApiSpy = jasmine.createSpyObj<AccountsApiService>('AccountsApiService', ['getMe']);
     accountsApiSpy.getMe.and.returnValue(
       of({
@@ -76,6 +92,7 @@ describe('SearchPageComponent', () => {
         provideNoopAnimations(),
         { provide: ListingsApiService, useValue: listingsApiSpy },
         { provide: AccountsApiService, useValue: accountsApiSpy },
+        { provide: OffersApiService, useValue: offersApiSpy },
       ],
     })
       .overrideComponent(SearchPageComponent, {
@@ -145,6 +162,14 @@ describe('SearchPageComponent', () => {
 
     expect(component.canViewSellerProfile(123)).toBeFalse();
     expect(component.canViewSellerProfile(searchResult.sellerId)).toBeTrue();
+  });
+
+  it('canSendOffer_ShouldOnlyBeTrueForOtherActiveListing', () => {
+    fixture.detectChanges();
+
+    expect(component.canSendOffer({ ...searchResult, sellerId: 123 })).toBeFalse();
+    expect(component.canSendOffer({ ...searchResult, isSold: true })).toBeFalse();
+    expect(component.canSendOffer(searchResult)).toBeTrue();
   });
 
   it('changeSortType_ShouldUpdateSortOptionAndCallSortResults', () => {
