@@ -30,6 +30,12 @@ from tests.integration.comment import (
 )
 from tests.integration.rating import TestMySQLRatingDB, TestRatingManagerIntegration
 
+from tests.integration.offer import (
+    TestMySQLOfferDB,
+    TestOfferManagerIntegration,
+    TestOfferServiceIntegration,
+)
+
 
 def load_tests(
     loader: unittest.TestLoader, tests: unittest.TestSuite, pattern: str
@@ -52,7 +58,9 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLEmailVerificationTokenDB))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLRatingDB))
     suite.addTests(loader.loadTestsFromTestCase(TestRatingManagerIntegration))
-
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferManagerIntegration))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferServiceIntegration))
+    suite.addTests(loader.loadTestsFromTestCase(TestMySQLOfferDB))
     return suite
 
 
