@@ -6,4 +6,5 @@ export const APP_URLS = {
 export const API_URLS = {
   accounts: `${APP_URLS.backendBaseUrl}/accounts`,
   listings: `${APP_URLS.backendBaseUrl}/listings`,
+  offers: `${APP_URLS.backendBaseUrl}/offers`,
 } as const;

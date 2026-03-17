@@ -36,8 +36,20 @@
         <span class="comment-count">{{ commentCountLabel }}</span>
       </div>
 
-      @if (showSellerProfileButton) {
+      @if (showSellerProfileButton || showOfferButton) {
         <div class="list-actions">
+          @if (showOfferButton) {
+            <button
+              mat-flat-button
+              type="button"
+              class="send-offer-btn"
+              (click)="onOfferClick($event)"
+            >
+              Send Offer
+            </button>
+          }
+
+          @if (showSellerProfileButton) {
           <button
             mat-stroked-button
             type="button"
@@ -46,6 +58,7 @@
           >
             View Seller Profile
           </button>
+          }
         </div>
       }
     </div>

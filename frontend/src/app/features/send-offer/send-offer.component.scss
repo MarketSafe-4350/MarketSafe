@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+.dialog-title {
+  margin: 0 0 18px 0;
+  font-weight: 650;
+  font-size: 1.35rem;
+  color: #f0394f;
+  text-align: center;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: min(420px, 92vw);
+  padding: 20px 24px;
+  box-sizing: border-box;
+}
+
+.full {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  button[mat-raised-button] {
+    background-color: #f0394f;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 10px;
+
+    &:hover {
+      filter: brightness(1.05);
+    }
+  }
+}
