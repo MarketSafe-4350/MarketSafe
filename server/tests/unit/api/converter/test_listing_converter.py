@@ -1,4 +1,5 @@
 from __future__ import annotations
+from unittest.mock import Mock
 
 import unittest
 from datetime import datetime, timezone
@@ -115,3 +116,33 @@ class TestListingConverter(unittest.TestCase):
         self.assertEqual(out.id, 1)
         self.assertIsNone(out.created_at)
         self.assertTrue(out.is_sold)
+
+    def test_listing_response_from_domain_uses_media_storage_public_url(self) -> None:
+        listing = Listing(
+            listing_id=11,
+            seller_id=7,
+            title="Bike",
+            description="Nice",
+            price=50.0,
+            image_url="listing-images/bike.png",
+            location="Winnipeg",
+            created_at=None,
+            is_sold=False,
+            sold_to_id=None,
+        )
+
+        media_storage = Mock()
+        media_storage.public_url.return_value = (
+            "http://localhost:9000/listing-images/bike.png"
+        )
+
+        out = ListingResponse.from_domain(
+            listing=listing,
+            media_storage=media_storage,
+        )
+
+        media_storage.public_url.assert_called_once_with("listing-images/bike.png")
+        self.assertEqual(
+            out.image_url,
+            "http://localhost:9000/listing-images/bike.png",
+        )

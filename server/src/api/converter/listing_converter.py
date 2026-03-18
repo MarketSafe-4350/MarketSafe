@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field
+
 from src.domain_models import Listing
+from src.minio.media_storage_utility import MediaStorageUtility
 
 
 class ListingCreate(BaseModel):
@@ -36,14 +38,22 @@ class ListingResponse(BaseModel):
     is_sold: bool
 
     @staticmethod
-    def from_domain(listing: Listing) -> "ListingResponse":
+    def from_domain(
+        listing: Listing,
+        media_storage: MediaStorageUtility | None = None,
+    ) -> "ListingResponse":
+        image_url = listing.image_url
+
+        if image_url and media_storage is not None:
+            image_url = media_storage.public_url(image_url)
+
         return ListingResponse(
             id=listing.id,
             seller_id=listing.seller_id,
             title=listing.title,
             description=listing.description,
             price=listing.price,
-            image_url=listing.image_url,
+            image_url=image_url,
             location=listing.location,
             created_at=listing.created_at.isoformat() if listing.created_at else None,
             is_sold=listing.is_sold,

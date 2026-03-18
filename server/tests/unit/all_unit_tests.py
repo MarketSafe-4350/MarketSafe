@@ -14,6 +14,7 @@ from tests.unit.db.rating import (
     TestMySQLRatingDBEdgeCases,
     TestRatingMapper,
 )
+from tests.unit.minio import TestMediaStorageUtility
 from tests.unit.test_main import TestMainUnit
 from tests.unit.api import (
     TestAPIDependencies,
@@ -119,6 +120,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestOfferManagerUnit))
     suite.addTests(loader.loadTestsFromTestCase(TestOfferServiceUnit))
     suite.addTests(loader.loadTestsFromTestCase(TestOfferRoutes))
+    suite.addTests(loader.loadTestsFromTestCase(TestMediaStorageUtility))
     return suite
 
 
