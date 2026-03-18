@@ -126,5 +126,61 @@ class TestAPIDependencies(unittest.TestCase):
         self.assertIs(result, service)
 
 
+
+    def test_get_media_storage_uses_default_env_values(self):
+        request = MagicMock(name="request")
+
+        with (
+            patch.dict("os.environ", {}, clear=True),
+            patch.object(deps, "MediaStorageUtility") as ctor,
+        ):
+            instance = MagicMock(name="media_storage")
+            ctor.return_value = instance
+
+            result = deps.get_media_storage(request=request)
+
+        ctor.assert_called_once_with(
+            endpoint="localhost:9000",
+            access_key="minioadmin",
+            secret_key="minioadmin123",
+            secure=False,
+            public_base_url="http://localhost:9000",
+            ensure_bucket_on_startup=True,
+            make_bucket_public_on_startup=True,
+        )
+        self.assertIs(result, instance)
+
+    def test_get_media_storage_uses_env_values(self):
+        request = MagicMock(name="request")
+
+        env = {
+            "MINIO_ENDPOINT": "minio:9000",
+            "MINIO_ROOT_USER": "user1",
+            "MINIO_ROOT_PASSWORD": "pass1",
+            "MINIO_SECURE": "true",
+            "MINIO_PUBLIC_BASE_URL": "https://cdn.example.com",
+        }
+
+        with (
+            patch.dict("os.environ", env, clear=True),
+            patch.object(deps, "MediaStorageUtility") as ctor,
+        ):
+            instance = MagicMock(name="media_storage")
+            ctor.return_value = instance
+
+            result = deps.get_media_storage(request=request)
+
+        ctor.assert_called_once_with(
+            endpoint="minio:9000",
+            access_key="user1",
+            secret_key="pass1",
+            secure=True,
+            public_base_url="https://cdn.example.com",
+            ensure_bucket_on_startup=True,
+            make_bucket_public_on_startup=True,
+        )
+        self.assertIs(result, instance)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -7,13 +7,18 @@ from fastapi import UploadFile
 from io import BytesIO
 from pathlib import Path
 from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 import src.api.routes.listing_routes as listing_routes
 
-from src.api.dependencies import get_listing_service
+from src.api.dependencies import (
+    get_comment_service,
+    get_listing_service,
+    get_media_storage,
+)
 from src.auth.dependencies import get_current_user_id
 
 
@@ -28,6 +33,11 @@ class TestListingRoutes(unittest.TestCase):
         self.listing_service = MagicMock(name="listing_service")
         self.app.dependency_overrides[get_listing_service] = (
             lambda: self.listing_service
+        )
+
+        self.media_storage = MagicMock(name="media_storage")
+        self.app.dependency_overrides[get_media_storage] = (
+            lambda: self.media_storage
         )
 
         self.client = TestClient(self.app)
@@ -105,38 +115,44 @@ class TestListingRoutes(unittest.TestCase):
         ext = listing_routes._normalized_image_extension(upload)
         self.assertEqual(ext, ".jpg")
 
-    def test_save_uploaded_image_rejects_non_image(self):
+    def test_upload_listing_image_rejects_non_image(self):
         upload = MagicMock()
         upload.content_type = "text/plain"
         upload.filename = "notes.txt"
 
         with self.assertRaises(ValueError) as ctx:
-            listing_routes._save_uploaded_image(upload, request=MagicMock())
+            import asyncio
+            asyncio.run(
+                listing_routes._upload_listing_image(upload, self.media_storage)
+            )
 
         self.assertIn("must be an image", str(ctx.exception))
+        self.media_storage.upload_bytes.assert_not_called()
 
-    def test_save_uploaded_image_writes_file_and_returns_url(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            upload_dir = Path(tmp)
+    def test_upload_listing_image_uploads_bytes_and_returns_key(self):
+        upload = MagicMock()
+        upload.content_type = "image/png"
+        upload.filename = "x.png"
+        upload.read = AsyncMock(return_value=b"fake image bytes")
 
-            upload = MagicMock()
-            upload.content_type = "image/png"
-            upload.filename = "x.png"
-            upload.file = io.BytesIO(b"fake image bytes")
+        fake_uuid = MagicMock()
+        fake_uuid.hex = "abc123"
 
-            fake_uuid = MagicMock()
-            fake_uuid.hex = "abc123"
+        self.media_storage.upload_bytes.return_value = "/uploads/listings/abc123.png"
 
-            with patch.object(
-                listing_routes, "_listing_uploads_dir", return_value=upload_dir
-            ), patch.object(listing_routes.uuid, "uuid4", return_value=fake_uuid):
+        with patch.object(listing_routes.uuid, "uuid4", return_value=fake_uuid):
+            import asyncio
+            url = asyncio.run(
+                listing_routes._upload_listing_image(upload, self.media_storage)
+            )
 
-                url = listing_routes._save_uploaded_image(upload, request=MagicMock())
-
-            self.assertEqual(url, "/uploads/listings/abc123.png")
-            saved_file = upload_dir / "abc123.png"
-            self.assertTrue(saved_file.exists())
-            self.assertEqual(saved_file.read_bytes(), b"fake image bytes")
+        self.assertEqual(url, "/uploads/listings/abc123.png")
+        upload.read.assert_awaited_once()
+        self.media_storage.upload_bytes.assert_called_once_with(
+            key="listings/abc123.png",
+            data=b"fake image bytes",
+            content_type="image/png",
+        )
 
     def test_create_listing_with_upload_no_image(self):
         fake_listing = MagicMock(name="listing_domain")
@@ -158,7 +174,7 @@ class TestListingRoutes(unittest.TestCase):
             listing_routes.ListingResponse,
             "from_domain",
             return_value=fake_response_dict,
-        ):
+        ) as from_domain_mock:
             resp = self.client.post(
                 "/listings/upload",
                 data={
@@ -181,6 +197,7 @@ class TestListingRoutes(unittest.TestCase):
             location="L",
             image_url=None,
         )
+        from_domain_mock.assert_called_once_with(fake_listing, self.media_storage)
 
     def test_listing_uploads_dir_uses_correct_parent_depth(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -234,14 +251,13 @@ class TestListingRoutes(unittest.TestCase):
 
         with patch.object(
             listing_routes,
-            "_save_uploaded_image",
-            return_value="/uploads/listings/x.jpg",
-        ) as save_mock, patch.object(
+            "_upload_listing_image",
+            new=AsyncMock(return_value="/uploads/listings/x.jpg"),
+        ) as upload_mock, patch.object(
             listing_routes.ListingResponse,
             "from_domain",
             return_value=fake_response_obj,
         ):
-
             resp = self.client.post(
                 "/listings/upload",
                 data={
@@ -256,7 +272,7 @@ class TestListingRoutes(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.json(), fake_response_obj.model_dump())
 
-        save_mock.assert_called_once()
+        upload_mock.assert_awaited_once()
         self.listing_service.create_listing.assert_called_once_with(
             seller_id=self.user_id,
             title="Chair",
@@ -266,11 +282,11 @@ class TestListingRoutes(unittest.TestCase):
             image_url="/uploads/listings/x.jpg",
         )
 
-    def test_create_listing_with_upload_invalid_image_returns_400_and_closes_file(self):
+    def test_create_listing_with_upload_invalid_image_returns_400(self):
         with patch.object(
             listing_routes,
-            "_save_uploaded_image",
-            side_effect=ValueError("Uploaded file must be an image."),
+            "_upload_listing_image",
+            new=AsyncMock(side_effect=ValueError("Uploaded file must be an image.")),
         ):
             resp = self.client.post(
                 "/listings/upload",
@@ -299,12 +315,10 @@ class TestListingRoutes(unittest.TestCase):
         )
 
     def test_get_all_listing_returns_list_of_listing_responses(self):
-        # Service returns two domain listings (we don't care about real Listing class here)
         l1 = MagicMock(name="listing1")
         l2 = MagicMock(name="listing2")
         self.listing_service.get_all_listing.return_value = [l1, l2]
 
-        # Patch converter to return deterministic dicts
         with patch.object(
             listing_routes.ListingResponse,
             "from_domain",
@@ -332,12 +346,13 @@ class TestListingRoutes(unittest.TestCase):
                     "is_sold": False,
                 },
             ],
-        ):
+        ) as from_domain_mock:
             resp = self.client.get("/listings")
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()), 2)
         self.listing_service.get_all_listing.assert_called_once()
+        self.assertEqual(from_domain_mock.call_count, 2)
 
     def test_get_my_listing_returns_list(self):
         l1 = MagicMock()
@@ -357,7 +372,7 @@ class TestListingRoutes(unittest.TestCase):
                 "created_at": None,
                 "is_sold": False,
             },
-        ):
+        ) as from_domain_mock:
             resp = self.client.get("/listings/me")
 
         self.assertEqual(resp.status_code, 200)
@@ -365,6 +380,7 @@ class TestListingRoutes(unittest.TestCase):
         self.listing_service.get_listing_by_user_id.assert_called_once_with(
             user_id=self.user_id
         )
+        from_domain_mock.assert_called_once_with(l1, self.media_storage)
 
     def test_search_listings_calls_service_and_returns_list(self):
         l1 = MagicMock()
@@ -384,12 +400,13 @@ class TestListingRoutes(unittest.TestCase):
                 "created_at": None,
                 "is_sold": False,
             },
-        ):
+        ) as from_domain_mock:
             resp = self.client.get("/listings/search?q=chair")
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.json()), 1)
         self.listing_service.search_listings.assert_called_once_with(query="chair")
+        from_domain_mock.assert_called_once_with(l1, self.media_storage)
 
     def test_create_listing_json_calls_service_and_returns_listing_response(self):
         fake_listing = MagicMock()
@@ -408,8 +425,10 @@ class TestListingRoutes(unittest.TestCase):
         }
 
         with patch.object(
-            listing_routes.ListingResponse, "from_domain", return_value=fake_response
-        ):
+            listing_routes.ListingResponse,
+            "from_domain",
+            return_value=fake_response,
+        ) as from_domain_mock:
             resp = self.client.post(
                 "/listings",
                 json={
@@ -432,20 +451,16 @@ class TestListingRoutes(unittest.TestCase):
             location="L",
             image_url=None,
         )
+        from_domain_mock.assert_called_once_with(fake_listing, self.media_storage)
 
-    # -----------------------------
-    # Comments routes
-    # -----------------------------
     def test_get_listing_comment_returns_list(self):
-        # Override get_comment_service dependency if not already done in setUp
         self.comment_service = MagicMock(name="comment_service")
-        self.app.dependency_overrides[listing_routes.get_comment_service] = (
+        self.app.dependency_overrides[get_comment_service] = (
             lambda: self.comment_service
         )
 
         c1 = MagicMock(name="comment_with_author1")
         c2 = MagicMock(name="comment_with_author2")
-        # each item must have .comment and .author fields because route uses them
         c1.comment, c1.author = MagicMock(), MagicMock()
         c2.comment, c2.author = MagicMock(), MagicMock()
 
@@ -483,16 +498,16 @@ class TestListingRoutes(unittest.TestCase):
 
     def test_create_listing_comment_calls_service_and_returns_comment_response(self):
         self.comment_service = MagicMock(name="comment_service")
-        self.app.dependency_overrides[listing_routes.get_comment_service] = (
+        self.app.dependency_overrides[get_comment_service] = (
             lambda: self.comment_service
         )
 
-        # CommentCreate.to_domain returns a Comment domain object
         fake_comment_domain = MagicMock(name="comment_domain")
         with patch.object(
-            listing_routes.CommentCreate, "to_domain", return_value=fake_comment_domain
+            listing_routes.CommentCreate,
+            "to_domain",
+            return_value=fake_comment_domain,
         ) as to_domain_mock:
-            # comment_service.create_comment returns CommentWithAuthor-like object
             item = MagicMock(name="comment_with_author")
             item.comment = MagicMock()
             item.author = MagicMock()
@@ -518,7 +533,10 @@ class TestListingRoutes(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.json()["listing_id"], 99)
 
-        to_domain_mock.assert_called_once_with(listing_id=99, author_id=self.user_id)
+        to_domain_mock.assert_called_once_with(
+            listing_id=99,
+            author_id=self.user_id,
+        )
         self.comment_service.create_comment.assert_called_once_with(
             actor_id=self.user_id,
             listing_id=99,

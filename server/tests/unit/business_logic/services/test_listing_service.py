@@ -8,6 +8,7 @@ from src.domain_models.listing import Listing
 from src.utils import ValidationError, ListingNotFoundError, UnapprovedBehaviorError
 from src.api.converter.listing_converter import ListingCreate
 
+
 class TestListingServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
         self.manager: MagicMock = MagicMock()
@@ -21,18 +22,16 @@ class TestListingServiceUnit(unittest.TestCase):
             description="This is a test listing.",
             price=10.0,
             location="Test Location",
-            image_url="http://example.com/image.jpg",
+            image_url="listings/image.jpg",
         )
         expected_result: List[Listing] = [one_listing, one_listing]
 
         self.manager.list_listings.return_value = expected_result
         result = self.service.get_all_listing()
+
         self.manager.list_listings.assert_called_once()
         self.assertEqual(result, expected_result)
 
-    # -----------------------------
-    # get listing by user id
-    # -----------------------------
     def test_get_listing_by_user_id_delegates_to_manager(self) -> None:
         user_id = 456
         one_listing = Listing(
@@ -42,14 +41,24 @@ class TestListingServiceUnit(unittest.TestCase):
             description="This is a test listing.",
             price=10.0,
             location="Test Location",
-            image_url="http://example.com/image.jpg",
+            image_url="listings/image.jpg",
         )
         expected_result: List[Listing] = [one_listing, one_listing]
 
         self.manager.list_listings_by_seller.return_value = expected_result
         result = self.service.get_listing_by_user_id(user_id=user_id)
-        self.manager.list_listings_by_seller.assert_called_once()
+
+        self.manager.list_listings_by_seller.assert_called_once_with(user_id)
         self.assertEqual(result, expected_result)
+
+    def test_get_listing_by_id_delegates_and_returns_value(self) -> None:
+        listing = MagicMock()
+        self.manager.get_listing_by_id.return_value = listing
+
+        result = self.service.get_listing_by_id(123)
+
+        self.manager.get_listing_by_id.assert_called_once_with(123)
+        self.assertIs(result, listing)
 
     def test_search_listings_filters_and_ranks_relevant_results(self) -> None:
         laptop_title_match = Listing(
@@ -98,21 +107,25 @@ class TestListingServiceUnit(unittest.TestCase):
 
     def test_search_listings_blank_query_returns_empty_list(self) -> None:
         result = self.service.search_listings("   ")
+
         self.assertEqual(result, [])
         self.manager.list_listings.assert_not_called()
 
-    # -----------------------------
-    # create_listing - happy path
-    # -----------------------------
+    def test_search_listings_query_none_returns_empty_list(self) -> None:
+        result = self.service.search_listings(None)
+
+        self.assertEqual(result, [])
+        self.manager.list_listings.assert_not_called()
+
     def test_create_listing_validates_and_delegates_to_manager(self) -> None:
-        expected_result: Listing = Listing(
+        expected_result = Listing(
             listing_id=123,
             seller_id=456,
             title="Test Listing",
             description="This is a test listing.",
             price=10.0,
             location="Test Location",
-            image_url="http://example.com/image.jpg",
+            image_url="listings/image.jpg",
         )
 
         self.manager.create_listing.return_value = expected_result
@@ -127,30 +140,28 @@ class TestListingServiceUnit(unittest.TestCase):
         )
 
         self.manager.create_listing.assert_called_once()
+        created_listing = self.manager.create_listing.call_args.args[0]
 
-        self.assertIsInstance(result, Listing)
-        self.assertEqual(result.seller_id, 456)
-        self.assertEqual(result.title, "Test Listing")
-        self.assertEqual(result.description, "This is a test listing.")
-        self.assertEqual(result.price, 10.0)
-        self.assertEqual(result.location, "Test Location")
-        self.assertEqual(result.image_url, "http://example.com/image.jpg")
-        self.assertFalse(result.is_sold)
+        self.assertIsInstance(created_listing, Listing)
+        self.assertEqual(created_listing.seller_id, 456)
+        self.assertEqual(created_listing.title, "Test Listing")
+        self.assertEqual(created_listing.description, "This is a test listing.")
+        self.assertEqual(created_listing.price, 10.0)
+        self.assertEqual(created_listing.location, "Test Location")
+        self.assertEqual(created_listing.image_url, "listings/image.jpg")
+        self.assertFalse(created_listing.is_sold)
 
-    # -----------------------------
-    # create_listing - validation errors
-    # -----------------------------
-    def test_create_listing_all_invalid_fields_raises_validation_error(
-        self,
-    ) -> None:
+        self.assertIs(result, expected_result)
+
+    def test_create_listing_all_invalid_fields_raises_validation_error(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
             self.service.create_listing(
                 seller_id=456,
-                title="   ",  # invalid
-                description="",  # invalid
-                price=None,  # invalid
-                location="",  # invalid
-                image_url="ftp://x.com/a",  # invalid scheme
+                title="   ",
+                description="",
+                price=None,
+                location="",
+                image_url="/bad-key",
             )
 
         err = ctx.exception
@@ -182,7 +193,6 @@ class TestListingServiceUnit(unittest.TestCase):
         errors = ctx.exception.details["errors"]
         self.assertIn("title", errors)
         self.assertIn("Title cannot be empty or whitespace only.", errors["title"])
-
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_title_empty_raises_validation_error(self) -> None:
@@ -199,7 +209,6 @@ class TestListingServiceUnit(unittest.TestCase):
         errors = ctx.exception.details["errors"]
         self.assertIn("title", errors)
         self.assertIn("Title cannot be empty or whitespace only.", errors["title"])
-
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_description_none_raises_validation_error(self) -> None:
@@ -207,7 +216,7 @@ class TestListingServiceUnit(unittest.TestCase):
             self.service.create_listing(
                 seller_id=456,
                 title="Valid title",
-                description=None,  # invalid
+                description=None,
                 price=10.0,
                 location="Valid location",
                 image_url=None,
@@ -216,7 +225,6 @@ class TestListingServiceUnit(unittest.TestCase):
         errors = ctx.exception.details["errors"]
         self.assertIn("description", errors)
         self.assertIn("Description cannot be empty.", errors["description"])
-
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_description_empty_raises_validation_error(self) -> None:
@@ -233,7 +241,6 @@ class TestListingServiceUnit(unittest.TestCase):
         errors = ctx.exception.details["errors"]
         self.assertIn("description", errors)
         self.assertIn("Description cannot be empty.", errors["description"])
-
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_price_less_zero_raises_validation_error(self) -> None:
@@ -249,9 +256,23 @@ class TestListingServiceUnit(unittest.TestCase):
 
         errors = ctx.exception.details["errors"]
         self.assertIn("price", errors)
-
         self.assertIn("Price must be a non-negative number.", errors["price"])
+        self.manager.create_listing.assert_not_called()
 
+    def test_create_listing_price_zero_raises_validation_error(self) -> None:
+        with self.assertRaises(ValidationError) as ctx:
+            self.service.create_listing(
+                seller_id=1,
+                title="A",
+                description="B",
+                price=0.0,
+                location="Winnipeg",
+                image_url=None,
+            )
+
+        errors = ctx.exception.details["errors"]
+        self.assertIn("price", errors)
+        self.assertIn("Price must be a non-negative number.", errors["price"])
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_price_none_raises_validation_error(self) -> None:
@@ -267,9 +288,7 @@ class TestListingServiceUnit(unittest.TestCase):
 
         errors = ctx.exception.details["errors"]
         self.assertIn("price", errors)
-
         self.assertIn("Price cannot be None.", errors["price"])
-
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_price_above_max_raises_validation_error(self) -> None:
@@ -286,7 +305,6 @@ class TestListingServiceUnit(unittest.TestCase):
         errors = ctx.exception.details["errors"]
         self.assertIn("price", errors)
         self.assertIn("Price cannot exceed 99999999.99.", errors["price"])
-
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_location_empty_raises_validation_error(self) -> None:
@@ -302,9 +320,7 @@ class TestListingServiceUnit(unittest.TestCase):
 
         errors = ctx.exception.details["errors"]
         self.assertIn("location", errors)
-
         self.assertIn("Location cannot be empty.", errors["location"])
-
         self.manager.create_listing.assert_not_called()
 
     def test_create_listing_location_above_max_raises_validation_error(self) -> None:
@@ -321,10 +337,9 @@ class TestListingServiceUnit(unittest.TestCase):
         errors = ctx.exception.details["errors"]
         self.assertIn("location", errors)
         self.assertIn("Location cannot exceed 120 characters.", errors["location"])
-
         self.manager.create_listing.assert_not_called()
 
-    def test_create_listing_image_url_valid(self) -> None:
+    def test_create_listing_image_key_valid(self) -> None:
         expected = Listing(
             listing_id=123,
             seller_id=1,
@@ -332,7 +347,7 @@ class TestListingServiceUnit(unittest.TestCase):
             description="B",
             price=10.0,
             location="Winnipeg",
-            image_url="http://example.com/image.jpg",
+            image_url="listings/image.jpg",
         )
 
         self.manager.create_listing.return_value = expected
@@ -343,43 +358,17 @@ class TestListingServiceUnit(unittest.TestCase):
             description="B",
             price=10.0,
             location="Winnipeg",
-            image_url="http://example.com/image.jpg",
+            image_url="listings/image.jpg",
         )
 
-        # manager should be called once
         self.manager.create_listing.assert_called_once()
-
         self.assertIsNotNone(result)
         self.assertEqual(result.id, 123)
-        self.assertEqual(result.image_url, "http://example.com/image.jpg")
+        self.assertEqual(result.image_url, "listings/image.jpg")
         self.assertEqual(result.title, "A")
         self.assertEqual(result.price, 10.0)
 
-    def test_create_listing_image_url_invalid_scheme_raises_validation_error(
-        self,
-    ) -> None:
-        with self.assertRaises(ValidationError) as ctx:
-            self.service.create_listing(
-                seller_id=1,
-                title="A",
-                description="B",
-                price=10.0,
-                location="Winnipeg",
-                image_url="ftp://example.com/image.jpg",
-            )
-
-        errors = ctx.exception.details["errors"]
-        self.assertIn("image_url", errors)
-
-        self.assertIn(
-            "Image URL must start with http:// or https://", errors["image_url"]
-        )
-
-        self.manager.create_listing.assert_not_called()
-
-    def test_create_listing_image_url_empty_raises_validation_error(
-        self,
-    ) -> None:
+    def test_create_listing_image_key_empty_raises_validation_error(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
             self.service.create_listing(
                 seller_id=1,
@@ -392,13 +381,11 @@ class TestListingServiceUnit(unittest.TestCase):
 
         errors = ctx.exception.details["errors"]
         self.assertIn("image_url", errors)
-
-        self.assertIn("Image URL cannot be empty if provided.", errors["image_url"])
-
+        self.assertIn("Image key cannot be empty if provided.", errors["image_url"])
         self.manager.create_listing.assert_not_called()
 
-    def test_create_listing_image_url_none_is_valid(self) -> None:
-        expected_result: Listing = Listing(
+    def test_create_listing_image_key_none_is_valid(self) -> None:
+        expected_result = Listing(
             listing_id=123,
             seller_id=456,
             title="Test Listing",
@@ -426,7 +413,7 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertEqual(result.title, "Test Listing")
         self.assertEqual(result.price, 10.0)
 
-    def test_create_listing_image_url_invalid_domain_raises_validation_error(
+    def test_create_listing_image_key_starting_with_slash_raises_validation_error(
         self,
     ) -> None:
         with self.assertRaises(ValidationError) as ctx:
@@ -436,38 +423,41 @@ class TestListingServiceUnit(unittest.TestCase):
                 description="B",
                 price=10.0,
                 location="Winnipeg",
-                image_url="http://",  # invalid - missing domain
+                image_url="/uploads/listings/image.jpg",
             )
 
         errors = ctx.exception.details["errors"]
         self.assertIn("image_url", errors)
-
-        self.assertIn("Image URL must have a valid domain.", errors["image_url"])
-
+        self.assertIn("Image key must not start with '/'.", errors["image_url"])
         self.manager.create_listing.assert_not_called()
 
-    def test_get_listing_by_id_delegates_and_returns_value(self):
-        listing = MagicMock()
-        self.manager.get_listing_by_id.return_value = listing
-        result = self.service.get_listing_by_id(123)
-        self.manager.get_listing_by_id.assert_called_once_with(123)
-        self.assertIs(result, listing)
-
-    def test_search_listings_query_none_returns_empty_list(self):
-        result = self.service.search_listings(None)
-        self.assertEqual(result, [])
-        self.manager.list_listings.assert_not_called()
-
-    def test_validate_image_url_local_path_allowed(self):
+    def test_validate_image_url_none_returns_none(self) -> None:
         errors = {}
-        path = "/uploads/listings/abc.png"
-        result = self.service._validate_image_url(path, errors)
-        self.assertEqual(result, path)
+
+        result = self.service._validate_image_url(None, errors)
+
+        self.assertIsNone(result)
         self.assertEqual(errors, {})
 
-    # test delete listing
+    def test_validate_image_url_valid_key_returns_key(self) -> None:
+        errors = {}
+        key = "listings/abc.png"
 
-    def test_delete_listing_not_found_raises(self):
+        result = self.service._validate_image_url(key, errors)
+
+        self.assertEqual(result, key)
+        self.assertEqual(errors, {})
+
+    def test_validate_image_url_leading_slash_adds_error(self) -> None:
+        errors = {}
+
+        result = self.service._validate_image_url("/listings/abc.png", errors)
+
+        self.assertIsNone(result)
+        self.assertIn("image_url", errors)
+        self.assertIn("Image key must not start with '/'.", errors["image_url"])
+
+    def test_delete_listing_not_found_raises(self) -> None:
         self.manager.get_listing_by_id.return_value = None
 
         with self.assertRaises(ListingNotFoundError):
@@ -475,7 +465,7 @@ class TestListingServiceUnit(unittest.TestCase):
 
         self.manager.delete_listing.assert_not_called()
 
-    def test_delete_listing_wrong_actor_raises(self):
+    def test_delete_listing_wrong_actor_raises(self) -> None:
         listing = MagicMock()
         listing.seller_id = 999
         self.manager.get_listing_by_id.return_value = listing
@@ -485,7 +475,7 @@ class TestListingServiceUnit(unittest.TestCase):
 
         self.manager.delete_listing.assert_not_called()
 
-    def test_delete_listing_happy_path_delegates(self):
+    def test_delete_listing_happy_path_delegates(self) -> None:
         listing = MagicMock()
         listing.seller_id = 10
         self.manager.get_listing_by_id.return_value = listing
@@ -497,13 +487,11 @@ class TestListingServiceUnit(unittest.TestCase):
         self.manager.get_listing_by_id.assert_called_once_with(1)
         self.manager.delete_listing.assert_called_once_with(1)
 
-
-
-    def test_listingcreate_to_domain_allows_none_optionals(self):
+    def test_listingcreate_to_domain_allows_none_optionals(self) -> None:
         dto = ListingCreate(
             title="Desk lamp",
             description="Works great",
-            price=10.0
+            price=10.0,
         )
 
         listing = dto.to_domain(seller_id=7)
@@ -511,3 +499,7 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertEqual(listing.seller_id, 7)
         self.assertIsNone(listing.image_url)
         self.assertIsNone(listing.location)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

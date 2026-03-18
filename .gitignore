@@ -19,3 +19,6 @@ server/.env
 mutation_tests/
 
 server/uploads
+server/uploads
+
+.secrets

@@ -5,5 +5,6 @@ from .errors import (AppError, InfrastructureError, DatabaseUnavailableError, Da
                      AccountAlreadyExistsError, AccountError, AccountNotFoundError,
                      TokenError, TokenNotFoundError, TokenExpiredError, TokenAlreadyUsedError,
                      EmailVerificationError, ListingError, ListingNotFoundError, CommentError, CommentNotFoundError
-                     , RatingError, RatingNotFoundError,
-                     OfferError, OfferNotFoundError)
+                     , RatingError, RatingNotFoundError, OfferError, OfferNotFoundError, MediaNotFoundError,
+                     MediaConflictError, StorageError,
+                     StorageUnavailableError)

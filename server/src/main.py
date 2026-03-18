@@ -6,6 +6,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from src.minio import MediaStorageUtility
 from src.utils.errors import AppError
 from src.config import CORS_ALLOWED_ORIGINS
 from src.api.errors.exception_handlers import (
@@ -35,11 +36,11 @@ def create_app() -> FastAPI:
     host = os.getenv("DB_HOST", "127.0.0.1")
 
     DBUtility.initialize(
-        host=host,  # because you're running this on your Mac
-        port=3306,
-        database="marketsafe",
-        username="marketsafe",
-        password="marketsafe",
+        host=host,
+        port=int(os.getenv("DB_PORT", 3306)),
+        database=os.getenv("DB_NAME"),
+        username=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
         driver="mysql+pymysql",
     )
     app = FastAPI(title="MarketSafe API")
@@ -65,6 +66,16 @@ def create_app() -> FastAPI:
     app.add_exception_handler(ApiError, api_error_handler)
     app.add_exception_handler(AppError, app_error_handler)
     app.add_exception_handler(RequestValidationError, request_validation_error_handler)
+
+    # app.state.media_storage = MediaStorageUtility(
+    #     endpoint=os.getenv("MINIO_ENDPOINT", "localhost:9000"),
+    #     access_key=os.getenv("MINIO_ROOT_USER", "minioadmin"),
+    #     secret_key=os.getenv("MINIO_ROOT_PASSWORD", "minioadmin123"),
+    #     secure=os.getenv("MINIO_SECURE", "false").lower() == "true",
+    #     public_base_url=os.getenv("MINIO_PUBLIC_BASE_URL", "http://localhost:9000"),
+    #     ensure_bucket_on_startup=True,
+    #     make_bucket_public_on_startup=True,
+    # )
 
     return app
 

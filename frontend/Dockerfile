@@ -2,15 +2,18 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Install dependencies
 COPY package*.json ./
-
 RUN npm install
 
+# Copy application source
 COPY . .
 
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Expose Angular dev server port
 EXPOSE 4200
 
-CMD ["npm", "start"]
-
-# docker build -t marketsafe-frontend -f frontend/Dockerfile frontend (build image)
-# docker run --name marketsafe-frontend -p 4200:4200 marketsafe-frontend (run container)
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["npm", "run", "start:docker"]

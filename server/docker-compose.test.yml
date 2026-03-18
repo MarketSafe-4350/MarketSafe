@@ -1,6 +1,9 @@
 services:
   db:
     image: mysql:8.4
+    env_file:
+      - path: ../.env
+        required: false
     environment:
       MYSQL_DATABASE: marketsafe
       MYSQL_USER: marketsafe
@@ -16,7 +19,7 @@ services:
 
   db-init:
     build:
-      context: ../persistence/db
+      context: ../assets/db
       dockerfile: init/Dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: root

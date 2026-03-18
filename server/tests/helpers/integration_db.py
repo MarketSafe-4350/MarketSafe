@@ -97,12 +97,12 @@ class IntegrationDBContext:
         started = ensure_db_for_tests(compose_cfg, timeout_s=timeout_s)
 
         # Resolve DB connection settings (defaults match your compose)
-        host = os.getenv("DB_HOST", "127.0.0.1")
-        port = int(os.getenv("DB_PORT", "3307"))
-        dbname = os.getenv("DB_NAME", "marketsafe")
-        user = os.getenv("DB_USER", "marketsafe")
-        pwd = os.getenv("DB_PASSWORD", "marketsafe")
-        driver = os.getenv("DB_DRIVER", "mysql+pymysql")
+        host = os.getenv("TEST_DB_HOST", "127.0.0.1")
+        port = int(os.getenv("TEST_DB_PORT", "3307"))
+        dbname = os.getenv("TEST_DB_NAME", "marketsafe")
+        user = os.getenv("TEST_DB_USER", "marketsafe")
+        pwd = os.getenv("TEST_DB_PASSWORD", "marketsafe")
+        driver = os.getenv("TEST_DB_DRIVER", "mysql+pymysql")
 
         DBUtility.reset()
 
