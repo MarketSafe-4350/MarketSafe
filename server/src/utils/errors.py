@@ -194,3 +194,47 @@ class OfferError(DomainError):
 class OfferNotFoundError(OfferError):
     code: str = "OFFER_NOT_FOUND"
     status_code: int = 404
+
+
+
+# -----------------------------
+# minio-specific errors (domain layer friendly)
+# -----------------------------
+
+@dataclass
+class StorageError(InfrastructureError):
+    """
+    Base class for storage-related infrastructure failures.
+    Example: MinIO unreachable, bad credentials, network error.
+    """
+    code: str = "STORAGE_ERROR"
+    status_code: int = 503
+
+
+@dataclass
+class StorageUnavailableError(StorageError):
+    """
+    Object storage service is down or unreachable.
+    Maps to 503.
+    """
+    code: str = "STORAGE_UNAVAILABLE"
+    status_code: int = 503
+
+@dataclass
+class MediaNotFoundError(DomainError):
+    """
+    Requested media object does not exist in storage.
+    Maps to 404.
+    """
+    code: str = "MEDIA_NOT_FOUND"
+    status_code: int = 404
+
+
+@dataclass
+class MediaConflictError(DomainError):
+    """
+    Used if you want to signal overwrite conflicts or duplicate uploads.
+    Optional — include only if needed.
+    """
+    code: str = "MEDIA_CONFLICT"
+    status_code: int = 409
