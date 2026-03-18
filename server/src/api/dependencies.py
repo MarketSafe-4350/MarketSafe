@@ -8,11 +8,16 @@ from src.db.account.mysql import MySQLAccountDB
 from src.db.listing.mysql import MySQLListingDB
 from src.db.comment.mysql import MySQLCommentDB
 
-from fastapi import Depends
+from fastapi import Depends, Request
+
+from src.minio import MediaStorageUtility
+
 
 def get_db() -> DBUtility:
     return DBUtility.instance()
 
+def get_media_storage(request: Request) -> MediaStorageUtility:
+    return request.app.state.media_storage
 # -----------------------------
 # DB layer dependencies
 # -----------------------------
