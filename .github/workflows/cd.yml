@@ -1,0 +1,46 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    branches: ["production", "main"]
+    types:
+      - completed
+
+jobs:
+  push-images:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # Only run if the CI workflow succeeded
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push API
+        uses: docker/build-push-action@v6
+        with:
+          context: ./server
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/marketsafe-api:latest
+
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/marketsafe-frontend:latest
+
+      - name: Build and push DB Init
+        uses: docker/build-push-action@v6
+        with:
+          context: ./persistence/db
+          file: ./persistence/db/init/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/marketsafe-db-init:latest
