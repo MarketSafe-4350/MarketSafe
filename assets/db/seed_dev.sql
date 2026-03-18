@@ -32,17 +32,18 @@ INSERT INTO account (email, password, fname, lname, verified) VALUES
 ('noah@example.com',    'password123', 'Noah',    'Clark',   TRUE),
 ('sophia@example.com',  'password123', 'Sophia',  'Lewis',   TRUE);
 
-
 -- =========================================
 -- LISTINGS
 -- - seller_id references account(id)
 -- - sold_to_id is NULL initially (not sold yet)
+-- - image_url stores MinIO object key, not full URL
 -- =========================================
 
-INSERT INTO listing (title, description, price, location, seller_id)
+INSERT INTO listing (title, description, image_url, price, location, seller_id)
 SELECT
   'iPhone 13 Pro',
   'Great condition, barely used.',
+  'default/placeholder1.png',
   850.00,
   'Winnipeg',
   a.id
@@ -50,10 +51,11 @@ FROM account a
 ORDER BY RAND()
 LIMIT 1;
 
-INSERT INTO listing (title, description, price, location, seller_id)
+INSERT INTO listing (title, description, image_url, price, location, seller_id)
 SELECT
   'Gaming Laptop',
   'RTX graphics, 16GB RAM.',
+  'default/placeholder2.png',
   1200.00,
   'Toronto',
   a.id
@@ -61,10 +63,11 @@ FROM account a
 ORDER BY RAND()
 LIMIT 1;
 
-INSERT INTO listing (title, description, price, location, seller_id)
+INSERT INTO listing (title, description, image_url, price, location, seller_id)
 SELECT
   'Office Chair',
   'Ergonomic and comfortable.',
+  'default/placeholder3.png',
   150.00,
   'Vancouver',
   a.id
@@ -72,10 +75,11 @@ FROM account a
 ORDER BY RAND()
 LIMIT 1;
 
-INSERT INTO listing (title, description, price, location, seller_id)
+INSERT INTO listing (title, description, image_url, price, location, seller_id)
 SELECT
   'Mountain Bike',
   'Lightweight aluminum frame.',
+  'default/placeholder4.png',
   600.00,
   'Calgary',
   a.id

@@ -19,7 +19,7 @@ services:
 
   db-init:
     build:
-      context: ../persistence/db
+      context: ../assets/db
       dockerfile: init/Dockerfile
     environment:
       MYSQL_ROOT_PASSWORD: root

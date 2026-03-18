@@ -296,25 +296,8 @@ class ListingService:
         return normalized_location
 
     def _validate_image_url(
-        self, image_url: str | None, errors: dict[str, list[str]]
+            self, image_url: str | None, errors: dict[str, list[str]]
     ) -> str | None:
-        """Validate image URL for a listing
-
-        Args:
-            image_url (str | None): The image URL to validate.
-
-        Raises:
-            ValidationError: If the image URL is invalid.
-            ValidationError: If the image URL does not have a valid domain.
-
-        Returns:
-            str | None: image url if valid, otherwise None
-
-        Rules:
-        - If image_url is None, return None (indicating no image provided).
-        - If image_url is not None, it must be a non-empty string that starts with "http://" or "https://".
-        - The URL must have a valid domain network location (e.g., example.com).
-        """
         if image_url is None:
             return None
 
@@ -322,25 +305,14 @@ class ListingService:
 
         if not image_url:
             self._add_error(
-                errors, "image_url", "Image URL cannot be empty if provided."
+                errors, "image_url", "Image key cannot be empty if provided."
             )
             return None
 
-        # Allow locally-served uploaded images (e.g. /uploads/listings/<file>)
         if image_url.startswith("/"):
-            return image_url
-
-        parse = urlparse(image_url)
-
-        if parse.scheme not in ("http", "https"):
             self._add_error(
-                errors, "image_url", "Image URL must start with http:// or https://"
+                errors, "image_url", "Image key must not start with '/'."
             )
-            return None
-
-        # check if url has a valid domain (e.g., example.com)
-        if not parse.netloc:
-            self._add_error(errors, "image_url", "Image URL must have a valid domain.")
             return None
 
         return image_url
