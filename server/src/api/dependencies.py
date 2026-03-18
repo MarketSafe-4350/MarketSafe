@@ -1,3 +1,5 @@
+import os
+
 from src.db.utils import DBUtility
 from src.business_logic.services import ListingService, CommentService, AccountService
 from src.business_logic.managers.listing import ListingManager
@@ -17,7 +19,17 @@ def get_db() -> DBUtility:
     return DBUtility.instance()
 
 def get_media_storage(request: Request) -> MediaStorageUtility:
-    return request.app.state.media_storage
+    return MediaStorageUtility(
+        endpoint=os.getenv("MINIO_ENDPOINT", "localhost:9000"),
+        access_key=os.getenv("MINIO_ROOT_USER", "minioadmin"),
+        secret_key=os.getenv("MINIO_ROOT_PASSWORD", "minioadmin123"),
+        secure=os.getenv("MINIO_SECURE", "false").lower() == "true",
+        public_base_url=os.getenv(
+            "MINIO_PUBLIC_BASE_URL", "http://localhost:9000"
+        ),
+        ensure_bucket_on_startup=True,
+        make_bucket_public_on_startup=True,
+    )
 # -----------------------------
 # DB layer dependencies
 # -----------------------------
