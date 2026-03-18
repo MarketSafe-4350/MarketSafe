@@ -45,6 +45,7 @@ class TestMainUnit(unittest.TestCase):
             paths = [getattr(r, "path", "") for r in app.routes]
             self.assertTrue(any(p.startswith("/accounts") for p in paths))
             self.assertTrue(any(p.startswith("/listings") for p in paths))
+            self.assertTrue(any(p.startswith("/offers") for p in paths))
             self.assertIn("/uploads", paths)
 
             from fastapi.exceptions import RequestValidationError

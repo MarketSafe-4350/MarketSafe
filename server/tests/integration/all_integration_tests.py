@@ -34,6 +34,7 @@ from tests.integration.offer import (
     TestMySQLOfferDB,
     TestOfferManagerIntegration,
     TestOfferServiceIntegration,
+    TestOfferRouteIntegration,
 )
 
 
@@ -61,6 +62,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestOfferManagerIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestOfferServiceIntegration))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLOfferDB))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferRouteIntegration))
     return suite
 
 
