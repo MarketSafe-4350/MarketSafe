@@ -9,7 +9,8 @@ features = [
     # "account_authentication_cosmic-ray.toml",
     # "listings_cosmic-ray.toml",
     # "search_cosmic-ray.toml",
-    "offer_cosmic-ray.toml",
+    # "offer_cosmic-ray.toml",
+    "rating_cosmic-ray.toml",
 ]
 
 # Create reports directory

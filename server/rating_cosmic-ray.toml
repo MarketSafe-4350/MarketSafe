@@ -1,0 +1,10 @@
+[cosmic-ray]
+module-path = [
+        "src/business_logic/managers/rating/rating_manager.py",
+    ]
+timeout = 60.0
+excluded-modules = []
+test-command = "python -m tests.unit.all_unit_tests"
+
+[cosmic-ray.distributor]
+name = "local"
