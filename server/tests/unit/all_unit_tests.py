@@ -22,8 +22,11 @@ from tests.unit.api import (
     TestListingRoutes,
     TestCommentConverter,
     TestListingConverter,
+    TestOfferConverter,
+    TestOfferRoutes,
     TestErrorHandlers,
     TestAccountRoutes,
+    TestOfferRoutes,
 )
 from tests.unit.auth import TestJWTAuth
 from tests.unit.business_logic import (
@@ -93,6 +96,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestValidation))
     suite.addTests(loader.loadTestsFromTestCase(TestCommentConverter))
     suite.addTests(loader.loadTestsFromTestCase(TestListingConverter))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferRoutes))
     suite.addTests(loader.loadTestsFromTestCase(TestErrorHandlers))
     suite.addTests(loader.loadTestsFromTestCase(TestAccountRoutes))
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLCommentDB))
@@ -116,6 +120,8 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestMySQLOfferDB))
     suite.addTests(loader.loadTestsFromTestCase(TestOfferManagerUnit))
     suite.addTests(loader.loadTestsFromTestCase(TestOfferServiceUnit))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferRoutes))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferConverter))
     suite.addTests(loader.loadTestsFromTestCase(TestMediaStorageUtility))
     return suite
 
