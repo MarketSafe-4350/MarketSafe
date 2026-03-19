@@ -48,8 +48,8 @@ jobs:
       - name: Build and push DB Init
         uses: docker/build-push-action@v6
         with:
-          context: ./persistence/db
-          file: ./persistence/db/init/Dockerfile
+          context: ./assets/db
+          file: ./assets/db/init/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ secrets.DOCKER_USERNAME }}/marketsafe-db-init:latest
