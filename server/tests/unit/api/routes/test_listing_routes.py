@@ -6,7 +6,6 @@ import tempfile
 from fastapi import UploadFile
 from io import BytesIO
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from fastapi import FastAPI

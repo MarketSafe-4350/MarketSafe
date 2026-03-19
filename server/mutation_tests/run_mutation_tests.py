@@ -8,7 +8,8 @@ os.chdir(Path(__file__).resolve().parents[1])
 features = [
     # "account_authentication_cosmic-ray.toml",
     # "listings_cosmic-ray.toml",
-    "search_cosmic-ray.toml",
+    # "search_cosmic-ray.toml",
+    "offer_cosmic-ray.toml",
 ]
 
 # Create reports directory
@@ -74,10 +75,13 @@ for feature in features:
     print(f"TXT report saved to: {txt_report}")
     print(f"HTML report saved to: {html_report}")
 
-
+# listing
 # "src/db/listing/listing_db.py",
 # "src/domain_models/listing.py",
 
+# auth
+#         "src/db/account/account_db.py",
+        # "src/domain_models/account.py",
 
 
 # import subprocess
