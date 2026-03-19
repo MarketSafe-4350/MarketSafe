@@ -58,10 +58,10 @@ class TestOfferConverter(unittest.TestCase):
         created = datetime(2026, 3, 4, 12, 30, 0, tzinfo=timezone.utc)
 
         offer = Offer(
-            id=10,
             listing_id=2,
             sender_id=7,
             offered_price=50.0,
+            offer_id=10,
             location_offered="Winnipeg",
             seen=False,
             accepted=None,
@@ -81,10 +81,10 @@ class TestOfferConverter(unittest.TestCase):
 
     def test_offer_response_from_domain_handles_none_created_date(self) -> None:
         offer = Offer(
-            id=1,
             listing_id=7,
             sender_id=3,
             offered_price=1.0,
+            offer_id=1,
             location_offered=None,
             seen=True,
             accepted=True,

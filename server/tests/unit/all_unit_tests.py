@@ -22,6 +22,7 @@ from tests.unit.api import (
     TestListingRoutes,
     TestCommentConverter,
     TestListingConverter,
+    TestOfferConverter,
     TestOfferRoutes,
     TestErrorHandlers,
     TestAccountRoutes,
@@ -120,6 +121,7 @@ def load_tests(
     suite.addTests(loader.loadTestsFromTestCase(TestOfferManagerUnit))
     suite.addTests(loader.loadTestsFromTestCase(TestOfferServiceUnit))
     suite.addTests(loader.loadTestsFromTestCase(TestOfferRoutes))
+    suite.addTests(loader.loadTestsFromTestCase(TestOfferConverter))
     suite.addTests(loader.loadTestsFromTestCase(TestMediaStorageUtility))
     return suite
 
