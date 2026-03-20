@@ -16,6 +16,7 @@ from src.api.errors.exception_handlers import (
 )
 from src.api.routes.listing_routes import router as listing_router
 from src.api.routes.account_routes import router as account_router
+from src.api.routes.offer_routes import router as offer_router
 from src.business_logic.services.account_service import AccountService
 from src.business_logic.services.listing_service import ListingService
 
@@ -60,6 +61,7 @@ def create_app() -> FastAPI:
     # routers
     app.include_router(account_router)
     app.include_router(listing_router)
+    app.include_router(offer_router)
     app.mount("/uploads", StaticFiles(directory=str(uploads_dir)), name="uploads")
 
     # exception handlers
