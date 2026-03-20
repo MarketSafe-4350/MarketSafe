@@ -62,7 +62,9 @@
                   @for (listing of profileListings; track listing.id) {
                     <app-listing-card
                       [listing]="listing"
-                      [showOfferButton]="canSendOffer(listing)"
+                      [showOfferButton]="isSellerProfile"
+                      [isOfferDisabled]="!canSendOffer(listing)"
+                      [offerButtonLabel]="getOfferButtonLabel(listing.id)"
                       (offerClick)="openSendOfferDialog(listing)"
                     ></app-listing-card>
                   }

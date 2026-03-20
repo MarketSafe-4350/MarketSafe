@@ -11,7 +11,7 @@ import { SearchPageComponent } from './search-page.component';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { Listing } from '../../shared/models/listing.models';
-import { OffersApiService } from '../../shared/services/offers-api.service';
+import { Offer, OffersApiService } from '../../shared/services/offers-api.service';
 import { SendOfferDialogComponent } from '../send-offer/send-offer.component';
 
 @Component({ template: '' })
@@ -63,8 +63,16 @@ describe('SearchPageComponent', () => {
 
     offersApiSpy = jasmine.createSpyObj<OffersApiService>('OffersApiService', [
       'create',
+      'getSent',
+      'getReceived',
+      'getReceivedUnseen',
+      'markSeen',
     ]);
     offersApiSpy.create.and.returnValue(of({}));
+    offersApiSpy.getSent.and.returnValue(of([]));
+    offersApiSpy.getReceived.and.returnValue(of([]));
+    offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.markSeen.and.returnValue(of({}));
 
     accountsApiSpy = jasmine.createSpyObj<AccountsApiService>('AccountsApiService', ['getMe']);
     accountsApiSpy.getMe.and.returnValue(
@@ -170,6 +178,27 @@ describe('SearchPageComponent', () => {
     expect(component.canSendOffer({ ...searchResult, sellerId: 123 })).toBeFalse();
     expect(component.canSendOffer({ ...searchResult, isSold: true })).toBeFalse();
     expect(component.canSendOffer(searchResult)).toBeTrue();
+  });
+
+  it('canSendOffer_DeclinedSentOffer_ShouldStillBeTrue', () => {
+    const declinedOffer: Offer = {
+      id: 77,
+      listingId: searchResult.id,
+      senderId: 123,
+      offeredPrice: 900,
+      locationOffered: 'Campus',
+      seen: true,
+      accepted: false,
+      createdDate: new Date().toISOString(),
+    };
+    offersApiSpy.getSent.and.returnValue(of([declinedOffer]));
+
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.canSendOffer(searchResult)).toBeTrue();
+    expect(component.getOfferButtonLabel(searchResult.id)).toBe('Send Offer');
   });
 
   it('changeSortType_ShouldUpdateSortOptionAndCallSortResults', () => {

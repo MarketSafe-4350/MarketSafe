@@ -6,7 +6,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ProfilePageComponent } from './profile.page';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
-import { OffersApiService } from '../../shared/services/offers-api.service';
+import { Offer, OffersApiService } from '../../shared/services/offers-api.service';
 
 import { Account } from '../../shared/models/account.models';
 import { Listing } from '../../shared/models/listing.models';
@@ -70,8 +70,16 @@ describe('ProfilePageComponent', () => {
     listingsApiSpy.getBySeller.and.returnValue(of(mockListings));
     offersApiSpy = jasmine.createSpyObj<OffersApiService>('OffersApiService', [
       'create',
+      'getSent',
+      'getReceived',
+      'getReceivedUnseen',
+      'markSeen',
     ]);
     offersApiSpy.create.and.returnValue(of({}));
+    offersApiSpy.getSent.and.returnValue(of([]));
+    offersApiSpy.getReceived.and.returnValue(of([]));
+    offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.markSeen.and.returnValue(of({}));
     matDialogSpy = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
     dialogRefSpy = jasmine.createSpyObj<MatDialogRef<SendOfferDialogComponent>>(
       'MatDialogRef',
@@ -179,5 +187,29 @@ describe('ProfilePageComponent', () => {
     expect(
       profilePageComponent.canSendOffer({ ...mockListings[0], isSold: true }),
     ).toBeFalse();
+  });
+
+  it('canSendOffer_DeclinedSentOffer_ShouldStillBeTrue', () => {
+    const declinedOffer: Offer = {
+      id: 33,
+      listingId: mockListings[0].id,
+      senderId: 123,
+      offeredPrice: 40,
+      locationOffered: 'Campus',
+      seen: true,
+      accepted: false,
+      createdDate: new Date().toISOString(),
+    };
+    offersApiSpy.getSent.and.returnValue(of([declinedOffer]));
+    activatedRouteStub.paramMap = of(convertToParamMap({ sellerId: '9' }));
+
+    fixture = TestBed.createComponent(ProfilePageComponent);
+    profilePageComponent = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(profilePageComponent.canSendOffer(mockListings[0])).toBeTrue();
+    expect(profilePageComponent.getOfferButtonLabel(mockListings[0].id)).toBe(
+      'Send Offer',
+    );
   });
 });

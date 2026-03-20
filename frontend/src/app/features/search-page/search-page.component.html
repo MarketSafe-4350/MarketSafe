@@ -86,7 +86,9 @@
                   <app-listing-card
                     [listing]="listing"
                     [showSellerProfileButton]="canViewSellerProfile(listing.sellerId)"
-                    [showOfferButton]="canSendOffer(listing)"
+                    [showOfferButton]="canViewSellerProfile(listing.sellerId)"
+                    [isOfferDisabled]="!canSendOffer(listing)"
+                    [offerButtonLabel]="getOfferButtonLabel(listing.id)"
                     (sellerProfileClick)="openSellerProfile(listing.sellerId)"
                     (offerClick)="openSendOfferDialog(listing)"
                   ></app-listing-card>
