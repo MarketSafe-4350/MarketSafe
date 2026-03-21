@@ -110,21 +110,6 @@ def get_account(
     )
 
 
-@router.get("/{account_id}", response_model=AccountResponse)
-def get_account_by_id(
-    account_id: int,
-    account_service: AccountService = Depends(get_account_service),
-):
-    account = account_service.get_account_userid(account_id)
-    return AccountResponse(
-        email=account.email,
-        fname=account.fname,
-        lname=account.lname,
-        rating_count=account.rating_count,
-        rating_average=account.average_rating_received,
-    )
-
-
 @router.get("/verify-email", response_model=VerifyEmailResponse)
 def verify_email(
     auth_token: str | None = Query(None, min_length=10),
@@ -171,3 +156,18 @@ def verify_email(
             status_code=500,
             content={"error_message": "An error occurred during verification"},
         )
+
+
+@router.get("/id/{account_id}", response_model=AccountResponse)
+def get_account_by_id(
+    account_id: int,
+    account_service: AccountService = Depends(get_account_service),
+):
+    account = account_service.get_account_userid(account_id)
+    return AccountResponse(
+        email=account.email,
+        fname=account.fname,
+        lname=account.lname,
+        rating_count=account.rating_count,
+        rating_average=account.average_rating_received,
+    )
