@@ -105,6 +105,23 @@ def get_account(
         email=account.email,
         fname=account.fname,
         lname=account.lname,
+        rating_count=account.rating_count,
+        rating_average=account.average_rating_received,
+    )
+
+
+@router.get("/{account_id}", response_model=AccountResponse)
+def get_account_by_id(
+    account_id: int,
+    account_service: AccountService = Depends(get_account_service),
+):
+    account = account_service.get_account_userid(account_id)
+    return AccountResponse(
+        email=account.email,
+        fname=account.fname,
+        lname=account.lname,
+        rating_count=account.rating_count,
+        rating_average=account.average_rating_received,
     )
 
 

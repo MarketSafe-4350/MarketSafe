@@ -17,6 +17,8 @@ class AccountResponse(BaseModel):
     email: EmailStr
     fname: str
     lname: str
+    rating_count: int
+    rating_average: Optional[float]
 
 
 class SignupResponse(BaseModel):

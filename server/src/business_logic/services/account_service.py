@@ -4,6 +4,7 @@ import datetime
 import re
 
 from src.business_logic.managers.account.account_manager import AccountManager
+from src.business_logic.managers.rating import RatingManager
 from src.api.errors import ApiError
 from src.domain_models import Account, VerificationToken
 from src.db.email_verification_token.mysql import MySQLEmailVerificationTokenDB
@@ -38,6 +39,7 @@ class AccountService:
         self,
         account_manager: AccountManager = None,
         token_db: MySQLEmailVerificationTokenDB = None,
+        rating_manager: RatingManager = None,
     ):
         """
         Initialize AccountService.
@@ -45,9 +47,11 @@ class AccountService:
         Args:
             account_manager: Manager for account database operations (optional)
             token_db: Database layer for email verification tokens (optional)
+            rating_manager: Manager for rating database operations (optional)
         """
         self.account_manager = account_manager
         self.token_db = token_db
+        self.rating_manager = rating_manager
 
     def create_account(
         self, email: str, password: str, fname: str, lname: str
@@ -223,34 +227,6 @@ class AccountService:
         logger.info(f"Account {db_token.account_id} verified successfully")
         return account
 
-    def get_account_by_userid(self, userid: str) -> Account:
-        """Retrieves an account by its user ID.
-
-        Args:
-            userid (str): The unique identifier of the account to retrieve.
-
-        Returns:
-            Account: The retrieved account domain model.
-        """
-        # do logic here (this is an example)
-        ##
-        if userid is None:
-            raise ApiError(status_code=400, message="userid cannot be None")
-
-        # should call DAO get account here
-
-        acc_test: Account = Account(
-            email="test1@gmail.com",
-            password="test",
-            fname="test",
-            lname="test",
-            account_id=1,
-            verified=False,
-        )
-
-        ##
-        return acc_test
-
     def get_account_by_email(self, email: str) -> Account:
         """Retrieves an account by email address.
 
@@ -319,5 +295,12 @@ class AccountService:
 
         if account is None:
             raise ApiError(status_code=404, message="Account not found")
+
+        account.rating_count = self.rating_manager.count_ratings_received_by_account_id(
+            userid
+        )
+        account.average_rating_received = (
+            self.rating_manager.get_average_rating_by_account_id(userid)
+        )
 
         return account

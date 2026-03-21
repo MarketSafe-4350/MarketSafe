@@ -30,7 +30,6 @@ class MySQLRatingDB(RatingDB):
     def __init__(self, db: DBUtility) -> None:
         super().__init__(db)
 
-
     # -----------------------------
     # BASE CLASS METHODS
     # -----------------------------
@@ -41,12 +40,14 @@ class MySQLRatingDB(RatingDB):
         """
         Validation.require_int(account_id, "account_id")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT AVG(r.transaction_rating) AS avg_rating
             FROM rating r
             INNER JOIN listing l ON l.id = r.listing_id
             WHERE l.seller_id = :account_id
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -67,11 +68,13 @@ class MySQLRatingDB(RatingDB):
         """
         Validation.require_int(account_id, "account_id")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT COALESCE(SUM(transaction_rating), 0) AS total_rating_sum
             FROM rating
             WHERE rater_id = :account_id
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -80,7 +83,10 @@ class MySQLRatingDB(RatingDB):
         except SQLAlchemyError as e:
             raise DatabaseQueryError(
                 message="Failed to fetch sum of ratings given by account.",
-                details={"op": "get_sum_of_ratings_given_by_account_id", "table": "rating"},
+                details={
+                    "op": "get_sum_of_ratings_given_by_account_id",
+                    "table": "rating",
+                },
             ) from e
 
     @override
@@ -91,12 +97,14 @@ class MySQLRatingDB(RatingDB):
 
         Validation.require_int(account_id, "account_id")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT COALESCE(SUM(r.transaction_rating), 0) AS total_rating_sum
             FROM rating r
             INNER JOIN listing l ON l.id = r.listing_id
             WHERE l.seller_id = :account_id
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -108,9 +116,39 @@ class MySQLRatingDB(RatingDB):
                 message="Failed to fetch sum of ratings received by account.",
                 details={
                     "op": "get_sum_of_ratings_received_by_account_id",
-                    "table": "rating"
+                    "table": "rating",
                 },
             ) from e
+
+    @override
+    def count_ratings_received_by_account_id(self, account_id: int) -> int:
+        """
+        Count of ratings received by a seller across all their listings.
+        """
+        Validation.require_int(account_id, "account_id")
+
+        sql = text(
+            """
+            SELECT COUNT(*) AS rating_count
+            FROM rating r
+            INNER JOIN listing l ON l.id = r.listing_id
+            WHERE l.seller_id = :account_id
+        """
+        )
+
+        try:
+            with self._db.connect() as conn:
+                row = conn.execute(sql, {"account_id": account_id}).mappings().first()
+                return int(row["rating_count"] or 0)
+        except SQLAlchemyError as e:
+            raise DatabaseQueryError(
+                message="Failed to count ratings received by account.",
+                details={
+                    "op": "count_ratings_received_by_account_id",
+                    "table": "rating",
+                },
+            ) from e
+
     # -----------------------------
     # CREATE
     # -----------------------------
@@ -118,18 +156,23 @@ class MySQLRatingDB(RatingDB):
     def add(self, rating: Rating) -> Rating:
         Validation.require_not_none(rating, "rating")
 
-        sql = text("""
+        sql = text(
+            """
             INSERT INTO rating (transaction_rating, listing_id, rater_id)
             VALUES (:transaction_rating, :listing_id, :rater_id)
-        """)
+        """
+        )
 
         try:
             with self._db.transaction() as conn:
-                result = conn.execute(sql, {
-                    "transaction_rating": rating.transaction_rating,
-                    "listing_id": rating.listing_id,
-                    "rater_id": rating.rater_id,
-                })
+                result = conn.execute(
+                    sql,
+                    {
+                        "transaction_rating": rating.transaction_rating,
+                        "listing_id": rating.listing_id,
+                        "rater_id": rating.rater_id,
+                    },
+                )
 
                 new_id = int(result.lastrowid)
 
@@ -163,11 +206,13 @@ class MySQLRatingDB(RatingDB):
     def get_by_id(self, rating_id: int) -> Optional[Rating]:
         Validation.require_int(rating_id, "rating_id")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT id, created_at, transaction_rating, listing_id, rater_id
             FROM rating
             WHERE id = :id
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -183,11 +228,13 @@ class MySQLRatingDB(RatingDB):
     def get_by_listing_id(self, listing_id: int) -> Optional[Rating]:
         Validation.require_int(listing_id, "listing_id")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT id, created_at, transaction_rating, listing_id, rater_id
             FROM rating
             WHERE listing_id = :listing_id
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -203,12 +250,14 @@ class MySQLRatingDB(RatingDB):
     def get_by_rater_id(self, rater_id: int) -> List[Rating]:
         Validation.require_int(rater_id, "rater_id")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT id, created_at, transaction_rating, listing_id, rater_id
             FROM rating
             WHERE rater_id = :rater_id
             ORDER BY created_at DESC, id DESC
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -222,11 +271,13 @@ class MySQLRatingDB(RatingDB):
 
     @override
     def get_all(self) -> List[Rating]:
-        sql = text("""
+        sql = text(
+            """
             SELECT id, created_at, transaction_rating, listing_id, rater_id
             FROM rating
             ORDER BY id ASC
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -248,19 +299,28 @@ class MySQLRatingDB(RatingDB):
         if offset < 0:
             raise ValidationError("offset must be >= 0.")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT id, created_at, transaction_rating, listing_id, rater_id
             FROM rating
             ORDER BY created_at DESC, id DESC
             LIMIT :limit OFFSET :offset
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
-                rows = conn.execute(sql, {
-                    "limit": limit,
-                    "offset": offset,
-                }).mappings().all()
+                rows = (
+                    conn.execute(
+                        sql,
+                        {
+                            "limit": limit,
+                            "offset": offset,
+                        },
+                    )
+                    .mappings()
+                    .all()
+                )
                 return [RatingMapper.from_mapping(row) for row in rows]
         except SQLAlchemyError as e:
             raise DatabaseQueryError(
@@ -272,18 +332,27 @@ class MySQLRatingDB(RatingDB):
     def get_by_score(self, transaction_rating: int) -> List[Rating]:
         Validation.require_int(transaction_rating, "transaction_rating")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT id, created_at, transaction_rating, listing_id, rater_id
             FROM rating
             WHERE transaction_rating = :transaction_rating
             ORDER BY created_at DESC, id DESC
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
-                rows = conn.execute(sql, {
-                    "transaction_rating": transaction_rating,
-                }).mappings().all()
+                rows = (
+                    conn.execute(
+                        sql,
+                        {
+                            "transaction_rating": transaction_rating,
+                        },
+                    )
+                    .mappings()
+                    .all()
+                )
                 return [RatingMapper.from_mapping(row) for row in rows]
         except SQLAlchemyError as e:
             raise DatabaseQueryError(
@@ -298,11 +367,13 @@ class MySQLRatingDB(RatingDB):
     def get_average_for_rater(self, rater_id: int) -> Optional[float]:
         Validation.require_int(rater_id, "rater_id")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT AVG(transaction_rating) AS avg_rating
             FROM rating
             WHERE rater_id = :rater_id
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -320,11 +391,13 @@ class MySQLRatingDB(RatingDB):
     def count_by_rater(self, rater_id: int) -> int:
         Validation.require_int(rater_id, "rater_id")
 
-        sql = text("""
+        sql = text(
+            """
             SELECT COUNT(*) AS rating_count
             FROM rating
             WHERE rater_id = :rater_id
-        """)
+        """
+        )
 
         try:
             with self._db.connect() as conn:
@@ -344,22 +417,27 @@ class MySQLRatingDB(RatingDB):
         Validation.require_not_none(rating, "rating")
         Validation.require_not_none(rating.id, "rating.id")
 
-        sql = text("""
+        sql = text(
+            """
             UPDATE rating
             SET transaction_rating = :transaction_rating,
                 listing_id = :listing_id,
                 rater_id = :rater_id
             WHERE id = :id
-        """)
+        """
+        )
 
         try:
             with self._db.transaction() as conn:
-                result = conn.execute(sql, {
-                    "id": rating.id,
-                    "transaction_rating": rating.transaction_rating,
-                    "listing_id": rating.listing_id,
-                    "rater_id": rating.rater_id,
-                })
+                result = conn.execute(
+                    sql,
+                    {
+                        "id": rating.id,
+                        "transaction_rating": rating.transaction_rating,
+                        "listing_id": rating.listing_id,
+                        "rater_id": rating.rater_id,
+                    },
+                )
 
                 if int(result.rowcount or 0) == 0:
                     raise RatingNotFoundError(
@@ -393,18 +471,23 @@ class MySQLRatingDB(RatingDB):
         Validation.require_int(rating_id, "rating_id")
         Validation.require_int(transaction_rating, "transaction_rating")
 
-        sql = text("""
+        sql = text(
+            """
             UPDATE rating
             SET transaction_rating = :transaction_rating
             WHERE id = :id
-        """)
+        """
+        )
 
         try:
             with self._db.transaction() as conn:
-                result = conn.execute(sql, {
-                    "id": rating_id,
-                    "transaction_rating": transaction_rating,
-                })
+                result = conn.execute(
+                    sql,
+                    {
+                        "id": rating_id,
+                        "transaction_rating": transaction_rating,
+                    },
+                )
 
                 if int(result.rowcount or 0) == 0:
                     raise RatingNotFoundError(
@@ -432,11 +515,13 @@ class MySQLRatingDB(RatingDB):
     def remove(self, rating_id: int) -> bool:
         Validation.require_int(rating_id, "rating_id")
 
-        sql = text("""
+        sql = text(
+            """
             DELETE
             FROM rating
             WHERE id = :id
-        """)
+        """
+        )
 
         try:
             with self._db.transaction() as conn:
@@ -452,11 +537,13 @@ class MySQLRatingDB(RatingDB):
     def remove_by_listing_id(self, listing_id: int) -> bool:
         Validation.require_int(listing_id, "listing_id")
 
-        sql = text("""
+        sql = text(
+            """
             DELETE
             FROM rating
             WHERE listing_id = :listing_id
-        """)
+        """
+        )
 
         try:
             with self._db.transaction() as conn:
@@ -465,5 +552,9 @@ class MySQLRatingDB(RatingDB):
         except SQLAlchemyError as e:
             raise DatabaseQueryError(
                 message="Failed to delete rating by listing id.",
-                details={"op": "remove_by_listing_id", "table": "rating", "listing_id": listing_id},
+                details={
+                    "op": "remove_by_listing_id",
+                    "table": "rating",
+                    "listing_id": listing_id,
+                },
             ) from e

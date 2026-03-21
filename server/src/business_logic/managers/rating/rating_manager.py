@@ -86,6 +86,11 @@ class RatingManager(IRatingManager):
         return self._rating_db.get_sum_of_ratings_received_by_account_id(account_id)
 
     @override
+    def count_ratings_received_by_account_id(self, account_id: int) -> int:
+        account_id = Validation.require_int(account_id, "account_id")
+        return self._rating_db.count_ratings_received_by_account_id(account_id)
+
+    @override
     def get_average_for_rater(self, rater_id: int) -> float | None:
         rater_id = Validation.require_int(rater_id, "rater_id")
         return self._rating_db.get_average_for_rater(rater_id)
