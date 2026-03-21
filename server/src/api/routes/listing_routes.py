@@ -19,6 +19,7 @@ from src.domain_models import Listing
 from src.domain_models.comment import Comment
 from src.api.converter.listing_converter import ListingCreate, ListingResponse
 from src.api.converter.comment_converter import CommentCreate, CommentResponse
+from src.api.converter.rating_converter import RatingCreate, RatingResponse
 from src.business_logic.services import (
     ListingService,
     CommentService,
@@ -181,6 +182,21 @@ def get_listing_comment(
         )
         for c in comments_author
     ]
+
+
+@router.post("/{listing_id}/ratings", response_model=RatingResponse)
+def rate_listing(
+    listing_id: int,
+    rating_request: RatingCreate,
+    user_id: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
+):
+    rating = listing_service.rate_listing(
+        listing_id=listing_id,
+        rater_id=user_id,
+        transaction_rating=rating_request.transaction_rating,
+    )
+    return RatingResponse.from_domain(rating)
 
 
 @router.post("/{listing_id}/comments", response_model=CommentResponse)

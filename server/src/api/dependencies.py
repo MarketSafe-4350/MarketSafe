@@ -117,8 +117,9 @@ def get_comment_service(
 
 def get_listing_service(
     listing_manager: ListingManager = Depends(get_listing_manager),
+    rating_manager: RatingManager = Depends(get_rating_manager),
 ) -> ListingService:
-    return ListingService(listing_manager=listing_manager)
+    return ListingService(listing_manager=listing_manager, rating_manager=rating_manager)
 
 
 def get_offer_service(
