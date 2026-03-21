@@ -24,6 +24,8 @@ interface HeaderOfferPreview {
   offeredPrice: number;
   seen: boolean;
   createdDate: string | null;
+  kind: 'received' | 'sent';
+  accepted: boolean | null;
 }
 
 @Component({
@@ -75,7 +77,9 @@ export class HeaderComponent implements OnInit {
   }
 
   onNotificationsOpened(): void {
-    const unseenOffers = this.offers().filter((offer) => !offer.seen);
+    const unseenOffers = this.offers().filter(
+      (offer) => offer.kind === 'received' && !offer.seen,
+    );
     if (unseenOffers.length === 0) {
       return;
     }
@@ -111,10 +115,20 @@ export class HeaderComponent implements OnInit {
     forkJoin({
       receivedOffers: this.offersApi.getReceived(),
       unseenOffers: this.offersApi.getReceivedUnseen(),
+      sentOffers: this.offersApi.getSent(),
       myListings: this.listingsApi.getMine(),
+      allListings: this.listingsApi.getAll(),
     }).subscribe({
-      next: ({ receivedOffers, unseenOffers, myListings }) => {
-        this.offers.set(this.toOfferPreviews(receivedOffers, myListings));
+      next: ({
+        receivedOffers,
+        unseenOffers,
+        sentOffers,
+        myListings,
+        allListings,
+      }) => {
+        this.offers.set(
+          this.toOfferPreviews(receivedOffers, sentOffers, myListings, allListings),
+        );
         this.unseenCount.set(unseenOffers.length);
         this.isLoadingOffers.set(false);
       },
@@ -127,28 +141,64 @@ export class HeaderComponent implements OnInit {
   }
 
   private toOfferPreviews(
-    offers: Offer[],
+    receivedOffers: Offer[],
+    sentOffers: Offer[],
     myListings: Listing[],
+    allListings: Listing[],
   ): HeaderOfferPreview[] {
-    const listingTitleById = new Map(
+    const receivedListingTitleById = new Map(
       myListings.map((listing) => [listing.id, listing.title]),
     );
+    const allListingTitleById = new Map(
+      allListings.map((listing) => [listing.id, listing.title]),
+    );
 
-    return [...offers]
+    const previews: HeaderOfferPreview[] = [
+      ...receivedOffers.map((offer) => ({
+        id: offer.id,
+        listingId: offer.listingId,
+        listingTitle:
+          receivedListingTitleById.get(offer.listingId) ??
+          `Listing #${offer.listingId}`,
+        offeredPrice: offer.offeredPrice,
+        seen: offer.seen,
+        createdDate: offer.createdDate,
+        kind: 'received' as const,
+        accepted: offer.accepted,
+      })),
+      ...sentOffers
+        .filter((offer) => offer.accepted !== null)
+        .map((offer) => ({
+          id: offer.id,
+          listingId: offer.listingId,
+          listingTitle:
+            allListingTitleById.get(offer.listingId) ??
+            `Listing #${offer.listingId}`,
+          offeredPrice: offer.offeredPrice,
+          seen: true,
+          createdDate: offer.createdDate,
+          kind: 'sent' as const,
+          accepted: offer.accepted,
+        })),
+    ];
+
+    return previews
       .sort((left, right) => {
         const leftDate = left.createdDate ? new Date(left.createdDate).getTime() : 0;
         const rightDate = right.createdDate ? new Date(right.createdDate).getTime() : 0;
         return rightDate - leftDate;
       })
       .slice(0, 3)
-      .map((offer) => ({
-        id: offer.id,
-        listingId: offer.listingId,
-        listingTitle:
-          listingTitleById.get(offer.listingId) ?? `Listing #${offer.listingId}`,
-        offeredPrice: offer.offeredPrice,
-        seen: offer.seen,
-        createdDate: offer.createdDate,
-      }));
+      .map((offer) => offer);
+  }
+
+  getNotificationSubtitle(offer: HeaderOfferPreview): string {
+    if (offer.kind === 'sent') {
+      return offer.accepted === true
+        ? 'Seller accepted your offer'
+        : 'Seller declined your offer';
+    }
+
+    return `New offer for $${offer.offeredPrice.toFixed(2)}`;
   }
 }

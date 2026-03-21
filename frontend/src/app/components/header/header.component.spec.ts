@@ -19,11 +19,11 @@ describe('HeaderComponent', () => {
     accountsApiSpy = jasmine.createSpyObj<AccountsApiService>('AccountsApiService', ['getMe']);
     listingsApiSpy = jasmine.createSpyObj<ListingsApiService>(
       'ListingsApiService',
-      ['getMine'],
+      ['getMine', 'getAll'],
     );
     offersApiSpy = jasmine.createSpyObj<OffersApiService>(
       'OffersApiService',
-      ['getReceived', 'getReceivedUnseen', 'markSeen'],
+      ['getReceived', 'getReceivedUnseen', 'getSent', 'markSeen'],
     );
     accountsApiSpy.getMe.and.returnValue(
       of({
@@ -35,8 +35,10 @@ describe('HeaderComponent', () => {
       })
     );
     listingsApiSpy.getMine.and.returnValue(of([]));
+    listingsApiSpy.getAll.and.returnValue(of([]));
     offersApiSpy.getReceived.and.returnValue(of([]));
     offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.getSent.and.returnValue(of([]));
     offersApiSpy.markSeen.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({

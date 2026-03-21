@@ -163,3 +163,18 @@ def verify_email(
             status_code=500,
             content={"error_message": "An error occurred during verification"},
         )
+
+
+@router.get("/{account_id}", response_model=AccountResponse)
+def get_account_by_id(
+    account_id: int,
+    _: int = Depends(get_current_user_id),
+):
+    service = _get_service()
+    account = service.get_account_userid(account_id)
+
+    return AccountResponse(
+        email=account.email,
+        fname=account.fname,
+        lname=account.lname,
+    )

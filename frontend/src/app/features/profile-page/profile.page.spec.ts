@@ -62,11 +62,13 @@ describe('ProfilePageComponent', () => {
     accountsApiSpy.getById.and.returnValue(of(mockAccount));
     listingsApiSpy = jasmine.createSpyObj<ListingsApiService>('ListingsApiService', [
       'getMine',
+      'getAll',
       'getBySeller',
       'create',
       'delete',
     ]);
     listingsApiSpy.getMine.and.returnValue(of(mockListings));
+    listingsApiSpy.getAll.and.returnValue(of(mockListings));
     listingsApiSpy.getBySeller.and.returnValue(of(mockListings));
     offersApiSpy = jasmine.createSpyObj<OffersApiService>('OffersApiService', [
       'create',

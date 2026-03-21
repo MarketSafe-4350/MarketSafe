@@ -322,7 +322,7 @@ export class MainPageComponent
   }
 
   private replaceBlockedOfferListingIds(
-    sentOffers: Array<{ listingId: number; accepted: boolean | null }>,
+    sentOffers: { listingId: number; accepted: boolean | null }[],
   ): void {
     this.blockedOfferListingIds.clear();
     for (const offer of sentOffers) {

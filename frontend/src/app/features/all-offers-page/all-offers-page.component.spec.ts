@@ -46,7 +46,7 @@ describe('AllOffersPageComponent', () => {
 
     accountsApiSpy = jasmine.createSpyObj<AccountsApiService>(
       'AccountsApiService',
-      ['getMe'],
+      ['getMe', 'getById'],
     );
     accountsApiSpy.getMe.and.returnValue(
       of({
@@ -57,19 +57,30 @@ describe('AllOffersPageComponent', () => {
         verified: true,
       }),
     );
+    accountsApiSpy.getById.and.returnValue(
+      of({
+        id: 88,
+        email: 'buyer@example.com',
+        fname: 'Jamie',
+        lname: 'Buyer',
+        verified: true,
+      }),
+    );
 
     listingsApiSpy = jasmine.createSpyObj<ListingsApiService>(
       'ListingsApiService',
-      ['getMine', 'create', 'delete'],
+      ['getMine', 'getAll', 'create', 'delete'],
     );
     listingsApiSpy.getMine.and.returnValue(of([listing]));
+    listingsApiSpy.getAll.and.returnValue(of([listing]));
 
     offersApiSpy = jasmine.createSpyObj<OffersApiService>(
       'OffersApiService',
-      ['getReceived', 'getReceivedUnseen', 'markSeen', 'resolve'],
+      ['getReceived', 'getReceivedUnseen', 'getSent', 'markSeen', 'resolve'],
     );
     offersApiSpy.getReceived.and.returnValue(of([pendingOffer]));
     offersApiSpy.getReceivedUnseen.and.returnValue(of([pendingOffer]));
+    offersApiSpy.getSent.and.returnValue(of([]));
     offersApiSpy.markSeen.and.returnValue(of({}));
     offersApiSpy.resolve.and.returnValue(of({}));
 
@@ -97,8 +108,10 @@ describe('AllOffersPageComponent', () => {
     expect(listingsApiSpy.getMine).toHaveBeenCalled();
     expect(offersApiSpy.getReceived).toHaveBeenCalled();
     expect(offersApiSpy.getReceivedUnseen).toHaveBeenCalled();
+    expect(accountsApiSpy.getById).toHaveBeenCalledWith(pendingOffer.senderId);
     expect(offersApiSpy.markSeen).toHaveBeenCalledWith(pendingOffer.id);
     expect(component.offers[0].listingTitle).toBe('Desk Lamp');
+    expect(component.offers[0].buyerName).toBe('Jamie Buyer');
     expect(component.offers[0].seen).toBeTrue();
   });
 

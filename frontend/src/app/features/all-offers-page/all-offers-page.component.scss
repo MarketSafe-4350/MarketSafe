@@ -22,6 +22,22 @@
   gap: 24px;
 }
 
+.offer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-copy h3 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.section-copy p {
+  margin: 6px 0 0;
+  color: #475569;
+}
+
 .offers-header {
   display: flex;
   align-items: flex-start;

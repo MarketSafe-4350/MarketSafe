@@ -21,11 +21,11 @@
       class="notifications-menu"
       xPosition="before"
     >
-      <div class="notifications-panel" (click)="$event.stopPropagation()">
+      <div class="notifications-panel">
         <div class="notifications-panel-header">
           <div>
             <h3>Offers</h3>
-            <p>Recent offers on your listings</p>
+            <p>Received offers and updates on offers you sent</p>
           </div>
           <button
             mat-button
@@ -55,9 +55,20 @@
                 <div class="notification-copy">
                   <span class="notification-title">{{ offer.listingTitle }}</span>
                   <span class="notification-subtitle">
-                    New offer for ${{ offer.offeredPrice.toFixed(2) }}
+                    {{ getNotificationSubtitle(offer) }}
                   </span>
                 </div>
+                <span
+                  class="notification-status"
+                  [class.notification-status-accepted]="offer.kind === 'sent' && offer.accepted === true"
+                  [class.notification-status-declined]="offer.kind === 'sent' && offer.accepted === false"
+                >
+                  {{
+                    offer.kind === 'sent'
+                      ? (offer.accepted === true ? 'Accepted' : 'Declined')
+                      : 'Received'
+                  }}
+                </span>
                 <span class="notification-time">{{ formatOfferDate(offer.createdDate) }}</span>
               </button>
             }

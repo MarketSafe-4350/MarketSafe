@@ -46,11 +46,13 @@ describe('SearchPageComponent', () => {
 
     listingsApiSpy = jasmine.createSpyObj<ListingsApiService>('ListingsApiService', [
       'getMine',
+      'getAll',
       'search',
       'create',
       'delete',
     ]);
     listingsApiSpy.getMine.and.returnValue(of([]));
+    listingsApiSpy.getAll.and.returnValue(of([searchResult]));
     listingsApiSpy.search.and.returnValue(of([searchResult]));
 
     matDialogSpy = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
