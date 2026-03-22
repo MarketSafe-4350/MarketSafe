@@ -492,38 +492,3 @@ class TestAccountServiceUnit(unittest.TestCase):
             payload["exp"],
             frozen_now + datetime.timedelta(days=30),
         )
-
-    def test_login_token_expiration_is_exactly_30_days(self):
-        frozen_now = datetime.datetime(2026, 3, 21, 12, 0, 0, tzinfo=datetime.timezone.utc)
-
-        account = Account(
-            email="user@umanitoba.ca",
-            password="ValidPass1",
-            fname="Test",
-            lname="User",
-            account_id=7,
-            verified=True,
-        )
-        # account.id = 7
-
-        self.account_manager.get_account_by_email.return_value = account
-
-        with patch(
-            "src.business_logic.services.account_service.datetime.datetime"
-        ) as mock_datetime:
-            mock_datetime.now.return_value = frozen_now
-
-            token = self.service.login("user@umanitoba.ca", "ValidPass1")
-
-        payload = jwt.decode(
-            token,
-            SECRET_KEY,
-            algorithms=["HS256"],
-            options={"verify_exp": False},
-        )
-
-        expected_exp = frozen_now + datetime.timedelta(days=30)
-        expected_exp_timestamp = int(expected_exp.timestamp())
-
-        self.assertEqual(payload["sub"], "7")
-        self.assertEqual(payload["exp"], expected_exp_timestamp)
