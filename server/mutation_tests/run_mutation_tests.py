@@ -12,6 +12,7 @@ features = [
     "rating_cosmic-ray.toml",
 ]
 
+
 reports_dir = Path("mutation_tests/reports")
 reports_dir.mkdir(parents=True, exist_ok=True)
 
@@ -27,6 +28,10 @@ for feature in features:
 
     subprocess.run(
         ["cosmic-ray", "init", "--force", feature, session],
+        check=True,
+    )
+    subprocess.run(
+        ["cr-filter-pragma", session],
         check=True,
     )
 

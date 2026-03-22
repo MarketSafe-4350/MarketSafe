@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import unittest
 from unittest.mock import MagicMock, patch
+import datetime
+import jwt
 
 from src.business_logic.services.account_service import AccountService
 from src.domain_models import Account
@@ -19,6 +21,7 @@ from src.utils import (
     EmailVerificationError,
 )
 
+SECRET_KEY="change-me"
 
 class TestAccountServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
@@ -28,6 +31,7 @@ class TestAccountServiceUnit(unittest.TestCase):
             account_manager=self.account_manager,
             token_db=self.token_db,
         )
+
 
     # -----------------------------
     # validate_email / validate_password / validate_account
@@ -381,3 +385,145 @@ class TestAccountServiceUnit(unittest.TestCase):
 
         self.assertEqual(token, "tok123")
         self.assertTrue(enc.called)
+
+
+    def test_validate_email_uses_last_domain_segment(self):
+        # Correct code uses split("@")[-1], so this should accept "umanitoba.ca".
+        # Mutants using [1] or [+1] would incorrectly read "dept" and raise.
+        self.service.validate_email("student@dept@umanitoba.ca")
+
+
+    def test_get_account_by_userid_returns_unverified_account(self):
+        account = self.service.get_account_by_userid("123")
+
+        self.assertFalse(account.verified)
+        self.assertEqual(account.id, 1)
+        self.assertEqual(account.email, "test1@gmail.com")
+
+
+    def test_login_raises_when_email_missing(self):
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("", "ValidPass1")
+
+        self.assertEqual(ctx.exception.status_code, 400)
+        self.assertEqual(ctx.exception._message, "Email and password are required")
+
+
+    def test_login_raises_when_password_missing(self):
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("user@umanitoba.ca", "")
+
+        self.assertEqual(ctx.exception.status_code, 400)
+        self.assertEqual(ctx.exception._message, "Email and password are required")
+
+
+    @patch("src.business_logic.services.account_service.jwt.encode")
+    def test_login_raises_for_wrong_password_when_stored_password_is_lexicographically_greater(
+        self, mock_encode
+    ):
+        account = Account(
+            email="user@umanitoba.ca",
+            password="zPassword9",
+            fname="Test",
+            lname="User",
+            account_id=7,
+            verified=True,
+        )
+        self.account_manager.get_account_by_email.return_value = account
+
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("user@umanitoba.ca", "aPassword9")
+
+        self.assertEqual(ctx.exception.status_code, 401)
+        self.assertEqual(ctx.exception._message, "Invalid email or password")
+        mock_encode.assert_not_called()
+
+
+    @patch("src.business_logic.services.account_service.jwt.encode")
+    def test_login_allows_equal_passwords_even_when_distinct_string_objects(
+        self, mock_encode
+    ):
+        stored_password = "ValidPass1"
+        supplied_password = "".join(["Valid", "Pass", "1"])
+
+        self.assertEqual(stored_password, supplied_password)
+        self.assertIsNot(stored_password, supplied_password)
+
+        account = Account(
+            email="user@umanitoba.ca",
+            password=stored_password,
+            fname="Test",
+            lname="User",
+            account_id=7,
+            verified=True,
+        )
+        self.account_manager.get_account_by_email.return_value = account
+        mock_encode.return_value = "fake-jwt"
+
+        token = self.service.login("user@umanitoba.ca", supplied_password)
+
+        self.assertEqual(token, "fake-jwt")
+        mock_encode.assert_called_once()
+
+
+    @patch("src.business_logic.services.account_service.jwt.encode")
+    @patch("src.business_logic.services.account_service.datetime.datetime")
+    def test_login_sets_expiration_to_exactly_30_days(self, mock_datetime, mock_encode):
+        frozen_now = datetime.datetime(2026, 3, 21, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        mock_datetime.now.return_value = frozen_now
+
+        account = Account(
+            email="user@umanitoba.ca",
+            password="ValidPass1",
+            fname="Test",
+            lname="User",
+            account_id=7,
+            verified=True,
+        )
+        self.account_manager.get_account_by_email.return_value = account
+        mock_encode.return_value = "fake-jwt"
+
+        token = self.service.login("user@umanitoba.ca", "ValidPass1")
+
+        self.assertEqual(token, "fake-jwt")
+
+        payload = mock_encode.call_args.args[0]
+        self.assertEqual(
+            payload["exp"],
+            frozen_now + datetime.timedelta(days=30),
+        )
+
+    def test_login_token_expiration_is_exactly_30_days(self):
+        frozen_now = datetime.datetime(2026, 3, 21, 12, 0, 0, tzinfo=datetime.timezone.utc)
+
+        account = Account(
+            email="user@umanitoba.ca",
+            password="ValidPass1",
+            fname="Test",
+            lname="User",
+            account_id=7,
+            verified=True,
+        )
+        # account.id = 7
+
+        self.account_manager.get_account_by_email.return_value = account
+
+        with patch(
+            "src.business_logic.services.account_service.datetime.datetime"
+        ) as mock_datetime:
+            mock_datetime.now.return_value = frozen_now
+
+            token = self.service.login("user@umanitoba.ca", "ValidPass1")
+
+        payload = jwt.decode(
+            token,
+            SECRET_KEY,
+            algorithms=["HS256"],
+            options={"verify_exp": False},
+        )
+
+        expected_exp = frozen_now + datetime.timedelta(days=30)
+        expected_exp_timestamp = int(expected_exp.timestamp())
+
+        self.assertEqual(payload["sub"], "7")
+        self.assertEqual(payload["exp"], expected_exp_timestamp)

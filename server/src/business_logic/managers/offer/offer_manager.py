@@ -32,11 +32,7 @@ class OfferManager(IOffermanager):
     def __init__(self, offer_db: OfferDB, listing_db: ListingDB) -> None:
         super().__init__(offer_db, listing_db)
 
-    # --------------------------------------------------
-    # CREATE
-    # --------------------------------------------------
-
-    @override
+    @override # pragma: no mutate
     def create_offer(self, offer: Offer) -> Offer:
         Validation.require_not_none(offer, "offer")
 
@@ -70,45 +66,41 @@ class OfferManager(IOffermanager):
 
         return self._offer_db.add(offer)
 
-    # --------------------------------------------------
-    # READ (simple)
-    # --------------------------------------------------
-
-    @override
+    @override # pragma: no mutate
     def get_offer_by_id(self, offer_id: int) -> Optional[Offer]:
         offer_id = Validation.require_int(offer_id, "offer_id")
         return self._offer_db.get_by_id(offer_id)
 
-    @override
+    @override # pragma: no mutate
     def get_all_offers(self) -> List[Offer]:
         return self._offer_db.get_all()
 
-    @override
+    @override # pragma: no mutate
     def get_offers_by_listing_id(self, listing_id: int) -> List[Offer]:
         listing_id = Validation.require_int(listing_id, "listing_id")
         return self._offer_db.get_by_listing_id(listing_id)
 
-    @override
+    @override # pragma: no mutate
     def get_offers_by_sender_id(self, sender_id: int) -> List[Offer]:
         sender_id = Validation.require_int(sender_id, "sender_id")
         return self._offer_db.get_by_sender_id(sender_id)
 
-    @override
+    @override # pragma: no mutate
     def get_accepted_offers_by_listing_id(self, listing_id: int) -> List[Offer]:
         listing_id = Validation.require_int(listing_id, "listing_id")
         return self._offer_db.get_accepted_by_listing_id(listing_id)
 
-    @override
+    @override # pragma: no mutate
     def get_unseen_offers_by_listing_id(self, listing_id: int) -> List[Offer]:
         listing_id = Validation.require_int(listing_id, "listing_id")
         return self._offer_db.get_unseen_by_listing_id(listing_id)
 
-    @override
+    @override # pragma: no mutate
     def get_pending_offers_by_listing_id(self, listing_id: int) -> List[Offer]:
         listing_id = Validation.require_int(listing_id, "listing_id")
         return self._offer_db.get_pending_by_listing_id(listing_id)
 
-    @override
+    @override # pragma: no mutate
     def get_offer_by_sender_and_listing(
         self, sender_id: int, listing_id: int
     ) -> Optional[Offer]:
@@ -116,11 +108,7 @@ class OfferManager(IOffermanager):
         listing_id = Validation.require_int(listing_id, "listing_id")
         return self._offer_db.get_by_sender_and_listing(sender_id, listing_id)
 
-    # --------------------------------------------------
-    # READ (aggregated)
-    # --------------------------------------------------
-
-    @override
+    @override # pragma: no mutate
     def get_offers_sellers(self, seller_id: int) -> List[Offer]:
         seller_id = Validation.require_int(seller_id, "seller_id")
         listings = self._listing_db.get_by_seller_id(seller_id)
@@ -129,7 +117,7 @@ class OfferManager(IOffermanager):
             offers.extend(self._offer_db.get_by_listing_id(listing.id))
         return offers
 
-    @override
+    @override # pragma: no mutate
     def get_offer_sellers_pending(self, seller_id: int) -> List[Offer]:
         seller_id = Validation.require_int(seller_id, "seller_id")
         listings = self._listing_db.get_by_seller_id(seller_id)
@@ -138,7 +126,7 @@ class OfferManager(IOffermanager):
             offers.extend(self._offer_db.get_pending_by_listing_id(listing.id))
         return offers
 
-    @override
+    @override # pragma: no mutate
     def get_offer_sellers_unseen(self, seller_id: int) -> List[Offer]:
         seller_id = Validation.require_int(seller_id, "seller_id")
         listings = self._listing_db.get_by_seller_id(seller_id)
@@ -147,22 +135,18 @@ class OfferManager(IOffermanager):
             offers.extend(self._offer_db.get_unseen_by_listing_id(listing.id))
         return offers
 
-    @override
+    @override # pragma: no mutate
     def get_pending_offers_with_listing_by_sender(self, sender_id: int) -> List[Offer]:
         sender_id = Validation.require_int(sender_id, "sender_id")
         all_offers = self._offer_db.get_by_sender_id(sender_id)
         return [offer for offer in all_offers if offer.is_pending]
 
-    # --------------------------------------------------
-    # UPDATE
-    # --------------------------------------------------
-
-    @override
+    @override # pragma: no mutate
     def set_offer_seen(self, offer_id: int) -> None:
         offer_id = Validation.require_int(offer_id, "offer_id")
         self._offer_db.set_seen(offer_id)
 
-    @override
+    @override # pragma: no mutate
     def set_offer_accepted(self, offer_id: int, accepted: bool, actor_id: int) -> None:
         offer_id = Validation.require_int(offer_id, "offer_id")
         actor_id = Validation.require_int(actor_id, "actor_id")
@@ -194,11 +178,8 @@ class OfferManager(IOffermanager):
                 if other.id != offer_id:
                     self._offer_db.set_accepted(other.id, False)
 
-    # --------------------------------------------------
-    # DELETE
-    # --------------------------------------------------
 
-    @override
+    @override # pragma: no mutate
     def delete_offer(self, offer_id: int) -> bool:
         offer_id = Validation.require_int(offer_id, "offer_id")
         return self._offer_db.remove(offer_id)

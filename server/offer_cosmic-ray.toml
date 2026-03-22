@@ -1,11 +1,15 @@
 [cosmic-ray]
 module-path = [
-        "src/business_logic/managers/offer/offer_manager.py",
         "src/business_logic/services/offer_service.py",
+        "src/business_logic/managers/offer/offer_manager.py",
     ]
 timeout = 60.0
 excluded-modules = []
 test-command = "python -m tests.unit.all_unit_tests"
 
+[cosmic-ray.filters.operators-filter]
+exclude-operators = [
+    "",
+]
 [cosmic-ray.distributor]
 name = "local"
