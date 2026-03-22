@@ -6,10 +6,10 @@ os.chdir(Path(__file__).resolve().parents[1])
 
 features = [
     "account_authentication_cosmic-ray.toml",
-    # "listings_cosmic-ray.toml",
-    # "search_cosmic-ray.toml",
-    # "offer_cosmic-ray.toml",
-    # "rating_cosmic-ray.toml",
+    "listings_cosmic-ray.toml",
+    "search_cosmic-ray.toml",
+    "offer_cosmic-ray.toml",
+    "rating_cosmic-ray.toml",
 ]
 
 
