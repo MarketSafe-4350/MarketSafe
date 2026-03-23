@@ -12,7 +12,7 @@ import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { Listing } from '../../shared/models/listing.models';
 import { CommentApiService } from '../../shared/services/comments-api.service';
-import { OffersApiService } from '../../shared/services/offers-api.service';
+import { Offer, OffersApiService } from '../../shared/services/offers-api.service';
 import { SendOfferDialogComponent } from '../send-offer/send-offer.component';
 
 describe('MainPageComponent', () => {
@@ -103,8 +103,16 @@ describe('MainPageComponent', () => {
 
     offersApiSpy = jasmine.createSpyObj<OffersApiService>('OffersApiService', [
       'create',
+      'getSent',
+      'getReceived',
+      'getReceivedUnseen',
+      'markSeen',
     ]);
     offersApiSpy.create.and.returnValue(of({}));
+    offersApiSpy.getSent.and.returnValue(of([]));
+    offersApiSpy.getReceived.and.returnValue(of([]));
+    offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.markSeen.and.returnValue(of({}));
 
     dialogRefSpy = jasmine.createSpyObj<MatDialogRef<SendOfferDialogComponent>>(
       'MatDialogRef',
@@ -192,6 +200,27 @@ describe('MainPageComponent', () => {
     expect(component.canSendOffer(ownedListing)).toBeFalse();
     expect(component.canSendOffer({ ...otherListing, isSold: true })).toBeFalse();
     expect(component.canSendOffer(otherListing)).toBeTrue();
+  });
+
+  it('canSendOffer_DeclinedSentOffer_ShouldStillBeTrue', () => {
+    const declinedOffer: Offer = {
+      id: 91,
+      listingId: otherListing.id,
+      senderId: 123,
+      offeredPrice: 10,
+      locationOffered: 'Winnipeg',
+      seen: true,
+      accepted: false,
+      createdDate: new Date().toISOString(),
+    };
+    offersApiSpy.getSent.and.returnValue(of([declinedOffer]));
+
+    fixture = TestBed.createComponent(MainPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.canSendOffer(otherListing)).toBeTrue();
+    expect(component.getOfferButtonLabel(otherListing.id)).toBe('Send Offer');
   });
 
   it('submitComment_WhitespaceOnly_ShouldSetErrorAndNotCreateComment', () => {

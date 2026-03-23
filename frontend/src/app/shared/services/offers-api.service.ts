@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { API_URLS } from '../app-urls';
 
@@ -11,10 +11,30 @@ export interface CreateOfferRequest {
 }
 
 interface CreateOfferApiRequest {
-  listing_id: number;
   offered_price: number;
   location_offered: string;
-  accepted: boolean;
+}
+
+interface OfferApiResponse {
+  id?: number | null;
+  listing_id: number;
+  sender_id: number;
+  offered_price: number;
+  location_offered?: string | null;
+  seen: boolean;
+  accepted?: boolean | null;
+  created_date?: string | null;
+}
+
+export interface Offer {
+  id: number;
+  listingId: number;
+  senderId: number;
+  offeredPrice: number;
+  locationOffered: string | null;
+  seen: boolean;
+  accepted: boolean | null;
+  createdDate: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -24,15 +44,67 @@ export class OffersApiService {
 
   create(payload: CreateOfferRequest): Observable<unknown> {
     const body: CreateOfferApiRequest = {
-      listing_id: payload.listingId,
       offered_price: payload.offeredPrice,
       location_offered: payload.locationOffered,
-      accepted: false,
     };
 
-    return this.http.post(this.apiUrl, body, {
+    return this.http.post(
+      `${API_URLS.listings}/${payload.listingId}/offer`,
+      body,
+      {
+        headers: this.authHeaders(),
+      },
+    );
+  }
+
+  getReceived(): Observable<Offer[]> {
+    return this.http
+      .get<OfferApiResponse[]>(`${API_URLS.accounts}/offers/received`, {
+        headers: this.authHeaders(),
+      })
+      .pipe(map((offers) => offers.map((offer) => this.toOffer(offer))));
+  }
+
+  getSent(): Observable<Offer[]> {
+    return this.http
+      .get<OfferApiResponse[]>(`${API_URLS.accounts}/offers/sent`, {
+        headers: this.authHeaders(),
+      })
+      .pipe(map((offers) => offers.map((offer) => this.toOffer(offer))));
+  }
+
+  getReceivedUnseen(): Observable<Offer[]> {
+    return this.http
+      .get<OfferApiResponse[]>(`${API_URLS.accounts}/offers/received/unseen`, {
+        headers: this.authHeaders(),
+      })
+      .pipe(map((offers) => offers.map((offer) => this.toOffer(offer))));
+  }
+
+  markSeen(offerId: number): Observable<unknown> {
+    return this.http.patch(`${this.apiUrl}/${offerId}/seen`, null, {
       headers: this.authHeaders(),
     });
+  }
+
+  resolve(offerId: number, accepted: boolean): Observable<unknown> {
+    return this.http.post(`${this.apiUrl}/${offerId}/resolve`, null, {
+      headers: this.authHeaders(),
+      params: { accepted },
+    });
+  }
+
+  private toOffer(offer: OfferApiResponse): Offer {
+    return {
+      id: offer.id ?? 0,
+      listingId: offer.listing_id,
+      senderId: offer.sender_id,
+      offeredPrice: offer.offered_price,
+      locationOffered: offer.location_offered ?? null,
+      seen: offer.seen,
+      accepted: offer.accepted ?? null,
+      createdDate: offer.created_date ?? null,
+    };
   }
 
   private authHeaders(): HttpHeaders {

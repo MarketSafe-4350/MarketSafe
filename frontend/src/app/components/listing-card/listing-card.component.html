@@ -43,9 +43,10 @@
               mat-flat-button
               type="button"
               class="send-offer-btn"
+              [disabled]="isOfferDisabled"
               (click)="onOfferClick($event)"
             >
-              Send Offer
+              {{ offerButtonLabel }}
             </button>
           }
 

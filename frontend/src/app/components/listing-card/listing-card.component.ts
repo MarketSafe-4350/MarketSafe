@@ -22,6 +22,8 @@ export class ListingCardComponent {
   @Input() commentCount = 0;
   @Input() showSellerProfileButton = false;
   @Input() showOfferButton = false;
+  @Input() isOfferDisabled = false;
+  @Input() offerButtonLabel = 'Send Offer';
   @Output() sellerProfileClick = new EventEmitter<void>();
   @Output() offerClick = new EventEmitter<void>();
 
@@ -72,6 +74,9 @@ export class ListingCardComponent {
 
   onOfferClick(event: Event): void {
     event.stopPropagation();
+    if (this.isOfferDisabled) {
+      return;
+    }
     this.offerClick.emit();
   }
 }
