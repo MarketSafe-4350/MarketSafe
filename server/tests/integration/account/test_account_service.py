@@ -5,11 +5,13 @@ import unittest
 
 from src.business_logic.services.account_service import AccountService
 from src.business_logic.managers.account import AccountManager
+from src.business_logic.managers.rating import RatingManager
 from src.db.account.mysql import MySQLAccountDB
+from src.db.rating.mysql import MySQLRatingDB
 from src.utils import ValidationError, AccountAlreadyExistsError
 from src.api.errors import ApiError
 
-from tests.helpers.integration_db import  ensure_tables_exist, reset_all_tables
+from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
 from tests.helpers.integration_db_session import acquire, get_db, release
 
 
@@ -18,7 +20,6 @@ class TestAccountServiceIntegration(unittest.TestCase):
     Integration tests:
       AccountService -> AccountManager -> MySQLAccountDB -> real MySQL (docker)
     """
-
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -35,13 +36,17 @@ class TestAccountServiceIntegration(unittest.TestCase):
 
         # Wire real DB -> manager -> service
         cls._account_db = MySQLAccountDB(db=cls._db)
+        cls._rating_db = MySQLRatingDB(db=cls._db)
         cls._manager = AccountManager(cls._account_db)
-        cls._service = AccountService(cls._manager)
+        cls._rating_manager = RatingManager(cls._rating_db)
+        cls._service = AccountService(
+            account_manager=cls._manager,
+            rating_manager=cls._rating_manager,
+        )
 
     @classmethod
     def tearDownClass(cls) -> None:
         release(cls._session, remove_volumes=False)
-
 
     # -----------------------------
     # create_account
@@ -146,12 +151,12 @@ class TestAccountServiceIntegration(unittest.TestCase):
             self._service.login("", "")
 
         self.assertEqual(ctx.exception.status_code, 400)
-    
+
     # -----------------------------
     # get account with userid
     # -----------------------------
 
-    def test_get_account_userid_returns_account(self) -> None:
+    def test_get_account_by_userid_returns_account(self) -> None:
         # Create account to retrieve
         created = self._service.create_account(
             email="userid@umanitoba.ca",
@@ -161,23 +166,23 @@ class TestAccountServiceIntegration(unittest.TestCase):
         )
 
         # Fetch using returned ID
-        account = self._service.get_account_userid(created.id)
+        account = self._service.get_account_by_userid(created.id)
 
         # Verify returned data matches DB
         self.assertIsNotNone(account)
         self.assertEqual(account.id, created.id)
         self.assertEqual(account.email, "userid@umanitoba.ca")
 
-    def test_get_account_userid_not_found_raises_404(self) -> None:
+    def test_get_account_by_userid_not_found_raises_404(self) -> None:
         # Non-existent ID
         with self.assertRaises(ApiError) as ctx:
-            self._service.get_account_userid(999999)
+            self._service.get_account_by_userid(999999)
 
         self.assertEqual(ctx.exception.status_code, 404)
 
-    def test_get_account_userid_none_raises_400(self) -> None:
+    def test_get_account_by_userid_none_raises_400(self) -> None:
         # None should be rejected immediately
         with self.assertRaises(ApiError) as ctx:
-            self._service.get_account_userid(None)
+            self._service.get_account_by_userid(None)
 
         self.assertEqual(ctx.exception.status_code, 400)

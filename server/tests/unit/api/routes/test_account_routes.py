@@ -106,38 +106,63 @@ class TestAccountRoutes(unittest.TestCase):
         service = MagicMock(name="account_service")
 
         account = MagicMock()
+        account.id = 1
         account.email = "me@b.com"
         account.fname = "Me"
         account.lname = "User"
-        service.get_account_userid.return_value = account
+        account.verified = True
+        account.average_rating_received = 1.0
+        account.sum_of_ratings_received = 1
+        service.get_account_by_userid.return_value = account
 
         self.app.dependency_overrides[get_account_service] = lambda: service
         resp = self.client.get("/accounts/me")
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(
-            resp.json(), {"email": "me@b.com", "fname": "Me", "lname": "User"}
+            resp.json(),
+            {
+                "id": 1,
+                "email": "me@b.com",
+                "fname": "Me",
+                "lname": "User",
+                "verified": True,
+                "average_rating_received": 1.0,
+                "sum_of_ratings_received": 1,
+            },
         )
-        service.get_account_userid.assert_called_once_with(self.user_id)
+        service.get_account_by_userid.assert_called_once_with(self.user_id)
 
     def test_get_account_by_id_returns_account_response(self) -> None:
         service = MagicMock(name="account_service")
 
         account = MagicMock()
+        account.id = 12
         account.email = "buyer@b.com"
         account.fname = "Buyer"
         account.lname = "Person"
-        service.get_account_userid.return_value = account
+        account.verified = False
+        account.average_rating_received = None
+        account.sum_of_ratings_received = 0
+        service.get_account_by_userid.return_value = account
 
-        with patch.object(account_routes, "_get_service", return_value=service):
-            resp = self.client.get("/accounts/12")
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/id/12")
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(
             resp.json(),
-            {"email": "buyer@b.com", "fname": "Buyer", "lname": "Person"},
+            {
+                "id": 12,
+                "email": "buyer@b.com",
+                "fname": "Buyer",
+                "lname": "Person",
+                "verified": False,
+                "average_rating_received": None,
+                "sum_of_ratings_received": 0,
+            },
         )
-        service.get_account_userid.assert_called_once_with(12)
+        service.get_account_by_userid.assert_called_once_with(12)
 
     # -----------------------------
     # GET /accounts/verify-email  (verify_email)
@@ -165,7 +190,9 @@ class TestAccountRoutes(unittest.TestCase):
         service.verify_email_token.return_value = account
 
         self.app.dependency_overrides[get_account_service] = lambda: service
-        resp = self.client.get("/accounts/verify-email?auth_token=auth_token_1234567890")
+        resp = self.client.get(
+            "/accounts/verify-email?auth_token=auth_token_1234567890"
+        )
 
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
@@ -217,7 +244,9 @@ class TestAccountRoutes(unittest.TestCase):
         service.verify_email_token.side_effect = Exception("unexpected")
 
         self.app.dependency_overrides[get_account_service] = lambda: service
-        resp = self.client.get("/accounts/verify-email?auth_token=auth_token_1234567890")
+        resp = self.client.get(
+            "/accounts/verify-email?auth_token=auth_token_1234567890"
+        )
 
         self.assertEqual(resp.status_code, 500)
         self.assertEqual(

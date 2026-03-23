@@ -215,7 +215,7 @@ class AccountService:
             )
 
         # Get the account and mark as verified
-        account: Account = self.get_account_userid(db_token.account_id)
+        account: Account = self.get_account_by_userid(db_token.account_id)
 
         # TODO: Call DAO to update account.verified = true
         # For now, we'll return the account (real implementation will update DB)
@@ -287,7 +287,7 @@ class AccountService:
         )
         return token
 
-    def get_account_userid(self, userid: int) -> Account:
+    def get_account_by_userid(self, userid: int) -> Account:
         if userid is None:
             raise ApiError(status_code=400, message="User ID cannot be None")
 

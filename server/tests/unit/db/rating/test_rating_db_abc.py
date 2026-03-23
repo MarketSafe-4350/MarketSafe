@@ -21,6 +21,9 @@ class _RatingDBCoverageShim(RatingDB):
     def get_sum_of_ratings_received_by_account_id(self, account_id: int) -> int:
         return RatingDB.get_sum_of_ratings_received_by_account_id(self, account_id)
 
+    def count_ratings_received_by_account_id(self, account_id: int) -> int:
+        return RatingDB.count_ratings_received_by_account_id(self, account_id)
+
     def get_by_listing_id(self, listing_id: int) -> Rating | None:
         return RatingDB.get_by_listing_id(self, listing_id)
 
@@ -103,6 +106,12 @@ class TestRatingDBABC(unittest.TestCase):
     ) -> None:
         with self.assertRaises(NotImplementedError):
             self.sut.get_sum_of_ratings_received_by_account_id(1)
+
+    def test_count_ratings_received_by_account_id_raises_not_implemented_error(
+        self,
+    ) -> None:
+        with self.assertRaises(NotImplementedError):
+            self.sut.count_ratings_received_by_account_id(1)
 
     def test_get_by_listing_id_raises_not_implemented_error(self) -> None:
         with self.assertRaises(NotImplementedError):

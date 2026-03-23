@@ -160,6 +160,18 @@ class TestRatingManagerUnit(unittest.TestCase):
         with self.assertRaises(ValidationError):
             self.manager.get_sum_of_ratings_received_by_account_id(None)  # type: ignore[arg-type]
 
+    def test_count_ratings_received_by_account_id_returns_count(self) -> None:
+        self.rating_db.count_ratings_received_by_account_id.return_value = 3
+
+        out = self.manager.count_ratings_received_by_account_id(1)
+
+        self.assertEqual(3, out)
+        self.rating_db.count_ratings_received_by_account_id.assert_called_once_with(1)
+
+    def test_count_ratings_received_by_account_id_raises_validation_error_when_account_id_invalid(self) -> None:
+        with self.assertRaises(ValidationError):
+            self.manager.count_ratings_received_by_account_id(None)  # type: ignore[arg-type]
+
     def test_get_average_for_rater_returns_average(self) -> None:
         self.rating_db.get_average_for_rater.return_value = 3.5
 

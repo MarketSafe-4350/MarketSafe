@@ -188,3 +188,14 @@ class TestValidation(unittest.TestCase):
     def test_rating_sum_raises_when_negative(self) -> None:
         with self.assertRaises(ValidationError):
             Validation.rating_sum(-1)
+
+    # -----------------------------
+    # rating_count
+    # -----------------------------
+    def test_rating_count_returns_value_when_valid(self) -> None:
+        out = Validation.rating_count(5)
+        self.assertEqual(out, 5)
+
+    def test_rating_count_raises_when_negative(self) -> None:
+        with self.assertRaises(ValidationError):
+            Validation.rating_count(-1)

@@ -99,14 +99,16 @@ def get_account(
     user_id: int = Depends(get_current_user_id),
     account_service: AccountService = Depends(get_account_service),
 ):
-    account = account_service.get_account_userid(user_id)
+    account = account_service.get_account_by_userid(user_id)
 
     return AccountResponse(
+        id=account.id,
         email=account.email,
         fname=account.fname,
         lname=account.lname,
-        rating_count=account.rating_count,
-        rating_average=account.average_rating_received,
+        verified=account.verified,
+        average_rating_received=account.average_rating_received,
+        sum_of_ratings_received=account.sum_of_ratings_received,
     )
 
 
@@ -163,11 +165,13 @@ def get_account_by_id(
     account_id: int,
     account_service: AccountService = Depends(get_account_service),
 ):
-    account = account_service.get_account_userid(account_id)
+    account = account_service.get_account_by_userid(account_id)
     return AccountResponse(
+        id=account.id,
         email=account.email,
         fname=account.fname,
         lname=account.lname,
-        rating_count=account.rating_count,
-        rating_average=account.average_rating_received,
+        verified=account.verified,
+        average_rating_received=account.average_rating_received,
+        sum_of_ratings_received=account.sum_of_ratings_received,
     )

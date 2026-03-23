@@ -99,6 +99,17 @@ def search_listings(
     return [ListingResponse.from_domain(listing, media_storage) for listing in listings]
 
 
+@router.get("/seller/{seller_id}", response_model=List[ListingResponse])
+def get_listings_by_seller(
+    seller_id: int,
+    _: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
+    media_storage: MediaStorageUtility = Depends(get_media_storage),
+):
+    listings: List[Listing] = listing_service.get_listing_by_user_id(user_id=seller_id)
+    return [ListingResponse.from_domain(listing, media_storage) for listing in listings]
+
+
 @router.post("", response_model=ListingResponse)
 def create_listing(
     request: ListingCreate,
