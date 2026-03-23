@@ -33,7 +33,6 @@ from src.api.dependencies import (
 from src.minio.media_storage_utility import MediaStorageUtility
 
 router = APIRouter(prefix="/listings")
-security = HTTPBearer()
 
 
 def _normalized_image_extension(upload: UploadFile) -> str:

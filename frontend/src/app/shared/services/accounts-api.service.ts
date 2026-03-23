@@ -30,7 +30,7 @@ export class AccountsApiService {
 
   getById(accountId: number): Observable<Account> {
     return this.http
-      .get<AccountApiResponse>(`${this.apiUrl}/${accountId}`, {
+      .get<AccountApiResponse>(`${this.apiUrl}/id/${accountId}`, {
         headers: this.authHeaders(),
       })
       .pipe(map((account) => this.toAccount(account)));
