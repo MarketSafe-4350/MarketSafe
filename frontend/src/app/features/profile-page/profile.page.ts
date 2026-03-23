@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -55,6 +56,7 @@ export class ProfilePageComponent
   profileListings: Listing[] = [];
   viewedSellerId: number | null = null;
   offerFeedbackMessage: string | null = null;
+  private readonly blockedOfferListingIds = new Set<number>();
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
@@ -78,11 +80,13 @@ export class ProfilePageComponent
         sidebarListings: this.listingsApi.getMine(),
         account: this.accountsApi.getById(this.viewedSellerId as number),
         profileListings: this.listingsApi.getBySeller(this.viewedSellerId as number),
+        sentOffers: this.offersApi.getSent(),
       }).subscribe({
-        next: ({ sidebarListings, account, profileListings }) => {
+        next: ({ sidebarListings, account, profileListings, sentOffers }) => {
           this.account = account;
           this.listings = sidebarListings;
           this.profileListings = this.getActiveListings(profileListings);
+          this.replaceBlockedOfferListingIds(sentOffers);
         },
         error: (err) => {
           console.error('Failed to load seller profile:', err);
@@ -166,8 +170,13 @@ export class ProfilePageComponent
       this.isSellerProfile &&
       this.currentUserId !== null &&
       listing.sellerId !== this.currentUserId &&
-      !listing.isSold
+      !listing.isSold &&
+      !this.hasBlockingOffer(listing.id)
     );
+  }
+
+  getOfferButtonLabel(listingId: number): string {
+    return this.hasBlockingOffer(listingId) ? 'Offer Sent' : 'Send Offer';
   }
 
   openSendOfferDialog(listing: Listing): void {
@@ -193,10 +202,16 @@ export class ProfilePageComponent
         })
         .subscribe({
           next: () => {
+            this.blockedOfferListingIds.add(listing.id);
             this.offerFeedbackMessage = `Offer sent for ${listing.title}.`;
           },
           error: (error) => {
             console.error('Failed to send offer:', error);
+            if (this.isDuplicateOfferError(error)) {
+              this.blockedOfferListingIds.add(listing.id);
+              this.offerFeedbackMessage = `You already sent an offer for ${listing.title}.`;
+              return;
+            }
             this.offerFeedbackMessage = 'Failed to send offer.';
           },
         });
@@ -205,5 +220,24 @@ export class ProfilePageComponent
 
   private getActiveListings(listings: Listing[]): Listing[] {
     return listings.filter((listing) => !listing.isSold);
+  }
+
+  private hasBlockingOffer(listingId: number): boolean {
+    return this.blockedOfferListingIds.has(listingId);
+  }
+
+  private replaceBlockedOfferListingIds(
+    sentOffers: { listingId: number; accepted: boolean | null }[],
+  ): void {
+    this.blockedOfferListingIds.clear();
+    for (const offer of sentOffers) {
+      if (offer.accepted !== false) {
+        this.blockedOfferListingIds.add(offer.listingId);
+      }
+    }
+  }
+
+  private isDuplicateOfferError(error: unknown): boolean {
+    return error instanceof HttpErrorResponse && error.status === 409;
   }
 }

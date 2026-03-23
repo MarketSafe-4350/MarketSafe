@@ -120,6 +120,25 @@ class TestAccountRoutes(unittest.TestCase):
         )
         service.get_account_userid.assert_called_once_with(self.user_id)
 
+    def test_get_account_by_id_returns_account_response(self) -> None:
+        service = MagicMock(name="account_service")
+
+        account = MagicMock()
+        account.email = "buyer@b.com"
+        account.fname = "Buyer"
+        account.lname = "Person"
+        service.get_account_userid.return_value = account
+
+        with patch.object(account_routes, "_get_service", return_value=service):
+            resp = self.client.get("/accounts/12")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.json(),
+            {"email": "buyer@b.com", "fname": "Buyer", "lname": "Person"},
+        )
+        service.get_account_userid.assert_called_once_with(12)
+
     # -----------------------------
     # GET /accounts/verify-email  (verify_email)
     # -----------------------------

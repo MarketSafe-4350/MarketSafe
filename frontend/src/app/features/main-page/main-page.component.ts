@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -54,6 +56,7 @@ export class MainPageComponent
   private readonly commentErrors = new Map<number, string>();
   private readonly offerMessages = new Map<number, string>();
   private readonly submittingOfferIds = new Set<number>();
+  private readonly blockedOfferListingIds = new Set<number>();
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
@@ -71,9 +74,13 @@ export class MainPageComponent
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.listingsApi.getAll().subscribe({
-      next: (listings) => {
+    forkJoin({
+      listings: this.listingsApi.getAll(),
+      sentOffers: this.offersApi.getSent(),
+    }).subscribe({
+      next: ({ listings, sentOffers }) => {
         this.listings = listings;
+        this.replaceBlockedOfferListingIds(sentOffers);
         this.preloadCommentsForListings(listings);
         this.isLoading = false;
         this.focusRequestedListing();
@@ -234,7 +241,15 @@ export class MainPageComponent
   }
 
   canSendOffer(listing: Listing): boolean {
-    return this.canViewSellerProfile(listing) && !listing.isSold;
+    return (
+      this.canViewSellerProfile(listing) &&
+      !listing.isSold &&
+      !this.hasBlockingOffer(listing.id)
+    );
+  }
+
+  getOfferButtonLabel(listingId: number): string {
+    return this.hasBlockingOffer(listingId) ? 'Offer Sent' : 'Send Offer';
   }
 
   getOfferMessage(listingId: number): string | null {
@@ -277,18 +292,48 @@ export class MainPageComponent
         listingId: listing.id,
         offeredPrice: payload.offeredPrice,
         locationOffered: payload.locationOffered,
-      })
+        })
       .subscribe({
         next: () => {
+          this.blockedOfferListingIds.add(listing.id);
           this.offerMessages.set(listing.id, 'Offer sent successfully.');
           this.submittingOfferIds.delete(listing.id);
         },
         error: (error) => {
           console.error('Failed to send offer:', error);
+          if (this.isDuplicateOfferError(error)) {
+            this.blockedOfferListingIds.add(listing.id);
+            this.offerMessages.set(
+              listing.id,
+              'You already sent an offer for this listing.',
+            );
+            this.submittingOfferIds.delete(listing.id);
+            return;
+          }
+
           this.offerMessages.set(listing.id, 'Failed to send offer.');
           this.submittingOfferIds.delete(listing.id);
         },
       });
+  }
+
+  private hasBlockingOffer(listingId: number): boolean {
+    return this.blockedOfferListingIds.has(listingId);
+  }
+
+  private replaceBlockedOfferListingIds(
+    sentOffers: { listingId: number; accepted: boolean | null }[],
+  ): void {
+    this.blockedOfferListingIds.clear();
+    for (const offer of sentOffers) {
+      if (offer.accepted !== false) {
+        this.blockedOfferListingIds.add(offer.listingId);
+      }
+    }
+  }
+
+  private isDuplicateOfferError(error: unknown): boolean {
+    return error instanceof HttpErrorResponse && error.status === 409;
   }
 
   private loadCommentAuthorLabel(): void {

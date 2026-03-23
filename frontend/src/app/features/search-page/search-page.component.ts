@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -50,10 +51,12 @@ export class SearchPageComponent extends ListingsSidebarActionsBase implements O
   offerFeedbackMessage: string | null = null;
   selectedSortOption: 'date' | 'price' | 'title' = 'date';
   sortDirection: 'asc' | 'desc' = 'asc';
+  private readonly blockedOfferListingIds = new Set<number>();
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
     this.loadSidebarListings();
+    this.loadSentOfferListingIds();
   }
 
   get hasSearchQuery(): boolean {
@@ -112,7 +115,15 @@ export class SearchPageComponent extends ListingsSidebarActionsBase implements O
   }
 
   canSendOffer(listing: Listing): boolean {
-    return this.canViewSellerProfile(listing.sellerId) && !listing.isSold;
+    return (
+      this.canViewSellerProfile(listing.sellerId) &&
+      !listing.isSold &&
+      !this.hasBlockingOffer(listing.id)
+    );
+  }
+
+  getOfferButtonLabel(listingId: number): string {
+    return this.hasBlockingOffer(listingId) ? 'Offer Sent' : 'Send Offer';
   }
 
   openSendOfferDialog(listing: Listing): void {
@@ -138,10 +149,16 @@ export class SearchPageComponent extends ListingsSidebarActionsBase implements O
         })
         .subscribe({
           next: () => {
+            this.blockedOfferListingIds.add(listing.id);
             this.offerFeedbackMessage = `Offer sent for ${listing.title}.`;
           },
           error: (error) => {
             console.error('Failed to send offer:', error);
+            if (this.isDuplicateOfferError(error)) {
+              this.blockedOfferListingIds.add(listing.id);
+              this.offerFeedbackMessage = `You already sent an offer for ${listing.title}.`;
+              return;
+            }
             this.offerFeedbackMessage = 'Failed to send offer.';
           },
         });
@@ -161,6 +178,30 @@ export class SearchPageComponent extends ListingsSidebarActionsBase implements O
         console.error('Failed to load sidebar listings:', error);
       },
     });
+  }
+
+  private loadSentOfferListingIds(): void {
+    this.offersApi.getSent().subscribe({
+      next: (offers) => {
+        this.blockedOfferListingIds.clear();
+        for (const offer of offers) {
+          if (offer.accepted !== false) {
+            this.blockedOfferListingIds.add(offer.listingId);
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Failed to load sent offers:', error);
+      },
+    });
+  }
+
+  private hasBlockingOffer(listingId: number): boolean {
+    return this.blockedOfferListingIds.has(listingId);
+  }
+
+  private isDuplicateOfferError(error: unknown): boolean {
+    return error instanceof HttpErrorResponse && error.status === 409;
   }
 
   sortResults(): void {
