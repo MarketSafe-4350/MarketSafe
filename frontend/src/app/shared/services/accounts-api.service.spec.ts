@@ -67,7 +67,7 @@ describe('AccountsApiService', () => {
       result = account;
     });
 
-    const req = httpMock.expectOne('http://localhost:8000/accounts/42');
+    const req = httpMock.expectOne('http://localhost:8000/accounts/id/42');
     expect(req.request.method).toBe('GET');
 
     req.flush({
