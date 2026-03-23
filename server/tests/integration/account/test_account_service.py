@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import os
 import unittest
+from uuid import uuid4
+
+from sqlalchemy import text
 
 from src.business_logic.services.account_service import AccountService
 from src.business_logic.managers.account import AccountManager
 from src.business_logic.managers.rating import RatingManager
 from src.db.account.mysql import MySQLAccountDB
 from src.db.rating.mysql import MySQLRatingDB
+from src.domain_models import Rating
 from src.utils import ValidationError, AccountAlreadyExistsError
 from src.api.errors import ApiError
 
@@ -186,3 +190,74 @@ class TestAccountServiceIntegration(unittest.TestCase):
             self._service.get_account_by_userid(None)
 
         self.assertEqual(ctx.exception.status_code, 400)
+
+    def test_get_account_by_userid_populates_rating_count(self) -> None:
+        seller = self._service.create_account(
+            email="rcount_seller@umanitoba.ca",
+            password="Password1",
+            fname="Seller",
+            lname="Count",
+        )
+        buyer = self._service.create_account(
+            email="rcount_buyer@umanitoba.ca",
+            password="Password1",
+            fname="Buyer",
+            lname="Count",
+        )
+
+        listing_id = self._insert_listing(seller.id, sold_to_id=buyer.id, is_sold=True)
+        self._rating_manager.create_rating(Rating(
+            listing_id=listing_id,
+            rater_id=buyer.id,
+            transaction_rating=5,
+        ))
+
+        account = self._service.get_account_by_userid(seller.id)
+        self.assertEqual(account.rating_count, 1)
+
+    def test_get_account_by_userid_rating_count_zero_when_no_ratings(self) -> None:
+        seller = self._service.create_account(
+            email="rcount_zero@umanitoba.ca",
+            password="Password1",
+            fname="Zero",
+            lname="Ratings",
+        )
+
+        account = self._service.get_account_by_userid(seller.id)
+        self.assertEqual(account.rating_count, 0)
+
+    # --------------------------------------------------
+    # helpers
+    # --------------------------------------------------
+    def _insert_listing(
+        self,
+        seller_id: int,
+        *,
+        sold_to_id: int | None = None,
+        is_sold: bool = False,
+    ) -> int:
+        uniq = uuid4().hex[:8]
+
+        sql = text("""
+            INSERT INTO listing (
+                seller_id, title, description, price,
+                location, image_url, is_sold, sold_to_id
+            )
+            VALUES (
+                :seller_id, :title, :description, :price,
+                :location, :image_url, :is_sold, :sold_to_id
+            )
+        """)
+
+        with self._db.transaction() as conn:
+            result = conn.execute(sql, {
+                "seller_id": seller_id,
+                "title": f"Listing {uniq}",
+                "description": "Test listing",
+                "price": 50.0,
+                "location": "Winnipeg",
+                "image_url": None,
+                "is_sold": is_sold,
+                "sold_to_id": sold_to_id,
+            })
+            return int(result.lastrowid)

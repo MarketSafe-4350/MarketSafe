@@ -109,6 +109,7 @@ def get_account(
         verified=account.verified,
         average_rating_received=account.average_rating_received,
         sum_of_ratings_received=account.sum_of_ratings_received,
+        rating_count=account.rating_count,
     )
 
 
@@ -174,4 +175,5 @@ def get_account_by_id(
         verified=account.verified,
         average_rating_received=account.average_rating_received,
         sum_of_ratings_received=account.sum_of_ratings_received,
+        rating_count=account.rating_count,
     )

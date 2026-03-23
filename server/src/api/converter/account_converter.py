@@ -21,6 +21,7 @@ class AccountResponse(BaseModel):
     verified: bool
     average_rating_received: Optional[float]
     sum_of_ratings_received: int
+    rating_count: int
 
 
 class SignupResponse(BaseModel):

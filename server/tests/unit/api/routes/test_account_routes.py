@@ -113,6 +113,7 @@ class TestAccountRoutes(unittest.TestCase):
         account.verified = True
         account.average_rating_received = 1.0
         account.sum_of_ratings_received = 1
+        account.rating_count = 1
         service.get_account_by_userid.return_value = account
 
         self.app.dependency_overrides[get_account_service] = lambda: service
@@ -129,6 +130,7 @@ class TestAccountRoutes(unittest.TestCase):
                 "verified": True,
                 "average_rating_received": 1.0,
                 "sum_of_ratings_received": 1,
+                "rating_count": 1,
             },
         )
         service.get_account_by_userid.assert_called_once_with(self.user_id)
@@ -144,6 +146,7 @@ class TestAccountRoutes(unittest.TestCase):
         account.verified = False
         account.average_rating_received = None
         account.sum_of_ratings_received = 0
+        account.rating_count = 0
         service.get_account_by_userid.return_value = account
 
         self.app.dependency_overrides[get_account_service] = lambda: service
@@ -160,6 +163,7 @@ class TestAccountRoutes(unittest.TestCase):
                 "verified": False,
                 "average_rating_received": None,
                 "sum_of_ratings_received": 0,
+                "rating_count": 0,
             },
         )
         service.get_account_by_userid.assert_called_once_with(12)

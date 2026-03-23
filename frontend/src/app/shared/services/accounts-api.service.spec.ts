@@ -46,6 +46,7 @@ describe('AccountsApiService', () => {
       verified: true,
       average_rating_received: 4,
       sum_of_ratings_received: 20,
+      rating_count: 5,
     });
 
     expect(result).toEqual({
