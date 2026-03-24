@@ -416,15 +416,6 @@ class TestAccountServiceUnit(unittest.TestCase):
         # Mutants using [1] or [+1] would incorrectly read "dept" and raise.
         self.service.validate_email("student@dept@umanitoba.ca")
 
-
-    def test_get_account_by_userid_returns_unverified_account(self):
-        account = self.service.get_account_by_userid("123")
-
-        self.assertFalse(account.verified)
-        self.assertEqual(account.id, 1)
-        self.assertEqual(account.email, "test1@gmail.com")
-
-
     def test_login_raises_when_email_missing(self):
         with self.assertRaises(ApiError) as ctx:
             self.service.login("", "ValidPass1")

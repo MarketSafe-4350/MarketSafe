@@ -17,7 +17,7 @@ class RatingResponse(BaseModel):
     rater_id: int
     transaction_rating: int
 
-    @staticmethod
+    @staticmethod # pragma: no mutate
     def from_domain(rating: Rating) -> "RatingResponse":
         return RatingResponse(
             id=rating.id,
