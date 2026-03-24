@@ -48,6 +48,23 @@ class Validation:
 
         return value
 
+    @staticmethod
+    def rating_count(value: int, field_name: str = "rating_count") -> int:
+        """
+        Validate the count of ratings.
+
+        Rules:
+        - Must be an integer
+        - Cannot be negative
+        """
+
+        value = Validation.require_int(value, field_name)
+
+        if value < 0:
+            raise ValidationError(f"{field_name} cannot be negative.")
+
+        return value
+
 
     @staticmethod
     def not_empty(value: str, field_name: str) -> str:

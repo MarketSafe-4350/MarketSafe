@@ -188,6 +188,16 @@ class TestAccount(unittest.TestCase):
         with self.assertRaises(ValidationError):
             account.sum_of_ratings_received = -1
 
+    def test_rating_count_getter_returns_value(self):
+        account = Account(
+            email="user@example.com",
+            password="hash",
+            fname="First",
+            lname="Last",
+            rating_count=3,
+        )
+        self.assertEqual(account.rating_count, 3)
+
     def test_init_rejects_invalid_rating_fields(self):
         with self.assertRaises(ValidationError):
             Account(

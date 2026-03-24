@@ -375,6 +375,38 @@ class TestRatingManagerIntegration(unittest.TestCase):
         with self.assertRaises(ValidationError):
             self._manager.get_average_for_rater(None)  # type: ignore[arg-type]
 
+    def test_count_ratings_received_by_account_id_happy_path(self) -> None:
+        seller_id = self._insert_account()
+        buyer_1 = self._insert_account()
+        buyer_2 = self._insert_account()
+
+        listing_1 = self._insert_listing(seller_id, sold_to_id=buyer_1, is_sold=True)
+        listing_2 = self._insert_listing(seller_id, sold_to_id=buyer_2, is_sold=True)
+
+        self._manager.create_rating(Rating(
+            listing_id=listing_1,
+            rater_id=buyer_1,
+            transaction_rating=5,
+        ))
+        self._manager.create_rating(Rating(
+            listing_id=listing_2,
+            rater_id=buyer_2,
+            transaction_rating=3,
+        ))
+
+        count = self._manager.count_ratings_received_by_account_id(seller_id)
+        self.assertEqual(count, 2)
+
+    def test_count_ratings_received_by_account_id_returns_zero_when_no_ratings(self) -> None:
+        seller_id = self._insert_account()
+
+        count = self._manager.count_ratings_received_by_account_id(seller_id)
+        self.assertEqual(count, 0)
+
+    def test_count_ratings_received_by_account_id_invalid_raises_validation_error(self) -> None:
+        with self.assertRaises(ValidationError):
+            self._manager.count_ratings_received_by_account_id("bad")  # type: ignore[arg-type]
+
     def test_count_by_rater_happy_path(self) -> None:
         seller_1 = self._insert_account()
         seller_2 = self._insert_account()

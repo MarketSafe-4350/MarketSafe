@@ -54,6 +54,18 @@ class BaseRatingDB(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def count_ratings_received_by_account_id(self, account_id: int) -> int:
+        """
+        Return the total count of ratings received by a seller across all their listings.
+
+        Expected behavior:
+        - Return count as integer.
+        - Return 0 if the seller has no ratings.
+        - Raise exception on validation or database failure.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def get_sum_of_ratings_received_by_account_id(self, account_id: int) -> int:
         """
         Return the total sum of ratings received by a seller.

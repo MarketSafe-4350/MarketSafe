@@ -1,13 +1,16 @@
 from src.domain_models.listing import Listing
+from src.domain_models.rating import Rating
 from src.utils.errors import (
     ValidationError,
     DatabaseUnavailableError,
     DatabaseQueryError,
 )
 from src.utils import ListingNotFoundError, UnapprovedBehaviorError
+from src.api.errors import ApiError
 from urllib.parse import urlparse
 from typing import List
 from src.business_logic.managers.listing import IListingManager
+from src.business_logic.managers.rating import RatingManager
 
 
 class ListingService:
@@ -15,8 +18,9 @@ class ListingService:
     MAX_LISTING_PRICE: float = 99_999_999.99
     MAX_LOCATION_LENGTH: int = 120
 
-    def __init__(self, listing_manager: IListingManager):
+    def __init__(self, listing_manager: IListingManager, rating_manager: RatingManager = None):
         self._listing_manager = listing_manager
+        self._rating_manager = rating_manager
 
     def get_all_listing(self) -> List[Listing]:
         """Get all listing
@@ -138,6 +142,51 @@ class ListingService:
             )
 
         return self._listing_manager.delete_listing(listing_id)
+
+    def rate_listing(self, listing_id: int, rater_id: int, transaction_rating: int) -> Rating:
+        """Creates a rating for a sold listing. Only the buyer can rate.
+
+        Args:
+            listing_id (int): The ID of the listing to rate.
+            rater_id (int): The ID of the account submitting the rating (must be the buyer).
+            transaction_rating (int): The rating value (1-5).
+
+        Returns:
+            Rating: The created rating domain model.
+        """
+        listing = self._listing_manager.get_listing_by_id(listing_id)
+        if listing is None:
+            raise ListingNotFoundError(
+                message=f"Listing not found for id: {listing_id}",
+                details={"listing_id": listing_id},
+            )
+
+        if not listing.is_sold:
+            raise UnapprovedBehaviorError(
+                message="Cannot rate a listing that has not been sold.",
+                details={"listing_id": listing_id},
+            )
+
+        if listing.sold_to_id != rater_id:
+            raise UnapprovedBehaviorError(
+                message="Only the buyer of this listing can submit a rating.",
+                details={"listing_id": listing_id, "buyer_id": listing.sold_to_id, "rater_id": rater_id},
+            )
+
+        existing = self._rating_manager.get_rating_by_listing_id(listing_id)
+        if existing is not None:
+            raise UnapprovedBehaviorError(
+                message="This listing has already been rated.",
+                details={"listing_id": listing_id},
+            )
+
+        rating = Rating(
+            listing_id=listing_id,
+            rater_id=rater_id,
+            transaction_rating=transaction_rating,
+        )
+
+        return self._rating_manager.create_rating(rating)
 
     def _validate_listing(
         self,

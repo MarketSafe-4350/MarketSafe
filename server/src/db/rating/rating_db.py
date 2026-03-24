@@ -180,6 +180,23 @@ class RatingDB(BaseRatingDB):
     # --------------------------------------------------
 
     @abstractmethod
+    def count_ratings_received_by_account_id(self, account_id: int) -> int:
+        """
+        Count how many ratings were received by a seller across all their listings.
+
+        Expected behavior:
+        - Return 0 if none exist.
+        - Never return None.
+        - Must raise exception if a database error occurs.
+
+        Raises:
+            ValidationError
+            DatabaseQueryError
+            DatabaseUnavailableError
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def get_average_for_rater(self, rater_id: int) -> Optional[float]:
         """
         Get the average rating value for ratings created by a given account.

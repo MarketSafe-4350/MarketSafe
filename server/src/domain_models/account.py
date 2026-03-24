@@ -41,22 +41,18 @@ class Account:
     """
 
     def __init__(
-            self,
-            email: str,
-            password: str,
-            fname: str,
-            lname: str,
-            *,
-            account_id: Optional[int] = None,
-            verified: bool = False,
-            listings: Optional[List[Listing]] = None,
-
-            average_rating_received: Optional[float] = None,
-            sum_of_ratings_received: int = 0,
-
-
-
-
+        self,
+        email: str,
+        password: str,
+        fname: str,
+        lname: str,
+        *,
+        account_id: Optional[int] = None,
+        verified: bool = False,
+        listings: Optional[List[Listing]] = None,
+        average_rating_received: Optional[float] = None,
+        sum_of_ratings_received: int = 0,
+        rating_count: int = 0,
     ):
         # Internal state (protected by convention)
         self._id = account_id
@@ -68,8 +64,12 @@ class Account:
 
         self._listings: List[Listing] = list(listings) if listings is not None else []
 
-        self._average_rating_received = Validation.rating_average(average_rating_received)
+        self._average_rating_received = Validation.rating_average(
+            average_rating_received
+        )
         self._sum_of_ratings_received = Validation.rating_sum(sum_of_ratings_received)
+        self._rating_count = Validation.rating_count(rating_count)
+
     # ==============================
     # ID (read-only, may be None before DB insert)
     # ==============================
@@ -82,9 +82,7 @@ class Account:
         if account_id is None:
             raise ValidationError("Account ID cannot be None.")
         if self._id is not None:
-            raise UnapprovedBehaviorError(
-                "Account ID has already been assigned."
-            )
+            raise UnapprovedBehaviorError("Account ID has already been assigned.")
         self._id = account_id
 
     # ==============================
@@ -131,7 +129,6 @@ class Account:
     def lname(self):
         return self._lname
 
-
     @lname.setter
     def lname(self, value):
         self._lname = Validation.require_str(value, "lname")
@@ -162,9 +159,17 @@ class Account:
     def sum_of_ratings_received(self, value: int) -> None:
         self._sum_of_ratings_received = Validation.rating_sum(value)
 
+    # ==============================
+    # RATING COUNT
+    # ==============================
 
+    @property
+    def rating_count(self) -> int:
+        return self._rating_count
 
-
+    @rating_count.setter
+    def rating_count(self, value: int) -> None:
+        self._rating_count = Validation.rating_count(value)
 
     # ==============================
     # AVERAGE RATING RECEIVED
@@ -206,7 +211,9 @@ class Account:
                 self._listings.pop(i)
                 return
 
-        raise ValidationError(f"Listing with id={listing_id} not found in this account.")
+        raise ValidationError(
+            f"Listing with id={listing_id} not found in this account."
+        )
 
     # ==============================
     # DEBUG REPRESENTATION
@@ -221,5 +228,4 @@ class Account:
             f"verified={self._verified}, "
             f"listings_count={len(self._listings)})"
             f"listings={self._listings})"
-
         )

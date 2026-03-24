@@ -146,6 +146,32 @@ class TestMySQLRatingDBUnit(unittest.TestCase):
 
         self.assertEqual(0, out)
 
+    def test_count_ratings_received_by_account_id_returns_count(self) -> None:
+        conn = MagicMock()
+        conn.execute.return_value = self._make_mapping_result(first={"rating_count": 5})
+        self.db.connect.return_value = self._mock_connect_ctx(conn)
+
+        out = self.repo.count_ratings_received_by_account_id(1)
+
+        self.assertEqual(5, out)
+
+    def test_count_ratings_received_by_account_id_returns_zero_when_none(self) -> None:
+        conn = MagicMock()
+        conn.execute.return_value = self._make_mapping_result(first={"rating_count": None})
+        self.db.connect.return_value = self._mock_connect_ctx(conn)
+
+        out = self.repo.count_ratings_received_by_account_id(1)
+
+        self.assertEqual(0, out)
+
+    def test_count_ratings_received_by_account_id_raises_database_query_error_on_sqla_error(self) -> None:
+        conn = MagicMock()
+        conn.execute.side_effect = SQLAlchemyError("db error")
+        self.db.connect.return_value = self._mock_connect_ctx(conn)
+
+        with self.assertRaises(DatabaseQueryError):
+            self.repo.count_ratings_received_by_account_id(1)
+
     # -----------------------------
     # CREATE
     # -----------------------------
