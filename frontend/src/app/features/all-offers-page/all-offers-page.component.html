@@ -130,7 +130,10 @@
               </div>
               <div class="offers-list">
                 @for (offer of sentOffers; track offer.id) {
-                  <mat-card class="offer-card">
+                  <mat-card
+                    class="offer-card"
+                    [class.offer-card-unseen]="offer.hasUnreadDecision"
+                  >
                     <div class="offer-card-header">
                       <div>
                         <p class="offer-label">Listing</p>
@@ -160,6 +163,10 @@
                         <strong>{{ getStatusLabel(offer) }}</strong>
                       </div>
                       <div>
+                        <span class="meta-label">Seller</span>
+                        <strong>{{ offer.sellerName || 'Unknown seller' }}</strong>
+                      </div>
+                      <div>
                         <span class="meta-label">Sent</span>
                         <strong>
                           {{
@@ -171,7 +178,50 @@
                       </div>
                     </div>
 
+                    @if (offer.accepted === true) {
+                      <div class="rating-panel">
+                        <div class="rating-panel-copy">
+                          <p class="offer-label">Rate Seller</p>
+                          <h4>How was your purchase from {{ offer.sellerName }}?</h4>
+                        </div>
+
+                        <div class="rating-stars" aria-label="Rate seller">
+                          @for (star of [1, 2, 3, 4, 5]; track star) {
+                            <button
+                              mat-stroked-button
+                              type="button"
+                              class="rating-star-btn"
+                              [class.rating-star-btn-selected]="offer.pendingRating !== null && star <= offer.pendingRating"
+                              [disabled]="offer.hasRatedSeller || offer.isSubmittingRating"
+                              (click)="setPendingRating(offer.id, star)"
+                            >
+                              {{ star }}
+                            </button>
+                          }
+                        </div>
+
+                        @if (offer.ratingMessage) {
+                          <p class="rating-feedback">{{ offer.ratingMessage }}</p>
+                        }
+
+                        @if (offer.ratingError) {
+                          <p class="rating-feedback rating-feedback-error">{{ offer.ratingError }}</p>
+                        }
+                      </div>
+                    }
+
                     <div class="offer-actions">
+                      @if (offer.accepted === true) {
+                        <button
+                          mat-flat-button
+                          type="button"
+                          class="accept-btn"
+                          [disabled]="!canRateSeller(offer) || offer.pendingRating === null"
+                          (click)="submitSellerRating(offer)"
+                        >
+                          {{ offer.isSubmittingRating ? 'Submitting...' : (offer.hasRatedSeller ? 'Rated' : 'Rate Seller') }}
+                        </button>
+                      }
                       <button
                         mat-stroked-button
                         type="button"

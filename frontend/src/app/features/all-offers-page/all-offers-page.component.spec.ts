@@ -8,6 +8,8 @@ import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { Offer, OffersApiService } from '../../shared/services/offers-api.service';
 import { Listing } from '../../shared/models/listing.models';
+import { RatingsApiService } from '../../shared/services/ratings-api.service';
+import { BuyerOfferNotificationsService } from '../../shared/services/buyer-offer-notifications.service';
 
 describe('AllOffersPageComponent', () => {
   let fixture: ComponentFixture<AllOffersPageComponent>;
@@ -15,6 +17,8 @@ describe('AllOffersPageComponent', () => {
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
   let listingsApiSpy: jasmine.SpyObj<ListingsApiService>;
   let offersApiSpy: jasmine.SpyObj<OffersApiService>;
+  let ratingsApiSpy: jasmine.SpyObj<RatingsApiService>;
+  let buyerOfferNotificationsSpy: jasmine.SpyObj<BuyerOfferNotificationsService>;
 
   const listing: Listing = {
     id: 5,
@@ -37,6 +41,17 @@ describe('AllOffersPageComponent', () => {
     seen: false,
     accepted: null,
     createdDate: new Date('2026-03-02').toISOString(),
+  };
+
+  const acceptedSentOffer: Offer = {
+    id: 21,
+    listingId: 5,
+    senderId: 10,
+    offeredPrice: 20,
+    locationOffered: 'Campus',
+    seen: true,
+    accepted: true,
+    createdDate: new Date('2026-03-03').toISOString(),
   };
 
   beforeEach(async () => {
@@ -78,11 +93,29 @@ describe('AllOffersPageComponent', () => {
       'OffersApiService',
       ['getReceived', 'getReceivedUnseen', 'getSent', 'markSeen', 'resolve'],
     );
+    ratingsApiSpy = jasmine.createSpyObj<RatingsApiService>(
+      'RatingsApiService',
+      ['create', 'getByListingId'],
+    );
+    buyerOfferNotificationsSpy = jasmine.createSpyObj<BuyerOfferNotificationsService>(
+      'BuyerOfferNotificationsService',
+      ['syncResolvedOffers', 'markResolvedOffersSeen'],
+    );
     offersApiSpy.getReceived.and.returnValue(of([pendingOffer]));
     offersApiSpy.getReceivedUnseen.and.returnValue(of([pendingOffer]));
     offersApiSpy.getSent.and.returnValue(of([]));
     offersApiSpy.markSeen.and.returnValue(of({}));
     offersApiSpy.resolve.and.returnValue(of({}));
+    ratingsApiSpy.create.and.returnValue(
+      of({
+        id: 1,
+        listingId: acceptedSentOffer.listingId,
+        raterId: 10,
+        transactionRating: 5,
+      }),
+    );
+    ratingsApiSpy.getByListingId.and.returnValue(of(null));
+    buyerOfferNotificationsSpy.syncResolvedOffers.and.returnValue(new Set<number>());
 
     await TestBed.configureTestingModule({
       imports: [AllOffersPageComponent, RouterTestingModule],
@@ -91,6 +124,8 @@ describe('AllOffersPageComponent', () => {
         { provide: AccountsApiService, useValue: accountsApiSpy },
         { provide: ListingsApiService, useValue: listingsApiSpy },
         { provide: OffersApiService, useValue: offersApiSpy },
+        { provide: RatingsApiService, useValue: ratingsApiSpy },
+        { provide: BuyerOfferNotificationsService, useValue: buyerOfferNotificationsSpy },
       ],
     }).compileComponents();
 
@@ -134,5 +169,54 @@ describe('AllOffersPageComponent', () => {
     component.resolveOffer(pendingOffer.id, false);
 
     expect(component.errorMessage).toBe('Failed to update offer status.');
+  });
+
+  it('ngOnInit_AcceptedSentOffer_ShouldLoadSellerNameForRatingFlow', () => {
+    offersApiSpy.getReceived.and.returnValue(of([]));
+    offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.getSent.and.returnValue(of([acceptedSentOffer]));
+    accountsApiSpy.getById.and.returnValue(
+      of({
+        id: 10,
+        email: 'seller@example.com',
+        fname: 'Seller',
+        lname: 'User',
+        verified: true,
+      }),
+    );
+
+    fixture = TestBed.createComponent(AllOffersPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.sentOffers.length).toBe(1);
+    expect(component.sentOffers[0].sellerName).toBe('Seller User');
+    expect(ratingsApiSpy.getByListingId).toHaveBeenCalledWith(acceptedSentOffer.listingId);
+  });
+
+  it('submitSellerRating_ShouldPersistRatingAndUpdateOfferState', () => {
+    offersApiSpy.getReceived.and.returnValue(of([]));
+    offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.getSent.and.returnValue(of([acceptedSentOffer]));
+    accountsApiSpy.getById.and.returnValue(
+      of({
+        id: 10,
+        email: 'seller@example.com',
+        fname: 'Seller',
+        lname: 'User',
+        verified: true,
+      }),
+    );
+
+    fixture = TestBed.createComponent(AllOffersPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    component.setPendingRating(acceptedSentOffer.id, 5);
+    component.submitSellerRating(component.sentOffers[0]);
+
+    expect(ratingsApiSpy.create).toHaveBeenCalledWith(acceptedSentOffer.listingId, 5);
+    expect(component.sentOffers[0].hasRatedSeller).toBeTrue();
+    expect(component.sentOffers[0].ratingMessage).toContain('You rated');
   });
 });

@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { Offer, OffersApiService } from '../../shared/services/offers-api.service';
+import { BuyerOfferNotificationsService } from '../../shared/services/buyer-offer-notifications.service';
 import { Listing } from '../../shared/models/listing.models';
 
 interface HeaderOfferPreview {
@@ -41,6 +42,8 @@ export class HeaderComponent implements OnInit {
   private readonly accountsApi = inject(AccountsApiService);
   private readonly offersApi = inject(OffersApiService);
   private readonly listingsApi = inject(ListingsApiService);
+  private readonly buyerOfferNotifications = inject(BuyerOfferNotificationsService);
+  private readonly currentUserId = this.getCurrentUserIdFromToken();
 
   readonly displayName = signal('Someone');
   readonly offers = signal<HeaderOfferPreview[]>([]);
@@ -80,7 +83,26 @@ export class HeaderComponent implements OnInit {
     const unseenOffers = this.offers().filter(
       (offer) => offer.kind === 'received' && !offer.seen,
     );
+    const unseenBuyerResolutionIds = this.offers()
+      .filter((offer) => offer.kind === 'sent' && !offer.seen)
+      .map((offer) => offer.id);
+
+    if (unseenBuyerResolutionIds.length > 0) {
+      this.buyerOfferNotifications.markResolvedOffersSeen(
+        unseenBuyerResolutionIds,
+        this.currentUserId,
+      );
+    }
+
     if (unseenOffers.length === 0) {
+      if (unseenBuyerResolutionIds.length > 0) {
+        this.offers.update((offers) =>
+          offers.map((offer) =>
+            offer.kind === 'sent' ? { ...offer, seen: true } : offer,
+          ),
+        );
+        this.unseenCount.set(0);
+      }
       return;
     }
 
@@ -126,10 +148,20 @@ export class HeaderComponent implements OnInit {
         myListings,
         allListings,
       }) => {
-        this.offers.set(
-          this.toOfferPreviews(receivedOffers, sentOffers, myListings, allListings),
+        const unseenBuyerResolutionIds = this.buyerOfferNotifications.syncResolvedOffers(
+          sentOffers,
+          this.currentUserId,
         );
-        this.unseenCount.set(unseenOffers.length);
+        this.offers.set(
+          this.toOfferPreviews(
+            receivedOffers,
+            sentOffers,
+            myListings,
+            allListings,
+            unseenBuyerResolutionIds,
+          ),
+        );
+        this.unseenCount.set(unseenOffers.length + unseenBuyerResolutionIds.size);
         this.isLoadingOffers.set(false);
       },
       error: (error) => {
@@ -145,6 +177,7 @@ export class HeaderComponent implements OnInit {
     sentOffers: Offer[],
     myListings: Listing[],
     allListings: Listing[],
+    unseenBuyerResolutionIds: Set<number>,
   ): HeaderOfferPreview[] {
     const receivedListingTitleById = new Map(
       myListings.map((listing) => [listing.id, listing.title]),
@@ -175,7 +208,7 @@ export class HeaderComponent implements OnInit {
             allListingTitleById.get(offer.listingId) ??
             `Listing #${offer.listingId}`,
           offeredPrice: offer.offeredPrice,
-          seen: true,
+          seen: !unseenBuyerResolutionIds.has(offer.id),
           createdDate: offer.createdDate,
           kind: 'sent' as const,
           accepted: offer.accepted,
@@ -200,5 +233,27 @@ export class HeaderComponent implements OnInit {
     }
 
     return `New offer for $${offer.offeredPrice.toFixed(2)}`;
+  }
+
+  private getCurrentUserIdFromToken(): number | null {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      return null;
+    }
+
+    const parts = token.split('.');
+    if (parts.length < 2) {
+      return null;
+    }
+
+    try {
+      const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+      const payload = JSON.parse(atob(padded)) as { sub?: string | number };
+      const id = Number(payload.sub);
+      return Number.isFinite(id) ? id : null;
+    } catch {
+      return null;
+    }
   }
 }
