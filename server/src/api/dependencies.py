@@ -6,11 +6,13 @@ from src.business_logic.managers.listing import ListingManager
 from src.business_logic.managers.comment import CommentManager
 from src.business_logic.managers.account import AccountManager
 from src.business_logic.managers.offer import OfferManager
+from src.business_logic.managers.rating import RatingManager
 from src.db.email_verification_token.mysql import MySQLEmailVerificationTokenDB
 from src.db.account.mysql import MySQLAccountDB
 from src.db.listing.mysql import MySQLListingDB
 from src.db.comment.mysql import MySQLCommentDB
 from src.db.offer.mysql import MySQLOfferDB
+from src.db.rating.mysql import MySQLRatingDB
 
 from fastapi import Depends, Request
 
@@ -54,6 +56,10 @@ def get_email_token_db(db: DBUtility = Depends(get_db)) -> MySQLEmailVerificatio
 def get_offer_db(db: DBUtility = Depends(get_db)) -> MySQLOfferDB:
     return MySQLOfferDB(db=db)
 
+
+def get_rating_db(db: DBUtility = Depends(get_db)) -> MySQLRatingDB:
+    return MySQLRatingDB(db=db)
+
 # -----------------------------
 # Manager layer dependencies
 # -----------------------------
@@ -75,6 +81,12 @@ def get_listing_manager(
 ) -> ListingManager:
     return ListingManager(listing_db=listing_db, comment_db=comment_db)
 
+def get_rating_manager(
+    rating_db: MySQLRatingDB = Depends(get_rating_db),
+) -> RatingManager:
+    return RatingManager(rating_db=rating_db)
+
+
 def get_offer_manager(
     offer_db: MySQLOfferDB = Depends(get_offer_db),
     listing_db: MySQLListingDB = Depends(get_listing_db),
@@ -87,8 +99,9 @@ def get_offer_manager(
 def get_account_service(
     account_manager: AccountManager = Depends(get_account_manager),
     token_db: MySQLEmailVerificationTokenDB = Depends(get_email_token_db),
+    rating_manager: RatingManager = Depends(get_rating_manager),
 ) -> AccountService:
-    return AccountService(account_manager=account_manager, token_db=token_db)
+    return AccountService(account_manager=account_manager, token_db=token_db, rating_manager=rating_manager)
 
 
 def get_comment_service(
@@ -104,8 +117,9 @@ def get_comment_service(
 
 def get_listing_service(
     listing_manager: ListingManager = Depends(get_listing_manager),
+    rating_manager: RatingManager = Depends(get_rating_manager),
 ) -> ListingService:
-    return ListingService(listing_manager=listing_manager)
+    return ListingService(listing_manager=listing_manager, rating_manager=rating_manager)
 
 
 def get_offer_service(

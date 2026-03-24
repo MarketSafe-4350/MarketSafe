@@ -13,6 +13,7 @@ interface AccountApiResponse {
   verified?: boolean;
   average_rating_received?: number | null;
   sum_of_ratings_received?: number | null;
+  rating_count?: number | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -30,7 +31,7 @@ export class AccountsApiService {
 
   getById(accountId: number): Observable<Account> {
     return this.http
-      .get<AccountApiResponse>(`${this.apiUrl}/${accountId}`, {
+      .get<AccountApiResponse>(`${this.apiUrl}/id/${accountId}`, {
         headers: this.authHeaders(),
       })
       .pipe(map((account) => this.toAccount(account)));
@@ -50,26 +51,15 @@ export class AccountsApiService {
   }
 
   private toAccount(account: AccountApiResponse): Account {
-    const ratingAvg = account.average_rating_received ?? 0;
-    const ratingSum = account.sum_of_ratings_received ?? 0;
-
     return {
       id: account.id ?? 0,
       email: account.email,
       fname: account.fname,
       lname: account.lname,
       verified: account.verified ?? false,
-      ratingAvg,
-      ratingSum,
-      ratingCount: this.toRatingCount(ratingAvg, ratingSum),
+      ratingAvg: account.average_rating_received ?? 0,
+      ratingSum: account.sum_of_ratings_received ?? 0,
+      ratingCount: account.rating_count ?? 0,
     };
-  }
-
-  private toRatingCount(ratingAvg: number, ratingSum: number): number {
-    if (ratingAvg <= 0 || ratingSum <= 0) {
-      return 0;
-    }
-
-    return Math.max(0, Math.round(ratingSum / ratingAvg));
   }
 }

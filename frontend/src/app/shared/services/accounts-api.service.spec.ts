@@ -46,6 +46,7 @@ describe('AccountsApiService', () => {
       verified: true,
       average_rating_received: 4,
       sum_of_ratings_received: 20,
+      rating_count: 5,
     });
 
     expect(result).toEqual({
@@ -67,7 +68,7 @@ describe('AccountsApiService', () => {
       result = account;
     });
 
-    const req = httpMock.expectOne('http://localhost:8000/accounts/42');
+    const req = httpMock.expectOne('http://localhost:8000/accounts/id/42');
     expect(req.request.method).toBe('GET');
 
     req.flush({

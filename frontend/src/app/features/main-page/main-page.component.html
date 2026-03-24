@@ -44,7 +44,9 @@
                     [listing]="listing"
                     [commentCount]="getComments(listing.id).length"
                     [showSellerProfileButton]="canViewSellerProfile(listing)"
-                    [showOfferButton]="canSendOffer(listing) && !isSubmittingOffer(listing.id)"
+                    [showOfferButton]="canViewSellerProfile(listing)"
+                    [isOfferDisabled]="!canSendOffer(listing) || isSubmittingOffer(listing.id)"
+                    [offerButtonLabel]="getOfferButtonLabel(listing.id)"
                     (sellerProfileClick)="openSellerProfile(listing)"
                     (offerClick)="openSendOfferDialog(listing)"
                   ></app-listing-card>

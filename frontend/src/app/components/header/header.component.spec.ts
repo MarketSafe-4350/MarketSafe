@@ -4,15 +4,27 @@ import { HeaderComponent } from './header.component';
 import { Router } from '@angular/router';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
+import { ListingsApiService } from '../../shared/services/listings-api.service';
+import { OffersApiService } from '../../shared/services/offers-api.service';
 describe('HeaderComponent', () => {
   let headerComponent: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
   let routerSpy: jasmine.SpyObj<Router>;
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
+  let listingsApiSpy: jasmine.SpyObj<ListingsApiService>;
+  let offersApiSpy: jasmine.SpyObj<OffersApiService>;
 
   beforeEach(async () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     accountsApiSpy = jasmine.createSpyObj<AccountsApiService>('AccountsApiService', ['getMe']);
+    listingsApiSpy = jasmine.createSpyObj<ListingsApiService>(
+      'ListingsApiService',
+      ['getMine', 'getAll'],
+    );
+    offersApiSpy = jasmine.createSpyObj<OffersApiService>(
+      'OffersApiService',
+      ['getReceived', 'getReceivedUnseen', 'getSent', 'markSeen'],
+    );
     accountsApiSpy.getMe.and.returnValue(
       of({
         id: 0,
@@ -22,6 +34,12 @@ describe('HeaderComponent', () => {
         verified: false,
       })
     );
+    listingsApiSpy.getMine.and.returnValue(of([]));
+    listingsApiSpy.getAll.and.returnValue(of([]));
+    offersApiSpy.getReceived.and.returnValue(of([]));
+    offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.getSent.and.returnValue(of([]));
+    offersApiSpy.markSeen.and.returnValue(of({}));
 
     await TestBed.configureTestingModule({
       imports: [HeaderComponent],
@@ -29,6 +47,8 @@ describe('HeaderComponent', () => {
         provideNoopAnimations(),
         { provide: Router, useValue: routerSpy },
         { provide: AccountsApiService, useValue: accountsApiSpy },
+        { provide: ListingsApiService, useValue: listingsApiSpy },
+        { provide: OffersApiService, useValue: offersApiSpy },
       ],
     }).compileComponents();
 

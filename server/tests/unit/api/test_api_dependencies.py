@@ -19,7 +19,8 @@ class TestAPIDependencies(unittest.TestCase):
         self.account_manager = MagicMock(name="account_manager")
         self.comment_manager = MagicMock(name="comment_manager")
         self.listing_manager = MagicMock(name="listing_manager")
-        self.offer_manager = MagicMock(name="offer_manager")  
+        self.offer_manager = MagicMock(name="offer_manager")
+        self.rating_manager = MagicMock(name="rating_manager")
 
     def test_get_db(self):
         with patch.object(deps.DBUtility, "instance", return_value=self.db) as mock_instance:
@@ -63,6 +64,14 @@ class TestAPIDependencies(unittest.TestCase):
         ctor.assert_called_once_with(db=self.db)
         self.assertIs(result, self.offer_db)
 
+    def test_get_rating_db(self):
+        rating_db = MagicMock(name="rating_db")
+        with patch.object(deps, "MySQLRatingDB", return_value=rating_db) as ctor:
+            result = deps.get_rating_db(db=self.db)
+
+        ctor.assert_called_once_with(db=self.db)
+        self.assertIs(result, rating_db)
+
     def test_get_account_manager(self):
         with patch.object(deps, "AccountManager", return_value=self.account_manager) as ctor:
             result = deps.get_account_manager(account_db=self.account_db)
@@ -90,6 +99,14 @@ class TestAPIDependencies(unittest.TestCase):
         )
         self.assertIs(result, self.listing_manager)
 
+    def test_get_rating_manager(self):
+        rating_db = MagicMock(name="rating_db")
+        with patch.object(deps, "RatingManager", return_value=self.rating_manager) as ctor:
+            result = deps.get_rating_manager(rating_db=rating_db)
+
+        ctor.assert_called_once_with(rating_db=rating_db)
+        self.assertIs(result, self.rating_manager)
+
     def test_get_offer_manager(self):
         with patch.object(deps, "OfferManager", return_value=self.offer_manager) as ctor:
             result = deps.get_offer_manager(
@@ -109,12 +126,14 @@ class TestAPIDependencies(unittest.TestCase):
         with patch.object(deps, "AccountService", return_value=service) as ctor:
             result = deps.get_account_service(
                 account_manager=self.account_manager,
-                token_db=self.token_db
+                token_db=self.token_db,
+                rating_manager=self.rating_manager,
             )
 
         ctor.assert_called_once_with(
             account_manager=self.account_manager,
-            token_db=self.token_db
+            token_db=self.token_db,
+            rating_manager=self.rating_manager,
         )
         self.assertIs(result, service)
 
@@ -139,9 +158,15 @@ class TestAPIDependencies(unittest.TestCase):
         service = MagicMock()
 
         with patch.object(deps, "ListingService", return_value=service) as ctor:
-            result = deps.get_listing_service(listing_manager=self.listing_manager)
+            result = deps.get_listing_service(
+                listing_manager=self.listing_manager,
+                rating_manager=self.rating_manager,
+            )
 
-        ctor.assert_called_once_with(listing_manager=self.listing_manager)
+        ctor.assert_called_once_with(
+            listing_manager=self.listing_manager,
+            rating_manager=self.rating_manager,
+        )
         self.assertIs(result, service)
 
     def test_get_offer_service(self):

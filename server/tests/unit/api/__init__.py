@@ -6,4 +6,5 @@ from .routes.test_offer_routes import TestOfferRoutes
 from .converter.test_comment_converter import TestCommentConverter
 from .converter.test_listing_converter import TestListingConverter
 from .converter.test_offer_converter import TestOfferConverter
+from .converter.test_rating_converter import TestRatingConverter
 from .errors.test_exception_handler import TestErrorHandlers

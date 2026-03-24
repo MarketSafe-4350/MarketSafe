@@ -337,6 +337,34 @@ class TestMySQLRatingDB(unittest.TestCase):
 
         self.assertIsNone(avg)
 
+    def test_count_ratings_received_by_account_id(self) -> None:
+        seller_id = self._insert_account()
+        buyer_1 = self._insert_account()
+        buyer_2 = self._insert_account()
+
+        listing_1 = self._insert_listing(seller_id, sold_to_id=buyer_1, is_sold=True)
+        listing_2 = self._insert_listing(seller_id, sold_to_id=buyer_2, is_sold=True)
+
+        self._rating_db.add(Rating(
+            listing_id=listing_1,
+            rater_id=buyer_1,
+            transaction_rating=5,
+        ))
+        self._rating_db.add(Rating(
+            listing_id=listing_2,
+            rater_id=buyer_2,
+            transaction_rating=3,
+        ))
+
+        count = self._rating_db.count_ratings_received_by_account_id(seller_id)
+        self.assertEqual(count, 2)
+
+    def test_count_ratings_received_by_account_id_returns_zero_when_no_ratings(self) -> None:
+        seller_id = self._insert_account()
+
+        count = self._rating_db.count_ratings_received_by_account_id(seller_id)
+        self.assertEqual(count, 0)
+
     def test_count_by_rater(self) -> None:
         seller_1 = self._insert_account()
         seller_2 = self._insert_account()

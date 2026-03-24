@@ -244,6 +244,25 @@ class IRatingManager(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def count_ratings_received_by_account_id(self, account_id: int) -> int:
+        """
+        PURPOSE:
+            Count how many ratings were received by a seller/account.
+
+        EXPECTED BEHAVIOR:
+            - Return count as integer.
+            - Return 0 if no ratings exist.
+
+        RETURNS:
+            int
+
+        RAISES (typical):
+            - ValidationError
+            - DatabaseUnavailableError / DatabaseQueryError
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def get_average_for_rater(self, rater_id: int) -> float | None:
         """
         PURPOSE:

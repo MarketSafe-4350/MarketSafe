@@ -27,9 +27,11 @@ class TestAccountServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
         self.account_manager: MagicMock = MagicMock(name="account_manager")
         self.token_db: MagicMock = MagicMock(name="token_db")
+        self.rating_manager: MagicMock = MagicMock(name="rating_manager")
         self.service = AccountService(
             account_manager=self.account_manager,
             token_db=self.token_db,
+            rating_manager=self.rating_manager,
         )
 
 
@@ -271,6 +273,17 @@ class TestAccountServiceUnit(unittest.TestCase):
         db_token.account_id = 123
         db_token.is_expired.return_value = False
 
+        real_account = Account(
+            email="test@umanitoba.ca",
+            password="hashedpassword",
+            fname="Test",
+            lname="User",
+            account_id=123,
+        )
+        self.account_manager.get_account_by_id.return_value = real_account
+        self.rating_manager.count_ratings_received_by_account_id.return_value = 0
+        self.rating_manager.get_average_rating_by_account_id.return_value = None
+
         with patch(
             "src.business_logic.services.account_service.TokenGenerator.hash_token",
             return_value="hashed",
@@ -292,28 +305,39 @@ class TestAccountServiceUnit(unittest.TestCase):
         self.assertEqual(ctx.exception.status_code, 400)
 
     def test_get_account_by_userid_returns_dummy_account(self) -> None:
-        out = self.service.get_account_by_userid("anything")
+        real_account = Account(
+            email="test@umanitoba.ca",
+            password="hashedpassword",
+            fname="Test",
+            lname="User",
+            account_id=1,
+        )
+        self.account_manager.get_account_by_id.return_value = real_account
+        self.rating_manager.count_ratings_received_by_account_id.return_value = 0
+        self.rating_manager.get_average_rating_by_account_id.return_value = None
+
+        out = self.service.get_account_by_userid(1)
         self.assertIsInstance(out, Account)
         self.assertEqual(out.id, 1)
 
     # -----------------------------
-    # get_account_userid (manager-based)
+    # get_account_by_userid (manager-based)
     # -----------------------------
-    def test_get_account_userid_none_raises_400(self) -> None:
+    def test_get_account_by_userid_none_raises_400(self) -> None:
         with self.assertRaises(ApiError) as ctx:
-            self.service.get_account_userid(None)
+            self.service.get_account_by_userid(None)
         self.assertEqual(ctx.exception.status_code, 400)
 
-    def test_get_account_userid_not_found_raises_404(self) -> None:
+    def test_get_account_by_userid_not_found_raises_404(self) -> None:
         self.account_manager.get_account_by_id.return_value = None
         with self.assertRaises(ApiError) as ctx:
-            self.service.get_account_userid(99)
+            self.service.get_account_by_userid(99)
         self.assertEqual(ctx.exception.status_code, 404)
 
-    def test_get_account_userid_success_returns_account(self) -> None:
+    def test_get_account_by_userid_success_returns_account(self) -> None:
         acc = MagicMock(spec=Account)
         self.account_manager.get_account_by_id.return_value = acc
-        out = self.service.get_account_userid(5)
+        out = self.service.get_account_by_userid(5)
         self.assertIs(out, acc)
         self.account_manager.get_account_by_id.assert_called_once_with(5)
 

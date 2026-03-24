@@ -4,7 +4,11 @@ import unittest
 from datetime import datetime, timedelta
 
 from src.business_logic.services import AccountService
+from src.business_logic.managers.account import AccountManager
+from src.business_logic.managers.rating import RatingManager
 from src.db import DBUtility
+from src.db.account.mysql import MySQLAccountDB
+from src.db.rating.mysql import MySQLRatingDB
 from src.db.email_verification_token.mysql import MySQLEmailVerificationTokenDB
 from src.domain_models import VerificationToken
 from src.utils import (
@@ -38,7 +42,13 @@ class TestEmailVerificationServiceIntegration(unittest.TestCase):
         integration_db.create_test_account(self._db, account_id=1, email="test1@example.com")
         integration_db.create_test_account(self._db, account_id=2, email="test2@example.com")
         self.token_db = MySQLEmailVerificationTokenDB(db=self._db)
-        self.service = AccountService(token_db=self.token_db)
+        account_manager = AccountManager(MySQLAccountDB(db=self._db))
+        rating_manager = RatingManager(MySQLRatingDB(db=self._db))
+        self.service = AccountService(
+            account_manager=account_manager,
+            token_db=self.token_db,
+            rating_manager=rating_manager,
+        )
 
     @classmethod
     def tearDownClass(cls) -> None:

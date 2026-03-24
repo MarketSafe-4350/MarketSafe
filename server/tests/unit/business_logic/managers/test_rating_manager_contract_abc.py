@@ -48,6 +48,9 @@ class _RatingManagerCoverageShim(IRatingManager):
     def get_sum_of_ratings_received_by_account_id(self, account_id: int):
         return IRatingManager.get_sum_of_ratings_received_by_account_id(self, account_id)
 
+    def count_ratings_received_by_account_id(self, account_id: int):
+        return IRatingManager.count_ratings_received_by_account_id(self, account_id)
+
     def get_average_for_rater(self, rater_id: int):
         return IRatingManager.get_average_for_rater(self, rater_id)
 
@@ -145,6 +148,10 @@ class TestRatingManagerABC(unittest.TestCase):
     def test_get_sum_of_ratings_received_by_account_id_raises_not_implemented_error(self):
         with self.assertRaises(NotImplementedError):
             self.sut.get_sum_of_ratings_received_by_account_id(1)
+
+    def test_count_ratings_received_by_account_id_raises_not_implemented_error(self):
+        with self.assertRaises(NotImplementedError):
+            self.sut.count_ratings_received_by_account_id(1)
 
     def test_get_average_for_rater_raises_not_implemented_error(self):
         with self.assertRaises(NotImplementedError):

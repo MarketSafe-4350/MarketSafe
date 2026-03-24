@@ -432,6 +432,67 @@ class TestListingRoutes(unittest.TestCase):
         )
         from_domain_mock.assert_called_once_with(fake_listing, self.media_storage)
 
+    def test_get_listings_by_seller_returns_list(self):
+        l1 = MagicMock()
+        self.listing_service.get_listing_by_user_id.return_value = [l1]
+
+        fake_response = {
+            "id": 5,
+            "seller_id": 42,
+            "title": "Desk",
+            "description": "Nice desk",
+            "price": 80.0,
+            "image_url": None,
+            "location": "Winnipeg",
+            "created_at": None,
+            "is_sold": False,
+        }
+
+        with patch.object(
+            listing_routes.ListingResponse,
+            "from_domain",
+            return_value=fake_response,
+        ) as from_domain_mock:
+            resp = self.client.get("/listings/seller/42")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.json()), 1)
+        self.assertEqual(resp.json()[0]["seller_id"], 42)
+        self.listing_service.get_listing_by_user_id.assert_called_once_with(
+            user_id=42
+        )
+        from_domain_mock.assert_called_once_with(l1, self.media_storage)
+
+    def test_rate_listing_calls_service_and_returns_rating_response(self):
+        fake_rating = MagicMock(name="rating_domain")
+        self.listing_service.rate_listing.return_value = fake_rating
+
+        fake_response = {
+            "id": 1,
+            "listing_id": 99,
+            "rater_id": self.user_id,
+            "transaction_rating": 4,
+        }
+
+        with patch.object(
+            listing_routes.RatingResponse,
+            "from_domain",
+            return_value=fake_response,
+        ) as from_domain_mock:
+            resp = self.client.post(
+                "/listings/99/ratings",
+                json={"transaction_rating": 4},
+            )
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json(), fake_response)
+        self.listing_service.rate_listing.assert_called_once_with(
+            listing_id=99,
+            rater_id=self.user_id,
+            transaction_rating=4,
+        )
+        from_domain_mock.assert_called_once_with(fake_rating)
+
     def test_get_listing_comment_returns_list(self):
         self.comment_service = MagicMock(name="comment_service")
         self.app.dependency_overrides[get_comment_service] = (

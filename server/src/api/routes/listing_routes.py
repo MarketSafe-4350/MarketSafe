@@ -19,6 +19,7 @@ from src.domain_models import Listing
 from src.domain_models.comment import Comment
 from src.api.converter.listing_converter import ListingCreate, ListingResponse
 from src.api.converter.comment_converter import CommentCreate, CommentResponse
+from src.api.converter.rating_converter import RatingCreate, RatingResponse
 from src.business_logic.services import (
     ListingService,
     CommentService,
@@ -32,7 +33,6 @@ from src.api.dependencies import (
 from src.minio.media_storage_utility import MediaStorageUtility
 
 router = APIRouter(prefix="/listings")
-security = HTTPBearer()
 
 
 def _normalized_image_extension(upload: UploadFile) -> str:
@@ -96,6 +96,17 @@ def search_listings(
     media_storage: MediaStorageUtility = Depends(get_media_storage),
 ):
     listings = listing_service.search_listings(query=q)
+    return [ListingResponse.from_domain(listing, media_storage) for listing in listings]
+
+
+@router.get("/seller/{seller_id}", response_model=List[ListingResponse])
+def get_listings_by_seller(
+    seller_id: int,
+    _: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
+    media_storage: MediaStorageUtility = Depends(get_media_storage),
+):
+    listings: List[Listing] = listing_service.get_listing_by_user_id(user_id=seller_id)
     return [ListingResponse.from_domain(listing, media_storage) for listing in listings]
 
 
@@ -181,6 +192,21 @@ def get_listing_comment(
         )
         for c in comments_author
     ]
+
+
+@router.post("/{listing_id}/ratings", response_model=RatingResponse)
+def rate_listing(
+    listing_id: int,
+    rating_request: RatingCreate,
+    user_id: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
+):
+    rating = listing_service.rate_listing(
+        listing_id=listing_id,
+        rater_id=user_id,
+        transaction_rating=rating_request.transaction_rating,
+    )
+    return RatingResponse.from_domain(rating)
 
 
 @router.post("/{listing_id}/comments", response_model=CommentResponse)

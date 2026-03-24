@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import unittest
 from unittest.mock import MagicMock, patch
 
@@ -9,6 +8,7 @@ from fastapi.testclient import TestClient
 
 import src.api.routes.account_routes as account_routes
 
+from src.api.dependencies import get_account_service
 from src.auth.dependencies import get_current_user_id
 
 
@@ -26,42 +26,6 @@ class TestAccountRoutes(unittest.TestCase):
         self.app.dependency_overrides.clear()
 
     # -----------------------------
-    # _get_service
-    # -----------------------------
-    def test_get_service_wires_dependencies(self) -> None:
-        """
-        Covers _get_service() without touching real DB / MySQL.
-        """
-        fake_db = MagicMock(name="db")
-        fake_account_db = MagicMock(name="account_db")
-        fake_manager = MagicMock(name="account_manager")
-        fake_token_db = MagicMock(name="token_db")
-        fake_service = MagicMock(name="service")
-
-        with patch.object(
-            account_routes.DBUtility, "instance", return_value=fake_db
-        ), patch.object(
-            account_routes, "MySQLAccountDB", return_value=fake_account_db
-        ) as accountdb_ctor, patch.object(
-            account_routes, "AccountManager", return_value=fake_manager
-        ) as manager_ctor, patch.object(
-            account_routes, "MySQLEmailVerificationTokenDB", return_value=fake_token_db
-        ) as tokendb_ctor, patch.object(
-            account_routes, "AccountService", return_value=fake_service
-        ) as service_ctor:
-
-            out = account_routes._get_service()
-
-        self.assertIs(out, fake_service)
-
-        accountdb_ctor.assert_called_once_with(db=fake_db)
-        manager_ctor.assert_called_once_with(account_db=fake_account_db)
-        tokendb_ctor.assert_called_once_with(db=fake_db)
-        service_ctor.assert_called_once_with(
-            account_manager=fake_manager, token_db=fake_token_db
-        )
-
-    # -----------------------------
     # POST /accounts  (create_account)
     # -----------------------------
     def test_create_account_success_returns_signup_response(self) -> None:
@@ -76,10 +40,8 @@ class TestAccountRoutes(unittest.TestCase):
             "rawtoken_1234567890"
         )
 
-        with patch.object(
-            account_routes, "_get_service", return_value=service
-        ), patch.object(account_routes, "FRONTEND_URL", "http://frontend"):
-
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        with patch.object(account_routes, "FRONTEND_URL", "http://frontend"):
             resp = self.client.post(
                 "/accounts",
                 json={"email": "a@b.com", "password": "pw", "fname": "A", "lname": "B"},
@@ -109,11 +71,11 @@ class TestAccountRoutes(unittest.TestCase):
         service = MagicMock(name="account_service")
         service.create_account.side_effect = Exception("boom")
 
-        with patch.object(account_routes, "_get_service", return_value=service):
-            resp = self.client.post(
-                "/accounts",
-                json={"email": "a@b.com", "password": "pw", "fname": "A", "lname": "B"},
-            )
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.post(
+            "/accounts",
+            json={"email": "a@b.com", "password": "pw", "fname": "A", "lname": "B"},
+        )
 
         self.assertEqual(resp.status_code, 500)
         self.assertEqual(resp.json()["error_message"], "boom")
@@ -125,11 +87,11 @@ class TestAccountRoutes(unittest.TestCase):
         service = MagicMock(name="account_service")
         service.login.return_value = "jwt123"
 
-        with patch.object(account_routes, "_get_service", return_value=service):
-            resp = self.client.post(
-                "/accounts/login",
-                json={"email": "a@b.com", "password": "pw"},
-            )
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.post(
+            "/accounts/login",
+            json={"email": "a@b.com", "password": "pw"},
+        )
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(
@@ -144,19 +106,67 @@ class TestAccountRoutes(unittest.TestCase):
         service = MagicMock(name="account_service")
 
         account = MagicMock()
+        account.id = 1
         account.email = "me@b.com"
         account.fname = "Me"
         account.lname = "User"
-        service.get_account_userid.return_value = account
+        account.verified = True
+        account.average_rating_received = 1.0
+        account.sum_of_ratings_received = 1
+        account.rating_count = 1
+        service.get_account_by_userid.return_value = account
 
-        with patch.object(account_routes, "_get_service", return_value=service):
-            resp = self.client.get("/accounts/me")
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/me")
 
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(
-            resp.json(), {"email": "me@b.com", "fname": "Me", "lname": "User"}
+            resp.json(),
+            {
+                "id": 1,
+                "email": "me@b.com",
+                "fname": "Me",
+                "lname": "User",
+                "verified": True,
+                "average_rating_received": 1.0,
+                "sum_of_ratings_received": 1,
+                "rating_count": 1,
+            },
         )
-        service.get_account_userid.assert_called_once_with(self.user_id)
+        service.get_account_by_userid.assert_called_once_with(self.user_id)
+
+    def test_get_account_by_id_returns_account_response(self) -> None:
+        service = MagicMock(name="account_service")
+
+        account = MagicMock()
+        account.id = 12
+        account.email = "buyer@b.com"
+        account.fname = "Buyer"
+        account.lname = "Person"
+        account.verified = False
+        account.average_rating_received = None
+        account.sum_of_ratings_received = 0
+        account.rating_count = 0
+        service.get_account_by_userid.return_value = account
+
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/id/12")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(
+            resp.json(),
+            {
+                "id": 12,
+                "email": "buyer@b.com",
+                "fname": "Buyer",
+                "lname": "Person",
+                "verified": False,
+                "average_rating_received": None,
+                "sum_of_ratings_received": 0,
+                "rating_count": 0,
+            },
+        )
+        service.get_account_by_userid.assert_called_once_with(12)
 
     # -----------------------------
     # GET /accounts/verify-email  (verify_email)
@@ -164,8 +174,8 @@ class TestAccountRoutes(unittest.TestCase):
     def test_verify_email_returns_400_when_missing_token(self) -> None:
         service = MagicMock(name="account_service")
 
-        with patch.object(account_routes, "_get_service", return_value=service):
-            resp = self.client.get("/accounts/verify-email")
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/verify-email")
 
         self.assertEqual(resp.status_code, 400)
         self.assertEqual(
@@ -183,10 +193,10 @@ class TestAccountRoutes(unittest.TestCase):
         account.verified = True
         service.verify_email_token.return_value = account
 
-        with patch.object(account_routes, "_get_service", return_value=service):
-            resp = self.client.get(
-                "/accounts/verify-email?auth_token=auth_token_1234567890"
-            )
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get(
+            "/accounts/verify-email?auth_token=auth_token_1234567890"
+        )
 
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
@@ -207,8 +217,8 @@ class TestAccountRoutes(unittest.TestCase):
         account.verified = True
         service.verify_email_token.return_value = account
 
-        with patch.object(account_routes, "_get_service", return_value=service):
-            resp = self.client.get("/accounts/verify-email?token=legacy_1234567890")
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/verify-email?token=legacy_1234567890")
 
         self.assertEqual(resp.status_code, 200)
         service.verify_email_token.assert_called_once_with("legacy_1234567890")
@@ -222,12 +232,10 @@ class TestAccountRoutes(unittest.TestCase):
                 self.message = message
                 self.status_code = status_code
 
-        with patch.object(
-            account_routes, "TokenNotFoundError", FakeTokenErr
-        ), patch.object(account_routes, "_get_service", return_value=service):
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        service.verify_email_token.side_effect = FakeTokenErr("nope", 404)
 
-            service.verify_email_token.side_effect = FakeTokenErr("nope", 404)
-
+        with patch.object(account_routes, "TokenNotFoundError", FakeTokenErr):
             resp = self.client.get(
                 "/accounts/verify-email?auth_token=auth_token_1234567890"
             )
@@ -239,10 +247,10 @@ class TestAccountRoutes(unittest.TestCase):
         service = MagicMock(name="account_service")
         service.verify_email_token.side_effect = Exception("unexpected")
 
-        with patch.object(account_routes, "_get_service", return_value=service):
-            resp = self.client.get(
-                "/accounts/verify-email?auth_token=auth_token_1234567890"
-            )
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get(
+            "/accounts/verify-email?auth_token=auth_token_1234567890"
+        )
 
         self.assertEqual(resp.status_code, 500)
         self.assertEqual(

@@ -12,7 +12,8 @@ from src.api.converter.listing_converter import ListingCreate
 class TestListingServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
         self.manager: MagicMock = MagicMock()
-        self.service = ListingService(listing_manager=self.manager)
+        self.rating_manager: MagicMock = MagicMock()
+        self.service = ListingService(listing_manager=self.manager, rating_manager=self.rating_manager)
 
     def test_get_all_listing_delegates_to_manager(self) -> None:
         one_listing = Listing(
@@ -486,6 +487,69 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertTrue(result)
         self.manager.get_listing_by_id.assert_called_once_with(1)
         self.manager.delete_listing.assert_called_once_with(1)
+
+    # -----------------------------
+    # rate_listing
+    # -----------------------------
+    def test_rate_listing_listing_not_found_raises(self) -> None:
+        self.manager.get_listing_by_id.return_value = None
+
+        with self.assertRaises(ListingNotFoundError):
+            self.service.rate_listing(listing_id=1, rater_id=2, transaction_rating=5)
+
+        self.rating_manager.create_rating.assert_not_called()
+
+    def test_rate_listing_not_sold_raises(self) -> None:
+        listing = MagicMock()
+        listing.is_sold = False
+        self.manager.get_listing_by_id.return_value = listing
+
+        with self.assertRaises(UnapprovedBehaviorError):
+            self.service.rate_listing(listing_id=1, rater_id=2, transaction_rating=5)
+
+        self.rating_manager.create_rating.assert_not_called()
+
+    def test_rate_listing_wrong_buyer_raises(self) -> None:
+        listing = MagicMock()
+        listing.is_sold = True
+        listing.sold_to_id = 99
+        self.manager.get_listing_by_id.return_value = listing
+
+        with self.assertRaises(UnapprovedBehaviorError):
+            self.service.rate_listing(listing_id=1, rater_id=2, transaction_rating=5)
+
+        self.rating_manager.create_rating.assert_not_called()
+
+    def test_rate_listing_already_rated_raises(self) -> None:
+        listing = MagicMock()
+        listing.is_sold = True
+        listing.sold_to_id = 2
+        self.manager.get_listing_by_id.return_value = listing
+        self.rating_manager.get_rating_by_listing_id.return_value = MagicMock()
+
+        with self.assertRaises(UnapprovedBehaviorError):
+            self.service.rate_listing(listing_id=1, rater_id=2, transaction_rating=5)
+
+        self.rating_manager.create_rating.assert_not_called()
+
+    def test_rate_listing_happy_path_creates_and_returns_rating(self) -> None:
+        listing = MagicMock()
+        listing.is_sold = True
+        listing.sold_to_id = 2
+        self.manager.get_listing_by_id.return_value = listing
+        self.rating_manager.get_rating_by_listing_id.return_value = None
+
+        created_rating = MagicMock()
+        self.rating_manager.create_rating.return_value = created_rating
+
+        out = self.service.rate_listing(listing_id=1, rater_id=2, transaction_rating=4)
+
+        self.assertIs(out, created_rating)
+        self.rating_manager.create_rating.assert_called_once()
+        created = self.rating_manager.create_rating.call_args.args[0]
+        self.assertEqual(created.listing_id, 1)
+        self.assertEqual(created.rater_id, 2)
+        self.assertEqual(created.transaction_rating, 4)
 
     def test_listingcreate_to_domain_allows_none_optionals(self) -> None:
         dto = ListingCreate(
