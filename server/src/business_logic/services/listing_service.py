@@ -41,6 +41,16 @@ class ListingService:
     def get_listing_by_id(self, listing_id: int) -> Listing | None:
         return self._listing_manager.get_listing_by_id(listing_id)
 
+    def get_listing_rating(self, listing_id: int) -> Rating | None:
+        listing = self._listing_manager.get_listing_by_id(listing_id)
+        if listing is None:
+            raise ListingNotFoundError(
+                message=f"Listing not found for id: {listing_id}",
+                details={"listing_id": listing_id},
+            )
+
+        return self._rating_manager.get_rating_by_listing_id(listing_id)
+
     def search_listings(self, query: str) -> List[Listing]:
         """Search listings by keywords across title, description, and location.
 

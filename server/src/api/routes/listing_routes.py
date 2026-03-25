@@ -209,6 +209,19 @@ def rate_listing(
     return RatingResponse.from_domain(rating)
 
 
+@router.get("/{listing_id}/ratings", response_model=RatingResponse | None)
+def get_listing_rating(
+    listing_id: int,
+    _: int = Depends(get_current_user_id),
+    listing_service: ListingService = Depends(get_listing_service),
+):
+    rating = listing_service.get_listing_rating(listing_id)
+    if rating is None:
+        return None
+
+    return RatingResponse.from_domain(rating)
+
+
 @router.post("/{listing_id}/comments", response_model=CommentResponse)
 def create_listing_comment(
     listing_id: int,
