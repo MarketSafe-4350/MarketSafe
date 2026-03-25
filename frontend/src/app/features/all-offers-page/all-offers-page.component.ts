@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +15,8 @@ import { Listing } from '../../shared/models/listing.models';
 import { ListingsSidebarActionsBase } from '../../shared/helpers/listings-sidebar-actions.base';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { OffersApiService, Offer } from '../../shared/services/offers-api.service';
+import { RatingsApiService } from '../../shared/services/ratings-api.service';
+import { BuyerOfferNotificationsService } from '../../shared/services/buyer-offer-notifications.service';
 
 interface OfferViewModel {
   id: number;
@@ -27,6 +30,14 @@ interface OfferViewModel {
   seen: boolean;
   accepted: boolean | null;
   direction: 'received' | 'sent';
+  sellerId: number | null;
+  sellerName: string;
+  pendingRating: number | null;
+  hasRatedSeller: boolean;
+  isSubmittingRating: boolean;
+  ratingMessage: string | null;
+  ratingError: string | null;
+  hasUnreadDecision: boolean;
 }
 
 @Component({
@@ -49,6 +60,8 @@ export class AllOffersPageComponent
 {
   private readonly accountsApi = inject(AccountsApiService);
   private readonly offersApi = inject(OffersApiService);
+  private readonly ratingsApi = inject(RatingsApiService);
+  private readonly buyerOfferNotifications = inject(BuyerOfferNotificationsService);
   private readonly router = inject(Router);
 
   offers: OfferViewModel[] = [];
@@ -86,6 +99,64 @@ export class AllOffersPageComponent
 
   canResolveOffer(offer: OfferViewModel): boolean {
     return offer.accepted === null && !this.isResolvingOffer(offer.id);
+  }
+
+  canRateSeller(offer: OfferViewModel): boolean {
+    return (
+      offer.direction === 'sent' &&
+      offer.accepted === true &&
+      !offer.hasRatedSeller &&
+      !offer.isSubmittingRating
+    );
+  }
+
+  setPendingRating(offerId: number, rating: number): void {
+    this.sentOffers = this.sentOffers.map((offer) =>
+      offer.id === offerId
+        ? {
+            ...offer,
+            pendingRating: rating,
+            ratingError: null,
+            ratingMessage: null,
+          }
+        : offer,
+    );
+    this.offers = [...this.receivedOffers, ...this.sentOffers];
+  }
+
+  submitSellerRating(offer: OfferViewModel): void {
+    if (!this.canRateSeller(offer) || offer.pendingRating === null) {
+      this.sentOffers = this.sentOffers.map((item) =>
+        item.id === offer.id
+          ? { ...item, ratingError: 'Choose a star rating before submitting.' }
+          : item,
+      );
+      this.offers = [...this.receivedOffers, ...this.sentOffers];
+      return;
+    }
+
+    this.updateSentOffer(offer.id, {
+      isSubmittingRating: true,
+      ratingError: null,
+      ratingMessage: null,
+    });
+
+    this.ratingsApi.create(offer.listingId, offer.pendingRating).subscribe({
+      next: () => {
+        this.updateSentOffer(offer.id, {
+          hasRatedSeller: true,
+          isSubmittingRating: false,
+          ratingMessage: `You rated ${offer.sellerName}.`,
+          ratingError: null,
+        });
+      },
+      error: (error) => {
+        this.updateSentOffer(offer.id, {
+          isSubmittingRating: false,
+          ratingError: this.toRatingErrorMessage(error),
+        });
+      },
+    });
   }
 
   resolveOffer(offerId: number, accepted: boolean): void {
@@ -143,11 +214,15 @@ export class AllOffersPageComponent
   private toOfferViewModels(
     offers: Offer[],
     listings: Listing[],
-    buyerNameById: Map<number, string>,
+    partyNameById: Map<number, string>,
     direction: 'received' | 'sent',
+    unreadSentOfferIds: Set<number>,
   ): OfferViewModel[] {
     const listingTitleById = new Map(
       listings.map((listing) => [listing.id, listing.title]),
+    );
+    const listingSellerIdById = new Map(
+      listings.map((listing) => [listing.id, listing.sellerId ?? null]),
     );
 
     return [...offers]
@@ -170,11 +245,26 @@ export class AllOffersPageComponent
         locationOffered: offer.locationOffered,
         senderId: offer.senderId,
         buyerName:
-          buyerNameById.get(offer.senderId) ?? `User #${offer.senderId}`,
+          direction === 'received'
+            ? partyNameById.get(offer.senderId) ?? `User #${offer.senderId}`
+            : '',
         createdDate: offer.createdDate,
         seen: offer.seen,
         accepted: offer.accepted,
         direction,
+        sellerId: listingSellerIdById.get(offer.listingId) ?? null,
+        sellerName:
+          direction === 'sent'
+            ? partyNameById.get(listingSellerIdById.get(offer.listingId) ?? -1) ??
+              `Seller #${listingSellerIdById.get(offer.listingId) ?? offer.listingId}`
+            : '',
+        pendingRating: null,
+        hasRatedSeller: false,
+        isSubmittingRating: false,
+        ratingMessage: null,
+        ratingError: null,
+        hasUnreadDecision:
+          direction === 'sent' && unreadSentOfferIds.has(offer.id),
       }));
   }
 
@@ -185,59 +275,78 @@ export class AllOffersPageComponent
     allListings: Listing[],
     unseenOffers: Offer[],
   ): void {
-    const uniqueSenderIds = [...new Set(receivedOffers.map((offer) => offer.senderId))];
+    const unreadSentOfferIds = this.buyerOfferNotifications.syncResolvedOffers(
+      sentOffers,
+      this.currentUserId,
+    );
+    const uniquePartyIds = [
+      ...new Set([
+        ...receivedOffers.map((offer) => offer.senderId),
+        ...sentOffers
+          .map((offer) => allListings.find((listing) => listing.id === offer.listingId)?.sellerId)
+          .filter((sellerId): sellerId is number => sellerId !== undefined),
+      ]),
+    ];
 
-    if (uniqueSenderIds.length === 0) {
+    if (uniquePartyIds.length === 0) {
       this.receivedOffers = this.toOfferViewModels(
         receivedOffers,
         ownedListings,
         new Map(),
         'received',
+        unreadSentOfferIds,
       );
       this.sentOffers = this.toOfferViewModels(
         sentOffers,
         allListings,
         new Map(),
         'sent',
+        unreadSentOfferIds,
       );
       this.offers = [...this.receivedOffers, ...this.sentOffers];
       this.isLoading = false;
       this.markOffersSeen(unseenOffers);
+      this.markSentOfferDecisionsSeen();
+      this.loadSentOfferRatings();
       return;
     }
 
     forkJoin(
-      uniqueSenderIds.map((senderId) =>
-        this.accountsApi.getById(senderId).pipe(
+      uniquePartyIds.map((accountId) =>
+        this.accountsApi.getById(accountId).pipe(
           catchError((error) => {
-            console.error(`Failed to load buyer ${senderId}:`, error);
+            console.error(`Failed to load account ${accountId}:`, error);
             return of(null);
           }),
         ),
       ),
     ).subscribe({
-      next: (buyers) => {
-        const buyerNameById = new Map<number, string>();
-        buyers.forEach((buyer, index) => {
-          const senderId = uniqueSenderIds[index];
-          buyerNameById.set(senderId, this.toBuyerName(senderId, buyer));
+      next: (accounts) => {
+        const partyNameById = new Map<number, string>();
+        accounts.forEach((account, index) => {
+          const accountId = uniquePartyIds[index];
+          partyNameById.set(accountId, this.toBuyerName(accountId, account));
         });
 
         this.receivedOffers = this.toOfferViewModels(
           receivedOffers,
           ownedListings,
-          buyerNameById,
+          partyNameById,
           'received',
+          unreadSentOfferIds,
         );
         this.sentOffers = this.toOfferViewModels(
           sentOffers,
           allListings,
-          new Map(),
+          partyNameById,
           'sent',
+          unreadSentOfferIds,
         );
         this.offers = [...this.receivedOffers, ...this.sentOffers];
         this.isLoading = false;
         this.markOffersSeen(unseenOffers);
+        this.markSentOfferDecisionsSeen();
+        this.loadSentOfferRatings();
       },
       error: (error) => {
         console.error('Failed to load buyer names:', error);
@@ -246,16 +355,20 @@ export class AllOffersPageComponent
           ownedListings,
           new Map(),
           'received',
+          unreadSentOfferIds,
         );
         this.sentOffers = this.toOfferViewModels(
           sentOffers,
           allListings,
           new Map(),
           'sent',
+          unreadSentOfferIds,
         );
         this.offers = [...this.receivedOffers, ...this.sentOffers];
         this.isLoading = false;
         this.markOffersSeen(unseenOffers);
+        this.markSentOfferDecisionsSeen();
+        this.loadSentOfferRatings();
       },
     });
   }
@@ -281,5 +394,83 @@ export class AllOffersPageComponent
         console.error('Failed to mark offers as seen:', error);
       },
     });
+  }
+
+  private markSentOfferDecisionsSeen(): void {
+    const unreadDecisionIds = this.sentOffers
+      .filter((offer) => offer.hasUnreadDecision)
+      .map((offer) => offer.id);
+
+    if (unreadDecisionIds.length === 0) {
+      return;
+    }
+
+    this.buyerOfferNotifications.markResolvedOffersSeen(
+      unreadDecisionIds,
+      this.currentUserId,
+    );
+    this.sentOffers = this.sentOffers.map((offer) => ({
+      ...offer,
+      hasUnreadDecision: false,
+    }));
+    this.offers = [...this.receivedOffers, ...this.sentOffers];
+  }
+
+  private loadSentOfferRatings(): void {
+    const acceptedSentOffers = this.sentOffers.filter((offer) => offer.accepted === true);
+    if (acceptedSentOffers.length === 0) {
+      return;
+    }
+
+    forkJoin(
+      acceptedSentOffers.map((offer) =>
+        this.ratingsApi.getByListingId(offer.listingId).pipe(
+          catchError((error) => {
+            console.error(`Failed to load rating for listing ${offer.listingId}:`, error);
+            return of(null);
+          }),
+        ),
+      ),
+    ).subscribe({
+      next: (ratings) => {
+        acceptedSentOffers.forEach((offer, index) => {
+          const rating = ratings[index];
+          if (rating) {
+            this.updateSentOffer(offer.id, {
+              hasRatedSeller: true,
+              pendingRating: rating.transactionRating,
+              ratingMessage: 'You already rated this seller.',
+            });
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Failed to load sent offer ratings:', error);
+      },
+    });
+  }
+
+  private updateSentOffer(
+    offerId: number,
+    changes: Partial<OfferViewModel>,
+  ): void {
+    this.sentOffers = this.sentOffers.map((offer) =>
+      offer.id === offerId ? { ...offer, ...changes } : offer,
+    );
+    this.offers = [...this.receivedOffers, ...this.sentOffers];
+  }
+
+  private toRatingErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      if (error.status === 400 || error.status === 422) {
+        return 'Choose a rating between 1 and 5 stars.';
+      }
+
+      if (error.status === 403 || error.status === 409) {
+        return 'This seller was already rated for this listing.';
+      }
+    }
+
+    return 'Failed to submit rating.';
   }
 }
