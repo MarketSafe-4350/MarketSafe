@@ -519,5 +519,37 @@ class TestListingRoutes(unittest.TestCase):
         )
 
 
+    def test_get_listing_rating_returns_rating_response(self):
+        fake_rating = MagicMock(name="rating_domain")
+        self.listing_service.get_listing_rating.return_value = fake_rating
+
+        fake_response = {
+            "id": 1,
+            "listing_id": 99,
+            "rater_id": self.user_id,
+            "transaction_rating": 4,
+        }
+
+        with patch.object(
+            listing_routes.RatingResponse,
+            "from_domain",
+            return_value=fake_response,
+        ) as from_domain_mock:
+            resp = self.client.get("/listings/99/ratings")
+
+        self.assertEqual(resp.status_code, 200)
+        self.listing_service.get_listing_rating.assert_called_once_with(99)
+        from_domain_mock.assert_called_once_with(fake_rating)
+
+    def test_get_listing_rating_returns_none_when_no_rating(self):
+        self.listing_service.get_listing_rating.return_value = None
+
+        resp = self.client.get("/listings/99/ratings")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertIsNone(resp.json())
+        self.listing_service.get_listing_rating.assert_called_once_with(99)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
