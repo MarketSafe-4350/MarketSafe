@@ -1,289 +1,289 @@
-[job-id] 0f7a642d2a644721b7a861eb2b171765
+[job-id] 1d923a5e48134c3d83d0382dcb95fa91
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Add 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] c5074589f5c446488becc11c9ac9e93b
+[job-id] b270911ab918449f9a8b8730cdde5963
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Add 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 07d79e6b2a9d4e16961cc173784b7eea
+[job-id] 50d0dc4deffe4345912e59a78edee350
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Sub 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] d2a8b08f2e034c8f86e0622229d41830
+[job-id] 5a720bc05a53472b979ef9358e91c7b8
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Sub 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] ed4cf83dfac24cc6afdc9382e0563296
+[job-id] aa2136aebbab4035ba5bbf1600830193
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Mul 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] e87613c317c74a85bef0888be2588be0
+[job-id] cba055220d264302b75a02c355bf1f02
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Mul 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 5bcdedd56e414686844545194c3e155b
+[job-id] 34f7451336d94a4d995f7c257d2bd48c
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Div 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] e0c4ee9fe3684412923826910096585b
+[job-id] 38e780b67f404e65a587e534b420edf5
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Div 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] fe0a6386737247faa321059a102762e3
+[job-id] 09788d70915e4f03b74bd62ada52e38a
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_FloorDiv 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] ce24a568e3ff47fcb02885b65a365008
+[job-id] 0c0f557924df4c61939326c401927b6e
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_FloorDiv 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 8ac7265197b54428bd6effcdddedfaa0
+[job-id] 2efbbc58672b4f9185eae3283ae829de
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Mod 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 7c838a98f7424aad89f2945e598b198e
+[job-id] cd64cecccba444abb88d9ad8e48a10e1
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Mod 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 06a8515572194b3ca1bde26addfa62b4
+[job-id] 7476ca56de76485fb44373d03435fd8e
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Pow 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] fdaab3e775ad4d7ba00f23505e84e53f
+[job-id] 50729cd5e0b7412cab990fb154d1b51d
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_Pow 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 703446080b3e4237849fa6a17e19c252
+[job-id] bacdb9f5cf4844b0a9614c1ea063afd0
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_RShift 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 912908d2d6a14d3fa78ccc3f6f68b3ff
+[job-id] b5c899fc40504ed4993e9edf68957b6a
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_RShift 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 23b7076ebfdf4606bfe6bb2dce83d251
+[job-id] 5a75f450888d423e82cb3fdae3001740
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_LShift 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 57376726d9474dd8ae371a343638e902
+[job-id] 1628da3c9b3d45aa83ea501a26d650f6
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_LShift 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 16c3f71b989244df992b68c12c868244
+[job-id] 44e922c834e743a8bd1ca22d17c7ab81
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_BitAnd 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 390acc66d178460ca266a99bdc714cc0
+[job-id] 3b4d11fd893747eb9e3333f9edc1a383
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_BitAnd 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] a0be1acd487f4e29be8805a39284fa92
+[job-id] 46d89cdde03a4e93b9599c9a73425846
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_BitXor 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 82f1a111152346f5a11f1379c558320d
+[job-id] 1dcb258b73f7434c866077a40baae02f
 src/api/routes/account_routes.py core/ReplaceBinaryOperator_BitOr_BitXor 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] fad5dfea78874e1bab5469cbbb31e987
+[job-id] e397335dd28146efaec858cfbf563c2c
 src/api/routes/account_routes.py core/ReplaceUnaryOperator_Delete_Not 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] dfbd693ca8ec4344a168afcf3f6b7453
+[job-id] 74bedf54de1a4e3e8520c8d94790f5f5
 src/api/routes/account_routes.py core/AddNot 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 38af68a1ea134d8d899cc0d19866f818
+[job-id] 160ff1454e8545deb4b077ce069145fb
 src/api/routes/account_routes.py core/ReplaceOrWithAnd 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] b2d463ff15ab449083c21e27e97cd2e4
+[job-id] b77008731ff541e0a4c9d79ff0836681
 src/api/routes/account_routes.py core/ExceptionReplacer 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] c234e2e428d54528a86368b9897e63a2
+[job-id] 690b7ddf2c164d16b0374e27d57548b4
 src/api/routes/account_routes.py core/ExceptionReplacer 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 5ce1dcfa6c0f406ab7cd759dbf9a1c63
+[job-id] 5692751ee711449d92f4451598e113f5
 src/api/routes/account_routes.py core/ExceptionReplacer 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] bbe4f4ac2e474390874b6e22c68534c7
+[job-id] d74835419e6a4e2fba0f62c58f531257
 src/api/routes/account_routes.py core/ExceptionReplacer 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 4556e2db263a4b928d2c0a142865617f
+[job-id] a0022c0bffe349c9bff71ee66aaebbb6
 src/api/routes/account_routes.py core/ExceptionReplacer 4
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 0fcd826dfc24467c9bd0a7bdc5892c20
+[job-id] 3f4262ed11eb48df9a3d609bdb6ebf8d
 src/api/routes/account_routes.py core/ExceptionReplacer 5
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 2b5fe2c1f6f545f1b7073f15eaa72ec3
+[job-id] 4b9adcfd99994b6db8cea43e5f6c8e90
 src/api/routes/account_routes.py core/NumberReplacer 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] b303a328ae63406aaa9e9ffd9791fea6
+[job-id] cc524f07a0c4434da728a240cef89800
 src/api/routes/account_routes.py core/NumberReplacer 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 0b7ccca26e0a424d90f78c8fb2e681e5
+[job-id] 0468bf7401674dac98021993a27dedfb
 src/api/routes/account_routes.py core/NumberReplacer 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 7d8f312a9d89459395a2801d7571dc6c
+[job-id] 417ae5f2ba60467c93c7fd9a883715ca
 src/api/routes/account_routes.py core/NumberReplacer 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 5191457259564d9a9426c505f80e37ff
+[job-id] d1d5487e55904e66bd11c7ca85a8383c
 src/api/routes/account_routes.py core/NumberReplacer 4
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] b4f442b9f39545b1ad5a11b9ed403b94
+[job-id] 30b1ab477fd04c718fba06c4e519aecf
 src/api/routes/account_routes.py core/NumberReplacer 5
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 5247e908c7a149a2a59792f4592abd23
+[job-id] a2281143e2a24119bb5354615e4fad5e
 src/api/routes/account_routes.py core/NumberReplacer 6
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] f484125a94be4d2e81a68a9b22a7c954
+[job-id] 81d85d48222d456c98baeb8b73f81c54
 src/api/routes/account_routes.py core/NumberReplacer 7
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 2bad21bcecef4e0eb45364f20f02f9e3
+[job-id] bff57331669a4e85bbf7b07be6c56173
 src/api/routes/account_routes.py core/NumberReplacer 8
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] e10fb0d396ab4fba9dccf9308728ed4c
+[job-id] 4789544fd62a446884d92859c0819388
 src/api/routes/account_routes.py core/NumberReplacer 9
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 38b697d816f2413e83ea74eb5f190959
+[job-id] e2c82bcafaf14caabf7920deb8de4dd3
 src/api/routes/account_routes.py core/NumberReplacer 10
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 6146f3a344694dc4bd324ae2c436eaeb
+[job-id] dbdcdef2682a4fcd906d4cbc6e75960e
 src/api/routes/account_routes.py core/NumberReplacer 11
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] eafb2701be7240189d39918ee2f640fa
+[job-id] 84608e6dbbc6445a9165d2f0eb9ad2a0
 src/api/routes/account_routes.py core/RemoveDecorator 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 25e2d4e6a1144bb2b026eff291a41456
+[job-id] c7959acf2dda46b2ae13c8949f4b0bbf
 src/api/routes/account_routes.py core/RemoveDecorator 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 12b3109ce07c491090c6f8ad118997ec
+[job-id] 52d0da14558248c7b37fd159bc587949
 src/api/routes/account_routes.py core/RemoveDecorator 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 527fee72e6e048efbef4e16d186dcfc5
+[job-id] fd06165285374555b537e0216a6f0f79
 src/api/routes/account_routes.py core/RemoveDecorator 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] cbdc359243184d2d9ca55169722c690f
+[job-id] ad4669a97a5d4c17ace1ad4c837c9749
 src/api/routes/account_routes.py core/RemoveDecorator 4
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] a30f5d0b3804415fb857cba6cdc49f18
+[job-id] e4ef7f25ddfd4618bfa51582235398a2
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Add 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 2e2c9699877b488fafb58d50389f294d
+[job-id] bd597d69c8c54d2e8b20ac3612a8cc79
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Add 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] f892d51b07714ca299c468624ea28b5e
+[job-id] b325acab0b0b46a69be6e5b7d2ab287a
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Sub 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] fe15f3877f634980818ce5b0d64a6792
+[job-id] a163a6bbab6d404ab72435fff18a7c06
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Sub 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 272a161785c4458ab467c0a8295cb994
+[job-id] 9f83182905694909ad92840d395874aa
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Mul 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] cf920680dc7e4927969b3710c41ce3e8
+[job-id] b0fa81de8ff442d9a88db703ac473640
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Mul 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] ce91ad2e902b40c9ba4f2daf0a1e3b4e
+[job-id] c1723b495f864e53984b9416efb89ad0
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Div 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] b5e2e76903ae467380cccd738a217e4e
+[job-id] 81572ada7f1f440da046e482563137e8
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Div 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] df20308e1fd14aa683312e3d4021e6a1
+[job-id] 406902d654ec47aab295ac08fa2f0a8a
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_FloorDiv 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 8be90f5bc7584a02aa39574ac91ab150
+[job-id] 99c9005f724a490f8a3c02d654ffd245
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_FloorDiv 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] b97ce2659bf14c97ba9be4018df8027b
+[job-id] 33668193c34f4287bbbc90d5f42b0550
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Mod 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 38e7ccbf5f5b498bad9bfa184255aa39
+[job-id] 453f951d4ec34e6590f9a0c1a48783e4
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Mod 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 8775c8d4043a43018e9dfeb2966dea65
+[job-id] 09db42514cd14d5eb2c5273b460b7886
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Pow 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 4a597f29cdf54d329cc6af561f77f50f
+[job-id] f74a7074301548e686dfd503467333da
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_Pow 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 52159457a4154ec592b435f31e96d5b9
+[job-id] 95429add08414e0c8ff9c25a88060e30
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_RShift 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] c5c9fc2045b24ee7ad673284b12adea2
+[job-id] 32435b819f644211aa0676fbf657d352
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_RShift 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 3d0b97c86cd34c96854f5b844e8680b5
+[job-id] 2589359e268f4ed4be1957fb9729d9c2
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_LShift 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 3a4b4d6c54714eb29252c6bf83ce056c
+[job-id] becc92fc7af6440e9fbd8f4b38170fdc
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_LShift 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] b7d31370e4164d8ead109186f051f477
+[job-id] 4bb039fa40644a498e8e7d638721c7f5
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_BitAnd 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 6fc621085793491492e1d97c93e929ef
+[job-id] 00aa2b2e4fdd46a294d609bd906877eb
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_BitAnd 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 4d574ec3c0ed451dbef77155b0fc7cd6
+[job-id] de027ccf95df478ea2d371023d284126
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_BitXor 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] a7ce5d78922649e8be3875f4f5a4b2d5
+[job-id] 335fb1d5598f4a8e99ccb42560fc23c9
 src/business_logic/managers/rating/rating_manager.py core/ReplaceBinaryOperator_BitOr_BitXor 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] ef227d20c6a94612901dfdc0598aa8b4
+[job-id] 66a5ca1bbbde4fc9a81f1a107f3b46bc
 src/business_logic/managers/rating/rating_manager.py core/NumberReplacer 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 4a0ed98bcc2b47efa4d486435557b44e
+[job-id] e25cbc8d99214e0b9da0f4639fc1be3f
 src/business_logic/managers/rating/rating_manager.py core/NumberReplacer 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 9131f5245b244fc494884f7337224246
+[job-id] f56a7605c22d482c955071a30b2e322c
 src/business_logic/managers/rating/rating_manager.py core/NumberReplacer 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] bc6791cbfc3c4bb7aecec1fca48f91dd
+[job-id] 46c48228125c4ab2ab9c9e97f135e8f5
 src/business_logic/managers/rating/rating_manager.py core/NumberReplacer 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 1f734806ffea4c208e4a14fece5911b9
+[job-id] 8ca7cf2aa43c4057b568a4150b869789
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] f97954b0c56e459f9521d4e62b76a8cf
+[job-id] 2d15e603e3a34c9ab3925aabeccac0c9
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 9a70eac5e54c4fe5b176928f7695bdf9
+[job-id] 67839677e666458eb8e2ffc68b5e3f3a
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 2
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 84ed5a38bf1f4d7e805c51a5f6eb2873
+[job-id] c3d20af020c04dd889c3be4da8bca242
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 3
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 5061acbd434e43dba82c33db72ac52df
+[job-id] bdd9ffecf4964f8c83903678b362169e
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 4
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 7b226cd91f784e1b829a7e46fd9a1912
+[job-id] b863a5fa4e6d43f3a62ef5c76fb30348
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 5
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 18686eda23c74bc6a500082435d9d249
+[job-id] 3c787ac60fc1482b88e239b084789d6b
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 6
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 81b0ba0fdb674cdc9268476b699a09f7
+[job-id] 13a66decd1884628ba8cd4ec0d2be68f
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 7
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 78bba617bbee47bc99c58cda3475f45a
+[job-id] 55b8accf21724305acbf367ef4d478b3
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 8
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] d0495ec625d549708c05b24afbf6d4fb
+[job-id] 8846f43d6dad438693521b9e69f6e9f2
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 9
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] c6ca64588fbc46338439f560c5fddb71
+[job-id] c41e1f583c304ceb9aa1f999e84580ea
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 10
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] acf9a9ddd6484f38bea3f4724218247e
+[job-id] 875288ce1c52402d81c95769cfa10591
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 11
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 9bc69dff66e14742a92b506274484602
+[job-id] e0a71d93ccde4dbeaa7013a99338d305
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 12
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] afe4d06656b046049ae9acba94cf6ff7
+[job-id] f1661f703a5b416abc8559f5bad4be79
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 13
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 627ad479451c48d3829c082220eac23a
+[job-id] b6ffc27e547140aaad7bf97fc4b17992
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 14
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 4be7c4d727454d7c816fa659abce8747
+[job-id] 52171c66657348649a8cbecfcc0f7e0a
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 15
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 2ce390ca726d431c91b1bc69411efd97
+[job-id] e146ebea44444a04bdb18e19befe6a50
 src/business_logic/managers/rating/rating_manager.py core/RemoveDecorator 16
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 31280ab9690c46e6aa28af13a5fdd574
+[job-id] 425d1b8f426e48d98355caa79331ff60
 src/api/converter/rating_converter.py core/NumberReplacer 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 422c1a57563a4236ab84e56db91a932d
+[job-id] 38dc41775af7485cb754ea4a267c7e87
 src/api/converter/rating_converter.py core/NumberReplacer 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] c1fdc4f7cba64aa6bcac17ab21444889
+[job-id] 4fd9d0394e4947a79e0209294765e742
 src/api/converter/rating_converter.py core/NumberReplacer 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] ce8d0cbda671448688b3ff41abbbb08c
+[job-id] 1350db4547dc4c3499dd704117b1d3a4
 src/api/converter/rating_converter.py core/NumberReplacer 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 9e54c8bf6a254f04a632bc906b68e999
+[job-id] 6e88d007f70f425f9919a969a466fd4a
 src/api/converter/rating_converter.py core/RemoveDecorator 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
 total jobs: 96

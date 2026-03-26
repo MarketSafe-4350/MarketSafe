@@ -1,223 +1,223 @@
-[job-id] 24b8fb1e278943b284954a54268c1782
+[job-id] ba5ae66b64444ce9bb34f9ef3fb41819
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Eq_NotEq 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 4cb0b0f944464cb99a4ad841c94b7316
+[job-id] 5fc9aafd1da84272b86c26eca30806e4
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Eq_Lt 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] bcca4e66ddc74b16a85a30c4e893e27f
+[job-id] 1fba376f508d4073b46992483b3e71eb
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Eq_LtE 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 29eee78450f743938f0ff15bf600724f
+[job-id] b71e8e9642cb4442822760a9ff7d87f7
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Eq_Gt 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 0a6372c7fd304d208f0ce8e8f6d440bc
+[job-id] 4f94e9582f7f410a85064f320a96e556
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Eq_GtE 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 2d87aa9d70be45a4b2bd4477f4f83087
+[job-id] 9839c446fdc04a01863c6617fda25e7c
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Eq_Is 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 980442aab423485ca72bfb566a9ae3ac
+[job-id] a6775c6d38b94d869410cb28cd343ead
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Eq_IsNot 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 1e22cdbe09ad4400bd8a7228d3d58453
+[job-id] 18a6ed4721dc493d8eb39bcac7f20a92
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_Eq 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 31e3de31f91b4c53bc0fe4b06ae905be
+[job-id] ce930b7d5b234678928f2deccfe2d77e
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_Eq 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 2e63b1aef8c04157adc3c6601e552256
+[job-id] 1b982d80b72a4988aef4720b52fc3269
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_Lt 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 1caaad7bc09f434ca3d92e8a6839d061
+[job-id] 9feafae58a594b53b2429c4422b90133
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_Lt 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 56d3dd1962ce442aa7130c054b0206d0
+[job-id] 749cb754bdac4a319010f4ebc1d4973b
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_LtE 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 7d77306157d041d79c2c87351b6449b8
+[job-id] 37c15b7a9d6148c6b15cde3ef7fa9e81
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_LtE 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 6a134c558e474faf86728a9a9a92179d
+[job-id] e250dd4d50c246a1bd61bbeae1cd863f
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_Gt 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] bbbe441a884c4188a45e10141bc1a6cd
+[job-id] 687bcd165c724678b90466c81819b3fb
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_Gt 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 9fc15c15cd7a47449893c959b8833e60
+[job-id] f2fd694550c044949f77ca2d93870621
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_GtE 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] e1adf6b9403f48b9bf3c98e9514971c6
+[job-id] 25b9b99ab9a04b0ea1aa190f727a167b
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_GtE 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 9a92c4a695ad44f0adc6afb02729b439
+[job-id] 36fc5a992e7f49c5bf39c880051c9f64
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_Is 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] e8b3dbae86654832abd56eefae04c772
+[job-id] 6066408051e04bfc929e5da3e154b812
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_Is 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] d06f9144ad474b34a7e3a7e423720616
+[job-id] 9ec554f69c1b4019879c037e9f928f68
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_IsNot 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] ff53931f604f4961abc01801d04da58a
+[job-id] 85beecb37909471f9ae1e6644b625a9d
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_NotEq_IsNot 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 1264f80decfe4709a7bf26b38083a8ad
+[job-id] 454486c175cb4a168ac0e360d49372e3
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_Eq 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 0c319e20e4fc491fbfb3ca09f8b73293
+[job-id] bbd9cf24b996489f88910999b415e1bd
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_NotEq 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 23938bb7c92141aa9d049f7d33d35e9a
+[job-id] 2820b0c30707477bb36cdc90e1ffbdfc
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_Lt 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] e823dac626a64a8e8d834748c4b0741a
+[job-id] 7dc24c308e464bbabd88cf4c896e3a8d
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_LtE 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 6c503fc5b4b64985a27438485e37f382
+[job-id] 841f990f5a0142069ab821c77884d382
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_Gt 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 533797e2bd194c37b44c4618bd78700e
+[job-id] 45ad9357034f4971b224f6c0c007a58b
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_GtE 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] a91c01c30288498388e67c497f67d3b9
+[job-id] 9231659e4d684738bc934c1ee0b125c2
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_IsNot 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 8bcb9167b0134400ab876ddab77da6f0
+[job-id] 140be1906643430eaa9299d7dace36ab
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_IsNot 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 6e85da5ef7d443f5ab19129bb0effc1a
+[job-id] 53d4ac45777f44bfafa8cfd0573cd6fb
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_IsNot 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] ce9b96f8e5d84b808e26436c857d6fbd
+[job-id] ab65a7882afd480aae6ba7367bcffd50
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_Is_IsNot 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] f10db6ee8c454aeea54c31f1de3c0386
+[job-id] 83ee01f619fb405884f78d648661f2d5
 src/business_logic/managers/offer/offer_manager.py core/ReplaceComparisonOperator_IsNot_Is 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] b42c3bea58074c02b74cafaad39f0851
+[job-id] 42957e3f25624d629a8b827d67fa957f
 src/business_logic/managers/offer/offer_manager.py core/ReplaceUnaryOperator_Delete_Not 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 85e97b3ed27c438293dd0625f4b0498d
+[job-id] 9c603726c7094f83aebba18841519345
 src/business_logic/managers/offer/offer_manager.py core/AddNot 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 622cb1bf72ff473aa9f254467e60af07
+[job-id] 686933d8e3164eceb735c3b286c52810
 src/business_logic/managers/offer/offer_manager.py core/AddNot 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 90b0cce5b71e4485828477b0792cfabe
+[job-id] 18a311dd93d14d5392acc9fe707fb906
 src/business_logic/managers/offer/offer_manager.py core/AddNot 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 536385858b2e4ce79060fa2e9f0ae22e
+[job-id] 513837a062454f8dbc207abfe534cde7
 src/business_logic/managers/offer/offer_manager.py core/AddNot 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] b9163e4e85f74c54b68fc57b22e6302a
+[job-id] a876c9bd04c24343b2cebb30e97c57c0
 src/business_logic/managers/offer/offer_manager.py core/AddNot 4
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] ad9179fbe91e4f6cb0efd39d598a9bbf
+[job-id] 7dd9f2f9f81a43c7bcdcee7df33b5455
 src/business_logic/managers/offer/offer_manager.py core/AddNot 5
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 47d954dc82c341eab33e11a5083fade9
+[job-id] 053d911f417a4d04b17db526dbed4b44
 src/business_logic/managers/offer/offer_manager.py core/AddNot 6
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 771a985508194f89acc019c317988baa
+[job-id] df642d2a7c454a1fa5550163d48b729d
 src/business_logic/managers/offer/offer_manager.py core/AddNot 7
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 544fd29fcc504f7a9f68cb1a0388245e
+[job-id] a45ffda4eb20434ba783b4bf912a9838
 src/business_logic/managers/offer/offer_manager.py core/AddNot 8
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 6caf8f2c9088454cb782fcb823e5bb64
+[job-id] e719ca9d0b7a4cbcb1516df435421596
 src/business_logic/managers/offer/offer_manager.py core/AddNot 9
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 8f6ba2eda9c3461c880d1e0860f7545a
+[job-id] 2ed0be29d9ff42ce81b05da83a275f0c
 src/business_logic/managers/offer/offer_manager.py core/AddNot 10
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 7daae5c131ba4a8bbe51bcc6b35a1122
+[job-id] e05a77aa046a4079aeb8e1889d8b01dc
 src/business_logic/managers/offer/offer_manager.py core/AddNot 11
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 082c0c9ac3dd42e8880a118cced7d824
+[job-id] d287741029ac42f79617ee6880efafe9
 src/business_logic/managers/offer/offer_manager.py core/ReplaceTrueWithFalse 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 96b2f8bf64454a788006e415d820b550
+[job-id] ad33692fdb904ab5a81653c2666d6f70
 src/business_logic/managers/offer/offer_manager.py core/ReplaceFalseWithTrue 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 5fc08c2189e64b6f843a4f0c10b87d21
+[job-id] a1820e759332413d995e9edf11ff0e94
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 0
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 81df67377e71449e82e5f0682e5939f7
+[job-id] 99b0e025a4ee4d20a733209c62890161
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 1
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] b3d01538b0914a3e932eb06d286737bb
+[job-id] 78c3c0b32dbe4676ba57a16ad06da647
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 2
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 0386c7677e7446b892702b9fdd280740
+[job-id] 1397a3867bd3479d987735b150669dde
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 3
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 1999535c7ef44ed6b1093ad907d491ea
+[job-id] 30e51027a26e4e3eabd05dc24c1445e0
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 4
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 3e9b2bf5185340fc9ee87056a1b21ae3
+[job-id] 8f021228d186445c9034c4316476eb36
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 5
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 6ed497be05ff4d688948b94ae8e14e82
+[job-id] d609ccc63b3f44e490d3523757f530bc
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 6
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 0e8f85eef31e46568d3c178a58e6274b
+[job-id] dfcd732d13d54aa893c78a23e9a3cd28
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 7
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] d8543a7d2ca64fa1b648718cba0d164d
+[job-id] a6d8b2b9620747519cf85cd5abc19c2d
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 8
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] ba69fbf51204467dae0408d54bd597b8
+[job-id] 00d26421a8d845c8a33520dfaf47c45d
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 9
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 2a1adba8c9e5456abd0facf6304461b0
+[job-id] 78c8fb0cfc444150b7ad511e7302ed2a
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 10
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 94fd6492a9f444849904ffb5fa214203
+[job-id] 570349ac658c45c4bb0a23aaba83db21
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 11
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 527946dca27a4f2495c640bdd46456cf
+[job-id] 7ba52d0e441b48e9b6a3106dfb649c1f
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 12
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 40f1ffae66e0472faac143d8f0d9ca5b
+[job-id] 82dd397658224dddb23c63c88e56946a
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 13
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] a9c7010ea19240f8ad355e8030fbccd0
+[job-id] 2c4fe79bbfc5446587e2f511cb3ceb9b
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 14
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] 37f9e904ab4045d7a51a36a34b1cc821
+[job-id] bb0b2d3c6f144f18a91d81eb8120358c
 src/business_logic/managers/offer/offer_manager.py core/RemoveDecorator 15
 worker outcome: WorkerOutcome.SKIPPED, test outcome: None
-[job-id] b762ebd8633e4dcb99646db826cf3e96
+[job-id] e7121394953b4aa7baefb5249aca35ff
 src/business_logic/managers/offer/offer_manager.py core/ZeroIterationForLoop 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] b9c33510556049b09589b08dde85d360
+[job-id] 27225d1caeaf4c8ba123b3e023659cc9
 src/business_logic/managers/offer/offer_manager.py core/ZeroIterationForLoop 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] eed79d16dde34fce85b97f728a60c18e
+[job-id] c129846fba0e4248bc307d2ecd323231
 src/business_logic/managers/offer/offer_manager.py core/ZeroIterationForLoop 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 3f96553c33c34e0b825a98acc7f00cc2
+[job-id] 7540e96152724ed681e3b4c9610e78ff
 src/business_logic/managers/offer/offer_manager.py core/ZeroIterationForLoop 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] ba2662c40e154e0bbe1d8f15590ca324
+[job-id] 5d1c76c596d74feebb8e800819136bca
 src/business_logic/services/offer_service.py core/ReplaceComparisonOperator_Is_IsNot 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] e2759d8e461247f095a0a7d9dec08847
+[job-id] fd690e5b21184e16b337a63159f0a6ee
 src/business_logic/services/offer_service.py core/ReplaceComparisonOperator_Is_IsNot 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 3a79a56a86a04de0a40be1de65ddd36d
+[job-id] 11b4557765ea4bf58880e8d5dad3f867
 src/business_logic/services/offer_service.py core/ReplaceComparisonOperator_Is_IsNot 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 42d6aa784a554488834b781329fbb168
+[job-id] b1a5cbb8991e4caeb8e7c657c2a30156
 src/business_logic/services/offer_service.py core/AddNot 0
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 6eacca3bbd8242e69f460d654d79c49e
+[job-id] c437c37d5fca461b8d8e46266fc27543
 src/business_logic/services/offer_service.py core/AddNot 1
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] 53c7a232abff4fecb85ef5544e28bd6a
+[job-id] 666537f1759f41ffad082fb6db1e65a9
 src/business_logic/services/offer_service.py core/AddNot 2
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
-[job-id] e6d9ae0b870f4c95813fd80c22a815bc
+[job-id] 65ba4aa6fc75452e9bfd810b8e6fe20f
 src/business_logic/services/offer_service.py core/AddNot 3
 worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
 total jobs: 74
