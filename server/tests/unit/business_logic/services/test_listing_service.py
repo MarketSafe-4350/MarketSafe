@@ -551,6 +551,27 @@ class TestListingServiceUnit(unittest.TestCase):
         self.assertEqual(created.rater_id, 2)
         self.assertEqual(created.transaction_rating, 4)
 
+    # -----------------------------
+    # get_listing_rating
+    # -----------------------------
+    def test_get_listing_rating_listing_not_found_raises(self) -> None:
+        self.manager.get_listing_by_id.return_value = None
+
+        with self.assertRaises(ListingNotFoundError):
+            self.service.get_listing_rating(99)
+
+        self.rating_manager.get_rating_by_listing_id.assert_not_called()
+
+    def test_get_listing_rating_returns_rating_from_manager(self) -> None:
+        self.manager.get_listing_by_id.return_value = MagicMock()
+        expected_rating = MagicMock()
+        self.rating_manager.get_rating_by_listing_id.return_value = expected_rating
+
+        result = self.service.get_listing_rating(5)
+
+        self.rating_manager.get_rating_by_listing_id.assert_called_once_with(5)
+        self.assertEqual(result, expected_rating)
+
     def test_listingcreate_to_domain_allows_none_optionals(self) -> None:
         dto = ListingCreate(
             title="Desk lamp",
