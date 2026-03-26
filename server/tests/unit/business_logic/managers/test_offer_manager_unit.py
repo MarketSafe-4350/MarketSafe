@@ -440,3 +440,307 @@ class TestOfferManagerUnit(unittest.TestCase):
     def test_delete_offer_raises_validation_error_when_id_invalid(self) -> None:
         with self.assertRaises(ValidationError):
             self.manager.delete_offer(None)  # type: ignore[arg-type]
+
+
+    def test_create_offer_checks_existing_offer_with_exact_sender_and_listing_ids(self) -> None:
+        offer = Offer(listing_id=10, sender_id=5, offered_price=100.0)
+        created = _make_offer(offer_id=1)
+        self.listing_db.get_by_id.return_value = _make_listing(listing_id=10, seller_id=99)
+        self.offer_db.get_by_sender_and_listing.return_value = None
+        self.offer_db.add.return_value = created
+
+        out = self.manager.create_offer(offer)
+
+        self.assertIs(created, out)
+        self.offer_db.get_by_sender_and_listing.assert_called_once_with(5, 10)
+
+    def test_create_offer_does_not_check_existing_offer_when_listing_missing(self) -> None:
+        offer = Offer(listing_id=10, sender_id=5, offered_price=100.0)
+        self.listing_db.get_by_id.return_value = None
+
+        with self.assertRaises(ListingNotFoundError):
+            self.manager.create_offer(offer)
+
+        self.offer_db.get_by_sender_and_listing.assert_not_called()
+        self.offer_db.add.assert_not_called()
+
+    def test_create_offer_does_not_check_existing_offer_when_listing_is_sold(self) -> None:
+        offer = Offer(listing_id=10, sender_id=5, offered_price=100.0)
+        self.listing_db.get_by_id.return_value = _make_listing(listing_id=10, seller_id=99, is_sold=True)
+
+        with self.assertRaises(UnapprovedBehaviorError):
+            self.manager.create_offer(offer)
+
+        self.offer_db.get_by_sender_and_listing.assert_not_called()
+        self.offer_db.add.assert_not_called()
+
+    def test_create_offer_does_not_check_existing_offer_when_sender_is_seller(self) -> None:
+        offer = Offer(listing_id=10, sender_id=99, offered_price=100.0)
+        self.listing_db.get_by_id.return_value = _make_listing(listing_id=10, seller_id=99)
+
+        with self.assertRaises(UnapprovedBehaviorError):
+            self.manager.create_offer(offer)
+
+        self.offer_db.get_by_sender_and_listing.assert_not_called()
+        self.offer_db.add.assert_not_called()
+
+    def test_get_offers_sellers_calls_offer_db_for_each_listing_id_in_order(self) -> None:
+        l1 = _make_listing(listing_id=10)
+        l2 = _make_listing(listing_id=11)
+        self.listing_db.get_by_seller_id.return_value = [l1, l2]
+        self.offer_db.get_by_listing_id.side_effect = [[_make_offer(offer_id=1)], [_make_offer(offer_id=2)]]
+
+        self.manager.get_offers_sellers(99)
+
+        self.offer_db.get_by_listing_id.assert_has_calls([call(10), call(11)])
+
+    def test_get_offer_sellers_pending_returns_empty_when_no_listings(self) -> None:
+        self.listing_db.get_by_seller_id.return_value = []
+
+        out = self.manager.get_offer_sellers_pending(99)
+
+        self.assertEqual([], out)
+        self.offer_db.get_pending_by_listing_id.assert_not_called()
+
+    def test_get_offer_sellers_unseen_returns_empty_when_no_listings(self) -> None:
+        self.listing_db.get_by_seller_id.return_value = []
+
+        out = self.manager.get_offer_sellers_unseen(99)
+
+        self.assertEqual([], out)
+        self.offer_db.get_unseen_by_listing_id.assert_not_called()
+
+    def test_get_pending_offers_with_listing_by_sender_keeps_multiple_pending_offers(self) -> None:
+        p1 = _make_offer(offer_id=1, accepted=None)
+        p2 = _make_offer(offer_id=2, accepted=None)
+        r1 = _make_offer(offer_id=3, accepted=False)
+
+        self.offer_db.get_by_sender_id.return_value = [p1, r1, p2]
+
+        out = self.manager.get_pending_offers_with_listing_by_sender(5)
+
+        self.assertEqual([p1, p2], out)
+
+    def test_set_offer_accepted_accepts_offer_and_rejects_every_other_pending_offer(self) -> None:
+        accepted_offer = _make_offer(offer_id=1, listing_id=10, sender_id=5, accepted=None)
+        other_pending_1 = _make_offer(offer_id=2, listing_id=10, sender_id=6, accepted=None)
+        other_pending_2 = _make_offer(offer_id=3, listing_id=10, sender_id=7, accepted=None)
+        listing = _make_listing(listing_id=10, seller_id=99)
+
+        self.offer_db.get_by_id.return_value = accepted_offer
+        self.listing_db.get_by_id.return_value = listing
+        self.offer_db.get_pending_by_listing_id.return_value = [
+            accepted_offer,
+            other_pending_1,
+            other_pending_2,
+        ]
+
+        self.manager.set_offer_accepted(1, True, 99)
+
+        self.offer_db.set_accepted.assert_has_calls(
+            [
+                call(1, True),
+                call(2, False),
+                call(3, False),
+            ],
+            any_order=False,
+        )
+        self.assertNotIn(call(1, False), self.offer_db.set_accepted.call_args_list)
+
+    def test_set_offer_accepted_does_not_reject_others_when_declining(self) -> None:
+        offer = _make_offer(offer_id=1, listing_id=10, sender_id=5, accepted=None)
+        listing = _make_listing(listing_id=10, seller_id=99)
+
+        self.offer_db.get_by_id.return_value = offer
+        self.listing_db.get_by_id.return_value = listing
+
+        self.manager.set_offer_accepted(1, False, 99)
+
+        self.offer_db.set_accepted.assert_called_once_with(1, False)
+        self.offer_db.get_pending_by_listing_id.assert_not_called()
+
+    def test_delete_offer_delegates_exact_id_to_db(self) -> None:
+        self.offer_db.remove.return_value = True
+
+        self.manager.delete_offer(123)
+
+        self.offer_db.remove.assert_called_once_with(123)
+
+
+    def test_create_offer_allows_non_owner_when_seller_id_less_than_sender_id(self):
+        """
+        Kills:
+        - listing.seller_id == offer.sender_id  -> listing.seller_id <= offer.sender_id
+        """
+        offer = SimpleNamespace(listing_id=10, sender_id=20)
+        listing = SimpleNamespace(id=10, seller_id=5, is_sold=False)
+
+        self.listing_db.get_by_id.return_value = listing
+        self.offer_db.get_by_sender_and_listing.return_value = None
+        self.offer_db.add.return_value = offer
+
+        result = self.manager.create_offer(offer)
+
+        self.assertIs(result, offer)
+        self.offer_db.add.assert_called_once_with(offer)
+
+    def test_create_offer_rejects_own_listing_with_equal_but_not_identical_large_ints(self):
+        """
+        Kills:
+        - listing.seller_id == offer.sender_id  -> listing.seller_id is offer.sender_id
+        """
+        seller_id = int("1000")
+        sender_id = int("1000")
+        self.assertEqual(seller_id, sender_id)
+        self.assertIsNot(seller_id, sender_id)
+
+        offer = SimpleNamespace(listing_id=10, sender_id=sender_id)
+        listing = SimpleNamespace(id=10, seller_id=seller_id, is_sold=False)
+
+        self.listing_db.get_by_id.return_value = listing
+
+        with self.assertRaises(UnapprovedBehaviorError) as cm:
+            self.manager.create_offer(offer)
+
+        self.assertIn("own listing", str(cm.exception))
+        self.offer_db.add.assert_not_called()
+
+    def test_create_offer_allows_reoffer_when_existing_accepted_is_integer_one(self):
+        """
+        Kills:
+        - existing.accepted is True  -> existing.accepted == True
+
+        Using accepted=1 means:
+        - original code: 1 is True -> False
+        - mutant:        1 == True -> True
+        """
+        offer = SimpleNamespace(listing_id=10, sender_id=20)
+        listing = SimpleNamespace(id=10, seller_id=5, is_sold=False)
+        existing = SimpleNamespace(is_pending=False, accepted=1)
+
+        self.listing_db.get_by_id.return_value = listing
+        self.offer_db.get_by_sender_and_listing.return_value = existing
+        self.offer_db.add.return_value = offer
+
+        result = self.manager.create_offer(offer)
+
+        self.assertIs(result, offer)
+        self.offer_db.add.assert_called_once_with(offer)
+
+    def test_create_offer_allows_reoffer_when_existing_accepted_is_integer_two(self):
+        """
+        Kills:
+        - existing.accepted is True  -> existing.accepted >= True
+
+        Using accepted=2 means:
+        - original code: 2 is True -> False
+        - mutant:        2 >= True -> True
+        """
+        offer = SimpleNamespace(listing_id=10, sender_id=20)
+        listing = SimpleNamespace(id=10, seller_id=5, is_sold=False)
+        existing = SimpleNamespace(is_pending=False, accepted=2)
+
+        self.listing_db.get_by_id.return_value = listing
+        self.offer_db.get_by_sender_and_listing.return_value = existing
+        self.offer_db.add.return_value = offer
+
+        result = self.manager.create_offer(offer)
+
+        self.assertIs(result, offer)
+        self.offer_db.add.assert_called_once_with(offer)
+
+    def test_set_offer_accepted_rejects_non_seller_when_actor_id_is_greater(self):
+        """
+        Kills:
+        - listing.seller_id != actor_id  -> listing.seller_id > actor_id
+
+        seller_id < actor_id should still be unauthorized in correct code.
+        """
+        offer = SimpleNamespace(id=50, listing_id=10, is_pending=True)
+        listing = SimpleNamespace(id=10, seller_id=5)
+
+        self.offer_db.get_by_id.return_value = offer
+        self.listing_db.get_by_id.return_value = listing
+
+        with self.assertRaises(UnapprovedBehaviorError) as cm:
+            self.manager.set_offer_accepted(offer_id=50, accepted=True, actor_id=6)
+
+        self.assertIn("Only the seller", str(cm.exception))
+        self.offer_db.set_accepted.assert_not_called()
+
+    def test_set_offer_accepted_allows_equal_but_not_identical_large_actor_id(self):
+        """
+        Kills:
+        - listing.seller_id != actor_id  -> listing.seller_id is not actor_id
+        """
+        seller_id = int("1000")
+        actor_id = int("1000")
+        self.assertEqual(seller_id, actor_id)
+        self.assertIsNot(seller_id, actor_id)
+
+        offer = SimpleNamespace(id=50, listing_id=10, is_pending=True)
+        listing = SimpleNamespace(id=10, seller_id=seller_id)
+
+        self.offer_db.get_by_id.return_value = offer
+        self.listing_db.get_by_id.return_value = listing
+        self.offer_db.get_pending_by_listing_id.return_value = []
+
+        self.manager.set_offer_accepted(offer_id=50, accepted=True, actor_id=actor_id)
+
+        self.offer_db.set_accepted.assert_called_once_with(50, True)
+
+    def test_set_offer_accepted_rejects_other_pending_offer_with_lower_id(self):
+        """
+        Kills:
+        - other.id != offer_id  -> other.id > offer_id
+
+        A lower-id pending offer should still be rejected.
+        """
+        offer_id = 100
+        accepted_offer = SimpleNamespace(id=offer_id, listing_id=10, is_pending=True)
+        other_pending = SimpleNamespace(id=99)
+
+        listing = SimpleNamespace(id=10, seller_id=7)
+
+        self.offer_db.get_by_id.return_value = accepted_offer
+        self.listing_db.get_by_id.return_value = listing
+        self.offer_db.get_pending_by_listing_id.return_value = [accepted_offer, other_pending]
+
+        self.manager.set_offer_accepted(offer_id=offer_id, accepted=True, actor_id=7)
+
+        self.assertEqual(
+            self.offer_db.set_accepted.call_args_list,
+            [
+                unittest.mock.call(offer_id, True),
+                unittest.mock.call(99, False),
+            ],
+        )
+
+    def test_set_offer_accepted_does_not_reject_same_offer_when_ids_are_equal_but_not_identical(self):
+        """
+        Kills:
+        - other.id != offer_id  -> other.id is not offer_id
+
+        same numeric value, different identity:
+        - correct code should NOT reject it
+        - mutant would incorrectly reject it
+        """
+        offer_id = int("1000")
+        same_value_different_object = int("1000")
+        self.assertEqual(offer_id, same_value_different_object)
+        self.assertIsNot(offer_id, same_value_different_object)
+
+        accepted_offer = SimpleNamespace(id=offer_id, listing_id=10, is_pending=True)
+        same_offer_again = SimpleNamespace(id=same_value_different_object)
+        listing = SimpleNamespace(id=10, seller_id=7)
+
+        self.offer_db.get_by_id.return_value = accepted_offer
+        self.listing_db.get_by_id.return_value = listing
+        self.offer_db.get_pending_by_listing_id.return_value = [same_offer_again]
+
+        self.manager.set_offer_accepted(offer_id=offer_id, accepted=True, actor_id=7)
+
+        self.assertEqual(
+            self.offer_db.set_accepted.call_args_list,
+            [unittest.mock.call(offer_id, True)],
+        )

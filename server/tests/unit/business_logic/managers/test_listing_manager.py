@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import unittest
 from unittest.mock import Mock, MagicMock
+from types import SimpleNamespace
 
 from src.business_logic.managers.listing.listing_manager import ListingManager
 from src.domain_models import Account, Listing, Comment
@@ -422,3 +423,173 @@ class TestListingManagerUnit(unittest.TestCase):
             self.mgr.mark_listing_sold(actor=actor, listing=listing, buyer=buyer)
 
         self.listing_db.set_sold.assert_not_called()
+     
+    
+    
+    def test_mark_listing_sold_allows_buyer_with_higher_id_than_seller(self):
+        """
+        Kills:
+        listing.seller_id == buyer_id  ->  listing.seller_id >= buyer_id
+        """
+        actor = SimpleNamespace(id=5)
+        buyer = SimpleNamespace(id=10)
+
+        listing = SimpleNamespace(
+            id=123,
+            seller_id=5,
+            is_sold=False,
+            mark_sold=MagicMock(),
+        )
+
+        self.mgr.mark_listing_sold(actor, listing, buyer)
+
+        listing.mark_sold.assert_called_once_with(10)
+        self.listing_db.set_sold.assert_called_once_with(
+            listing_id=123,
+            is_sold=True,
+            sold_to_id=10,
+        )
+
+    def test_mark_listing_sold_rejects_self_purchase_with_equal_but_distinct_large_ints(self):
+        """
+        Kills:
+        listing.seller_id == buyer_id  ->  listing.seller_id is buyer_id
+        """
+        seller_id = int("1000")
+        buyer_id = int("1000")
+
+        self.assertEqual(seller_id, buyer_id)
+        self.assertIsNot(seller_id, buyer_id)
+
+        actor = SimpleNamespace(id=seller_id)
+        buyer = SimpleNamespace(id=buyer_id)
+
+        listing = SimpleNamespace(
+            id=123,
+            seller_id=seller_id,
+            is_sold=False,
+            mark_sold=MagicMock(),
+        )
+
+        with self.assertRaises(UnapprovedBehaviorError) as cm:
+            self.mgr.mark_listing_sold(actor, listing, buyer)
+
+        self.assertIn("Seller cannot buy their own listing", str(cm.exception))
+        listing.mark_sold.assert_not_called()
+        self.listing_db.set_sold.assert_not_called()
+
+    def test_mark_listing_sold_rejects_non_seller_when_actor_id_is_lower_than_seller_id(self):
+        """
+        Kills:
+        listing.seller_id != actor_id  ->  listing.seller_id < actor_id
+        """
+        actor = SimpleNamespace(id=5)
+        buyer = SimpleNamespace(id=20)
+
+        listing = SimpleNamespace(
+            id=123,
+            seller_id=10,
+            is_sold=False,
+            mark_sold=MagicMock(),
+        )
+
+        with self.assertRaises(UnapprovedBehaviorError) as cm:
+            self.mgr.mark_listing_sold(actor, listing, buyer)
+
+        self.assertIn("Only the seller can mark this listing as sold", str(cm.exception))
+        listing.mark_sold.assert_not_called()
+        self.listing_db.set_sold.assert_not_called()
+
+    def test_mark_listing_sold_allows_seller_with_equal_but_distinct_large_int_actor_id(self):
+        """
+        Kills:
+        listing.seller_id != actor_id  ->  listing.seller_id is not actor_id
+        """
+        seller_id = int("1000")
+        actor_id = int("1000")
+
+        self.assertEqual(seller_id, actor_id)
+        self.assertIsNot(seller_id, actor_id)
+
+        actor = SimpleNamespace(id=actor_id)
+        buyer = SimpleNamespace(id=2000)
+
+        listing = SimpleNamespace(
+            id=123,
+            seller_id=seller_id,
+            is_sold=False,
+            mark_sold=MagicMock(),
+        )
+
+        self.mgr.mark_listing_sold(actor, listing, buyer)
+
+        listing.mark_sold.assert_called_once_with(2000)
+        self.listing_db.set_sold.assert_called_once_with(
+            listing_id=123,
+            is_sold=True,
+            sold_to_id=2000,
+        )
+    def test_mark_listing_sold_rejects_self_purchase(self):
+        seller_id = 7
+        buyer_id = 7
+
+        actor = SimpleNamespace(id=seller_id)
+        buyer = SimpleNamespace(id=buyer_id)
+
+        listing = SimpleNamespace(
+            id=123,
+            seller_id=seller_id,
+            is_sold=False,
+            mark_sold=MagicMock(),
+        )
+
+        with self.assertRaises(UnapprovedBehaviorError) as cm:
+            self.mgr.mark_listing_sold(actor, listing, buyer)
+        self.assertIn("Seller cannot buy their own listing", str(cm.exception))
+        listing.mark_sold.assert_not_called()
+
+
+    def test_rejects_self_purchase(self):
+        actor = SimpleNamespace(id=7)
+        buyer = SimpleNamespace(id=7)
+
+        listing = SimpleNamespace(id=1, seller_id=7, is_sold=False)
+
+        with self.assertRaises(UnapprovedBehaviorError):
+            self.mgr.mark_listing_sold(actor, listing, buyer)
+
+    def test_allows_different_buyer(self):
+        actor = SimpleNamespace(id=5)
+        buyer = SimpleNamespace(id=10)
+
+        listing = SimpleNamespace(
+            id=1,
+            seller_id=5,
+            is_sold=False,
+            mark_sold=MagicMock(),
+        )
+
+        self.mgr.mark_listing_sold(actor, listing, buyer)
+
+        listing.mark_sold.assert_called_once_with(10)
+    # def test_mark_listing_sold_raises_when_seller_tries_to_buy_own_listing(self):
+    #     actor_id = 7
+    #     buyer_id = 7
+
+    #     listing = SimpleNamespace(
+    #         id=123,
+    #         seller_id=7,
+    #         is_sold=False,
+    #     )
+
+    #     self.listing_db.get_by_id.return_value = listing
+
+    #     with self.assertRaises(UnapprovedBehaviorError) as cm:
+    #         self.mgr.mark_listing_sold(
+    #             listing_id=123,
+    #             actor_id=actor_id,
+    #             buyer_id=buyer_id,
+    #         )
+
+    #     self.assertIn("Seller cannot buy their own listing", str(cm.exception))
+    #     self.listing_db.set_sold.assert_not_called()

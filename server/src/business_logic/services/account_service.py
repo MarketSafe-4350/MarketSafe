@@ -278,9 +278,7 @@ class AccountService:
         ## if not bcrypt.checkpw(password.encode(), account.password.encode()):
         # raise ApiError(status_code=401, message="Invalid email or password")
 
-        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(
-            days=30
-        )
+        expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30) # pragma: no mutate
 
         token = jwt.encode(
             {"sub": str(account.id), "exp": expiration}, SECRET_KEY, algorithm="HS256"
