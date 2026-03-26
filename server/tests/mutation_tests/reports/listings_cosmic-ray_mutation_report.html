@@ -1,0 +1,823 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" /><title>Cosmic Ray Report</title></head><body><div class="container"><h1><p class="text-dark">Cosmic Ray Report</p></h1></div><div class="container"><div class="mb-1" id="summary_info___accordion"><div class="card"><a data-toggle="collapse" data-target="#summary_info___collapse_1" aria-expanded="true" aria-controls="summary_info___collapse_1" href="#"><div class="card-header" id="summary_info___heading_1"><button class="btn btn-outline-dark"><h4 class="m-0">Summary info</h4></button></div></a><div aria-labelledby="summary_info___heading_1" data-parent="#summary_info___accordion" class="collapse show" id="summary_info___collapse_1"><div class="card-body"><p>Date time: 25/03/2026 19:35:43</p><p>Total jobs: 92</p><p>Complete: 92 (100.00%)</p><p>Surviving mutants: 0 (0.00%)</p></div></div></div></div><div class="mb-1" id="job_list___accordion"><div class="card"><a data-toggle="collapse" data-target="#job_list___collapse_1" aria-expanded="false" aria-controls="job_list___collapse_1" href="#"><div class="card-header" id="job_list___heading_1"><button class="btn btn-outline-dark"><h4 class="m-0">Job list</h4></button></div></a><div aria-labelledby="job_list___heading_1" data-parent="#job_list___accordion" class="collapse" id="job_list___collapse_1"><div class="card-body"><div class="text-right mb-1"><div class="mx-1" id="job_item_expand_all"><a href="#" onclick="$('div.job_list___sub_multi_collapse').collapse('show');"><button class="btn btn-outline-dark"><span>Expand All</span></button></a></div><div class="mx-1" id="job_item_collapse_all"><a href="#" onclick="$('div.job_list___sub_multi_collapse').collapse('hide');"><button class="btn btn-outline-dark"><span>Collapse All</span></button></a></div></div><div class="mb-1" id="job_list___sub_accordion_1"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_1_1" aria-expanded="false" aria-controls="job_list___sub_collapse_1_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_1_1"><button class="btn btn-outline-success"><span class="job_id">1 : Job ID dcfcee072d104314b054d2fceade3008</span></button></div></a><div aria-labelledby="job_list___sub_heading_1_1" data-parent="#job_list___sub_accordion_1" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_1_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_Add, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility + None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_2"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_2_1" aria-expanded="false" aria-controls="job_list___sub_collapse_2_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_2_1"><button class="btn btn-outline-success"><span class="job_id">2 : Job ID 2b882bae621943c895ff20fbcc282644</span></button></div></a><div aria-labelledby="job_list___sub_heading_2_1" data-parent="#job_list___sub_accordion_2" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_2_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_Sub, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility - None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_3"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_3_1" aria-expanded="false" aria-controls="job_list___sub_collapse_3_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_3_1"><button class="btn btn-outline-success"><span class="job_id">3 : Job ID 1f5907b7312c4b97a21a1fc2e97374ea</span></button></div></a><div aria-labelledby="job_list___sub_heading_3_1" data-parent="#job_list___sub_accordion_3" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_3_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_Mul, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility * None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_4"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_4_1" aria-expanded="false" aria-controls="job_list___sub_collapse_4_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_4_1"><button class="btn btn-outline-success"><span class="job_id">4 : Job ID dff94fbf696643e2843a9fb0754cf249</span></button></div></a><div aria-labelledby="job_list___sub_heading_4_1" data-parent="#job_list___sub_accordion_4" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_4_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_Div, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility / None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_5"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_5_1" aria-expanded="false" aria-controls="job_list___sub_collapse_5_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_5_1"><button class="btn btn-outline-success"><span class="job_id">5 : Job ID 10f2f99a4eef43c59c04aa17af0f1575</span></button></div></a><div aria-labelledby="job_list___sub_heading_5_1" data-parent="#job_list___sub_accordion_5" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_5_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_FloorDiv, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility // None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_6"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_6_1" aria-expanded="false" aria-controls="job_list___sub_collapse_6_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_6_1"><button class="btn btn-outline-success"><span class="job_id">6 : Job ID ed5affc9e9104c908b74525203ff3cbe</span></button></div></a><div aria-labelledby="job_list___sub_heading_6_1" data-parent="#job_list___sub_accordion_6" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_6_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_Mod, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility % None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_7"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_7_1" aria-expanded="false" aria-controls="job_list___sub_collapse_7_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_7_1"><button class="btn btn-outline-success"><span class="job_id">7 : Job ID 79f02d7cdf5f4780b2c0aea0c2bb5c40</span></button></div></a><div aria-labelledby="job_list___sub_heading_7_1" data-parent="#job_list___sub_accordion_7" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_7_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_Pow, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility ** None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_8"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_8_1" aria-expanded="false" aria-controls="job_list___sub_collapse_8_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_8_1"><button class="btn btn-outline-success"><span class="job_id">8 : Job ID ef9f6aab6a054da988e2031f9c961aa7</span></button></div></a><div aria-labelledby="job_list___sub_heading_8_1" data-parent="#job_list___sub_accordion_8" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_8_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_RShift, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility &gt;&gt; None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_9"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_9_1" aria-expanded="false" aria-controls="job_list___sub_collapse_9_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_9_1"><button class="btn btn-outline-success"><span class="job_id">9 : Job ID 8d35dd9e1b75494b8db75daca9aee0e2</span></button></div></a><div aria-labelledby="job_list___sub_heading_9_1" data-parent="#job_list___sub_accordion_9" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_9_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_LShift, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility &lt;&lt; None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_10"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_10_1" aria-expanded="false" aria-controls="job_list___sub_collapse_10_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_10_1"><button class="btn btn-outline-success"><span class="job_id">10 : Job ID 9c1fd052edf14597a275fac811b26adb</span></button></div></a><div aria-labelledby="job_list___sub_heading_10_1" data-parent="#job_list___sub_accordion_10" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_10_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_BitAnd, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility &amp; None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_11"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_11_1" aria-expanded="false" aria-controls="job_list___sub_collapse_11_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_11_1"><button class="btn btn-outline-success"><span class="job_id">11 : Job ID 3c2bb86121464282b3651d73d44131f8</span></button></div></a><div aria-labelledby="job_list___sub_heading_11_1" data-parent="#job_list___sub_accordion_11" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_11_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=43" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (43, 43), end pos: (43, 44)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_BitOr_BitXor, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -40,7 +40,7 @@
+     @staticmethod
+     def from_domain(
+         listing: Listing,
+-        media_storage: MediaStorageUtility | None = None,
++        media_storage: MediaStorageUtility ^ None = None,
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ </pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_12"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_12_1" aria-expanded="false" aria-controls="job_list___sub_collapse_12_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_12_1"><button class="btn btn-outline-success"><span class="job_id">12 : Job ID 9a5a9dbb291e44ae9ae365559d5e62c7</span></button></div></a><div aria-labelledby="job_list___sub_heading_12_1" data-parent="#job_list___sub_accordion_12" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_12_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (47, 39), end pos: (47, 45)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_IsNot_Is, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -44,7 +44,7 @@
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ 
+-        if image_url and media_storage is not None:
++        if image_url and media_storage is None:
+             image_url = media_storage.public_url(image_url)
+ 
+         return ListingResponse(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_13"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_13_1" aria-expanded="false" aria-controls="job_list___sub_collapse_13_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_13_1"><button class="btn btn-outline-success"><span class="job_id">13 : Job ID 93a461f74d1f4e3589660224bb2c3333</span></button></div></a><div aria-labelledby="job_list___sub_heading_13_1" data-parent="#job_list___sub_accordion_13" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_13_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (47, 11), end pos: (47, 50)</button></a></pre><pre>operator: core/AddNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -44,7 +44,7 @@
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ 
+-        if image_url and media_storage is not None:
++        if not image_url and media_storage is not None:
+             image_url = media_storage.public_url(image_url)
+ 
+         return ListingResponse(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_14"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_14_1" aria-expanded="false" aria-controls="job_list___sub_collapse_14_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_14_1"><button class="btn btn-outline-success"><span class="job_id">14 : Job ID 3ba65343990040ccbe891821d0638a6b</span></button></div></a><div aria-labelledby="job_list___sub_heading_14_1" data-parent="#job_list___sub_accordion_14" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_14_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=58" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (58, 57), end pos: (58, 75)</button></a></pre><pre>operator: core/AddNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -55,6 +55,6 @@
+             price=listing.price,
+             image_url=image_url,
+             location=listing.location,
+-            created_at=listing.created_at.isoformat() if listing.created_at else None,
++            created_at=listing.created_at.isoformat() if not listing.created_at else None,
+             is_sold=listing.is_sold,
+         )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_15"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_15_1" aria-expanded="false" aria-controls="job_list___sub_collapse_15_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_15_1"><button class="btn btn-outline-success"><span class="job_id">15 : Job ID 25530a695a614cf88bd5f2df29b59b2d</span></button></div></a><div aria-labelledby="job_list___sub_heading_15_1" data-parent="#job_list___sub_accordion_15" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_15_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (47, 21), end pos: (47, 24)</button></a></pre><pre>operator: core/ReplaceAndWithOr, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -44,7 +44,7 @@
+     ) -&gt; "ListingResponse":
+         image_url = listing.image_url
+ 
+-        if image_url and media_storage is not None:
++        if image_url or media_storage is not None:
+             image_url = media_storage.public_url(image_url)
+ 
+         return ListingResponse(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_16"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_16_1" aria-expanded="false" aria-controls="job_list___sub_collapse_16_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_16_1"><button class="btn btn-outline-success"><span class="job_id">16 : Job ID 536fc550c4434093b121ab49b8426a5a</span></button></div></a><div aria-labelledby="job_list___sub_heading_16_1" data-parent="#job_list___sub_accordion_16" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_16_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=12" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (12, 33), end pos: (12, 34)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -9,7 +9,7 @@
+ 
+     title: str
+     description: str
+-    price: float = Field(..., gt=0, le=99_999_999.99)
++    price: float = Field(..., gt= 1, le=99_999_999.99)
+     image_url: str | None = None
+     location: str | None = Field(default=None, max_length=120)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_17"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_17_1" aria-expanded="false" aria-controls="job_list___sub_collapse_17_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_17_1"><button class="btn btn-outline-success"><span class="job_id">17 : Job ID e3aa31f7cf9b400da4ef6adda0404bf8</span></button></div></a><div aria-labelledby="job_list___sub_heading_17_1" data-parent="#job_list___sub_accordion_17" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_17_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=12" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (12, 33), end pos: (12, 34)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -9,7 +9,7 @@
+ 
+     title: str
+     description: str
+-    price: float = Field(..., gt=0, le=99_999_999.99)
++    price: float = Field(..., gt= -1, le=99_999_999.99)
+     image_url: str | None = None
+     location: str | None = Field(default=None, max_length=120)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_18"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_18_1" aria-expanded="false" aria-controls="job_list___sub_collapse_18_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_18_1"><button class="btn btn-outline-success"><span class="job_id">18 : Job ID aaaf149f673442eb95a7bfdb6659b5db</span></button></div></a><div aria-labelledby="job_list___sub_heading_18_1" data-parent="#job_list___sub_accordion_18" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_18_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=12" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (12, 39), end pos: (12, 52)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -9,7 +9,7 @@
+ 
+     title: str
+     description: str
+-    price: float = Field(..., gt=0, le=99_999_999.99)
++    price: float = Field(..., gt=0, le= 100000000.99)
+     image_url: str | None = None
+     location: str | None = Field(default=None, max_length=120)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_19"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_19_1" aria-expanded="false" aria-controls="job_list___sub_collapse_19_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_19_1"><button class="btn btn-outline-success"><span class="job_id">19 : Job ID 416a0578e87746068d8b9851abd5292e</span></button></div></a><div aria-labelledby="job_list___sub_heading_19_1" data-parent="#job_list___sub_accordion_19" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_19_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=12" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (12, 39), end pos: (12, 52)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -9,7 +9,7 @@
+ 
+     title: str
+     description: str
+-    price: float = Field(..., gt=0, le=99_999_999.99)
++    price: float = Field(..., gt=0, le= 99999998.99)
+     image_url: str | None = None
+     location: str | None = Field(default=None, max_length=120)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_20"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_20_1" aria-expanded="false" aria-controls="job_list___sub_collapse_20_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_20_1"><button class="btn btn-outline-success"><span class="job_id">20 : Job ID 900b3112d86c4d46bfb599ab13159b15</span></button></div></a><div aria-labelledby="job_list___sub_heading_20_1" data-parent="#job_list___sub_accordion_20" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_20_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=14" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (14, 58), end pos: (14, 61)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -11,7 +11,7 @@
+     description: str
+     price: float = Field(..., gt=0, le=99_999_999.99)
+     image_url: str | None = None
+-    location: str | None = Field(default=None, max_length=120)
++    location: str | None = Field(default=None, max_length= 121)
+ 
+     def to_domain(self, seller_id: int) -&gt; Listing:
+         return Listing(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_21"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_21_1" aria-expanded="false" aria-controls="job_list___sub_collapse_21_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_21_1"><button class="btn btn-outline-success"><span class="job_id">21 : Job ID f7d7cb01f84948c198a591b25b06ea48</span></button></div></a><div aria-labelledby="job_list___sub_heading_21_1" data-parent="#job_list___sub_accordion_21" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_21_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=14" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (14, 58), end pos: (14, 61)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 5</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -11,7 +11,7 @@
+     description: str
+     price: float = Field(..., gt=0, le=99_999_999.99)
+     image_url: str | None = None
+-    location: str | None = Field(default=None, max_length=120)
++    location: str | None = Field(default=None, max_length= 119)
+ 
+     def to_domain(self, seller_id: int) -&gt; Listing:
+         return Listing(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_22"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_22_1" aria-expanded="false" aria-controls="job_list___sub_collapse_22_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_22_1"><button class="btn btn-outline-success"><span class="job_id">22 : Job ID 06bf67cab7bf41d58492745d1e9e6504</span></button></div></a><div aria-labelledby="job_list___sub_heading_22_1" data-parent="#job_list___sub_accordion_22" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_22_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/api/converter/listing_converter.py&amp;line=40" class="text-secondary"><button class="btn btn-outline-dark">src/api/converter/listing_converter.py, start pos: (40, 4), end pos: (41, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/api/converter/listing_converter.py
++++ bsrc/api/converter/listing_converter.py
+@@ -36,8 +36,6 @@
+     location: str | None = None
+     created_at: str | None = None
+     is_sold: bool
+-
+-    @staticmethod
+     def from_domain(
+         listing: Listing,
+         media_storage: MediaStorageUtility | None = None,</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_23"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_23_1" aria-expanded="false" aria-controls="job_list___sub_collapse_23_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_23_1"><button class="btn btn-outline-success"><span class="job_id">23 : Job ID bae00a7215ef4da59c08b036a1f5630a</span></button></div></a><div aria-labelledby="job_list___sub_heading_23_1" data-parent="#job_list___sub_accordion_23" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_23_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=238" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (238, 29), end pos: (238, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_NotEq, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_24"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_24_1" aria-expanded="false" aria-controls="job_list___sub_collapse_24_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_24_1"><button class="btn btn-outline-success"><span class="job_id">24 : Job ID ecade1b19f74412d9c49d233d495238e</span></button></div></a><div aria-labelledby="job_list___sub_heading_24_1" data-parent="#job_list___sub_accordion_24" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_24_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=238" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (238, 29), end pos: (238, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_Lt, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_25"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_25_1" aria-expanded="false" aria-controls="job_list___sub_collapse_25_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_25_1"><button class="btn btn-outline-success"><span class="job_id">25 : Job ID 42863519c39f42808061ae1c2a77f7b2</span></button></div></a><div aria-labelledby="job_list___sub_heading_25_1" data-parent="#job_list___sub_accordion_25" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_25_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=238" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (238, 29), end pos: (238, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_LtE, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_26"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_26_1" aria-expanded="false" aria-controls="job_list___sub_collapse_26_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_26_1"><button class="btn btn-outline-success"><span class="job_id">26 : Job ID ebcfae926f344f72a11d3a7bce0dbcd1</span></button></div></a><div aria-labelledby="job_list___sub_heading_26_1" data-parent="#job_list___sub_accordion_26" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_26_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=238" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (238, 29), end pos: (238, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_Gt, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_27"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_27_1" aria-expanded="false" aria-controls="job_list___sub_collapse_27_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_27_1"><button class="btn btn-outline-success"><span class="job_id">27 : Job ID 823498ec0206427da357be240db6bd5e</span></button></div></a><div aria-labelledby="job_list___sub_heading_27_1" data-parent="#job_list___sub_accordion_27" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_27_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=238" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (238, 29), end pos: (238, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_GtE, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_28"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_28_1" aria-expanded="false" aria-controls="job_list___sub_collapse_28_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_28_1"><button class="btn btn-outline-success"><span class="job_id">28 : Job ID 22e47972a7ce451ebd318869928132af</span></button></div></a><div aria-labelledby="job_list___sub_heading_28_1" data-parent="#job_list___sub_accordion_28" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_28_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=238" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (238, 29), end pos: (238, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_Is, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_29"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_29_1" aria-expanded="false" aria-controls="job_list___sub_collapse_29_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_29_1"><button class="btn btn-outline-success"><span class="job_id">29 : Job ID 6e759b64e29c4aafb9a2415cbb751f30</span></button></div></a><div aria-labelledby="job_list___sub_heading_29_1" data-parent="#job_list___sub_accordion_29" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_29_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=238" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (238, 29), end pos: (238, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_IsNot, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_30"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_30_1" aria-expanded="false" aria-controls="job_list___sub_collapse_30_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_30_1"><button class="btn btn-outline-success"><span class="job_id">30 : Job ID abb4348d328b42188ea88e04a1f7c939</span></button></div></a><div aria-labelledby="job_list___sub_heading_30_1" data-parent="#job_list___sub_accordion_30" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_30_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=228" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (228, 29), end pos: (228, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Eq, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -225,7 +225,7 @@
+                 details={"listing_id": None},
+             )
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id == actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller can mark this listing as sold.",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_31"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_31_1" aria-expanded="false" aria-controls="job_list___sub_collapse_31_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_31_1"><button class="btn btn-outline-success"><span class="job_id">31 : Job ID bfed025f8bf548f496e2807b91e7d1b1</span></button></div></a><div aria-labelledby="job_list___sub_heading_31_1" data-parent="#job_list___sub_accordion_31" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_31_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=228" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (228, 29), end pos: (228, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Lt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -225,7 +225,7 @@
+                 details={"listing_id": None},
+             )
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id &lt; actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller can mark this listing as sold.",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_32"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_32_1" aria-expanded="false" aria-controls="job_list___sub_collapse_32_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_32_1"><button class="btn btn-outline-success"><span class="job_id">32 : Job ID 2e88d8b6bb4342aaa3bd91135adccd9c</span></button></div></a><div aria-labelledby="job_list___sub_heading_32_1" data-parent="#job_list___sub_accordion_32" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_32_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=228" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (228, 29), end pos: (228, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_LtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -225,7 +225,7 @@
+                 details={"listing_id": None},
+             )
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id &lt;= actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller can mark this listing as sold.",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_33"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_33_1" aria-expanded="false" aria-controls="job_list___sub_collapse_33_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_33_1"><button class="btn btn-outline-success"><span class="job_id">33 : Job ID ddde66aeb685434381ce3c55d79688f5</span></button></div></a><div aria-labelledby="job_list___sub_heading_33_1" data-parent="#job_list___sub_accordion_33" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_33_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=228" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (228, 29), end pos: (228, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Gt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -225,7 +225,7 @@
+                 details={"listing_id": None},
+             )
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id &gt; actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller can mark this listing as sold.",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_34"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_34_1" aria-expanded="false" aria-controls="job_list___sub_collapse_34_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_34_1"><button class="btn btn-outline-success"><span class="job_id">34 : Job ID 0b491430b9e94af4a3eb88180f3600de</span></button></div></a><div aria-labelledby="job_list___sub_heading_34_1" data-parent="#job_list___sub_accordion_34" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_34_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=228" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (228, 29), end pos: (228, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_GtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -225,7 +225,7 @@
+                 details={"listing_id": None},
+             )
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id &gt;= actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller can mark this listing as sold.",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_35"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_35_1" aria-expanded="false" aria-controls="job_list___sub_collapse_35_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_35_1"><button class="btn btn-outline-success"><span class="job_id">35 : Job ID 3874c17ae23a4f08b52b3670849fdb29</span></button></div></a><div aria-labelledby="job_list___sub_heading_35_1" data-parent="#job_list___sub_accordion_35" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_35_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=228" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (228, 29), end pos: (228, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Is, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -225,7 +225,7 @@
+                 details={"listing_id": None},
+             )
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id is actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller can mark this listing as sold.",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_36"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_36_1" aria-expanded="false" aria-controls="job_list___sub_collapse_36_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_36_1"><button class="btn btn-outline-success"><span class="job_id">36 : Job ID fb752401ae0a413c8467efa9df64da8d</span></button></div></a><div aria-labelledby="job_list___sub_heading_36_1" data-parent="#job_list___sub_accordion_36" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_36_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=228" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (228, 29), end pos: (228, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_IsNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -225,7 +225,7 @@
+                 details={"listing_id": None},
+             )
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id is not actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller can mark this listing as sold.",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_37"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_37_1" aria-expanded="false" aria-controls="job_list___sub_collapse_37_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_37_1"><button class="btn btn-outline-success"><span class="job_id">37 : Job ID 84c57a4d3fa246a7a10a12ff30b0820a</span></button></div></a><div aria-labelledby="job_list___sub_heading_37_1" data-parent="#job_list___sub_accordion_37" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_37_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=128" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (128, 19), end pos: (128, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -125,7 +125,7 @@
+         listing_id = Validation.require_int(listing_id, "listing_id")
+ 
+         listing = self._listing_db.get_by_id(listing_id)
+-        if listing is None:
++        if listing is not None:
+             return None
+ 
+         comments = self._comment_db.get_by_listing_id(listing_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_38"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_38_1" aria-expanded="false" aria-controls="job_list___sub_collapse_38_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_38_1"><button class="btn btn-outline-success"><span class="job_id">38 : Job ID f37ecf606655485c9ecf53ce9d27ccbd</span></button></div></a><div aria-labelledby="job_list___sub_heading_38_1" data-parent="#job_list___sub_accordion_38" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_38_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=146" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (146, 27), end pos: (146, 29)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -143,7 +143,7 @@
+         """
+         Validation.require_not_none(listing, "listing")
+ 
+-        if self._rating_db is None:
++        if self._rating_db is not None:
+             raise ConfigurationError(
+                 message="RatingDB dependency is required for fill_listing_rating_value().",
+                 details={"missing_dependency": "BaseRatingDB"},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_39"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_39_1" aria-expanded="false" aria-controls="job_list___sub_collapse_39_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_39_1"><button class="btn btn-outline-success"><span class="job_id">39 : Job ID eeef55765a2c4024987ed9fe43b896aa</span></button></div></a><div aria-labelledby="job_list___sub_heading_39_1" data-parent="#job_list___sub_accordion_39" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_39_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=152" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (152, 22), end pos: (152, 24)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -149,7 +149,7 @@
+                 details={"missing_dependency": "BaseRatingDB"},
+             )
+ 
+-        if listing.id is None:
++        if listing.id is not None:
+             return listing
+ 
+         listing.rating = self._rating_db.get_by_listing_id(listing.id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_40"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_40_1" aria-expanded="false" aria-controls="job_list___sub_collapse_40_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_40_1"><button class="btn btn-outline-success"><span class="job_id">40 : Job ID b7a58c804c75483783d803354941ee7b</span></button></div></a><div aria-labelledby="job_list___sub_heading_40_1" data-parent="#job_list___sub_accordion_40" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_40_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=168" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (168, 27), end pos: (168, 29)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -165,7 +165,7 @@
+         """
+         listing_id = Validation.require_int(listing_id, "listing_id")
+ 
+-        if self._rating_db is None:
++        if self._rating_db is not None:
+             raise ConfigurationError(
+                 message="RatingDB dependency is required for get_listing_with_rating_by_id().",
+                 details={"missing_dependency": "BaseRatingDB"},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_41"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_41_1" aria-expanded="false" aria-controls="job_list___sub_collapse_41_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_41_1"><button class="btn btn-outline-success"><span class="job_id">41 : Job ID 328ab6a2211a4631a8a2fb1670a85104</span></button></div></a><div aria-labelledby="job_list___sub_heading_41_1" data-parent="#job_list___sub_accordion_41" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_41_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=175" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (175, 19), end pos: (175, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -172,7 +172,7 @@
+             )
+ 
+         listing = self._listing_db.get_by_id(listing_id)
+-        if listing is None:
++        if listing is not None:
+             return None
+ 
+         return self.fill_listing_rating_value(listing)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_42"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_42_1" aria-expanded="false" aria-controls="job_list___sub_collapse_42_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_42_1"><button class="btn btn-outline-success"><span class="job_id">42 : Job ID 2fe1fee9ba1e4f2e9793cfa98bb96eea</span></button></div></a><div aria-labelledby="job_list___sub_heading_42_1" data-parent="#job_list___sub_accordion_42" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_42_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=190" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (190, 27), end pos: (190, 29)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 5</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -187,7 +187,7 @@
+         """
+         listing_id = Validation.require_int(listing_id, "listing_id")
+ 
+-        if self._rating_db is None:
++        if self._rating_db is not None:
+             raise ConfigurationError(
+                 message="RatingDB dependency is required for get_listing_with_comments_and_rating().",
+                 details={"missing_dependency": "BaseRatingDB"},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_43"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_43_1" aria-expanded="false" aria-controls="job_list___sub_collapse_43_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_43_1"><button class="btn btn-outline-success"><span class="job_id">43 : Job ID 5ff56c5f23dc43b5b5dfb6e2741bf10d</span></button></div></a><div aria-labelledby="job_list___sub_heading_43_1" data-parent="#job_list___sub_accordion_43" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_43_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=197" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (197, 19), end pos: (197, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 6</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -194,7 +194,7 @@
+             )
+ 
+         listing = self._listing_db.get_by_id(listing_id)
+-        if listing is None:
++        if listing is not None:
+             return None
+ 
+         listing.comments = self._comment_db.get_by_listing_id(listing_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_44"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_44_1" aria-expanded="false" aria-controls="job_list___sub_collapse_44_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_44_1"><button class="btn btn-outline-success"><span class="job_id">44 : Job ID 01dbac1e6c854775bdcbbd0c3676f1e8</span></button></div></a><div aria-labelledby="job_list___sub_heading_44_1" data-parent="#job_list___sub_accordion_44" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_44_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=222" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (222, 22), end pos: (222, 24)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 7</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -219,7 +219,7 @@
+         actor_id = Validation.require_int(actor.id, "actor.id")
+         buyer_id = Validation.require_int(buyer.id, "buyer.id")
+ 
+-        if listing.id is None:
++        if listing.id is not None:
+             raise ListingNotFoundError(
+                 message="Listing must be persisted before being marked as sold.",
+                 details={"listing_id": None},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_45"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_45_1" aria-expanded="false" aria-controls="job_list___sub_collapse_45_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_45_1"><button class="btn btn-outline-success"><span class="job_id">45 : Job ID d2edc77fb1d04689aa0384b2db1c9ec9</span></button></div></a><div aria-labelledby="job_list___sub_heading_45_1" data-parent="#job_list___sub_accordion_45" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_45_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=286" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (286, 19), end pos: (286, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 8</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -283,7 +283,7 @@
+         - If listing is not persisted -&gt; return listing unchanged
+         - If listing has no rating -&gt; keep listing.rating as None
+         """
+-        if listing is None:
++        if listing is not None:
+             return None
+ 
+         if self._rating_db is None:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_46"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_46_1" aria-expanded="false" aria-controls="job_list___sub_collapse_46_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_46_1"><button class="btn btn-outline-success"><span class="job_id">46 : Job ID 3c826469af1042e7ba324fae7d9eaee6</span></button></div></a><div aria-labelledby="job_list___sub_heading_46_1" data-parent="#job_list___sub_accordion_46" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_46_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=289" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (289, 27), end pos: (289, 29)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 9</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -286,7 +286,7 @@
+         if listing is None:
+             return None
+ 
+-        if self._rating_db is None:
++        if self._rating_db is not None:
+             return listing
+ 
+         if listing.id is None:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_47"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_47_1" aria-expanded="false" aria-controls="job_list___sub_collapse_47_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_47_1"><button class="btn btn-outline-success"><span class="job_id">47 : Job ID 5c950b4f935b416f8bd52728369b48fa</span></button></div></a><div aria-labelledby="job_list___sub_heading_47_1" data-parent="#job_list___sub_accordion_47" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_47_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=292" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (292, 22), end pos: (292, 24)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 10</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -289,7 +289,7 @@
+         if self._rating_db is None:
+             return listing
+ 
+-        if listing.id is None:
++        if listing.id is not None:
+             return listing
+ 
+         listing.rating = self._rating_db.get_by_listing_id(listing.id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_48"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_48_1" aria-expanded="false" aria-controls="job_list___sub_collapse_48_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_48_1"><button class="btn btn-outline-success"><span class="job_id">48 : Job ID bc676fdb2d964150ac93396bad28dbd4</span></button></div></a><div aria-labelledby="job_list___sub_heading_48_1" data-parent="#job_list___sub_accordion_48" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_48_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=299" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (299, 27), end pos: (299, 29)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 11</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -296,7 +296,7 @@
+         return listing
+ 
+     def _populate_ratings_if_available(self, listings: List[Listing]) -&gt; List[Listing]:
+-        if self._rating_db is None:
++        if self._rating_db is not None:
+             return listings
+ 
+         for listing in listings:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_49"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_49_1" aria-expanded="false" aria-controls="job_list___sub_collapse_49_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_49_1"><button class="btn btn-outline-success"><span class="job_id">49 : Job ID 6b13e97e7a2847d396605f87e0ee9283</span></button></div></a><div aria-labelledby="job_list___sub_heading_49_1" data-parent="#job_list___sub_accordion_49" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_49_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=128" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (128, 11), end pos: (128, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -125,7 +125,7 @@
+         listing_id = Validation.require_int(listing_id, "listing_id")
+ 
+         listing = self._listing_db.get_by_id(listing_id)
+-        if listing is None:
++        if not listing is None:
+             return None
+ 
+         comments = self._comment_db.get_by_listing_id(listing_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_50"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_50_1" aria-expanded="false" aria-controls="job_list___sub_collapse_50_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_50_1"><button class="btn btn-outline-success"><span class="job_id">50 : Job ID 4640726962d945bcbe60048fff462ebc</span></button></div></a><div aria-labelledby="job_list___sub_heading_50_1" data-parent="#job_list___sub_accordion_50" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_50_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=146" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (146, 11), end pos: (146, 34)</button></a></pre><pre>operator: core/AddNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -143,7 +143,7 @@
+         """
+         Validation.require_not_none(listing, "listing")
+ 
+-        if self._rating_db is None:
++        if not self._rating_db is None:
+             raise ConfigurationError(
+                 message="RatingDB dependency is required for fill_listing_rating_value().",
+                 details={"missing_dependency": "BaseRatingDB"},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_51"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_51_1" aria-expanded="false" aria-controls="job_list___sub_collapse_51_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_51_1"><button class="btn btn-outline-success"><span class="job_id">51 : Job ID b7ad3ee67b89456f983d49a088d1ab93</span></button></div></a><div aria-labelledby="job_list___sub_heading_51_1" data-parent="#job_list___sub_accordion_51" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_51_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=152" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (152, 11), end pos: (152, 29)</button></a></pre><pre>operator: core/AddNot, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -149,7 +149,7 @@
+                 details={"missing_dependency": "BaseRatingDB"},
+             )
+ 
+-        if listing.id is None:
++        if not listing.id is None:
+             return listing
+ 
+         listing.rating = self._rating_db.get_by_listing_id(listing.id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_52"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_52_1" aria-expanded="false" aria-controls="job_list___sub_collapse_52_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_52_1"><button class="btn btn-outline-success"><span class="job_id">52 : Job ID 1c1cb24a54db4574a8e65035fca9e7ae</span></button></div></a><div aria-labelledby="job_list___sub_heading_52_1" data-parent="#job_list___sub_accordion_52" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_52_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=168" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (168, 11), end pos: (168, 34)</button></a></pre><pre>operator: core/AddNot, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -165,7 +165,7 @@
+         """
+         listing_id = Validation.require_int(listing_id, "listing_id")
+ 
+-        if self._rating_db is None:
++        if not self._rating_db is None:
+             raise ConfigurationError(
+                 message="RatingDB dependency is required for get_listing_with_rating_by_id().",
+                 details={"missing_dependency": "BaseRatingDB"},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_53"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_53_1" aria-expanded="false" aria-controls="job_list___sub_collapse_53_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_53_1"><button class="btn btn-outline-success"><span class="job_id">53 : Job ID bbccab4caed24b3a901a0ce6c3b6c834</span></button></div></a><div aria-labelledby="job_list___sub_heading_53_1" data-parent="#job_list___sub_accordion_53" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_53_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=175" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (175, 11), end pos: (175, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -172,7 +172,7 @@
+             )
+ 
+         listing = self._listing_db.get_by_id(listing_id)
+-        if listing is None:
++        if not listing is None:
+             return None
+ 
+         return self.fill_listing_rating_value(listing)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_54"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_54_1" aria-expanded="false" aria-controls="job_list___sub_collapse_54_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_54_1"><button class="btn btn-outline-success"><span class="job_id">54 : Job ID e06fe255c3124a56b26111633ba7ddbe</span></button></div></a><div aria-labelledby="job_list___sub_heading_54_1" data-parent="#job_list___sub_accordion_54" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_54_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=190" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (190, 11), end pos: (190, 34)</button></a></pre><pre>operator: core/AddNot, occurrence: 5</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -187,7 +187,7 @@
+         """
+         listing_id = Validation.require_int(listing_id, "listing_id")
+ 
+-        if self._rating_db is None:
++        if not self._rating_db is None:
+             raise ConfigurationError(
+                 message="RatingDB dependency is required for get_listing_with_comments_and_rating().",
+                 details={"missing_dependency": "BaseRatingDB"},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_55"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_55_1" aria-expanded="false" aria-controls="job_list___sub_collapse_55_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_55_1"><button class="btn btn-outline-success"><span class="job_id">55 : Job ID aa1770aaf7314b1abd0c7f36b5bb4120</span></button></div></a><div aria-labelledby="job_list___sub_heading_55_1" data-parent="#job_list___sub_accordion_55" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_55_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=197" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (197, 11), end pos: (197, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 6</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -194,7 +194,7 @@
+             )
+ 
+         listing = self._listing_db.get_by_id(listing_id)
+-        if listing is None:
++        if not listing is None:
+             return None
+ 
+         listing.comments = self._comment_db.get_by_listing_id(listing_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_56"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_56_1" aria-expanded="false" aria-controls="job_list___sub_collapse_56_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_56_1"><button class="btn btn-outline-success"><span class="job_id">56 : Job ID 68647f28671b4f59adac9c01d9d3cf13</span></button></div></a><div aria-labelledby="job_list___sub_heading_56_1" data-parent="#job_list___sub_accordion_56" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_56_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=222" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (222, 11), end pos: (222, 29)</button></a></pre><pre>operator: core/AddNot, occurrence: 7</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -219,7 +219,7 @@
+         actor_id = Validation.require_int(actor.id, "actor.id")
+         buyer_id = Validation.require_int(buyer.id, "buyer.id")
+ 
+-        if listing.id is None:
++        if not listing.id is None:
+             raise ListingNotFoundError(
+                 message="Listing must be persisted before being marked as sold.",
+                 details={"listing_id": None},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_57"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_57_1" aria-expanded="false" aria-controls="job_list___sub_collapse_57_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_57_1"><button class="btn btn-outline-success"><span class="job_id">57 : Job ID eea450d0c1784f17b5aee0ce6486eec5</span></button></div></a><div aria-labelledby="job_list___sub_heading_57_1" data-parent="#job_list___sub_accordion_57" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_57_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=228" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (228, 11), end pos: (228, 40)</button></a></pre><pre>operator: core/AddNot, occurrence: 8</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -225,7 +225,7 @@
+                 details={"listing_id": None},
+             )
+ 
+-        if listing.seller_id != actor_id:
++        if not listing.seller_id != actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller can mark this listing as sold.",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_58"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_58_1" aria-expanded="false" aria-controls="job_list___sub_collapse_58_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_58_1"><button class="btn btn-outline-success"><span class="job_id">58 : Job ID 4d0434bb18744db0b8d8883c5eee9784</span></button></div></a><div aria-labelledby="job_list___sub_heading_58_1" data-parent="#job_list___sub_accordion_58" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_58_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=238" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (238, 11), end pos: (238, 40)</button></a></pre><pre>operator: core/AddNot, occurrence: 9</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_59"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_59_1" aria-expanded="false" aria-controls="job_list___sub_collapse_59_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_59_1"><button class="btn btn-outline-success"><span class="job_id">59 : Job ID 0691f5b508634724b7845234a2842baa</span></button></div></a><div aria-labelledby="job_list___sub_heading_59_1" data-parent="#job_list___sub_accordion_59" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_59_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=244" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (244, 11), end pos: (244, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 10</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -241,7 +241,7 @@
+                 details={"listing_id": listing.id},
+             )
+ 
+-        if listing.is_sold:
++        if not listing.is_sold:
+             raise UnapprovedBehaviorError(
+                 message="Listing is already sold.",
+                 details={"listing_id": listing.id},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_60"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_60_1" aria-expanded="false" aria-controls="job_list___sub_collapse_60_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_60_1"><button class="btn btn-outline-success"><span class="job_id">60 : Job ID c9fa89dd63cf4d5e8fe82fff4e2edf4c</span></button></div></a><div aria-labelledby="job_list___sub_heading_60_1" data-parent="#job_list___sub_accordion_60" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_60_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=286" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (286, 11), end pos: (286, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 11</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -283,7 +283,7 @@
+         - If listing is not persisted -&gt; return listing unchanged
+         - If listing has no rating -&gt; keep listing.rating as None
+         """
+-        if listing is None:
++        if not listing is None:
+             return None
+ 
+         if self._rating_db is None:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_61"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_61_1" aria-expanded="false" aria-controls="job_list___sub_collapse_61_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_61_1"><button class="btn btn-outline-success"><span class="job_id">61 : Job ID 83ce411478214ab1bd488dac4118220c</span></button></div></a><div aria-labelledby="job_list___sub_heading_61_1" data-parent="#job_list___sub_accordion_61" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_61_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=289" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (289, 11), end pos: (289, 34)</button></a></pre><pre>operator: core/AddNot, occurrence: 12</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -286,7 +286,7 @@
+         if listing is None:
+             return None
+ 
+-        if self._rating_db is None:
++        if not self._rating_db is None:
+             return listing
+ 
+         if listing.id is None:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_62"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_62_1" aria-expanded="false" aria-controls="job_list___sub_collapse_62_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_62_1"><button class="btn btn-outline-success"><span class="job_id">62 : Job ID 7758d07797d94d4194f6c53174d3a50d</span></button></div></a><div aria-labelledby="job_list___sub_heading_62_1" data-parent="#job_list___sub_accordion_62" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_62_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=292" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (292, 11), end pos: (292, 29)</button></a></pre><pre>operator: core/AddNot, occurrence: 13</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -289,7 +289,7 @@
+         if self._rating_db is None:
+             return listing
+ 
+-        if listing.id is None:
++        if not listing.id is None:
+             return listing
+ 
+         listing.rating = self._rating_db.get_by_listing_id(listing.id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_63"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_63_1" aria-expanded="false" aria-controls="job_list___sub_collapse_63_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_63_1"><button class="btn btn-outline-success"><span class="job_id">63 : Job ID 4d3de6470f3b4aa38137896550c61ccb</span></button></div></a><div aria-labelledby="job_list___sub_heading_63_1" data-parent="#job_list___sub_accordion_63" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_63_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=299" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (299, 11), end pos: (299, 34)</button></a></pre><pre>operator: core/AddNot, occurrence: 14</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -296,7 +296,7 @@
+         return listing
+ 
+     def _populate_ratings_if_available(self, listings: List[Listing]) -&gt; List[Listing]:
+-        if self._rating_db is None:
++        if not self._rating_db is None:
+             return listings
+ 
+         for listing in listings:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_64"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_64_1" aria-expanded="false" aria-controls="job_list___sub_collapse_64_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_64_1"><button class="btn btn-outline-success"><span class="job_id">64 : Job ID 541130c8b370441296b1fbc7d67f6ddb</span></button></div></a><div aria-labelledby="job_list___sub_heading_64_1" data-parent="#job_list___sub_accordion_64" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_64_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=254" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (254, 20), end pos: (254, 24)</button></a></pre><pre>operator: core/ReplaceTrueWithFalse, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -251,7 +251,7 @@
+ 
+         self._listing_db.set_sold(
+             listing_id=listing.id,
+-            is_sold=True,
++            is_sold=False,
+             sold_to_id=buyer_id,
+         )
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_65"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_65_1" aria-expanded="false" aria-controls="job_list___sub_collapse_65_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_65_1"><button class="btn btn-outline-success"><span class="job_id">65 : Job ID cde94ce1b9c74763bddf4606bb4ed2ad</span></button></div></a><div aria-labelledby="job_list___sub_heading_65_1" data-parent="#job_list___sub_accordion_65" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_65_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=68" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (68, 46), end pos: (68, 48)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -65,7 +65,7 @@
+         return self._populate_ratings_if_available(listings)
+ 
+     @override # pragma: no mutate
+-    def list_recent_unsold(self, limit: int = 50, offset: int = 0) -&gt; List[Listing]:
++    def list_recent_unsold(self, limit: int = 51, offset: int = 0) -&gt; List[Listing]:
+         limit = Validation.require_int(limit, "limit")
+         offset = Validation.require_int(offset, "offset")
+         listings = self._listing_db.get_recent_unsold(limit=limit, offset=offset)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_66"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_66_1" aria-expanded="false" aria-controls="job_list___sub_collapse_66_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_66_1"><button class="btn btn-outline-success"><span class="job_id">66 : Job ID 6401e05ea2cb46a88e346cc834343f31</span></button></div></a><div aria-labelledby="job_list___sub_heading_66_1" data-parent="#job_list___sub_accordion_66" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_66_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=68" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (68, 46), end pos: (68, 48)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -65,7 +65,7 @@
+         return self._populate_ratings_if_available(listings)
+ 
+     @override # pragma: no mutate
+-    def list_recent_unsold(self, limit: int = 50, offset: int = 0) -&gt; List[Listing]:
++    def list_recent_unsold(self, limit: int = 49, offset: int = 0) -&gt; List[Listing]:
+         limit = Validation.require_int(limit, "limit")
+         offset = Validation.require_int(offset, "offset")
+         listings = self._listing_db.get_recent_unsold(limit=limit, offset=offset)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_67"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_67_1" aria-expanded="false" aria-controls="job_list___sub_collapse_67_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_67_1"><button class="btn btn-outline-success"><span class="job_id">67 : Job ID 04f285ecbe9a4b9b8f5eba77ffa11c7f</span></button></div></a><div aria-labelledby="job_list___sub_heading_67_1" data-parent="#job_list___sub_accordion_67" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_67_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=68" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (68, 64), end pos: (68, 65)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -65,7 +65,7 @@
+         return self._populate_ratings_if_available(listings)
+ 
+     @override # pragma: no mutate
+-    def list_recent_unsold(self, limit: int = 50, offset: int = 0) -&gt; List[Listing]:
++    def list_recent_unsold(self, limit: int = 50, offset: int = 1) -&gt; List[Listing]:
+         limit = Validation.require_int(limit, "limit")
+         offset = Validation.require_int(offset, "offset")
+         listings = self._listing_db.get_recent_unsold(limit=limit, offset=offset)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_68"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_68_1" aria-expanded="false" aria-controls="job_list___sub_collapse_68_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_68_1"><button class="btn btn-outline-success"><span class="job_id">68 : Job ID f9367c27e6be474e827c8c70e633d5e0</span></button></div></a><div aria-labelledby="job_list___sub_heading_68_1" data-parent="#job_list___sub_accordion_68" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_68_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=68" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (68, 64), end pos: (68, 65)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -65,7 +65,7 @@
+         return self._populate_ratings_if_available(listings)
+ 
+     @override # pragma: no mutate
+-    def list_recent_unsold(self, limit: int = 50, offset: int = 0) -&gt; List[Listing]:
++    def list_recent_unsold(self, limit: int = 50, offset: int = -1) -&gt; List[Listing]:
+         limit = Validation.require_int(limit, "limit")
+         offset = Validation.require_int(offset, "offset")
+         listings = self._listing_db.get_recent_unsold(limit=limit, offset=offset)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_69"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_69_1" aria-expanded="false" aria-controls="job_list___sub_collapse_69_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_69_1"><button class="btn btn-outline-success"><span class="job_id">69 : Job ID e6c21b2ec40f4b418783155cd164df64</span></button></div></a><div aria-labelledby="job_list___sub_heading_69_1" data-parent="#job_list___sub_accordion_69" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_69_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=94" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (94, 70), end pos: (94, 72)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -91,7 +91,7 @@
+         return self._populate_ratings_if_available(listings)
+ 
+     @override # pragma: no mutate
+-    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 50, offset: int = 0) -&gt; List[Listing]:
++    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 51, offset: int = 0) -&gt; List[Listing]:
+         keyword = Validation.require_str(keyword, "keyword")
+         limit = Validation.require_int(limit, "limit")
+         offset = Validation.require_int(offset, "offset")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_70"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_70_1" aria-expanded="false" aria-controls="job_list___sub_collapse_70_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_70_1"><button class="btn btn-outline-success"><span class="job_id">70 : Job ID 7c82b3df11bf4e03b4d5eb1ff2530acc</span></button></div></a><div aria-labelledby="job_list___sub_heading_70_1" data-parent="#job_list___sub_accordion_70" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_70_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=94" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (94, 70), end pos: (94, 72)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 5</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -91,7 +91,7 @@
+         return self._populate_ratings_if_available(listings)
+ 
+     @override # pragma: no mutate
+-    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 50, offset: int = 0) -&gt; List[Listing]:
++    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 49, offset: int = 0) -&gt; List[Listing]:
+         keyword = Validation.require_str(keyword, "keyword")
+         limit = Validation.require_int(limit, "limit")
+         offset = Validation.require_int(offset, "offset")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_71"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_71_1" aria-expanded="false" aria-controls="job_list___sub_collapse_71_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_71_1"><button class="btn btn-outline-success"><span class="job_id">71 : Job ID 0ae051c89b514080b7ed4e8e2b824b70</span></button></div></a><div aria-labelledby="job_list___sub_heading_71_1" data-parent="#job_list___sub_accordion_71" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_71_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=94" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (94, 88), end pos: (94, 89)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 6</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -91,7 +91,7 @@
+         return self._populate_ratings_if_available(listings)
+ 
+     @override # pragma: no mutate
+-    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 50, offset: int = 0) -&gt; List[Listing]:
++    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 50, offset: int = 1) -&gt; List[Listing]:
+         keyword = Validation.require_str(keyword, "keyword")
+         limit = Validation.require_int(limit, "limit")
+         offset = Validation.require_int(offset, "offset")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_72"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_72_1" aria-expanded="false" aria-controls="job_list___sub_collapse_72_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_72_1"><button class="btn btn-outline-success"><span class="job_id">72 : Job ID 92ff18d5cbde42b68c263246f7313837</span></button></div></a><div aria-labelledby="job_list___sub_heading_72_1" data-parent="#job_list___sub_accordion_72" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_72_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=94" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (94, 88), end pos: (94, 89)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 7</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -91,7 +91,7 @@
+         return self._populate_ratings_if_available(listings)
+ 
+     @override # pragma: no mutate
+-    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 50, offset: int = 0) -&gt; List[Listing]:
++    def find_unsold_by_title_keyword(self, keyword: str, limit: int = 50, offset: int = -1) -&gt; List[Listing]:
+         keyword = Validation.require_str(keyword, "keyword")
+         limit = Validation.require_int(limit, "limit")
+         offset = Validation.require_int(offset, "offset")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_73"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_73_1" aria-expanded="false" aria-controls="job_list___sub_collapse_73_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_73_1"><button class="btn btn-outline-success"><span class="job_id">73 : Job ID 65b9e90ce7b841afb015188de4395354</span></button></div></a><div aria-labelledby="job_list___sub_heading_73_1" data-parent="#job_list___sub_accordion_73" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_73_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=42" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (42, 4), end pos: (43, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_74"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_74_1" aria-expanded="false" aria-controls="job_list___sub_collapse_74_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_74_1"><button class="btn btn-outline-success"><span class="job_id">74 : Job ID bd432d4ea45f4a38902c9bd5877354ca</span></button></div></a><div aria-labelledby="job_list___sub_heading_74_1" data-parent="#job_list___sub_accordion_74" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_74_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=51" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (51, 4), end pos: (52, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 1</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_75"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_75_1" aria-expanded="false" aria-controls="job_list___sub_collapse_75_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_75_1"><button class="btn btn-outline-success"><span class="job_id">75 : Job ID f4de3e452a62474d8ffd3c0c283f9baf</span></button></div></a><div aria-labelledby="job_list___sub_heading_75_1" data-parent="#job_list___sub_accordion_75" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_75_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=57" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (57, 4), end pos: (58, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 2</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_76"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_76_1" aria-expanded="false" aria-controls="job_list___sub_collapse_76_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_76_1"><button class="btn btn-outline-success"><span class="job_id">76 : Job ID 14b46437d4e5475fafa45c7283fa84d9</span></button></div></a><div aria-labelledby="job_list___sub_heading_76_1" data-parent="#job_list___sub_accordion_76" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_76_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=62" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (62, 4), end pos: (63, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 3</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_77"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_77_1" aria-expanded="false" aria-controls="job_list___sub_collapse_77_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_77_1"><button class="btn btn-outline-success"><span class="job_id">77 : Job ID e869ef83ce3145779048797ebd931834</span></button></div></a><div aria-labelledby="job_list___sub_heading_77_1" data-parent="#job_list___sub_accordion_77" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_77_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=67" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (67, 4), end pos: (68, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 4</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_78"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_78_1" aria-expanded="false" aria-controls="job_list___sub_collapse_78_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_78_1"><button class="btn btn-outline-success"><span class="job_id">78 : Job ID 494ed81be71e4560b1342fca8626d9de</span></button></div></a><div aria-labelledby="job_list___sub_heading_78_1" data-parent="#job_list___sub_accordion_78" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_78_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=74" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (74, 4), end pos: (75, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 5</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_79"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_79_1" aria-expanded="false" aria-controls="job_list___sub_collapse_79_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_79_1"><button class="btn btn-outline-success"><span class="job_id">79 : Job ID a11f5fc393fa4cf9b02aa923f9a73a75</span></button></div></a><div aria-labelledby="job_list___sub_heading_79_1" data-parent="#job_list___sub_accordion_79" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_79_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=80" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (80, 4), end pos: (81, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 6</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_80"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_80_1" aria-expanded="false" aria-controls="job_list___sub_collapse_80_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_80_1"><button class="btn btn-outline-success"><span class="job_id">80 : Job ID 0b5065344635433e890377f1d06f3be4</span></button></div></a><div aria-labelledby="job_list___sub_heading_80_1" data-parent="#job_list___sub_accordion_80" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_80_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=86" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (86, 4), end pos: (87, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 7</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_81"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_81_1" aria-expanded="false" aria-controls="job_list___sub_collapse_81_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_81_1"><button class="btn btn-outline-success"><span class="job_id">81 : Job ID d67f1f1e924e4a66a72592cf932bf3be</span></button></div></a><div aria-labelledby="job_list___sub_heading_81_1" data-parent="#job_list___sub_accordion_81" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_81_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=93" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (93, 4), end pos: (94, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 8</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_82"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_82_1" aria-expanded="false" aria-controls="job_list___sub_collapse_82_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_82_1"><button class="btn btn-outline-success"><span class="job_id">82 : Job ID 68ff407a85374aaeaf1bd697236bdd2d</span></button></div></a><div aria-labelledby="job_list___sub_heading_82_1" data-parent="#job_list___sub_accordion_82" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_82_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=101" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (101, 4), end pos: (102, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 9</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_83"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_83_1" aria-expanded="false" aria-controls="job_list___sub_collapse_83_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_83_1"><button class="btn btn-outline-success"><span class="job_id">83 : Job ID 84447face0444f2ba249a801082c37c1</span></button></div></a><div aria-labelledby="job_list___sub_heading_83_1" data-parent="#job_list___sub_accordion_83" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_83_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=107" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (107, 4), end pos: (108, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 10</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_84"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_84_1" aria-expanded="false" aria-controls="job_list___sub_collapse_84_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_84_1"><button class="btn btn-outline-success"><span class="job_id">84 : Job ID f4de2f21fdce4b0aaa2c904bd8122882</span></button></div></a><div aria-labelledby="job_list___sub_heading_84_1" data-parent="#job_list___sub_accordion_84" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_84_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=116" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (116, 4), end pos: (117, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 11</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_85"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_85_1" aria-expanded="false" aria-controls="job_list___sub_collapse_85_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_85_1"><button class="btn btn-outline-success"><span class="job_id">85 : Job ID f77861534e044ecbb183d387e0bafee4</span></button></div></a><div aria-labelledby="job_list___sub_heading_85_1" data-parent="#job_list___sub_accordion_85" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_85_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=136" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (136, 4), end pos: (137, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 12</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_86"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_86_1" aria-expanded="false" aria-controls="job_list___sub_collapse_86_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_86_1"><button class="btn btn-outline-success"><span class="job_id">86 : Job ID 575c053dbc534d21b22292961fb25361</span></button></div></a><div aria-labelledby="job_list___sub_heading_86_1" data-parent="#job_list___sub_accordion_86" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_86_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=158" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (158, 4), end pos: (159, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 13</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_87"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_87_1" aria-expanded="false" aria-controls="job_list___sub_collapse_87_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_87_1"><button class="btn btn-outline-success"><span class="job_id">87 : Job ID db9fd877b436482d8ba21e19bbd17b55</span></button></div></a><div aria-labelledby="job_list___sub_heading_87_1" data-parent="#job_list___sub_accordion_87" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_87_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=180" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (180, 4), end pos: (181, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 14</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_88"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_88_1" aria-expanded="false" aria-controls="job_list___sub_collapse_88_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_88_1"><button class="btn btn-outline-success"><span class="job_id">88 : Job ID 0bbd90f9835141888c039d9dea943128</span></button></div></a><div aria-labelledby="job_list___sub_heading_88_1" data-parent="#job_list___sub_accordion_88" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_88_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=206" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (206, 4), end pos: (207, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 15</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_89"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_89_1" aria-expanded="false" aria-controls="job_list___sub_collapse_89_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_89_1"><button class="btn btn-outline-success"><span class="job_id">89 : Job ID cf0ba1952c16403eb8a79c630292c68a</span></button></div></a><div aria-labelledby="job_list___sub_heading_89_1" data-parent="#job_list___sub_accordion_89" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_89_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=213" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (213, 4), end pos: (214, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 16</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_90"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_90_1" aria-expanded="false" aria-controls="job_list___sub_collapse_90_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_90_1"><button class="btn btn-outline-success"><span class="job_id">90 : Job ID e2c953ffb382435aa22263f5319c9bda</span></button></div></a><div aria-labelledby="job_list___sub_heading_90_1" data-parent="#job_list___sub_accordion_90" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_90_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=258" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (258, 4), end pos: (259, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 17</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_91"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_91_1" aria-expanded="false" aria-controls="job_list___sub_collapse_91_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_91_1"><button class="btn btn-outline-success"><span class="job_id">91 : Job ID fd4fe2dff94c461fba495f359252320d</span></button></div></a><div aria-labelledby="job_list___sub_heading_91_1" data-parent="#job_list___sub_accordion_91" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_91_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=267" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (267, 4), end pos: (268, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 18</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_92"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_92_1" aria-expanded="false" aria-controls="job_list___sub_collapse_92_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_92_1"><button class="btn btn-outline-success"><span class="job_id">92 : Job ID ebd0801d1d224b4db6ceb3571127d1a1</span></button></div></a><div aria-labelledby="job_list___sub_heading_92_1" data-parent="#job_list___sub_accordion_92" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_92_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/listing/listing_manager.py&amp;line=302" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/listing/listing_manager.py, start pos: (302, 23), end pos: (302, 31)</button></a></pre><pre>operator: core/ZeroIterationForLoop, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/listing/listing_manager.py
++++ bsrc/business_logic/managers/listing/listing_manager.py
+@@ -299,7 +299,7 @@
+         if self._rating_db is None:
+             return listings
+ 
+-        for listing in listings:
++        for listing in []:
+             self._populate_rating_if_available(listing)
+ 
+         return listings</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div></div></div></div></div></div><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script><script type="text/javascript">$('div.job_list___sub_multi_collapse').on('shown.bs.collapse',  function () {    correct_behavior_functional_buttons();  });$('div.job_list___sub_multi_collapse').on('hidden.bs.collapse',  function () {    correct_behavior_functional_buttons();  });function correct_behavior_functional_buttons() {    var expand = false;    var collapse = false;    $('a.job_list___sub_multi_heading').each(function(index) {      if ($(this).attr('aria-expanded') == 'false') {        expand = true;        return false;      };    });    $('a.job_list___sub_multi_heading').each(function(index) {      if ($(this).attr('aria-expanded') == 'true') {        collapse = true;        return false;      };    });    if (expand) {      $('div#job_item_expand_all').css('display', 'inline-block');    } else {      $('div#job_item_expand_all').css('display', 'none');    };    if (collapse) {      $('div#job_item_collapse_all').css('display', 'inline-block');    } else {      $('div#job_item_collapse_all').css('display', 'none');    };  };correct_behavior_functional_buttons();</script></body></html>

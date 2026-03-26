@@ -14,9 +14,7 @@ server/.env
 
 .coverage
 
-# mutation testing
 *.sqlite
-mutation_tests/
 
 server/uploads
 server/uploads

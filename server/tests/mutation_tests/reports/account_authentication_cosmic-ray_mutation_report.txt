@@ -1,0 +1,291 @@
+[job-id] 6b383f0017ca4f96ab9e5ae4b378413a
+src/auth/jwt.py core/ReplaceUnaryOperator_Delete_Not 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] f63f6e2d1e514aa7a9f18d4546dac5de
+src/auth/jwt.py core/ReplaceUnaryOperator_Delete_Not 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 2131e69ed6304b4e9bf34a4df1117cc5
+src/auth/jwt.py core/AddNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] b250dff4c32440d3806a705aeb34b681
+src/auth/jwt.py core/AddNot 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] fb80d5db446b4f219e3b78d815df95ab
+src/auth/jwt.py core/ExceptionReplacer 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 7a31be23ff5342a1b6e5164521031582
+src/auth/jwt.py core/ExceptionReplacer 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 5abf170db1444683abe1fe9e12918feb
+src/auth/jwt.py core/ExceptionReplacer 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 75ee6740df114ec8ae7c196aca0d4f40
+src/auth/jwt.py core/NumberReplacer 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] f4abda3fe4f945e8847cbcd657abb4be
+src/auth/jwt.py core/NumberReplacer 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 4c62b160bdef44f8b56de250d2b84eb0
+src/auth/jwt.py core/NumberReplacer 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] c167ea5503c44d1681521b11c3b2e198
+src/auth/jwt.py core/NumberReplacer 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] ab2c2ce8a4c746d1a085ea8f82ace401
+src/auth/jwt.py core/NumberReplacer 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] cc9d33579f3e4d8dabd1ef54b4f5e5e7
+src/auth/jwt.py core/NumberReplacer 5
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] dbf83b353e3e457d9c10665534ccaa2e
+src/auth/jwt.py core/NumberReplacer 6
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] e4da377b251941b4bc1e1aa2414476d9
+src/auth/jwt.py core/NumberReplacer 7
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 76bb603487a347a9bdf2d1ebcfca9188
+src/auth/jwt.py core/NumberReplacer 8
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 4251b7c817f446d3ab4ae658263bc5fa
+src/auth/jwt.py core/NumberReplacer 9
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] dc1c782f3c1744f1b04a576c639d3a7f
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_Sub 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 07d00e8548214e86a641cadb7e46f0b6
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_Mul 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] e114494bc1744629bdd872bf68f7ed13
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_Div 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] bbbd1e630b934ec5b4f4d86814b442fc
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_FloorDiv 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 45815f20e5134e6eb5df5da4d6f16c65
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_Mod 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 6dde1ed6ef844565bbc249973f1fa7ee
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_Pow 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 3b9af27dc3d54cc6a016d0b03f5212ba
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_RShift 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 63fe7afe1866439fa4b4503c08ebbc76
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_LShift 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] db790ff8a50f428b9578911b35d234b9
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_BitOr 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 325da6acb5f046ac9f047803d8ed20c2
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_BitAnd 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 95298f8c84874576ba555a34f2394dee
+src/business_logic/services/account_service.py core/ReplaceBinaryOperator_Add_BitXor 0
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 4a476d7ea54843ffb0e01fe8c03c8f80
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_NotEq_Eq 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 7409103b3d874d3696ea954c3b77dae2
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_NotEq_Lt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 6396369f8fa742c19311daf1bdfb6c14
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_NotEq_LtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 388f07ffc0574bc39267eb06e07675c1
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_NotEq_Gt 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] a4726bec0f14459aacf0af5d3ad70a95
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_NotEq_GtE 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 285914eaecce48d68746d053fedfd5cd
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_NotEq_Is 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 08c69eae16d14ec0b79dedc415f1132c
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_NotEq_IsNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 1ded6b2e880c4db2b5df6da8c2aeea93
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_Is_IsNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 25fca6aa21114ee284037e27bfa9069c
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_Is_IsNot 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] a75080c8291e4eb9bf48a45e39f9023c
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_Is_IsNot 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 4aeceda7267a4ca1962e18d166bd2e3c
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_Is_IsNot 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 6202471b307f491ca423fc4ce7187a38
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_Is_IsNot 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 6ec64396f2504f26a79546bc4413950c
+src/business_logic/services/account_service.py core/ReplaceComparisonOperator_IsNot_Is 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] c0c20d6f289a4b44b1ef02968ca97336
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_USub_UAdd 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 0a25f8914fae4be0aaede6d294d74e22
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_USub_Invert 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 0f09c06e7d6d46e5b81d9a8613c56888
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_USub_Not 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 3fdf2e6fb3e44171b915b200c6067a2c
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_Delete_USub 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] c514fbc55bbc4d40a927f9abbac79a73
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_Delete_Not 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 633ea4cbd39d4127a9226852de909362
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_Delete_Not 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 9ac2418358654875b18cea5c8ac51a70
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_Delete_Not 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] ab4bcc037e58468a822321da163d9fee
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_Delete_Not 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 98d1ad69ee0c4e3da0a6cc5198b2aa61
+src/business_logic/services/account_service.py core/ReplaceUnaryOperator_Delete_Not 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 6ca03e7927df4cbfb3865725e8464b06
+src/business_logic/services/account_service.py core/AddNot 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] b806f45a5ce1441896007c0a5cd01931
+src/business_logic/services/account_service.py core/AddNot 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] a34e2b3b11f544248929188e990645e1
+src/business_logic/services/account_service.py core/AddNot 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 893df628303a447c9860b7bf1928b4d4
+src/business_logic/services/account_service.py core/AddNot 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 446c219eefa14233afe78fe566790190
+src/business_logic/services/account_service.py core/AddNot 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 6f70cc743d1a480fa0214510574fbd26
+src/business_logic/services/account_service.py core/AddNot 5
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 4a07aa9795ec4b22b7a9b7ac2b2b9a2f
+src/business_logic/services/account_service.py core/AddNot 6
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 62673612f47a4b5cb38f580f4e09a8e5
+src/business_logic/services/account_service.py core/AddNot 7
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 1cfb42dad40141ea8d2fab9320fe6bc7
+src/business_logic/services/account_service.py core/AddNot 8
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] b3b7f73bce624a8eba18f17cc4f82d0c
+src/business_logic/services/account_service.py core/AddNot 9
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 7791aa53b28847ad8e0314c64bd47cfc
+src/business_logic/services/account_service.py core/AddNot 10
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] ebca7f168eff41efb0251a032b6ba2be
+src/business_logic/services/account_service.py core/AddNot 11
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] f8cf2fb05d114498a609272b9f327267
+src/business_logic/services/account_service.py core/AddNot 12
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 90a3fd52a9f9422bba3bc00144af31e3
+src/business_logic/services/account_service.py core/AddNot 13
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 873f0c6d01e648e380f99a78bac02cab
+src/business_logic/services/account_service.py core/ReplaceTrueWithFalse 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 4b73431bd263437e9be6187958d2ce15
+src/business_logic/services/account_service.py core/ReplaceOrWithAnd 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 117973e24a9642e4acb2fdb8427091e4
+src/business_logic/services/account_service.py core/ExceptionReplacer 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] d7f0624f8f254d60b5db0a090c33d093
+src/business_logic/services/account_service.py core/ExceptionReplacer 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] f1495d0bf8804b828c21d9c8f4971fe7
+src/business_logic/services/account_service.py core/ExceptionReplacer 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] f45bf8df253c498aa36b2eae5b751db0
+src/business_logic/services/account_service.py core/ExceptionReplacer 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 709381da46ae4132b74dc61a8aade61c
+src/business_logic/services/account_service.py core/NumberReplacer 0
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 198bb4b0d88f44ffb36a63b5c4ea9281
+src/business_logic/services/account_service.py core/NumberReplacer 1
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 00f81324b7c54314a816f9507c6a0b63
+src/business_logic/services/account_service.py core/NumberReplacer 2
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] d45090139b834921b1b5b747f1e67c87
+src/business_logic/services/account_service.py core/NumberReplacer 3
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] b93f92dcb83649768487fe6749c08493
+src/business_logic/services/account_service.py core/NumberReplacer 4
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 624ab0aa6e01490d85d7ed92b1fafb92
+src/business_logic/services/account_service.py core/NumberReplacer 5
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 7ed8de907a5147668672eaf264e1ec5b
+src/business_logic/services/account_service.py core/NumberReplacer 6
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] a065415d6eef4e8fa67966acbfb15c5c
+src/business_logic/services/account_service.py core/NumberReplacer 7
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] c12ca819376046d8859f3d37d9304a6c
+src/business_logic/services/account_service.py core/NumberReplacer 8
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] f600289f3fce4edc9dcdc2e2536937d3
+src/business_logic/services/account_service.py core/NumberReplacer 9
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 71006d0e1b274d728f94c11a9b05870f
+src/business_logic/services/account_service.py core/NumberReplacer 10
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] d485ab39c5ee4fd2b9e9a926ac9fffd4
+src/business_logic/services/account_service.py core/NumberReplacer 11
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 487e6f8e45ff4c20910b45da532cfd37
+src/business_logic/services/account_service.py core/NumberReplacer 12
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 6993c76cba1d4e0ea832f70b3989a475
+src/business_logic/services/account_service.py core/NumberReplacer 13
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 36cff26eed8343649ff593d42a73d804
+src/business_logic/services/account_service.py core/NumberReplacer 14
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] c0b32fe297ba497f867e477b5bea0b7a
+src/business_logic/services/account_service.py core/NumberReplacer 15
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 29e121c4868a4677bf13e60bf9c46ebf
+src/business_logic/services/account_service.py core/NumberReplacer 16
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] b741d3e1c98b441495749a876785c394
+src/business_logic/services/account_service.py core/NumberReplacer 17
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] b3c02b4844c44e31b08c3d1a4b315ea3
+src/business_logic/services/account_service.py core/NumberReplacer 18
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] a59adae5e4c5428f8cd8d8e7d26fea33
+src/business_logic/services/account_service.py core/NumberReplacer 19
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 98e7fc7496ea4f5a924d5ca7f2e6b1a4
+src/business_logic/services/account_service.py core/NumberReplacer 20
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 1b6b61133afa430e9c6f2f6a467e06e2
+src/business_logic/services/account_service.py core/NumberReplacer 21
+worker outcome: WorkerOutcome.SKIPPED, test outcome: None
+[job-id] 2a2245c9d5cc477fa8340c215b6cc78c
+src/business_logic/services/account_service.py core/NumberReplacer 22
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 2d29bd7bd71f47a0a69996293dcaa2e8
+src/business_logic/services/account_service.py core/NumberReplacer 23
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] f2b43df6bcdc4128a9e1767164daae55
+src/business_logic/services/account_service.py core/NumberReplacer 24
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+[job-id] 94b840514f224ad197d39803142ad1f7
+src/business_logic/services/account_service.py core/NumberReplacer 25
+worker outcome: WorkerOutcome.NORMAL, test outcome: TestOutcome.KILLED
+total jobs: 96
+complete: 96 (100.00%)
+surviving mutants: 0 (0.00%)

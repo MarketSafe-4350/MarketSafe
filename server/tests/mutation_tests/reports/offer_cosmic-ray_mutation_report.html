@@ -1,0 +1,755 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" /><title>Cosmic Ray Report</title></head><body><div class="container"><h1><p class="text-dark">Cosmic Ray Report</p></h1></div><div class="container"><div class="mb-1" id="summary_info___accordion"><div class="card"><a data-toggle="collapse" data-target="#summary_info___collapse_1" aria-expanded="true" aria-controls="summary_info___collapse_1" href="#"><div class="card-header" id="summary_info___heading_1"><button class="btn btn-outline-dark"><h4 class="m-0">Summary info</h4></button></div></a><div aria-labelledby="summary_info___heading_1" data-parent="#summary_info___accordion" class="collapse show" id="summary_info___collapse_1"><div class="card-body"><p>Date time: 25/03/2026 19:43:54</p><p>Total jobs: 74</p><p>Complete: 74 (100.00%)</p><p>Surviving mutants: 0 (0.00%)</p></div></div></div></div><div class="mb-1" id="job_list___accordion"><div class="card"><a data-toggle="collapse" data-target="#job_list___collapse_1" aria-expanded="false" aria-controls="job_list___collapse_1" href="#"><div class="card-header" id="job_list___heading_1"><button class="btn btn-outline-dark"><h4 class="m-0">Job list</h4></button></div></a><div aria-labelledby="job_list___heading_1" data-parent="#job_list___accordion" class="collapse" id="job_list___collapse_1"><div class="card-body"><div class="text-right mb-1"><div class="mx-1" id="job_item_expand_all"><a href="#" onclick="$('div.job_list___sub_multi_collapse').collapse('show');"><button class="btn btn-outline-dark"><span>Expand All</span></button></a></div><div class="mx-1" id="job_item_collapse_all"><a href="#" onclick="$('div.job_list___sub_multi_collapse').collapse('hide');"><button class="btn btn-outline-dark"><span>Collapse All</span></button></a></div></div><div class="mb-1" id="job_list___sub_accordion_1"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_1_1" aria-expanded="false" aria-controls="job_list___sub_collapse_1_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_1_1"><button class="btn btn-outline-success"><span class="job_id">1 : Job ID 24b8fb1e278943b284954a54268c1782</span></button></div></a><div aria-labelledby="job_list___sub_heading_1_1" data-parent="#job_list___sub_accordion_1" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_1_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (47, 29), end pos: (47, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_NotEq, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -44,7 +44,7 @@
+                 message="Cannot send an offer on a closed listing."
+             )
+ 
+-        if listing.seller_id == offer.sender_id:
++        if listing.seller_id != offer.sender_id:
+             raise UnapprovedBehaviorError(
+                 message="You cannot send an offer on your own listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_2"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_2_1" aria-expanded="false" aria-controls="job_list___sub_collapse_2_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_2_1"><button class="btn btn-outline-success"><span class="job_id">2 : Job ID 4cb0b0f944464cb99a4ad841c94b7316</span></button></div></a><div aria-labelledby="job_list___sub_heading_2_1" data-parent="#job_list___sub_accordion_2" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_2_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (47, 29), end pos: (47, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_Lt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -44,7 +44,7 @@
+                 message="Cannot send an offer on a closed listing."
+             )
+ 
+-        if listing.seller_id == offer.sender_id:
++        if listing.seller_id &lt; offer.sender_id:
+             raise UnapprovedBehaviorError(
+                 message="You cannot send an offer on your own listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_3"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_3_1" aria-expanded="false" aria-controls="job_list___sub_collapse_3_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_3_1"><button class="btn btn-outline-success"><span class="job_id">3 : Job ID bcca4e66ddc74b16a85a30c4e893e27f</span></button></div></a><div aria-labelledby="job_list___sub_heading_3_1" data-parent="#job_list___sub_accordion_3" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_3_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (47, 29), end pos: (47, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_LtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -44,7 +44,7 @@
+                 message="Cannot send an offer on a closed listing."
+             )
+ 
+-        if listing.seller_id == offer.sender_id:
++        if listing.seller_id &lt;= offer.sender_id:
+             raise UnapprovedBehaviorError(
+                 message="You cannot send an offer on your own listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_4"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_4_1" aria-expanded="false" aria-controls="job_list___sub_collapse_4_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_4_1"><button class="btn btn-outline-success"><span class="job_id">4 : Job ID 29eee78450f743938f0ff15bf600724f</span></button></div></a><div aria-labelledby="job_list___sub_heading_4_1" data-parent="#job_list___sub_accordion_4" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_4_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (47, 29), end pos: (47, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_Gt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -44,7 +44,7 @@
+                 message="Cannot send an offer on a closed listing."
+             )
+ 
+-        if listing.seller_id == offer.sender_id:
++        if listing.seller_id &gt; offer.sender_id:
+             raise UnapprovedBehaviorError(
+                 message="You cannot send an offer on your own listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_5"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_5_1" aria-expanded="false" aria-controls="job_list___sub_collapse_5_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_5_1"><button class="btn btn-outline-success"><span class="job_id">5 : Job ID 0a6372c7fd304d208f0ce8e8f6d440bc</span></button></div></a><div aria-labelledby="job_list___sub_heading_5_1" data-parent="#job_list___sub_accordion_5" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_5_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (47, 29), end pos: (47, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_GtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -44,7 +44,7 @@
+                 message="Cannot send an offer on a closed listing."
+             )
+ 
+-        if listing.seller_id == offer.sender_id:
++        if listing.seller_id &gt;= offer.sender_id:
+             raise UnapprovedBehaviorError(
+                 message="You cannot send an offer on your own listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_6"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_6_1" aria-expanded="false" aria-controls="job_list___sub_collapse_6_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_6_1"><button class="btn btn-outline-success"><span class="job_id">6 : Job ID 2d87aa9d70be45a4b2bd4477f4f83087</span></button></div></a><div aria-labelledby="job_list___sub_heading_6_1" data-parent="#job_list___sub_accordion_6" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_6_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (47, 29), end pos: (47, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_Is, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -44,7 +44,7 @@
+                 message="Cannot send an offer on a closed listing."
+             )
+ 
+-        if listing.seller_id == offer.sender_id:
++        if listing.seller_id is offer.sender_id:
+             raise UnapprovedBehaviorError(
+                 message="You cannot send an offer on your own listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_7"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_7_1" aria-expanded="false" aria-controls="job_list___sub_collapse_7_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_7_1"><button class="btn btn-outline-success"><span class="job_id">7 : Job ID 980442aab423485ca72bfb566a9ae3ac</span></button></div></a><div aria-labelledby="job_list___sub_heading_7_1" data-parent="#job_list___sub_accordion_7" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_7_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (47, 29), end pos: (47, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Eq_IsNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -44,7 +44,7 @@
+                 message="Cannot send an offer on a closed listing."
+             )
+ 
+-        if listing.seller_id == offer.sender_id:
++        if listing.seller_id is not offer.sender_id:
+             raise UnapprovedBehaviorError(
+                 message="You cannot send an offer on your own listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_8"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_8_1" aria-expanded="false" aria-controls="job_list___sub_collapse_8_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_8_1"><button class="btn btn-outline-success"><span class="job_id">8 : Job ID 1e22cdbe09ad4400bd8a7228d3d58453</span></button></div></a><div aria-labelledby="job_list___sub_heading_8_1" data-parent="#job_list___sub_accordion_8" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_8_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=163" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (163, 29), end pos: (163, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Eq, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -160,7 +160,7 @@
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id == actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller of the listing can accept or decline offers."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_9"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_9_1" aria-expanded="false" aria-controls="job_list___sub_collapse_9_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_9_1"><button class="btn btn-outline-success"><span class="job_id">9 : Job ID 31e3de31f91b4c53bc0fe4b06ae905be</span></button></div></a><div aria-labelledby="job_list___sub_heading_9_1" data-parent="#job_list___sub_accordion_9" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_9_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=178" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (178, 28), end pos: (178, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Eq, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -175,7 +175,7 @@
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+-                if other.id != offer_id:
++                if other.id == offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ 
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_10"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_10_1" aria-expanded="false" aria-controls="job_list___sub_collapse_10_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_10_1"><button class="btn btn-outline-success"><span class="job_id">10 : Job ID 2e63b1aef8c04157adc3c6601e552256</span></button></div></a><div aria-labelledby="job_list___sub_heading_10_1" data-parent="#job_list___sub_accordion_10" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_10_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=163" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (163, 29), end pos: (163, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Lt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -160,7 +160,7 @@
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id &lt; actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller of the listing can accept or decline offers."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_11"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_11_1" aria-expanded="false" aria-controls="job_list___sub_collapse_11_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_11_1"><button class="btn btn-outline-success"><span class="job_id">11 : Job ID 1caaad7bc09f434ca3d92e8a6839d061</span></button></div></a><div aria-labelledby="job_list___sub_heading_11_1" data-parent="#job_list___sub_accordion_11" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_11_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=178" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (178, 28), end pos: (178, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Lt, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -175,7 +175,7 @@
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+-                if other.id != offer_id:
++                if other.id &lt; offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ 
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_12"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_12_1" aria-expanded="false" aria-controls="job_list___sub_collapse_12_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_12_1"><button class="btn btn-outline-success"><span class="job_id">12 : Job ID 56d3dd1962ce442aa7130c054b0206d0</span></button></div></a><div aria-labelledby="job_list___sub_heading_12_1" data-parent="#job_list___sub_accordion_12" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_12_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=163" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (163, 29), end pos: (163, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_LtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -160,7 +160,7 @@
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id &lt;= actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller of the listing can accept or decline offers."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_13"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_13_1" aria-expanded="false" aria-controls="job_list___sub_collapse_13_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_13_1"><button class="btn btn-outline-success"><span class="job_id">13 : Job ID 7d77306157d041d79c2c87351b6449b8</span></button></div></a><div aria-labelledby="job_list___sub_heading_13_1" data-parent="#job_list___sub_accordion_13" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_13_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=178" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (178, 28), end pos: (178, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_LtE, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -175,7 +175,7 @@
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+-                if other.id != offer_id:
++                if other.id &lt;= offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ 
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_14"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_14_1" aria-expanded="false" aria-controls="job_list___sub_collapse_14_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_14_1"><button class="btn btn-outline-success"><span class="job_id">14 : Job ID 6a134c558e474faf86728a9a9a92179d</span></button></div></a><div aria-labelledby="job_list___sub_heading_14_1" data-parent="#job_list___sub_accordion_14" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_14_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=163" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (163, 29), end pos: (163, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Gt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -160,7 +160,7 @@
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id &gt; actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller of the listing can accept or decline offers."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_15"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_15_1" aria-expanded="false" aria-controls="job_list___sub_collapse_15_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_15_1"><button class="btn btn-outline-success"><span class="job_id">15 : Job ID bbbe441a884c4188a45e10141bc1a6cd</span></button></div></a><div aria-labelledby="job_list___sub_heading_15_1" data-parent="#job_list___sub_accordion_15" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_15_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=178" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (178, 28), end pos: (178, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Gt, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -175,7 +175,7 @@
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+-                if other.id != offer_id:
++                if other.id &gt; offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ 
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_16"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_16_1" aria-expanded="false" aria-controls="job_list___sub_collapse_16_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_16_1"><button class="btn btn-outline-success"><span class="job_id">16 : Job ID 9fc15c15cd7a47449893c959b8833e60</span></button></div></a><div aria-labelledby="job_list___sub_heading_16_1" data-parent="#job_list___sub_accordion_16" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_16_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=163" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (163, 29), end pos: (163, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_GtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -160,7 +160,7 @@
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id &gt;= actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller of the listing can accept or decline offers."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_17"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_17_1" aria-expanded="false" aria-controls="job_list___sub_collapse_17_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_17_1"><button class="btn btn-outline-success"><span class="job_id">17 : Job ID e1adf6b9403f48b9bf3c98e9514971c6</span></button></div></a><div aria-labelledby="job_list___sub_heading_17_1" data-parent="#job_list___sub_accordion_17" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_17_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=178" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (178, 28), end pos: (178, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_GtE, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -175,7 +175,7 @@
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+-                if other.id != offer_id:
++                if other.id &gt;= offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ 
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_18"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_18_1" aria-expanded="false" aria-controls="job_list___sub_collapse_18_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_18_1"><button class="btn btn-outline-success"><span class="job_id">18 : Job ID 9a92c4a695ad44f0adc6afb02729b439</span></button></div></a><div aria-labelledby="job_list___sub_heading_18_1" data-parent="#job_list___sub_accordion_18" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_18_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=163" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (163, 29), end pos: (163, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Is, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -160,7 +160,7 @@
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id is actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller of the listing can accept or decline offers."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_19"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_19_1" aria-expanded="false" aria-controls="job_list___sub_collapse_19_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_19_1"><button class="btn btn-outline-success"><span class="job_id">19 : Job ID e8b3dbae86654832abd56eefae04c772</span></button></div></a><div aria-labelledby="job_list___sub_heading_19_1" data-parent="#job_list___sub_accordion_19" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_19_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=178" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (178, 28), end pos: (178, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Is, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -175,7 +175,7 @@
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+-                if other.id != offer_id:
++                if other.id is offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ 
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_20"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_20_1" aria-expanded="false" aria-controls="job_list___sub_collapse_20_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_20_1"><button class="btn btn-outline-success"><span class="job_id">20 : Job ID d06f9144ad474b34a7e3a7e423720616</span></button></div></a><div aria-labelledby="job_list___sub_heading_20_1" data-parent="#job_list___sub_accordion_20" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_20_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=163" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (163, 29), end pos: (163, 31)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_IsNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -160,7 +160,7 @@
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+-        if listing.seller_id != actor_id:
++        if listing.seller_id is not actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller of the listing can accept or decline offers."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_21"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_21_1" aria-expanded="false" aria-controls="job_list___sub_collapse_21_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_21_1"><button class="btn btn-outline-success"><span class="job_id">21 : Job ID ff53931f604f4961abc01801d04da58a</span></button></div></a><div aria-labelledby="job_list___sub_heading_21_1" data-parent="#job_list___sub_accordion_21" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_21_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=178" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (178, 28), end pos: (178, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_IsNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -175,7 +175,7 @@
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+-                if other.id != offer_id:
++                if other.id is not offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ 
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_22"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_22_1" aria-expanded="false" aria-controls="job_list___sub_collapse_22_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_22_1"><button class="btn btn-outline-success"><span class="job_id">22 : Job ID 1264f80decfe4709a7bf26b38083a8ad</span></button></div></a><div aria-labelledby="job_list___sub_heading_22_1" data-parent="#job_list___sub_accordion_22" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_22_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 33), end pos: (61, 35)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_Eq, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if existing.accepted == True:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_23"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_23_1" aria-expanded="false" aria-controls="job_list___sub_collapse_23_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_23_1"><button class="btn btn-outline-success"><span class="job_id">23 : Job ID 0c319e20e4fc491fbfb3ca09f8b73293</span></button></div></a><div aria-labelledby="job_list___sub_heading_23_1" data-parent="#job_list___sub_accordion_23" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_23_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 33), end pos: (61, 35)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_NotEq, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if existing.accepted != True:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_24"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_24_1" aria-expanded="false" aria-controls="job_list___sub_collapse_24_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_24_1"><button class="btn btn-outline-success"><span class="job_id">24 : Job ID 23938bb7c92141aa9d049f7d33d35e9a</span></button></div></a><div aria-labelledby="job_list___sub_heading_24_1" data-parent="#job_list___sub_accordion_24" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_24_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 33), end pos: (61, 35)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_Lt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if existing.accepted &lt; True:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_25"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_25_1" aria-expanded="false" aria-controls="job_list___sub_collapse_25_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_25_1"><button class="btn btn-outline-success"><span class="job_id">25 : Job ID e823dac626a64a8e8d834748c4b0741a</span></button></div></a><div aria-labelledby="job_list___sub_heading_25_1" data-parent="#job_list___sub_accordion_25" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_25_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 33), end pos: (61, 35)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_LtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if existing.accepted &lt;= True:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_26"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_26_1" aria-expanded="false" aria-controls="job_list___sub_collapse_26_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_26_1"><button class="btn btn-outline-success"><span class="job_id">26 : Job ID 6c503fc5b4b64985a27438485e37f382</span></button></div></a><div aria-labelledby="job_list___sub_heading_26_1" data-parent="#job_list___sub_accordion_26" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_26_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 33), end pos: (61, 35)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_Gt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if existing.accepted &gt; True:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_27"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_27_1" aria-expanded="false" aria-controls="job_list___sub_collapse_27_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_27_1"><button class="btn btn-outline-success"><span class="job_id">27 : Job ID 533797e2bd194c37b44c4618bd78700e</span></button></div></a><div aria-labelledby="job_list___sub_heading_27_1" data-parent="#job_list___sub_accordion_27" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_27_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 33), end pos: (61, 35)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_GtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if existing.accepted &gt;= True:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_28"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_28_1" aria-expanded="false" aria-controls="job_list___sub_collapse_28_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_28_1"><button class="btn btn-outline-success"><span class="job_id">28 : Job ID a91c01c30288498388e67c497f67d3b9</span></button></div></a><div aria-labelledby="job_list___sub_heading_28_1" data-parent="#job_list___sub_accordion_28" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_28_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=40" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (40, 19), end pos: (40, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -37,7 +37,7 @@
+         Validation.require_not_none(offer, "offer")
+ 
+         listing: Optional[Listing] = self._listing_db.get_by_id(offer.listing_id)
+-        if listing is None:
++        if listing is not None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+         if listing.is_sold:
+             raise UnapprovedBehaviorError(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_29"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_29_1" aria-expanded="false" aria-controls="job_list___sub_collapse_29_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_29_1"><button class="btn btn-outline-success"><span class="job_id">29 : Job ID 8bcb9167b0134400ab876ddab77da6f0</span></button></div></a><div aria-labelledby="job_list___sub_heading_29_1" data-parent="#job_list___sub_accordion_29" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_29_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 33), end pos: (61, 35)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if existing.accepted is not True:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_30"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_30_1" aria-expanded="false" aria-controls="job_list___sub_collapse_30_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_30_1"><button class="btn btn-outline-success"><span class="job_id">30 : Job ID 6e85da5ef7d443f5ab19129bb0effc1a</span></button></div></a><div aria-labelledby="job_list___sub_heading_30_1" data-parent="#job_list___sub_accordion_30" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_30_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=156" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (156, 17), end pos: (156, 19)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -153,7 +153,7 @@
+         Validation.is_boolean(accepted, "accepted")
+ 
+         offer = self._offer_db.get_by_id(offer_id)
+-        if offer is None:
++        if offer is not None:
+             raise OfferNotFoundError(message=f"Offer {offer_id} not found.")
+ 
+         listing = self._listing_db.get_by_id(offer.listing_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_31"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_31_1" aria-expanded="false" aria-controls="job_list___sub_collapse_31_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_31_1"><button class="btn btn-outline-success"><span class="job_id">31 : Job ID ce9b96f8e5d84b808e26436c857d6fbd</span></button></div></a><div aria-labelledby="job_list___sub_heading_31_1" data-parent="#job_list___sub_accordion_31" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_31_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=160" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (160, 19), end pos: (160, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -157,7 +157,7 @@
+             raise OfferNotFoundError(message=f"Offer {offer_id} not found.")
+ 
+         listing = self._listing_db.get_by_id(offer.listing_id)
+-        if listing is None:
++        if listing is not None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+         if listing.seller_id != actor_id:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_32"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_32_1" aria-expanded="false" aria-controls="job_list___sub_collapse_32_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_32_1"><button class="btn btn-outline-success"><span class="job_id">32 : Job ID f10db6ee8c454aeea54c31f1de3c0386</span></button></div></a><div aria-labelledby="job_list___sub_heading_32_1" data-parent="#job_list___sub_accordion_32" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_32_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=55" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (55, 20), end pos: (55, 26)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_IsNot_Is, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -52,7 +52,7 @@
+         existing: Optional[Offer] = self._offer_db.get_by_sender_and_listing(
+             offer.sender_id, offer.listing_id
+         )
+-        if existing is not None:
++        if existing is None:
+             if existing.is_pending:
+                 raise ConflictError(
+                     message="You already have a pending offer on this listing. "</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_33"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_33_1" aria-expanded="false" aria-controls="job_list___sub_collapse_33_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_33_1"><button class="btn btn-outline-success"><span class="job_id">33 : Job ID b42c3bea58074c02b74cafaad39f0851</span></button></div></a><div aria-labelledby="job_list___sub_heading_33_1" data-parent="#job_list___sub_accordion_33" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_33_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=168" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (168, 11), end pos: (168, 14)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_Not, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -165,7 +165,7 @@
+                 message="Only the seller of the listing can accept or decline offers."
+             )
+ 
+-        if not offer.is_pending:
++        if  offer.is_pending:
+             raise UnapprovedBehaviorError(
+                 message="This offer has already been resolved."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_34"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_34_1" aria-expanded="false" aria-controls="job_list___sub_collapse_34_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_34_1"><button class="btn btn-outline-success"><span class="job_id">34 : Job ID 85e97b3ed27c438293dd0625f4b0498d</span></button></div></a><div aria-labelledby="job_list___sub_heading_34_1" data-parent="#job_list___sub_accordion_34" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_34_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=40" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (40, 11), end pos: (40, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -37,7 +37,7 @@
+         Validation.require_not_none(offer, "offer")
+ 
+         listing: Optional[Listing] = self._listing_db.get_by_id(offer.listing_id)
+-        if listing is None:
++        if not listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+         if listing.is_sold:
+             raise UnapprovedBehaviorError(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_35"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_35_1" aria-expanded="false" aria-controls="job_list___sub_collapse_35_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_35_1"><button class="btn btn-outline-success"><span class="job_id">35 : Job ID 622cb1bf72ff473aa9f254467e60af07</span></button></div></a><div aria-labelledby="job_list___sub_heading_35_1" data-parent="#job_list___sub_accordion_35" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_35_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=42" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (42, 11), end pos: (42, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -39,7 +39,7 @@
+         listing: Optional[Listing] = self._listing_db.get_by_id(offer.listing_id)
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+-        if listing.is_sold:
++        if not listing.is_sold:
+             raise UnapprovedBehaviorError(
+                 message="Cannot send an offer on a closed listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_36"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_36_1" aria-expanded="false" aria-controls="job_list___sub_collapse_36_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_36_1"><button class="btn btn-outline-success"><span class="job_id">36 : Job ID 90b0cce5b71e4485828477b0792cfabe</span></button></div></a><div aria-labelledby="job_list___sub_heading_36_1" data-parent="#job_list___sub_accordion_36" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_36_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=47" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (47, 11), end pos: (47, 47)</button></a></pre><pre>operator: core/AddNot, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -44,7 +44,7 @@
+                 message="Cannot send an offer on a closed listing."
+             )
+ 
+-        if listing.seller_id == offer.sender_id:
++        if not listing.seller_id == offer.sender_id:
+             raise UnapprovedBehaviorError(
+                 message="You cannot send an offer on your own listing."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_37"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_37_1" aria-expanded="false" aria-controls="job_list___sub_collapse_37_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_37_1"><button class="btn btn-outline-success"><span class="job_id">37 : Job ID 536385858b2e4ce79060fa2e9f0ae22e</span></button></div></a><div aria-labelledby="job_list___sub_heading_37_1" data-parent="#job_list___sub_accordion_37" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_37_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=55" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (55, 11), end pos: (55, 31)</button></a></pre><pre>operator: core/AddNot, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -52,7 +52,7 @@
+         existing: Optional[Offer] = self._offer_db.get_by_sender_and_listing(
+             offer.sender_id, offer.listing_id
+         )
+-        if existing is not None:
++        if not existing is not None:
+             if existing.is_pending:
+                 raise ConflictError(
+                     message="You already have a pending offer on this listing. "</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_38"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_38_1" aria-expanded="false" aria-controls="job_list___sub_collapse_38_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_38_1"><button class="btn btn-outline-success"><span class="job_id">38 : Job ID b9163e4e85f74c54b68fc57b22e6302a</span></button></div></a><div aria-labelledby="job_list___sub_heading_38_1" data-parent="#job_list___sub_accordion_38" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_38_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=56" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (56, 15), end pos: (56, 34)</button></a></pre><pre>operator: core/AddNot, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -53,7 +53,7 @@
+             offer.sender_id, offer.listing_id
+         )
+         if existing is not None:
+-            if existing.is_pending:
++            if not existing.is_pending:
+                 raise ConflictError(
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_39"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_39_1" aria-expanded="false" aria-controls="job_list___sub_collapse_39_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_39_1"><button class="btn btn-outline-success"><span class="job_id">39 : Job ID ad9179fbe91e4f6cb0efd39d598a9bbf</span></button></div></a><div aria-labelledby="job_list___sub_heading_39_1" data-parent="#job_list___sub_accordion_39" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_39_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 15), end pos: (61, 40)</button></a></pre><pre>operator: core/AddNot, occurrence: 5</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if not existing.accepted is True:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_40"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_40_1" aria-expanded="false" aria-controls="job_list___sub_collapse_40_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_40_1"><button class="btn btn-outline-success"><span class="job_id">40 : Job ID 47d954dc82c341eab33e11a5083fade9</span></button></div></a><div aria-labelledby="job_list___sub_heading_40_1" data-parent="#job_list___sub_accordion_40" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_40_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=156" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (156, 11), end pos: (156, 24)</button></a></pre><pre>operator: core/AddNot, occurrence: 6</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -153,7 +153,7 @@
+         Validation.is_boolean(accepted, "accepted")
+ 
+         offer = self._offer_db.get_by_id(offer_id)
+-        if offer is None:
++        if not offer is None:
+             raise OfferNotFoundError(message=f"Offer {offer_id} not found.")
+ 
+         listing = self._listing_db.get_by_id(offer.listing_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_41"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_41_1" aria-expanded="false" aria-controls="job_list___sub_collapse_41_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_41_1"><button class="btn btn-outline-success"><span class="job_id">41 : Job ID 771a985508194f89acc019c317988baa</span></button></div></a><div aria-labelledby="job_list___sub_heading_41_1" data-parent="#job_list___sub_accordion_41" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_41_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=160" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (160, 11), end pos: (160, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 7</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -157,7 +157,7 @@
+             raise OfferNotFoundError(message=f"Offer {offer_id} not found.")
+ 
+         listing = self._listing_db.get_by_id(offer.listing_id)
+-        if listing is None:
++        if not listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+         if listing.seller_id != actor_id:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_42"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_42_1" aria-expanded="false" aria-controls="job_list___sub_collapse_42_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_42_1"><button class="btn btn-outline-success"><span class="job_id">42 : Job ID 544fd29fcc504f7a9f68cb1a0388245e</span></button></div></a><div aria-labelledby="job_list___sub_heading_42_1" data-parent="#job_list___sub_accordion_42" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_42_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=163" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (163, 11), end pos: (163, 40)</button></a></pre><pre>operator: core/AddNot, occurrence: 8</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -160,7 +160,7 @@
+         if listing is None:
+             raise ListingNotFoundError(message=f"Listing {offer.listing_id} not found.")
+ 
+-        if listing.seller_id != actor_id:
++        if not listing.seller_id != actor_id:
+             raise UnapprovedBehaviorError(
+                 message="Only the seller of the listing can accept or decline offers."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_43"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_43_1" aria-expanded="false" aria-controls="job_list___sub_collapse_43_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_43_1"><button class="btn btn-outline-success"><span class="job_id">43 : Job ID 6caf8f2c9088454cb782fcb823e5bb64</span></button></div></a><div aria-labelledby="job_list___sub_heading_43_1" data-parent="#job_list___sub_accordion_43" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_43_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=168" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (168, 11), end pos: (168, 31)</button></a></pre><pre>operator: core/AddNot, occurrence: 9</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -165,7 +165,7 @@
+                 message="Only the seller of the listing can accept or decline offers."
+             )
+ 
+-        if not offer.is_pending:
++        if not not offer.is_pending:
+             raise UnapprovedBehaviorError(
+                 message="This offer has already been resolved."
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_44"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_44_1" aria-expanded="false" aria-controls="job_list___sub_collapse_44_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_44_1"><button class="btn btn-outline-success"><span class="job_id">44 : Job ID 8f6ba2eda9c3461c880d1e0860f7545a</span></button></div></a><div aria-labelledby="job_list___sub_heading_44_1" data-parent="#job_list___sub_accordion_44" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_44_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=175" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (175, 11), end pos: (175, 19)</button></a></pre><pre>operator: core/AddNot, occurrence: 10</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -172,7 +172,7 @@
+ 
+         self._offer_db.set_accepted(offer_id, accepted)
+ 
+-        if accepted:
++        if not accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+                 if other.id != offer_id:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_45"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_45_1" aria-expanded="false" aria-controls="job_list___sub_collapse_45_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_45_1"><button class="btn btn-outline-success"><span class="job_id">45 : Job ID 7daae5c131ba4a8bbe51bcc6b35a1122</span></button></div></a><div aria-labelledby="job_list___sub_heading_45_1" data-parent="#job_list___sub_accordion_45" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_45_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=178" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (178, 19), end pos: (178, 39)</button></a></pre><pre>operator: core/AddNot, occurrence: 11</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -175,7 +175,7 @@
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+-                if other.id != offer_id:
++                if not other.id != offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ 
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_46"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_46_1" aria-expanded="false" aria-controls="job_list___sub_collapse_46_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_46_1"><button class="btn btn-outline-success"><span class="job_id">46 : Job ID 082c0c9ac3dd42e8880a118cced7d824</span></button></div></a><div aria-labelledby="job_list___sub_heading_46_1" data-parent="#job_list___sub_accordion_46" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_46_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=61" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (61, 36), end pos: (61, 40)</button></a></pre><pre>operator: core/ReplaceTrueWithFalse, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -58,7 +58,7 @@
+                     message="You already have a pending offer on this listing. "
+                     "Wait for it to be rejected before sending another."
+                 )
+-            if existing.accepted is True:
++            if existing.accepted is False:
+                 raise UnapprovedBehaviorError(
+                     message="Your offer on this listing was already accepted."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_47"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_47_1" aria-expanded="false" aria-controls="job_list___sub_collapse_47_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_47_1"><button class="btn btn-outline-success"><span class="job_id">47 : Job ID 96b2f8bf64454a788006e415d820b550</span></button></div></a><div aria-labelledby="job_list___sub_heading_47_1" data-parent="#job_list___sub_accordion_47" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_47_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=179" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (179, 58), end pos: (179, 63)</button></a></pre><pre>operator: core/ReplaceFalseWithTrue, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -176,7 +176,7 @@
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+             for other in pending_offers:
+                 if other.id != offer_id:
+-                    self._offer_db.set_accepted(other.id, False)
++                    self._offer_db.set_accepted(other.id, True)
+ 
+ 
+     @override # pragma: no mutate</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_48"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_48_1" aria-expanded="false" aria-controls="job_list___sub_collapse_48_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_48_1"><button class="btn btn-outline-success"><span class="job_id">48 : Job ID 5fc08c2189e64b6f843a4f0c10b87d21</span></button></div></a><div aria-labelledby="job_list___sub_heading_48_1" data-parent="#job_list___sub_accordion_48" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_48_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=35" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (35, 4), end pos: (36, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_49"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_49_1" aria-expanded="false" aria-controls="job_list___sub_collapse_49_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_49_1"><button class="btn btn-outline-success"><span class="job_id">49 : Job ID 81df67377e71449e82e5f0682e5939f7</span></button></div></a><div aria-labelledby="job_list___sub_heading_49_1" data-parent="#job_list___sub_accordion_49" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_49_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=69" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (69, 4), end pos: (70, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 1</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_50"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_50_1" aria-expanded="false" aria-controls="job_list___sub_collapse_50_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_50_1"><button class="btn btn-outline-success"><span class="job_id">50 : Job ID b3d01538b0914a3e932eb06d286737bb</span></button></div></a><div aria-labelledby="job_list___sub_heading_50_1" data-parent="#job_list___sub_accordion_50" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_50_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=74" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (74, 4), end pos: (75, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 2</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_51"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_51_1" aria-expanded="false" aria-controls="job_list___sub_collapse_51_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_51_1"><button class="btn btn-outline-success"><span class="job_id">51 : Job ID 0386c7677e7446b892702b9fdd280740</span></button></div></a><div aria-labelledby="job_list___sub_heading_51_1" data-parent="#job_list___sub_accordion_51" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_51_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=78" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (78, 4), end pos: (79, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 3</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_52"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_52_1" aria-expanded="false" aria-controls="job_list___sub_collapse_52_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_52_1"><button class="btn btn-outline-success"><span class="job_id">52 : Job ID 1999535c7ef44ed6b1093ad907d491ea</span></button></div></a><div aria-labelledby="job_list___sub_heading_52_1" data-parent="#job_list___sub_accordion_52" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_52_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=83" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (83, 4), end pos: (84, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 4</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_53"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_53_1" aria-expanded="false" aria-controls="job_list___sub_collapse_53_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_53_1"><button class="btn btn-outline-success"><span class="job_id">53 : Job ID 3e9b2bf5185340fc9ee87056a1b21ae3</span></button></div></a><div aria-labelledby="job_list___sub_heading_53_1" data-parent="#job_list___sub_accordion_53" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_53_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=88" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (88, 4), end pos: (89, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 5</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_54"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_54_1" aria-expanded="false" aria-controls="job_list___sub_collapse_54_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_54_1"><button class="btn btn-outline-success"><span class="job_id">54 : Job ID 6ed497be05ff4d688948b94ae8e14e82</span></button></div></a><div aria-labelledby="job_list___sub_heading_54_1" data-parent="#job_list___sub_accordion_54" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_54_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=93" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (93, 4), end pos: (94, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 6</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_55"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_55_1" aria-expanded="false" aria-controls="job_list___sub_collapse_55_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_55_1"><button class="btn btn-outline-success"><span class="job_id">55 : Job ID 0e8f85eef31e46568d3c178a58e6274b</span></button></div></a><div aria-labelledby="job_list___sub_heading_55_1" data-parent="#job_list___sub_accordion_55" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_55_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=98" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (98, 4), end pos: (99, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 7</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_56"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_56_1" aria-expanded="false" aria-controls="job_list___sub_collapse_56_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_56_1"><button class="btn btn-outline-success"><span class="job_id">56 : Job ID d8543a7d2ca64fa1b648718cba0d164d</span></button></div></a><div aria-labelledby="job_list___sub_heading_56_1" data-parent="#job_list___sub_accordion_56" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_56_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=103" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (103, 4), end pos: (104, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 8</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_57"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_57_1" aria-expanded="false" aria-controls="job_list___sub_collapse_57_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_57_1"><button class="btn btn-outline-success"><span class="job_id">57 : Job ID ba69fbf51204467dae0408d54bd597b8</span></button></div></a><div aria-labelledby="job_list___sub_heading_57_1" data-parent="#job_list___sub_accordion_57" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_57_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=111" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (111, 4), end pos: (112, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 9</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_58"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_58_1" aria-expanded="false" aria-controls="job_list___sub_collapse_58_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_58_1"><button class="btn btn-outline-success"><span class="job_id">58 : Job ID 2a1adba8c9e5456abd0facf6304461b0</span></button></div></a><div aria-labelledby="job_list___sub_heading_58_1" data-parent="#job_list___sub_accordion_58" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_58_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=120" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (120, 4), end pos: (121, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 10</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_59"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_59_1" aria-expanded="false" aria-controls="job_list___sub_collapse_59_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_59_1"><button class="btn btn-outline-success"><span class="job_id">59 : Job ID 94fd6492a9f444849904ffb5fa214203</span></button></div></a><div aria-labelledby="job_list___sub_heading_59_1" data-parent="#job_list___sub_accordion_59" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_59_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=129" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (129, 4), end pos: (130, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 11</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_60"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_60_1" aria-expanded="false" aria-controls="job_list___sub_collapse_60_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_60_1"><button class="btn btn-outline-success"><span class="job_id">60 : Job ID 527946dca27a4f2495c640bdd46456cf</span></button></div></a><div aria-labelledby="job_list___sub_heading_60_1" data-parent="#job_list___sub_accordion_60" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_60_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=138" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (138, 4), end pos: (139, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 12</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_61"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_61_1" aria-expanded="false" aria-controls="job_list___sub_collapse_61_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_61_1"><button class="btn btn-outline-success"><span class="job_id">61 : Job ID 40f1ffae66e0472faac143d8f0d9ca5b</span></button></div></a><div aria-labelledby="job_list___sub_heading_61_1" data-parent="#job_list___sub_accordion_61" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_61_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=144" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (144, 4), end pos: (145, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 13</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_62"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_62_1" aria-expanded="false" aria-controls="job_list___sub_collapse_62_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_62_1"><button class="btn btn-outline-success"><span class="job_id">62 : Job ID a9c7010ea19240f8ad355e8030fbccd0</span></button></div></a><div aria-labelledby="job_list___sub_heading_62_1" data-parent="#job_list___sub_accordion_62" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_62_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=149" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (149, 4), end pos: (150, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 14</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_63"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_63_1" aria-expanded="false" aria-controls="job_list___sub_collapse_63_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_63_1"><button class="btn btn-outline-success"><span class="job_id">63 : Job ID 37f9e904ab4045d7a51a36a34b1cc821</span></button></div></a><div aria-labelledby="job_list___sub_heading_63_1" data-parent="#job_list___sub_accordion_63" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_63_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=182" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (182, 4), end pos: (183, 0)</button></a></pre><pre>operator: core/RemoveDecorator, occurrence: 15</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_64"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_64_1" aria-expanded="false" aria-controls="job_list___sub_collapse_64_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_64_1"><button class="btn btn-outline-success"><span class="job_id">64 : Job ID b762ebd8633e4dcb99646db826cf3e96</span></button></div></a><div aria-labelledby="job_list___sub_heading_64_1" data-parent="#job_list___sub_accordion_64" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_64_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=116" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (116, 23), end pos: (116, 31)</button></a></pre><pre>operator: core/ZeroIterationForLoop, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -113,7 +113,7 @@
+         seller_id = Validation.require_int(seller_id, "seller_id")
+         listings = self._listing_db.get_by_seller_id(seller_id)
+         offers = []
+-        for listing in listings:
++        for listing in []:
+             offers.extend(self._offer_db.get_by_listing_id(listing.id))
+         return offers
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_65"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_65_1" aria-expanded="false" aria-controls="job_list___sub_collapse_65_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_65_1"><button class="btn btn-outline-success"><span class="job_id">65 : Job ID b9c33510556049b09589b08dde85d360</span></button></div></a><div aria-labelledby="job_list___sub_heading_65_1" data-parent="#job_list___sub_accordion_65" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_65_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=125" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (125, 23), end pos: (125, 31)</button></a></pre><pre>operator: core/ZeroIterationForLoop, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -122,7 +122,7 @@
+         seller_id = Validation.require_int(seller_id, "seller_id")
+         listings = self._listing_db.get_by_seller_id(seller_id)
+         offers = []
+-        for listing in listings:
++        for listing in []:
+             offers.extend(self._offer_db.get_pending_by_listing_id(listing.id))
+         return offers
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_66"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_66_1" aria-expanded="false" aria-controls="job_list___sub_collapse_66_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_66_1"><button class="btn btn-outline-success"><span class="job_id">66 : Job ID eed79d16dde34fce85b97f728a60c18e</span></button></div></a><div aria-labelledby="job_list___sub_heading_66_1" data-parent="#job_list___sub_accordion_66" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_66_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=134" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (134, 23), end pos: (134, 31)</button></a></pre><pre>operator: core/ZeroIterationForLoop, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -131,7 +131,7 @@
+         seller_id = Validation.require_int(seller_id, "seller_id")
+         listings = self._listing_db.get_by_seller_id(seller_id)
+         offers = []
+-        for listing in listings:
++        for listing in []:
+             offers.extend(self._offer_db.get_unseen_by_listing_id(listing.id))
+         return offers
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_67"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_67_1" aria-expanded="false" aria-controls="job_list___sub_collapse_67_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_67_1"><button class="btn btn-outline-success"><span class="job_id">67 : Job ID 3f96553c33c34e0b825a98acc7f00cc2</span></button></div></a><div aria-labelledby="job_list___sub_heading_67_1" data-parent="#job_list___sub_accordion_67" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_67_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/managers/offer/offer_manager.py&amp;line=177" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/managers/offer/offer_manager.py, start pos: (177, 25), end pos: (177, 39)</button></a></pre><pre>operator: core/ZeroIterationForLoop, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/managers/offer/offer_manager.py
++++ bsrc/business_logic/managers/offer/offer_manager.py
+@@ -174,7 +174,7 @@
+ 
+         if accepted:
+             pending_offers = self._offer_db.get_pending_by_listing_id(offer.listing_id)
+-            for other in pending_offers:
++            for other in []:
+                 if other.id != offer_id:
+                     self._offer_db.set_accepted(other.id, False)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_68"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_68_1" aria-expanded="false" aria-controls="job_list___sub_collapse_68_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_68_1"><button class="btn btn-outline-success"><span class="job_id">68 : Job ID ba2662c40e154e0bbe1d8f15590ca324</span></button></div></a><div aria-labelledby="job_list___sub_heading_68_1" data-parent="#job_list___sub_accordion_68" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_68_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/offer_service.py&amp;line=68" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/offer_service.py, start pos: (68, 17), end pos: (68, 19)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/offer_service.py
++++ bsrc/business_logic/services/offer_service.py
+@@ -65,7 +65,7 @@
+         seller != buyer, listing not already sold).
+         """
+         offer = self._offer_manager.get_offer_by_id(offer_id)
+-        if offer is None:
++        if offer is not None:
+             raise OfferNotFoundError(message=f"Offer {offer_id} not found.")
+ 
+         self._offer_manager.set_offer_accepted(offer_id, accepted, actor_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_69"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_69_1" aria-expanded="false" aria-controls="job_list___sub_collapse_69_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_69_1"><button class="btn btn-outline-success"><span class="job_id">69 : Job ID e2759d8e461247f095a0a7d9dec08847</span></button></div></a><div aria-labelledby="job_list___sub_heading_69_1" data-parent="#job_list___sub_accordion_69" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_69_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/offer_service.py&amp;line=76" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/offer_service.py, start pos: (76, 23), end pos: (76, 25)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/offer_service.py
++++ bsrc/business_logic/services/offer_service.py
+@@ -73,7 +73,7 @@
+         if accepted:
+             actor = self._account_manager.get_account_by_id(actor_id)
+             listing = self._listing_manager.get_listing_by_id(offer.listing_id)
+-            if listing is None:
++            if listing is not None:
+                 raise ListingNotFoundError(
+                     message=f"Listing {offer.listing_id} not found."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_70"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_70_1" aria-expanded="false" aria-controls="job_list___sub_collapse_70_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_70_1"><button class="btn btn-outline-success"><span class="job_id">70 : Job ID 3a79a56a86a04de0a40be1de65ddd36d</span></button></div></a><div aria-labelledby="job_list___sub_heading_70_1" data-parent="#job_list___sub_accordion_70" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_70_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/offer_service.py&amp;line=81" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/offer_service.py, start pos: (81, 21), end pos: (81, 23)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/offer_service.py
++++ bsrc/business_logic/services/offer_service.py
+@@ -78,7 +78,7 @@
+                     message=f"Listing {offer.listing_id} not found."
+                 )
+             buyer = self._account_manager.get_account_by_id(offer.sender_id)
+-            if buyer is None:
++            if buyer is not None:
+                 raise UnapprovedBehaviorError(
+                     message=f"Buyer account {offer.sender_id} not found."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_71"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_71_1" aria-expanded="false" aria-controls="job_list___sub_collapse_71_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_71_1"><button class="btn btn-outline-success"><span class="job_id">71 : Job ID 42d6aa784a554488834b781329fbb168</span></button></div></a><div aria-labelledby="job_list___sub_heading_71_1" data-parent="#job_list___sub_accordion_71" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_71_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/offer_service.py&amp;line=68" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/offer_service.py, start pos: (68, 11), end pos: (68, 24)</button></a></pre><pre>operator: core/AddNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/offer_service.py
++++ bsrc/business_logic/services/offer_service.py
+@@ -65,7 +65,7 @@
+         seller != buyer, listing not already sold).
+         """
+         offer = self._offer_manager.get_offer_by_id(offer_id)
+-        if offer is None:
++        if not offer is None:
+             raise OfferNotFoundError(message=f"Offer {offer_id} not found.")
+ 
+         self._offer_manager.set_offer_accepted(offer_id, accepted, actor_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_72"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_72_1" aria-expanded="false" aria-controls="job_list___sub_collapse_72_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_72_1"><button class="btn btn-outline-success"><span class="job_id">72 : Job ID 6eacca3bbd8242e69f460d654d79c49e</span></button></div></a><div aria-labelledby="job_list___sub_heading_72_1" data-parent="#job_list___sub_accordion_72" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_72_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/offer_service.py&amp;line=73" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/offer_service.py, start pos: (73, 11), end pos: (73, 19)</button></a></pre><pre>operator: core/AddNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/offer_service.py
++++ bsrc/business_logic/services/offer_service.py
+@@ -70,7 +70,7 @@
+ 
+         self._offer_manager.set_offer_accepted(offer_id, accepted, actor_id)
+ 
+-        if accepted:
++        if not accepted:
+             actor = self._account_manager.get_account_by_id(actor_id)
+             listing = self._listing_manager.get_listing_by_id(offer.listing_id)
+             if listing is None:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_73"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_73_1" aria-expanded="false" aria-controls="job_list___sub_collapse_73_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_73_1"><button class="btn btn-outline-success"><span class="job_id">73 : Job ID 53c7a232abff4fecb85ef5544e28bd6a</span></button></div></a><div aria-labelledby="job_list___sub_heading_73_1" data-parent="#job_list___sub_accordion_73" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_73_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/offer_service.py&amp;line=76" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/offer_service.py, start pos: (76, 15), end pos: (76, 30)</button></a></pre><pre>operator: core/AddNot, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/offer_service.py
++++ bsrc/business_logic/services/offer_service.py
+@@ -73,7 +73,7 @@
+         if accepted:
+             actor = self._account_manager.get_account_by_id(actor_id)
+             listing = self._listing_manager.get_listing_by_id(offer.listing_id)
+-            if listing is None:
++            if not listing is None:
+                 raise ListingNotFoundError(
+                     message=f"Listing {offer.listing_id} not found."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_74"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_74_1" aria-expanded="false" aria-controls="job_list___sub_collapse_74_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_74_1"><button class="btn btn-outline-success"><span class="job_id">74 : Job ID e6d9ae0b870f4c95813fd80c22a815bc</span></button></div></a><div aria-labelledby="job_list___sub_heading_74_1" data-parent="#job_list___sub_accordion_74" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_74_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/offer_service.py&amp;line=81" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/offer_service.py, start pos: (81, 15), end pos: (81, 28)</button></a></pre><pre>operator: core/AddNot, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/offer_service.py
++++ bsrc/business_logic/services/offer_service.py
+@@ -78,7 +78,7 @@
+                     message=f"Listing {offer.listing_id} not found."
+                 )
+             buyer = self._account_manager.get_account_by_id(offer.sender_id)
+-            if buyer is None:
++            if not buyer is None:
+                 raise UnapprovedBehaviorError(
+                     message=f"Buyer account {offer.sender_id} not found."
+                 )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div></div></div></div></div></div><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script><script type="text/javascript">$('div.job_list___sub_multi_collapse').on('shown.bs.collapse',  function () {    correct_behavior_functional_buttons();  });$('div.job_list___sub_multi_collapse').on('hidden.bs.collapse',  function () {    correct_behavior_functional_buttons();  });function correct_behavior_functional_buttons() {    var expand = false;    var collapse = false;    $('a.job_list___sub_multi_heading').each(function(index) {      if ($(this).attr('aria-expanded') == 'false') {        expand = true;        return false;      };    });    $('a.job_list___sub_multi_heading').each(function(index) {      if ($(this).attr('aria-expanded') == 'true') {        collapse = true;        return false;      };    });    if (expand) {      $('div#job_item_expand_all').css('display', 'inline-block');    } else {      $('div#job_item_expand_all').css('display', 'none');    };    if (collapse) {      $('div#job_item_collapse_all').css('display', 'inline-block');    } else {      $('div#job_item_collapse_all').css('display', 'none');    };  };correct_behavior_functional_buttons();</script></body></html>

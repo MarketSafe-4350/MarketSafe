@@ -1,0 +1,26 @@
+[cosmic-ray]
+module-path = [
+        "src/business_logic/managers/rating/rating_manager.py",
+        "src/api/converter/rating_converter.py",
+        "src/api/routes/account_routes.py",
+    ]
+timeout = 60.0
+excluded-modules = []
+test-command = "python -m tests.unit.all_unit_tests"
+
+[cosmic-ray.filters.operators-filter]
+    exclude-operators = [
+        "core/ReplaceBinaryOperator_BitOr_Add",
+        "core/ReplaceBinaryOperator_BitOr_Sub",
+        "core/ReplaceBinaryOperator_BitOr_Mul",
+        "core/ReplaceBinaryOperator_BitOr_Div",
+        "core/ReplaceBinaryOperator_BitOr_FloorDiv",
+        "core/ReplaceBinaryOperator_BitOr_Mod",
+        "core/ReplaceBinaryOperator_BitOr_Pow",
+        "core/ReplaceBinaryOperator_BitOr_RShift",
+        "core/ReplaceBinaryOperator_BitOr_LShift",
+        "core/ReplaceBinaryOperator_BitOr_BitAnd",
+        "core/ReplaceBinaryOperator_BitOr_BitXor",
+    ]
+[cosmic-ray.distributor]
+name = "local"
