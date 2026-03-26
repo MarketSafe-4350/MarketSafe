@@ -257,6 +257,63 @@ class TestAccountRoutes(unittest.TestCase):
             resp.json()["error_message"], "An error occurred during verification"
         )
 
+    def test_verify_email_auth_token_rejects_9_characters(self) -> None:
+        service = MagicMock(name="account_service")
+
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/verify-email?auth_token=123456789")
+
+        self.assertEqual(resp.status_code, 422)
+        service.verify_email_token.assert_not_called()
+
+
+    def test_verify_email_auth_token_accepts_10_characters(self) -> None:
+        service = MagicMock(name="account_service")
+
+        account = MagicMock()
+        account.email = "a@b.com"
+        account.fname = "A"
+        account.lname = "B"
+        account.verified = True
+        service.verify_email_token.return_value = account
+
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/verify-email?auth_token=1234567890")
+
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["email"], "a@b.com")
+        self.assertEqual(data["verified"], True)
+        self.assertEqual(data["message"], "Email verified successfully!")
+        service.verify_email_token.assert_called_once_with("1234567890")
+
+
+    def test_verify_email_legacy_token_rejects_9_characters(self) -> None:
+        service = MagicMock(name="account_service")
+
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/verify-email?token=123456789")
+
+        self.assertEqual(resp.status_code, 422)
+        service.verify_email_token.assert_not_called()
+
+
+    def test_verify_email_legacy_token_accepts_10_characters(self) -> None:
+        service = MagicMock(name="account_service")
+
+        account = MagicMock()
+        account.email = "a@b.com"
+        account.fname = "A"
+        account.lname = "B"
+        account.verified = True
+        service.verify_email_token.return_value = account
+
+        self.app.dependency_overrides[get_account_service] = lambda: service
+        resp = self.client.get("/accounts/verify-email?token=1234567890")
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.json()["email"], "a@b.com")
+        service.verify_email_token.assert_called_once_with("1234567890")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

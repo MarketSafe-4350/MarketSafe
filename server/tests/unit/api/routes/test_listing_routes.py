@@ -596,5 +596,41 @@ class TestListingRoutes(unittest.TestCase):
         response = self.client.get("/listings/search?q=")
         self.assertEqual(response.status_code, 422)
 
+    def test_get_listing_rating_returns_none_when_service_returns_none(self):
+        listing_id = 42
+        self.listing_service.get_listing_rating.return_value = None
+
+        response = self.client.get(f"/listings/{listing_id}/ratings")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.json())
+        self.listing_service.get_listing_rating.assert_called_once_with(listing_id)
+
+
+    def test_get_listing_rating_returns_rating_response_when_rating_exists(self):
+        listing_id = 42
+        fake_rating = MagicMock(name="rating_domain")
+        self.listing_service.get_listing_rating.return_value = fake_rating
+
+        fake_response = {
+            "id": 1,
+            "listing_id": listing_id,
+            "rater_id": 20,
+            "transaction_rating": 4,
+        }
+
+        with patch.object(
+            listing_routes.RatingResponse,
+            "from_domain",
+            return_value=fake_response,
+        ) as from_domain_mock:
+            response = self.client.get(f"/listings/{listing_id}/ratings")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), fake_response)
+        self.listing_service.get_listing_rating.assert_called_once_with(listing_id)
+        from_domain_mock.assert_called_once_with(fake_rating)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
