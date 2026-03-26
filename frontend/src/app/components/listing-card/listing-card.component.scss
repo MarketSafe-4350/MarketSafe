@@ -69,6 +69,34 @@
   min-width: 0;
 }
 
+.list-actions {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.seller-profile-btn {
+  width: fit-content;
+}
+
+.send-offer-btn {
+  width: fit-content;
+  background-color: #f0394f;
+  color: #fff;
+  font-weight: 600;
+
+  &:hover {
+    filter: brightness(1.05);
+  }
+
+  &:disabled {
+    background-color: #cbd5e1;
+    color: #475569;
+    cursor: not-allowed;
+  }
+}
+
 .list-title {
   font-weight: 600;
   font-size: 1rem;

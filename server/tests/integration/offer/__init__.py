@@ -1,0 +1,4 @@
+from .test_mysql_offer_db import TestMySQLOfferDB
+from .test_offer_manager_integration import TestOfferManagerIntegration
+from .test_offer_service_integration import TestOfferServiceIntegration
+from .test_offer_route_integration import TestOfferRouteIntegration

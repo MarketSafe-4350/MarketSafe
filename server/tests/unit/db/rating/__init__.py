@@ -1,0 +1,5 @@
+from .test_rating_db_abc import TestRatingDBABC
+from .test_base_rating_db_abc import TestBaseRatingDBABC
+from .test_mysql_rating_db import TestMySQLRatingDBUnit
+from .test_mysql_rating_db_edge_cases import TestMySQLRatingDBEdgeCases
+from .test_rating_mapper import TestRatingMapper

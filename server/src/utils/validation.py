@@ -10,6 +10,63 @@ class Validation:
     """
 
     @staticmethod
+    def rating_average(value: float | None, field_name: str = "average_rating_received") -> float | None:
+        """
+        Validate an average rating value.
+
+        Rules:
+        - Can be None (meaning no ratings exist yet)
+        - Must be numeric if provided
+        - Cannot be negative
+        """
+
+        if value is None:
+            return None
+
+        if not isinstance(value, (int, float)):
+            raise ValidationError(f"{field_name} must be a number or None.")
+
+        if value < 0:
+            raise ValidationError(f"{field_name} cannot be negative.")
+
+        return float(value)
+
+    @staticmethod
+    def rating_sum(value: int, field_name: str = "sum_of_ratings_received") -> int:
+        """
+        Validate the sum of ratings.
+
+        Rules:
+        - Must be an integer
+        - Cannot be negative
+        """
+
+        value = Validation.require_int(value, field_name)
+
+        if value < 0:
+            raise ValidationError(f"{field_name} cannot be negative.")
+
+        return value
+
+    @staticmethod
+    def rating_count(value: int, field_name: str = "rating_count") -> int:
+        """
+        Validate the count of ratings.
+
+        Rules:
+        - Must be an integer
+        - Cannot be negative
+        """
+
+        value = Validation.require_int(value, field_name)
+
+        if value < 0:
+            raise ValidationError(f"{field_name} cannot be negative.")
+
+        return value
+
+
+    @staticmethod
     def not_empty(value: str, field_name: str) -> str:
         if value is None or value.strip() == "":
             raise ValidationError(f"{field_name} cannot be empty.")

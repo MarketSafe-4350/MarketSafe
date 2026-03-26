@@ -3,15 +3,17 @@ import { fakeAsync, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { MainPageComponent } from './main-page.component';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { Listing } from '../../shared/models/listing.models';
 import { CommentApiService } from '../../shared/services/comments-api.service';
+import { Offer, OffersApiService } from '../../shared/services/offers-api.service';
+import { SendOfferDialogComponent } from '../send-offer/send-offer.component';
 
 describe('MainPageComponent', () => {
   let fixture: ComponentFixture<MainPageComponent>;
@@ -20,6 +22,8 @@ describe('MainPageComponent', () => {
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
   let matDialogSpy: jasmine.SpyObj<MatDialog>;
   let commentApiSpy: jasmine.SpyObj<CommentApiService>;
+  let offersApiSpy: jasmine.SpyObj<OffersApiService>;
+  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<SendOfferDialogComponent>>;
   let activatedRouteStub: {
     snapshot: { queryParamMap: ReturnType<typeof convertToParamMap> };
   };
@@ -97,6 +101,26 @@ describe('MainPageComponent', () => {
       }),
     );
 
+    offersApiSpy = jasmine.createSpyObj<OffersApiService>('OffersApiService', [
+      'create',
+      'getSent',
+      'getReceived',
+      'getReceivedUnseen',
+      'markSeen',
+    ]);
+    offersApiSpy.create.and.returnValue(of({}));
+    offersApiSpy.getSent.and.returnValue(of([]));
+    offersApiSpy.getReceived.and.returnValue(of([]));
+    offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.markSeen.and.returnValue(of({}));
+
+    dialogRefSpy = jasmine.createSpyObj<MatDialogRef<SendOfferDialogComponent>>(
+      'MatDialogRef',
+      ['afterClosed'],
+    );
+    dialogRefSpy.afterClosed.and.returnValue(of(null));
+    matDialogSpy.open.and.returnValue(dialogRefSpy);
+
     await TestBed.configureTestingModule({
       imports: [MainPageComponent, RouterTestingModule],
       providers: [
@@ -104,6 +128,7 @@ describe('MainPageComponent', () => {
         { provide: ListingsApiService, useValue: listingsApiSpy },
         { provide: AccountsApiService, useValue: accountsApiSpy },
         { provide: CommentApiService, useValue: commentApiSpy },
+        { provide: OffersApiService, useValue: offersApiSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
       ],
     })
@@ -149,6 +174,53 @@ describe('MainPageComponent', () => {
     const deleteButtons =
       fixture.nativeElement.querySelectorAll('button.delete-btn');
     expect(deleteButtons.length).toBe(1);
+  });
+
+  it('openSellerProfile_ShouldNavigateToSellerProfileRoute', async () => {
+    fixture.detectChanges();
+
+    const router = TestBed.inject(Router);
+    const navigateSpy = spyOn(router, 'navigate').and.resolveTo(true);
+
+    component.openSellerProfile(otherListing);
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/profile', otherListing.sellerId]);
+  });
+
+  it('canViewSellerProfile_ShouldBeFalseForOwnedListing', () => {
+    fixture.detectChanges();
+
+    expect(component.canViewSellerProfile(ownedListing)).toBeFalse();
+    expect(component.canViewSellerProfile(otherListing)).toBeTrue();
+  });
+
+  it('canSendOffer_ShouldOnlyBeTrueForOtherActiveListing', () => {
+    fixture.detectChanges();
+
+    expect(component.canSendOffer(ownedListing)).toBeFalse();
+    expect(component.canSendOffer({ ...otherListing, isSold: true })).toBeFalse();
+    expect(component.canSendOffer(otherListing)).toBeTrue();
+  });
+
+  it('canSendOffer_DeclinedSentOffer_ShouldStillBeTrue', () => {
+    const declinedOffer: Offer = {
+      id: 91,
+      listingId: otherListing.id,
+      senderId: 123,
+      offeredPrice: 10,
+      locationOffered: 'Winnipeg',
+      seen: true,
+      accepted: false,
+      createdDate: new Date().toISOString(),
+    };
+    offersApiSpy.getSent.and.returnValue(of([declinedOffer]));
+
+    fixture = TestBed.createComponent(MainPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.canSendOffer(otherListing)).toBeTrue();
+    expect(component.getOfferButtonLabel(otherListing.id)).toBe('Send Offer');
   });
 
   it('submitComment_WhitespaceOnly_ShouldSetErrorAndNotCreateComment', () => {

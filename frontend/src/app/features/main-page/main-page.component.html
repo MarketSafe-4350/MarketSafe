@@ -43,8 +43,17 @@
                   <app-listing-card
                     [listing]="listing"
                     [commentCount]="getComments(listing.id).length"
+                    [showSellerProfileButton]="canViewSellerProfile(listing)"
+                    [showOfferButton]="canViewSellerProfile(listing)"
+                    [isOfferDisabled]="!canSendOffer(listing) || isSubmittingOffer(listing.id)"
+                    [offerButtonLabel]="getOfferButtonLabel(listing.id)"
+                    (sellerProfileClick)="openSellerProfile(listing)"
+                    (offerClick)="openSendOfferDialog(listing)"
                   ></app-listing-card>
                 </div>
+                @if (getOfferMessage(listing.id); as offerMessage) {
+                  <p class="comment-disabled-note">{{ offerMessage }}</p>
+                }
                 @if (listing.isSold) {
                   <p class="comment-disabled-note">Comments are disabled for sold listings.</p>
                 }

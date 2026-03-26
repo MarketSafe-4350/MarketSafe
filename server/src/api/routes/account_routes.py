@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 import logging
 
+from src.api.dependencies import get_account_service
 from src.auth.dependencies import get_current_user_id
 from src.api.converter.account_converter import LoginRequest
 from src.config import FRONTEND_URL
@@ -31,21 +32,11 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/accounts")
 
 
-def _get_service() -> AccountService:
-    """Helper function to get service when needed
-
-    Returns:
-        AccountService: A new instance of AccountService with its dependencies initialized.
-    """
-    db = DBUtility.instance()
-    account_db = MySQLAccountDB(db=db)
-    account_manager = AccountManager(account_db=account_db)
-    token_db = MySQLEmailVerificationTokenDB(db=db)
-    return AccountService(account_manager=account_manager, token_db=token_db)
-
-
 @router.post("", response_model=SignupResponse)
-def create_account(request: AccountSignup):
+def create_account(
+    request: AccountSignup,
+    account_service: AccountService = Depends(get_account_service),
+):
     """Creates a new account and returns verification link.
 
     Args:
@@ -54,9 +45,8 @@ def create_account(request: AccountSignup):
     Returns:
         SignupResponse: The response with account data and verification link.
     """
-    service = _get_service()
     try:
-        account: Account = service.create_account(
+        account: Account = account_service.create_account(
             email=request.email,
             password=request.password,
             fname=request.fname,
@@ -66,7 +56,7 @@ def create_account(request: AccountSignup):
         # Generate verification auth_token and create link
         # NOTE: In production, this would be done after saving to DB
         # For now, using a mock account_id for demonstration
-        raw_token = service.generate_and_store_verification_token(account_id=1)
+        raw_token = account_service.generate_and_store_verification_token(account_id=1)
 
         # Create verification link
         verification_link = f"{FRONTEND_URL}/verify-email?auth_token={raw_token}"
@@ -87,7 +77,10 @@ def create_account(request: AccountSignup):
 
 
 @router.post("/login", response_model=Token)
-def login_account(request: LoginRequest):
+def login_account(
+    request: LoginRequest,
+    account_service: AccountService = Depends(get_account_service),
+):
     """
     Authenticates a user and returns a JWT auth_token.
 
@@ -97,23 +90,26 @@ def login_account(request: LoginRequest):
     Returns:
         dict: A JSON object containing the access auth_token and auth_token type.
     """
-    service = _get_service()
-
-    token = service.login(request.email, request.password)
+    token = account_service.login(request.email, request.password)
     return {"access_token": token, "token_type": "bearer"}
 
 
 @router.get("/me", response_model=AccountResponse)
 def get_account(
     user_id: int = Depends(get_current_user_id),
+    account_service: AccountService = Depends(get_account_service),
 ):
-    service = _get_service()
-    account = service.get_account_userid(user_id)
+    account = account_service.get_account_by_userid(user_id)
 
     return AccountResponse(
+        id=account.id,
         email=account.email,
         fname=account.fname,
         lname=account.lname,
+        verified=account.verified,
+        average_rating_received=account.average_rating_received,
+        sum_of_ratings_received=account.sum_of_ratings_received,
+        rating_count=account.rating_count,
     )
 
 
@@ -121,12 +117,12 @@ def get_account(
 def verify_email(
     auth_token: str | None = Query(None, min_length=10),
     token: str | None = Query(None, min_length=10),
+    account_service: AccountService = Depends(get_account_service),
 ):
     """
     Email verification endpoint: /accounts/verify-email?auth_token=...
     Supports legacy token query parameter for backwards compatibility.
     """
-    service = _get_service()
     try:
         verification_token = auth_token or token
         if not verification_token:
@@ -135,7 +131,7 @@ def verify_email(
                 content={"error_message": "No verification auth_token provided."},
             )
 
-        account = service.verify_email_token(verification_token)
+        account = account_service.verify_email_token(verification_token)
 
         logger.info(f"Email verified for account {account.email}")
 
@@ -163,3 +159,21 @@ def verify_email(
             status_code=500,
             content={"error_message": "An error occurred during verification"},
         )
+
+
+@router.get("/id/{account_id}", response_model=AccountResponse)
+def get_account_by_id(
+    account_id: int,
+    account_service: AccountService = Depends(get_account_service),
+):
+    account = account_service.get_account_by_userid(account_id)
+    return AccountResponse(
+        id=account.id,
+        email=account.email,
+        fname=account.fname,
+        lname=account.lname,
+        verified=account.verified,
+        average_rating_received=account.average_rating_received,
+        sum_of_ratings_received=account.sum_of_ratings_received,
+        rating_count=account.rating_count,
+    )

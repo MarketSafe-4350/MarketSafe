@@ -15,6 +15,7 @@
           <mat-card-header>
             <div class="profile-header">
               <div class="profile-info">
+                <div class="section-title">{{ pageTitle }}</div>
                 <div class="profile-name">{{fullName}}</div>
                 <div class="profile-email">{{account?.email ?? '-'}}</div>
               </div>
@@ -34,13 +35,42 @@
           <mat-divider></mat-divider>
           <mat-card-content class="section">
             <div class="section-header">
-              <h3 class="section-title">My Rating</h3>
+              <h3 class="section-title">{{ ratingTitle }}</h3>
             </div>
 
             <app-rating
               [average]="ratingAvg"
               [reviewCount]="ratingCount"
             ></app-rating>
+          </mat-card-content>
+
+          <mat-divider></mat-divider>
+          <mat-card-content class="section listing-section">
+            <div class="section-header">
+              <h3 class="section-title">{{ listingsTitle }}</h3>
+            </div>
+
+            @if (offerFeedbackMessage) {
+              <p>{{ offerFeedbackMessage }}</p>
+            }
+
+            @if (profileListings.length === 0) {
+              <p>No listings to show.</p>
+            } @else {
+              <div class="listings-scroll">
+                <div class="listing-grid">
+                  @for (listing of profileListings; track listing.id) {
+                    <app-listing-card
+                      [listing]="listing"
+                      [showOfferButton]="isSellerProfile"
+                      [isOfferDisabled]="!canSendOffer(listing)"
+                      [offerButtonLabel]="getOfferButtonLabel(listing.id)"
+                      (offerClick)="openSendOfferDialog(listing)"
+                    ></app-listing-card>
+                  }
+                </div>
+              </div>
+            }
           </mat-card-content>
 
         </mat-card>

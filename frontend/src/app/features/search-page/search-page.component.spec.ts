@@ -5,12 +5,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { SearchPageComponent } from './search-page.component';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { ListingsApiService } from '../../shared/services/listings-api.service';
 import { Listing } from '../../shared/models/listing.models';
+import { Offer, OffersApiService } from '../../shared/services/offers-api.service';
+import { SendOfferDialogComponent } from '../send-offer/send-offer.component';
 
 @Component({ template: '' })
 class DummyRouteComponent {}
@@ -22,6 +24,8 @@ describe('SearchPageComponent', () => {
   let accountsApiSpy: jasmine.SpyObj<AccountsApiService>;
   let router: Router;
   let matDialogSpy: jasmine.SpyObj<MatDialog>;
+  let offersApiSpy: jasmine.SpyObj<OffersApiService>;
+  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<SendOfferDialogComponent>>;
 
   const searchResult: Listing = {
     id: 25,
@@ -42,14 +46,36 @@ describe('SearchPageComponent', () => {
 
     listingsApiSpy = jasmine.createSpyObj<ListingsApiService>('ListingsApiService', [
       'getMine',
+      'getAll',
       'search',
       'create',
       'delete',
     ]);
     listingsApiSpy.getMine.and.returnValue(of([]));
+    listingsApiSpy.getAll.and.returnValue(of([searchResult]));
     listingsApiSpy.search.and.returnValue(of([searchResult]));
 
     matDialogSpy = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
+    dialogRefSpy = jasmine.createSpyObj<MatDialogRef<SendOfferDialogComponent>>(
+      'MatDialogRef',
+      ['afterClosed'],
+    );
+    dialogRefSpy.afterClosed.and.returnValue(of(null));
+    matDialogSpy.open.and.returnValue(dialogRefSpy);
+
+    offersApiSpy = jasmine.createSpyObj<OffersApiService>('OffersApiService', [
+      'create',
+      'getSent',
+      'getReceived',
+      'getReceivedUnseen',
+      'markSeen',
+    ]);
+    offersApiSpy.create.and.returnValue(of({}));
+    offersApiSpy.getSent.and.returnValue(of([]));
+    offersApiSpy.getReceived.and.returnValue(of([]));
+    offersApiSpy.getReceivedUnseen.and.returnValue(of([]));
+    offersApiSpy.markSeen.and.returnValue(of({}));
+
     accountsApiSpy = jasmine.createSpyObj<AccountsApiService>('AccountsApiService', ['getMe']);
     accountsApiSpy.getMe.and.returnValue(
       of({
@@ -76,6 +102,7 @@ describe('SearchPageComponent', () => {
         provideNoopAnimations(),
         { provide: ListingsApiService, useValue: listingsApiSpy },
         { provide: AccountsApiService, useValue: accountsApiSpy },
+        { provide: OffersApiService, useValue: offersApiSpy },
       ],
     })
       .overrideComponent(SearchPageComponent, {
@@ -122,6 +149,58 @@ describe('SearchPageComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/main-page'], {
       queryParams: { listingId: searchResult.id },
     });
+  });
+
+  it('sellerProfileClick_ShouldNavigateToSellerProfile', () => {
+    fixture.detectChanges();
+    component.searchQuery = 'gaming laptop';
+    component.onSubmitSearch();
+    fixture.detectChanges();
+
+    const navigateSpy = spyOn(router, 'navigate').and.resolveTo(true);
+    const button: HTMLButtonElement | null =
+      fixture.nativeElement.querySelector('.seller-profile-btn');
+
+    expect(button).toBeTruthy();
+    button?.click();
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/profile', searchResult.sellerId]);
+  });
+
+  it('canViewSellerProfile_ShouldBeFalseForCurrentUser', () => {
+    fixture.detectChanges();
+
+    expect(component.canViewSellerProfile(123)).toBeFalse();
+    expect(component.canViewSellerProfile(searchResult.sellerId)).toBeTrue();
+  });
+
+  it('canSendOffer_ShouldOnlyBeTrueForOtherActiveListing', () => {
+    fixture.detectChanges();
+
+    expect(component.canSendOffer({ ...searchResult, sellerId: 123 })).toBeFalse();
+    expect(component.canSendOffer({ ...searchResult, isSold: true })).toBeFalse();
+    expect(component.canSendOffer(searchResult)).toBeTrue();
+  });
+
+  it('canSendOffer_DeclinedSentOffer_ShouldStillBeTrue', () => {
+    const declinedOffer: Offer = {
+      id: 77,
+      listingId: searchResult.id,
+      senderId: 123,
+      offeredPrice: 900,
+      locationOffered: 'Campus',
+      seen: true,
+      accepted: false,
+      createdDate: new Date().toISOString(),
+    };
+    offersApiSpy.getSent.and.returnValue(of([declinedOffer]));
+
+    fixture = TestBed.createComponent(SearchPageComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.canSendOffer(searchResult)).toBeTrue();
+    expect(component.getOfferButtonLabel(searchResult.id)).toBe('Send Offer');
   });
 
   it('changeSortType_ShouldUpdateSortOptionAndCallSortResults', () => {

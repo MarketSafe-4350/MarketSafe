@@ -108,5 +108,51 @@ describe('ListingCardComponent', () => {
       const commentCount = fixture.nativeElement.querySelector('.comment-count');
       expect(commentCount?.textContent?.trim()).toBe('3 comments');
     });
+
+    it('template_ShouldRenderSellerProfileButtonWhenEnabled', () => {
+      fixture.componentRef.setInput('showSellerProfileButton', true);
+      fixture.detectChanges();
+
+      const sellerProfileButton =
+        fixture.nativeElement.querySelector('.seller-profile-btn');
+      expect(sellerProfileButton?.textContent?.trim()).toBe(
+        'View Seller Profile',
+      );
+    });
+
+    it('sellerProfileClick_ShouldEmitWhenButtonClicked', () => {
+      fixture.componentRef.setInput('showSellerProfileButton', true);
+      fixture.detectChanges();
+
+      const emitSpy = spyOn(listingCardComponent.sellerProfileClick, 'emit');
+      const sellerProfileButton: HTMLButtonElement | null =
+        fixture.nativeElement.querySelector('.seller-profile-btn');
+
+      sellerProfileButton?.click();
+
+      expect(emitSpy).toHaveBeenCalled();
+    });
+
+    it('template_ShouldRenderOfferButtonWhenEnabled', () => {
+      fixture.componentRef.setInput('showOfferButton', true);
+      fixture.detectChanges();
+
+      const offerButton =
+        fixture.nativeElement.querySelector('.send-offer-btn');
+      expect(offerButton?.textContent?.trim()).toBe('Send Offer');
+    });
+
+    it('offerClick_ShouldEmitWhenButtonClicked', () => {
+      fixture.componentRef.setInput('showOfferButton', true);
+      fixture.detectChanges();
+
+      const emitSpy = spyOn(listingCardComponent.offerClick, 'emit');
+      const offerButton: HTMLButtonElement | null =
+        fixture.nativeElement.querySelector('.send-offer-btn');
+
+      offerButton?.click();
+
+      expect(emitSpy).toHaveBeenCalled();
+    });
   });
 });

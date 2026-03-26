@@ -4,4 +4,7 @@ from .errors import (AppError, InfrastructureError, DatabaseUnavailableError, Da
                      DomainError, ValidationError, ConflictError, UnapprovedBehaviorError, ConfigurationError,
                      AccountAlreadyExistsError, AccountError, AccountNotFoundError,
                      TokenError, TokenNotFoundError, TokenExpiredError, TokenAlreadyUsedError,
-                     EmailVerificationError, ListingError, ListingNotFoundError, CommentError, CommentNotFoundError)
+                     EmailVerificationError, ListingError, ListingNotFoundError, CommentError, CommentNotFoundError
+                     , RatingError, RatingNotFoundError, OfferError, OfferNotFoundError, MediaNotFoundError,
+                     MediaConflictError, StorageError,
+                     StorageUnavailableError)

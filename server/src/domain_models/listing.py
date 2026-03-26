@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+from src.domain_models.offer import Offer
 from src.utils import ValidationError, UnapprovedBehaviorError, Validation
 from typing import List
 from src.domain_models.comment import Comment
+from src.domain_models.rating import Rating
+
 
 class Listing:
     """
@@ -15,7 +18,9 @@ class Listing:
     - title, description, price are required.
     - is_sold indicates whether the listing is sold.
     - sold_to_id must be set when is_sold is True (DB trigger enforces it too).
+    - rating can only exist when the listing is sold.
     - id can only be assigned once (after DB persistence).
+    - offers is the list of Offer objects associated with this listing.
     """
 
     def __init__(
@@ -32,6 +37,8 @@ class Listing:
         is_sold: bool = False,
         sold_to_id: int | None = None,
         comments: List[Comment] | None = None,
+        rating: Rating | None = None,
+        offers: List[Offer] | None = None,
     ):
         self._id = listing_id
         self._seller_id = Validation.require_int(seller_id, "seller_id")
@@ -54,9 +61,12 @@ class Listing:
         self._is_sold = Validation.is_boolean(is_sold, "is_sold")
         self._sold_to_id = sold_to_id
 
-        self._comments = comments
+        self._comments = list(comments) if comments is not None else []
+        self._rating = None if rating is None else rating
+        self._offers = list(offers) if offers is not None else []
 
         self._enforce_sold_invariants()
+        self._enforce_rating_invariants()
 
     # ==============================
     # ID (read-only, may be None before DB insert)
@@ -72,6 +82,9 @@ class Listing:
         if self._id is not None:
             raise UnapprovedBehaviorError("Listing ID has already been assigned.")
         self._id = listing_id
+
+        # Re-check once listing gets a persistent id
+        self._enforce_rating_invariants()
 
     # ==============================
     # SELLER ID (NOT NULL)
@@ -157,8 +170,6 @@ class Listing:
     def created_at(self):
         return self._created_at
 
-    # Intentionally no setter unless you want it for tests then add one.
-
     # ==============================
     # SOLD STATE + BUYER
     # ==============================
@@ -172,12 +183,15 @@ class Listing:
         return self._sold_to_id
 
     def mark_sold(self, buyer_account_id: int) -> None:
-        buyer_account_id = Validation.is_positive_number(buyer_account_id, "sold_to_id")
+        buyer_account_id = Validation.require_positive_int(
+            buyer_account_id, "sold_to_id"
+        )
         if self._is_sold:
             raise UnapprovedBehaviorError("Listing is already sold.")
         self._is_sold = True
         self._sold_to_id = buyer_account_id
         self._enforce_sold_invariants()
+        self._enforce_rating_invariants()
 
     def _enforce_sold_invariants(self) -> None:
         if self._is_sold and self._sold_to_id is None:
@@ -186,17 +200,56 @@ class Listing:
             raise ValidationError("sold_to_id must be None when is_sold is False.")
 
     # ==============================
-    # comments (NULLABLE)
+    # RATING (NULLABLE, sold listings only)
     # ==============================
+
     @property
-    def comments(self) -> List[Comment] | None:
-        return self._comments
+    def rating(self) -> Rating | None:
+        return self._rating
+
+    @rating.setter
+    def rating(self, value: Rating | None) -> None:
+        self._rating = None if value is None else value
+        self._enforce_rating_invariants()
+
+    def add_rating(self, rating: Rating) -> None:
+        Validation.require_not_none(rating, "rating")
+
+        if self._rating is not None:
+            raise UnapprovedBehaviorError("Listing already has a rating.")
+
+        self._rating = rating
+        self._enforce_rating_invariants()
+
+    def remove_rating(self) -> None:
+        self._rating = None
+
+    def _enforce_rating_invariants(self) -> None:
+        if self._rating is None:
+            return
+
+        if not self._is_sold:
+            raise ValidationError("rating can only be set for a sold listing.")
+
+        if self._id is not None and self._rating.listing_id != self._id:
+            raise ValidationError(
+                f"rating.listing_id ({self._rating.listing_id}) "
+                f"does not match Listing.id ({self._id})."
+            )
+
+    # ==============================
+    # COMMENTS
+    # ==============================
+
+    @property
+    def comments(self) -> List[Comment]:
+        return list(self._comments)
 
     @comments.setter
-    def comments(self, value: List[Comment]) -> None:
+    def comments(self, value: List[Comment] | None) -> None:
         if value is None:
-            self._comments = None
-            return self._comments
+            self._comments = []
+            return
 
         if not isinstance(value, list):
             raise ValidationError("comments must be a list of Comment.")
@@ -205,7 +258,6 @@ class Listing:
             if not isinstance(comment, Comment):
                 raise ValidationError(f"comments[{i}] must be a Comment.")
 
-        # shallow copy list for safety measure from external mutation
         self._comments = list(value)
 
     def add_comment(self, comment: Comment) -> None:
@@ -214,7 +266,7 @@ class Listing:
         self._comments.append(comment)
 
     def add_comments(self, comments: List[Comment]) -> None:
-        Validation.require_not_none(comments, "Comments")
+        Validation.require_not_none(comments, "comments")
 
         if not isinstance(comments, list):
             raise ValidationError("comments must be a list of Comment.")
@@ -223,7 +275,6 @@ class Listing:
             if not isinstance(comment, Comment):
                 raise ValidationError(f"comments[{i}] must be a Comment.")
 
-            # invariant check
             if self._id is not None and comment.listing_id != self._id:
                 raise ValidationError(
                     f"comments[{i}].listing_id ({comment.listing_id}) "
@@ -231,6 +282,43 @@ class Listing:
                 )
 
             self._comments.append(comment)
+
+    # ==============================
+    # OFFERS
+    # ==============================
+
+    @property
+    def offers(self) -> List[Offer]:
+        return list(self._offers)
+
+    @offers.setter
+    def offers(self, value: List[Offer] | None) -> None:
+        if value is None:
+            self._offers = []
+            return
+
+        if not isinstance(value, list):
+            raise ValidationError("offers must be a list of Offer.")
+
+        for i, offer in enumerate(value):
+            if not isinstance(offer, Offer):
+                raise ValidationError(f"offers[{i}] must be an Offer.")
+
+        self._offers = list(value)
+
+    def add_offer(self, offer: Offer) -> None:
+        Validation.require_not_none(offer, "offer")
+
+        if not isinstance(offer, Offer):
+            raise ValidationError("offer must be an Offer.")
+
+        if self._id is not None and offer.listing_id != self._id:
+            raise ValidationError(
+                f"offer.listing_id ({offer.listing_id}) "
+                f"does not match Listing.id ({self._id})."
+            )
+
+        self._offers.append(offer)
 
     # ==============================
     # DEBUG REPRESENTATION
@@ -244,6 +332,8 @@ class Listing:
             f"price={self._price}, "
             f"is_sold={self._is_sold}, "
             f"sold_to_id={self._sold_to_id}, "
-            f"created_at={self._created_at!r}"
-            f"comments={self._comments})"
+            f"created_at={self._created_at!r}, "
+            f"rating={self._rating}, "
+            f"comments={self._comments}, "
+            f"offers={self._offers})"
         )

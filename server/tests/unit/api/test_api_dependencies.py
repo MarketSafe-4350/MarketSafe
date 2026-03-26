@@ -13,12 +13,14 @@ class TestAPIDependencies(unittest.TestCase):
         self.account_db = MagicMock(name="account_db")
         self.listing_db = MagicMock(name="listing_db")
         self.comment_db = MagicMock(name="comment_db")
+        self.offer_db = MagicMock(name="offer_db") 
         self.token_db = MagicMock(name="token_db")
 
         self.account_manager = MagicMock(name="account_manager")
         self.comment_manager = MagicMock(name="comment_manager")
         self.listing_manager = MagicMock(name="listing_manager")
-
+        self.offer_manager = MagicMock(name="offer_manager")
+        self.rating_manager = MagicMock(name="rating_manager")
 
     def test_get_db(self):
         with patch.object(deps.DBUtility, "instance", return_value=self.db) as mock_instance:
@@ -55,6 +57,20 @@ class TestAPIDependencies(unittest.TestCase):
         ctor.assert_called_once_with(db=self.db)
         self.assertIs(result, self.token_db)
 
+    def test_get_offer_db(self):
+        with patch.object(deps, "MySQLOfferDB", return_value=self.offer_db) as ctor:
+            result = deps.get_offer_db(db=self.db)
+
+        ctor.assert_called_once_with(db=self.db)
+        self.assertIs(result, self.offer_db)
+
+    def test_get_rating_db(self):
+        rating_db = MagicMock(name="rating_db")
+        with patch.object(deps, "MySQLRatingDB", return_value=rating_db) as ctor:
+            result = deps.get_rating_db(db=self.db)
+
+        ctor.assert_called_once_with(db=self.db)
+        self.assertIs(result, rating_db)
 
     def test_get_account_manager(self):
         with patch.object(deps, "AccountManager", return_value=self.account_manager) as ctor:
@@ -83,6 +99,26 @@ class TestAPIDependencies(unittest.TestCase):
         )
         self.assertIs(result, self.listing_manager)
 
+    def test_get_rating_manager(self):
+        rating_db = MagicMock(name="rating_db")
+        with patch.object(deps, "RatingManager", return_value=self.rating_manager) as ctor:
+            result = deps.get_rating_manager(rating_db=rating_db)
+
+        ctor.assert_called_once_with(rating_db=rating_db)
+        self.assertIs(result, self.rating_manager)
+
+    def test_get_offer_manager(self):
+        with patch.object(deps, "OfferManager", return_value=self.offer_manager) as ctor:
+            result = deps.get_offer_manager(
+                offer_db=self.offer_db,
+                listing_db=self.listing_db,
+            )
+
+        ctor.assert_called_once_with(
+            offer_db=self.offer_db,
+            listing_db=self.listing_db,
+        )
+        self.assertIs(result, self.offer_manager)
 
     def test_get_account_service(self):
         service = MagicMock()
@@ -90,12 +126,14 @@ class TestAPIDependencies(unittest.TestCase):
         with patch.object(deps, "AccountService", return_value=service) as ctor:
             result = deps.get_account_service(
                 account_manager=self.account_manager,
-                token_db=self.token_db
+                token_db=self.token_db,
+                rating_manager=self.rating_manager,
             )
 
         ctor.assert_called_once_with(
             account_manager=self.account_manager,
-            token_db=self.token_db
+            token_db=self.token_db,
+            rating_manager=self.rating_manager,
         )
         self.assertIs(result, service)
 
@@ -120,10 +158,89 @@ class TestAPIDependencies(unittest.TestCase):
         service = MagicMock()
 
         with patch.object(deps, "ListingService", return_value=service) as ctor:
-            result = deps.get_listing_service(listing_manager=self.listing_manager)
+            result = deps.get_listing_service(
+                listing_manager=self.listing_manager,
+                rating_manager=self.rating_manager,
+            )
 
-        ctor.assert_called_once_with(listing_manager=self.listing_manager)
+        ctor.assert_called_once_with(
+            listing_manager=self.listing_manager,
+            rating_manager=self.rating_manager,
+        )
         self.assertIs(result, service)
+
+    def test_get_offer_service(self):
+        service = MagicMock()
+
+        with patch.object(deps, "OfferService", return_value=service) as ctor:
+            result = deps.get_offer_service(
+                offer_manager=self.offer_manager,
+                listing_manager=self.listing_manager,
+                account_manager=self.account_manager,
+            )
+
+        ctor.assert_called_once_with(
+            offer_manager=self.offer_manager,
+            listing_manager=self.listing_manager,
+            account_manager=self.account_manager,
+        )
+        self.assertIs(result, service)
+
+
+
+    def test_get_media_storage_uses_default_env_values(self):
+        request = MagicMock(name="request")
+
+        with (
+            patch.dict("os.environ", {}, clear=True),
+            patch.object(deps, "MediaStorageUtility") as ctor,
+        ):
+            instance = MagicMock(name="media_storage")
+            ctor.return_value = instance
+
+            result = deps.get_media_storage(request=request)
+
+        ctor.assert_called_once_with(
+            endpoint="localhost:9000",
+            access_key="minioadmin",
+            secret_key="minioadmin123",
+            secure=False,
+            public_base_url="http://localhost:9000",
+            ensure_bucket_on_startup=True,
+            make_bucket_public_on_startup=True,
+        )
+        self.assertIs(result, instance)
+
+    def test_get_media_storage_uses_env_values(self):
+        request = MagicMock(name="request")
+
+        env = {
+            "MINIO_ENDPOINT": "minio:9000",
+            "MINIO_ROOT_USER": "user1",
+            "MINIO_ROOT_PASSWORD": "pass1",
+            "MINIO_SECURE": "true",
+            "MINIO_PUBLIC_BASE_URL": "https://cdn.example.com",
+        }
+
+        with (
+            patch.dict("os.environ", env, clear=True),
+            patch.object(deps, "MediaStorageUtility") as ctor,
+        ):
+            instance = MagicMock(name="media_storage")
+            ctor.return_value = instance
+
+            result = deps.get_media_storage(request=request)
+
+        ctor.assert_called_once_with(
+            endpoint="minio:9000",
+            access_key="user1",
+            secret_key="pass1",
+            secure=True,
+            public_base_url="https://cdn.example.com",
+            ensure_bucket_on_startup=True,
+            make_bucket_public_on_startup=True,
+        )
+        self.assertIs(result, instance)
 
 
 if __name__ == "__main__":

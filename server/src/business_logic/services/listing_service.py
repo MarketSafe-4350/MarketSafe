@@ -1,13 +1,16 @@
 from src.domain_models.listing import Listing
+from src.domain_models.rating import Rating
 from src.utils.errors import (
     ValidationError,
     DatabaseUnavailableError,
     DatabaseQueryError,
 )
 from src.utils import ListingNotFoundError, UnapprovedBehaviorError
+from src.api.errors import ApiError
 from urllib.parse import urlparse
 from typing import List
 from src.business_logic.managers.listing import IListingManager
+from src.business_logic.managers.rating import RatingManager
 
 
 class ListingService:
@@ -15,8 +18,9 @@ class ListingService:
     MAX_LISTING_PRICE: float = 99_999_999.99
     MAX_LOCATION_LENGTH: int = 120
 
-    def __init__(self, listing_manager: IListingManager):
+    def __init__(self, listing_manager: IListingManager, rating_manager: RatingManager = None):
         self._listing_manager = listing_manager
+        self._rating_manager = rating_manager
 
     def get_all_listing(self) -> List[Listing]:
         """Get all listing
@@ -36,6 +40,16 @@ class ListingService:
 
     def get_listing_by_id(self, listing_id: int) -> Listing | None:
         return self._listing_manager.get_listing_by_id(listing_id)
+
+    def get_listing_rating(self, listing_id: int) -> Rating | None:
+        listing = self._listing_manager.get_listing_by_id(listing_id)
+        if listing is None:
+            raise ListingNotFoundError(
+                message=f"Listing not found for id: {listing_id}",
+                details={"listing_id": listing_id},
+            )
+
+        return self._rating_manager.get_rating_by_listing_id(listing_id)
 
     def search_listings(self, query: str) -> List[Listing]:
         """Search listings by keywords across title, description, and location.
@@ -138,6 +152,51 @@ class ListingService:
             )
 
         return self._listing_manager.delete_listing(listing_id)
+
+    def rate_listing(self, listing_id: int, rater_id: int, transaction_rating: int) -> Rating:
+        """Creates a rating for a sold listing. Only the buyer can rate.
+
+        Args:
+            listing_id (int): The ID of the listing to rate.
+            rater_id (int): The ID of the account submitting the rating (must be the buyer).
+            transaction_rating (int): The rating value (1-5).
+
+        Returns:
+            Rating: The created rating domain model.
+        """
+        listing = self._listing_manager.get_listing_by_id(listing_id)
+        if listing is None:
+            raise ListingNotFoundError(
+                message=f"Listing not found for id: {listing_id}",
+                details={"listing_id": listing_id},
+            )
+
+        if not listing.is_sold:
+            raise UnapprovedBehaviorError(
+                message="Cannot rate a listing that has not been sold.",
+                details={"listing_id": listing_id},
+            )
+
+        if listing.sold_to_id != rater_id:
+            raise UnapprovedBehaviorError(
+                message="Only the buyer of this listing can submit a rating.",
+                details={"listing_id": listing_id, "buyer_id": listing.sold_to_id, "rater_id": rater_id},
+            )
+
+        existing = self._rating_manager.get_rating_by_listing_id(listing_id)
+        if existing is not None:
+            raise UnapprovedBehaviorError(
+                message="This listing has already been rated.",
+                details={"listing_id": listing_id},
+            )
+
+        rating = Rating(
+            listing_id=listing_id,
+            rater_id=rater_id,
+            transaction_rating=transaction_rating,
+        )
+
+        return self._rating_manager.create_rating(rating)
 
     def _validate_listing(
         self,
@@ -296,25 +355,8 @@ class ListingService:
         return normalized_location
 
     def _validate_image_url(
-        self, image_url: str | None, errors: dict[str, list[str]]
+            self, image_url: str | None, errors: dict[str, list[str]]
     ) -> str | None:
-        """Validate image URL for a listing
-
-        Args:
-            image_url (str | None): The image URL to validate.
-
-        Raises:
-            ValidationError: If the image URL is invalid.
-            ValidationError: If the image URL does not have a valid domain.
-
-        Returns:
-            str | None: image url if valid, otherwise None
-
-        Rules:
-        - If image_url is None, return None (indicating no image provided).
-        - If image_url is not None, it must be a non-empty string that starts with "http://" or "https://".
-        - The URL must have a valid domain network location (e.g., example.com).
-        """
         if image_url is None:
             return None
 
@@ -322,25 +364,14 @@ class ListingService:
 
         if not image_url:
             self._add_error(
-                errors, "image_url", "Image URL cannot be empty if provided."
+                errors, "image_url", "Image key cannot be empty if provided."
             )
             return None
 
-        # Allow locally-served uploaded images (e.g. /uploads/listings/<file>)
         if image_url.startswith("/"):
-            return image_url
-
-        parse = urlparse(image_url)
-
-        if parse.scheme not in ("http", "https"):
             self._add_error(
-                errors, "image_url", "Image URL must start with http:// or https://"
+                errors, "image_url", "Image key must not start with '/'."
             )
-            return None
-
-        # check if url has a valid domain (e.g., example.com)
-        if not parse.netloc:
-            self._add_error(errors, "image_url", "Image URL must have a valid domain.")
             return None
 
         return image_url

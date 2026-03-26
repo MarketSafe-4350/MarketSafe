@@ -1,4 +1,5 @@
 from __future__ import annotations
+from unittest.mock import Mock
 
 import unittest
 from datetime import datetime, timezone
@@ -115,3 +116,102 @@ class TestListingConverter(unittest.TestCase):
         self.assertEqual(out.id, 1)
         self.assertIsNone(out.created_at)
         self.assertTrue(out.is_sold)
+
+    def test_listing_response_from_domain_uses_media_storage_public_url(self) -> None:
+        listing = Listing(
+            listing_id=11,
+            seller_id=7,
+            title="Bike",
+            description="Nice",
+            price=50.0,
+            image_url="listing-images/bike.png",
+            location="Winnipeg",
+            created_at=None,
+            is_sold=False,
+            sold_to_id=None,
+        )
+
+        media_storage = Mock()
+        media_storage.public_url.return_value = (
+            "http://localhost:9000/listing-images/bike.png"
+        )
+
+        out = ListingResponse.from_domain(
+            listing=listing,
+            media_storage=media_storage,
+        )
+
+        media_storage.public_url.assert_called_once_with("listing-images/bike.png")
+        self.assertEqual(
+            out.image_url,
+            "http://localhost:9000/listing-images/bike.png",
+        )
+
+    def test_listingcreate_allows_price_just_above_zero(self):
+        listing = ListingCreate(
+            title="Pen",
+            description="Blue pen",
+            price=0.01,
+            image_url=None,
+            location=None,
+        )
+
+        self.assertEqual(listing.price, 0.01)
+
+    def test_listingcreate_allows_exact_max_price(self):
+        listing = ListingCreate(
+            title="Car",
+            description="Used car",
+            price=99_999_999.99,
+            image_url=None,
+            location=None,
+        )
+
+        self.assertEqual(listing.price, 99_999_999.99)
+
+    def test_listingcreate_allows_location_of_length_120(self):
+        location = "a" * 120
+
+        listing = ListingCreate(
+            title="Desk",
+            description="Wood desk",
+            price=100.0,
+            image_url=None,
+            location=location,
+        )
+
+        self.assertEqual(listing.location, location)
+        self.assertEqual(len(listing.location), 120)
+
+    def test_listingresponse_from_domain_can_be_called_on_instance(self):
+        listing = Listing(
+            listing_id=1,
+            seller_id=42,
+            title="Bike",
+            description="Good condition",
+            price=125.0,
+            image_url=None,
+            location="Winnipeg",
+            created_at=datetime(2026, 3, 21, 12, 0, 0),
+            is_sold=False,
+        )
+
+        response_instance = ListingResponse(
+            id=None,
+            seller_id=0,
+            title="placeholder",
+            description="placeholder",
+            price=1.0,
+            image_url=None,
+            location=None,
+            created_at=None,
+            is_sold=False,
+        )
+
+        result = response_instance.from_domain(listing)
+
+        self.assertEqual(result.id, 1)
+        self.assertEqual(result.seller_id, 42)
+        self.assertEqual(result.title, "Bike")
+        self.assertEqual(result.created_at, listing.created_at.isoformat())
+        self.assertFalse(result.is_sold)

@@ -5,10 +5,15 @@ import { map, Observable } from 'rxjs';
 import { Account } from '../models/account.models';
 import { API_URLS } from '../app-urls';
 
-interface AccountMeResponse {
+interface AccountApiResponse {
+  id?: number | null;
   email: string;
   fname: string;
   lname: string;
+  verified?: boolean;
+  average_rating_received?: number | null;
+  sum_of_ratings_received?: number | null;
+  rating_count?: number | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -18,18 +23,18 @@ export class AccountsApiService {
 
   getMe(): Observable<Account> {
     return this.http
-      .get<AccountMeResponse>(`${this.apiUrl}/me`, {
+      .get<AccountApiResponse>(`${this.apiUrl}/me`, {
         headers: this.authHeaders(),
       })
-      .pipe(
-        map((account) => ({
-          id: 0,
-          email: account.email,
-          fname: account.fname,
-          lname: account.lname,
-          verified: false,
-        }))
-      );
+      .pipe(map((account) => this.toAccount(account)));
+  }
+
+  getById(accountId: number): Observable<Account> {
+    return this.http
+      .get<AccountApiResponse>(`${this.apiUrl}/id/${accountId}`, {
+        headers: this.authHeaders(),
+      })
+      .pipe(map((account) => this.toAccount(account)));
   }
 
   private authHeaders(): HttpHeaders {
@@ -43,5 +48,18 @@ export class AccountsApiService {
     }
 
     return new HttpHeaders(headers);
+  }
+
+  private toAccount(account: AccountApiResponse): Account {
+    return {
+      id: account.id ?? 0,
+      email: account.email,
+      fname: account.fname,
+      lname: account.lname,
+      verified: account.verified ?? false,
+      ratingAvg: account.average_rating_received ?? 0,
+      ratingSum: account.sum_of_ratings_received ?? 0,
+      ratingCount: account.rating_count ?? 0,
+    };
   }
 }

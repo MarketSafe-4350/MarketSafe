@@ -8,11 +8,7 @@ from src.business_logic.managers.listing.listing_manager import ListingManager
 from src.db.listing.mysql.mysql_listing_db import MySQLListingDB
 from src.db.account.mysql.mysql_account_db import MySQLAccountDB
 from src.domain_models.account import Account
-from src.utils.errors import (
-    ValidationError,
-    DatabaseQueryError,
-    DatabaseUnavailableError,
-)
+from src.utils.errors import ValidationError
 
 from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
 from tests.helpers.integration_db_session import acquire, get_db, release
@@ -53,7 +49,8 @@ class TestListingServiceIntegration(unittest.TestCase):
         cls._listing_db = MySQLListingDB(db=cls._db)
         cls._comment_db = _StubCommentDB()
         cls._manager = ListingManager(
-            listing_db=cls._listing_db, comment_db=cls._comment_db
+            listing_db=cls._listing_db,
+            comment_db=cls._comment_db,
         )
         cls._service = ListingService(cls._manager)
 
@@ -62,11 +59,9 @@ class TestListingServiceIntegration(unittest.TestCase):
         release(cls._session, remove_volumes=False)
 
     def setUp(self) -> None:
-        # keep each test independent
         reset_all_tables(self._db)
 
     def _create_account(self, email: str) -> int:
-        """Mock account service create account"""
         created = self._account_db.add(
             Account(
                 email=email,
@@ -99,10 +94,10 @@ class TestListingServiceIntegration(unittest.TestCase):
             location="Winnipeg",
             image_url=None,
         )
+
         listing_id = getattr(created, "id", None)
         self.assertIsNotNone(listing_id)
 
-        # Verify it exists in DB by fetching all and matching by id/title
         all_listings = self._listing_db.get_all()
         self.assertEqual(len(all_listings), 1)
         self.assertEqual(all_listings[0].title, "Bike")
@@ -110,7 +105,7 @@ class TestListingServiceIntegration(unittest.TestCase):
         self.assertEqual(all_listings[0].price, 50.0)
         self.assertIsNone(all_listings[0].image_url)
 
-    def test_create_listing_image_url_valid_persists(self) -> None:
+    def test_create_listing_image_key_valid_persists(self) -> None:
         seller_id = self._create_account("seller2@umanitoba.ca")
 
         created = self._service.create_listing(
@@ -119,14 +114,14 @@ class TestListingServiceIntegration(unittest.TestCase):
             description="Works",
             price=500.0,
             location="Winnipeg",
-            image_url="https://example.com/img.jpg",
+            image_url="listings/img.jpg",
         )
 
         listing_id = getattr(created, "id", None)
         self.assertIsNotNone(listing_id)
 
         in_db = self._listing_db.get_all()[0]
-        self.assertEqual(in_db.image_url, "https://example.com/img.jpg")
+        self.assertEqual(in_db.image_url, "listings/img.jpg")
 
     # -----------------------------
     # create_listing validation errors
@@ -155,6 +150,7 @@ class TestListingServiceIntegration(unittest.TestCase):
                 location="Winnipeg",
                 image_url=None,
             )
+
         self.assertIn("description", ctx.exception.details["errors"])
 
     def test_create_listing_rejects_price_none(self) -> None:
@@ -167,6 +163,7 @@ class TestListingServiceIntegration(unittest.TestCase):
                 location="Winnipeg",
                 image_url=None,
             )
+
         self.assertIn("price", ctx.exception.details["errors"])
 
     def test_create_listing_rejects_price_zero_or_negative(self) -> None:
@@ -179,6 +176,7 @@ class TestListingServiceIntegration(unittest.TestCase):
                 location="Winnipeg",
                 image_url=None,
             )
+
         self.assertIn("price", ctx.exception.details["errors"])
 
         with self.assertRaises(ValidationError) as ctx2:
@@ -190,6 +188,7 @@ class TestListingServiceIntegration(unittest.TestCase):
                 location="Winnipeg",
                 image_url=None,
             )
+
         self.assertIn("price", ctx2.exception.details["errors"])
 
     def test_create_listing_rejects_empty_location(self) -> None:
@@ -202,9 +201,10 @@ class TestListingServiceIntegration(unittest.TestCase):
                 location="",
                 image_url=None,
             )
+
         self.assertIn("location", ctx.exception.details["errors"])
 
-    def test_create_listing_rejects_image_url_empty_string(self) -> None:
+    def test_create_listing_rejects_image_key_empty_string(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
             self._service.create_listing(
                 seller_id=1,
@@ -214,9 +214,10 @@ class TestListingServiceIntegration(unittest.TestCase):
                 location="Winnipeg",
                 image_url="   ",
             )
+
         self.assertIn("image_url", ctx.exception.details["errors"])
 
-    def test_create_listing_rejects_image_url_bad_scheme(self) -> None:
+    def test_create_listing_rejects_image_key_starting_with_slash(self) -> None:
         with self.assertRaises(ValidationError) as ctx:
             self._service.create_listing(
                 seller_id=1,
@@ -224,20 +225,9 @@ class TestListingServiceIntegration(unittest.TestCase):
                 description="B",
                 price=10.0,
                 location="Winnipeg",
-                image_url="ftp://example.com/img.jpg",
+                image_url="/listings/img.jpg",
             )
-        self.assertIn("image_url", ctx.exception.details["errors"])
 
-    def test_create_listing_rejects_image_url_missing_domain(self) -> None:
-        with self.assertRaises(ValidationError) as ctx:
-            self._service.create_listing(
-                seller_id=1,
-                title="A",
-                description="B",
-                price=10.0,
-                location="Winnipeg",
-                image_url="https:///no-domain",
-            )
         self.assertIn("image_url", ctx.exception.details["errors"])
 
     # -----------------------------
@@ -251,11 +241,11 @@ class TestListingServiceIntegration(unittest.TestCase):
         self._service.create_listing(seller1, "A2", "D", 12.0, "Winnipeg", None)
         self._service.create_listing(seller2, "B1", "D", 99.0, "Winnipeg", None)
 
-        seller_1_listings = self._service.get_listing_by_user_id(1)
+        seller_1_listings = self._service.get_listing_by_user_id(seller1)
         self.assertEqual(len(seller_1_listings), 2)
-        self.assertTrue(all(l.seller_id == 1 for l in seller_1_listings))
+        self.assertTrue(all(l.seller_id == seller1 for l in seller_1_listings))
 
-        seller_2_listings = self._service.get_listing_by_user_id(2)
+        seller_2_listings = self._service.get_listing_by_user_id(seller2)
         self.assertEqual(len(seller_2_listings), 1)
-        self.assertEqual(seller_2_listings[0].seller_id, 2)
+        self.assertEqual(seller_2_listings[0].seller_id, seller2)
         self.assertEqual(seller_2_listings[0].title, "B1")

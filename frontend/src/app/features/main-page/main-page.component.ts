@@ -1,8 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { forkJoin } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { HeaderComponent } from '../../components/header/header.component';
 import { LeftNavigationComponent } from '../left-navigation/left-navigation.component';
@@ -12,6 +15,11 @@ import { ListingComment } from '../../shared/models/comment.models';
 import { ListingsSidebarActionsBase } from '../../shared/helpers/listings-sidebar-actions.base';
 import { AccountsApiService } from '../../shared/services/accounts-api.service';
 import { CommentApiService } from '../../shared/services/comments-api.service';
+import { OffersApiService } from '../../shared/services/offers-api.service';
+import {
+  SendOfferDialogComponent,
+  SendOfferPayload,
+} from '../send-offer/send-offer.component';
 @Component({
   selector: 'app-main-page',
   standalone: true,
@@ -32,7 +40,10 @@ export class MainPageComponent
 {
   private readonly accountsApi = inject(AccountsApiService);
   private readonly commentsApi = inject(CommentApiService);
+  private readonly offersApi = inject(OffersApiService);
+  private readonly dialog = inject(MatDialog);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   readonly maxCommentLength = 500;
   isLoading = false;
   selectedListingId: number | null = null;
@@ -43,6 +54,9 @@ export class MainPageComponent
   private readonly commentsByListingId = new Map<number, ListingComment[]>();
   private readonly commentDrafts = new Map<number, string>();
   private readonly commentErrors = new Map<number, string>();
+  private readonly offerMessages = new Map<number, string>();
+  private readonly submittingOfferIds = new Set<number>();
+  private readonly blockedOfferListingIds = new Set<number>();
 
   ngOnInit(): void {
     this.initializeSidebarListingActions();
@@ -60,9 +74,13 @@ export class MainPageComponent
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.listingsApi.getAll().subscribe({
-      next: (listings) => {
+    forkJoin({
+      listings: this.listingsApi.getAll(),
+      sentOffers: this.offersApi.getSent(),
+    }).subscribe({
+      next: ({ listings, sentOffers }) => {
         this.listings = listings;
+        this.replaceBlockedOfferListingIds(sentOffers);
         this.preloadCommentsForListings(listings);
         this.isLoading = false;
         this.focusRequestedListing();
@@ -206,8 +224,116 @@ export class MainPageComponent
     return new Date(value).toLocaleString();
   }
 
+  openSellerProfile(listing: Listing): void {
+    if (!this.canViewSellerProfile(listing)) {
+      return;
+    }
+
+    void this.router.navigate(['/profile', listing.sellerId]);
+  }
+
+  canViewSellerProfile(listing: Listing): boolean {
+    return (
+      listing.sellerId !== undefined &&
+      this.currentUserId !== null &&
+      listing.sellerId !== this.currentUserId
+    );
+  }
+
+  canSendOffer(listing: Listing): boolean {
+    return (
+      this.canViewSellerProfile(listing) &&
+      !listing.isSold &&
+      !this.hasBlockingOffer(listing.id)
+    );
+  }
+
+  getOfferButtonLabel(listingId: number): string {
+    return this.hasBlockingOffer(listingId) ? 'Offer Sent' : 'Send Offer';
+  }
+
+  getOfferMessage(listingId: number): string | null {
+    return this.offerMessages.get(listingId) ?? null;
+  }
+
+  isSubmittingOffer(listingId: number): boolean {
+    return this.submittingOfferIds.has(listingId);
+  }
+
+  openSendOfferDialog(listing: Listing): void {
+    if (!this.canSendOffer(listing)) {
+      return;
+    }
+
+    const ref = this.dialog.open(SendOfferDialogComponent, {
+      width: '460px',
+      maxWidth: '92vw',
+    });
+
+    ref.afterClosed().subscribe((payload: SendOfferPayload | null) => {
+      if (!payload) {
+        return;
+      }
+
+      this.submitOffer(listing, payload);
+    });
+  }
+
   private clearCommentError(listingId: number): void {
     this.commentErrors.delete(listingId);
+  }
+
+  private submitOffer(listing: Listing, payload: SendOfferPayload): void {
+    this.offerMessages.delete(listing.id);
+    this.submittingOfferIds.add(listing.id);
+
+    this.offersApi
+      .create({
+        listingId: listing.id,
+        offeredPrice: payload.offeredPrice,
+        locationOffered: payload.locationOffered,
+        })
+      .subscribe({
+        next: () => {
+          this.blockedOfferListingIds.add(listing.id);
+          this.offerMessages.set(listing.id, 'Offer sent successfully.');
+          this.submittingOfferIds.delete(listing.id);
+        },
+        error: (error) => {
+          console.error('Failed to send offer:', error);
+          if (this.isDuplicateOfferError(error)) {
+            this.blockedOfferListingIds.add(listing.id);
+            this.offerMessages.set(
+              listing.id,
+              'You already sent an offer for this listing.',
+            );
+            this.submittingOfferIds.delete(listing.id);
+            return;
+          }
+
+          this.offerMessages.set(listing.id, 'Failed to send offer.');
+          this.submittingOfferIds.delete(listing.id);
+        },
+      });
+  }
+
+  private hasBlockingOffer(listingId: number): boolean {
+    return this.blockedOfferListingIds.has(listingId);
+  }
+
+  private replaceBlockedOfferListingIds(
+    sentOffers: { listingId: number; accepted: boolean | null }[],
+  ): void {
+    this.blockedOfferListingIds.clear();
+    for (const offer of sentOffers) {
+      if (offer.accepted !== false) {
+        this.blockedOfferListingIds.add(offer.listingId);
+      }
+    }
+  }
+
+  private isDuplicateOfferError(error: unknown): boolean {
+    return error instanceof HttpErrorResponse && error.status === 409;
   }
 
   private loadCommentAuthorLabel(): void {

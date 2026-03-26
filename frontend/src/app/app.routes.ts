@@ -7,6 +7,7 @@ import { MainPageComponent } from './features/main-page/main-page.component';
 import { MyListingsPageComponent } from './features/my-listings-page/my-listings-page.component';
 import { SearchPageComponent } from './features/search-page/search-page.component';
 import { VerifyEmailComponent } from './features/verify-email/verify-email.component';
+import { AllOffersPageComponent } from './features/all-offers-page/all-offers-page.component';
 import { authGuard } from './shared/auth.guard';
 
 export const routes: Routes = [
@@ -17,7 +18,9 @@ export const routes: Routes = [
 
   // Protected routes
   { path: 'profile', component: ProfilePageComponent, canActivate: [authGuard]},
+  { path: 'profile/:sellerId', component: ProfilePageComponent, canActivate: [authGuard]},
   { path: 'main-page', component: MainPageComponent, canActivate: [authGuard]},
   { path: 'search', component: SearchPageComponent, canActivate: [authGuard]},
   { path: 'my-listings', component: MyListingsPageComponent, canActivate: [authGuard]},
+  { path: 'offers', component: AllOffersPageComponent, canActivate: [authGuard]},
 ];

@@ -1,0 +1,1075 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" /><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" /><title>Cosmic Ray Report</title></head><body><div class="container"><h1><p class="text-dark">Cosmic Ray Report</p></h1></div><div class="container"><div class="mb-1" id="summary_info___accordion"><div class="card"><a data-toggle="collapse" data-target="#summary_info___collapse_1" aria-expanded="true" aria-controls="summary_info___collapse_1" href="#"><div class="card-header" id="summary_info___heading_1"><button class="btn btn-outline-dark"><h4 class="m-0">Summary info</h4></button></div></a><div aria-labelledby="summary_info___heading_1" data-parent="#summary_info___accordion" class="collapse show" id="summary_info___collapse_1"><div class="card-body"><p>Date time: 26/03/2026 17:13:02</p><p>Total jobs: 96</p><p>Complete: 96 (100.00%)</p><p>Surviving mutants: 0 (0.00%)</p></div></div></div></div><div class="mb-1" id="job_list___accordion"><div class="card"><a data-toggle="collapse" data-target="#job_list___collapse_1" aria-expanded="false" aria-controls="job_list___collapse_1" href="#"><div class="card-header" id="job_list___heading_1"><button class="btn btn-outline-dark"><h4 class="m-0">Job list</h4></button></div></a><div aria-labelledby="job_list___heading_1" data-parent="#job_list___accordion" class="collapse" id="job_list___collapse_1"><div class="card-body"><div class="text-right mb-1"><div class="mx-1" id="job_item_expand_all"><a href="#" onclick="$('div.job_list___sub_multi_collapse').collapse('show');"><button class="btn btn-outline-dark"><span>Expand All</span></button></a></div><div class="mx-1" id="job_item_collapse_all"><a href="#" onclick="$('div.job_list___sub_multi_collapse').collapse('hide');"><button class="btn btn-outline-dark"><span>Collapse All</span></button></a></div></div><div class="mb-1" id="job_list___sub_accordion_1"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_1_1" aria-expanded="false" aria-controls="job_list___sub_collapse_1_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_1_1"><button class="btn btn-outline-success"><span class="job_id">1 : Job ID 934b75eee8864bd688621ad81933e563</span></button></div></a><div aria-labelledby="job_list___sub_heading_1_1" data-parent="#job_list___sub_accordion_1" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_1_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=8" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (8, 7), end pos: (8, 10)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_Not, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -5,7 +5,7 @@
+ 
+ 
+ def get_user_id_from_token(token: str) -&gt; int:
+-    if not token:
++    if  token:
+         raise ApiError(status_code=401, message="Missing authentication auth_token")
+ 
+     try:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_2"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_2_1" aria-expanded="false" aria-controls="job_list___sub_collapse_2_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_2_1"><button class="btn btn-outline-success"><span class="job_id">2 : Job ID 591ef63d6e6a4ee498f38b5ce1030d2d</span></button></div></a><div aria-labelledby="job_list___sub_heading_2_1" data-parent="#job_list___sub_accordion_2" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_2_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=15" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (15, 11), end pos: (15, 14)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_Not, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -12,7 +12,7 @@
+         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+         user_id = payload.get("sub")
+ 
+-        if not user_id:
++        if  user_id:
+             raise ApiError(status_code=401, message="Invalid auth_token payload")
+ 
+         return int(user_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_3"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_3_1" aria-expanded="false" aria-controls="job_list___sub_collapse_3_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_3_1"><button class="btn btn-outline-success"><span class="job_id">3 : Job ID be8948b757fc4632b90c8637162480be</span></button></div></a><div aria-labelledby="job_list___sub_heading_3_1" data-parent="#job_list___sub_accordion_3" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_3_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=8" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (8, 7), end pos: (8, 16)</button></a></pre><pre>operator: core/AddNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -5,7 +5,7 @@
+ 
+ 
+ def get_user_id_from_token(token: str) -&gt; int:
+-    if not token:
++    if not not token:
+         raise ApiError(status_code=401, message="Missing authentication auth_token")
+ 
+     try:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_4"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_4_1" aria-expanded="false" aria-controls="job_list___sub_collapse_4_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_4_1"><button class="btn btn-outline-success"><span class="job_id">4 : Job ID eb51bb55c8fb4fba98903caa162dd049</span></button></div></a><div aria-labelledby="job_list___sub_heading_4_1" data-parent="#job_list___sub_accordion_4" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_4_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=15" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (15, 11), end pos: (15, 22)</button></a></pre><pre>operator: core/AddNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -12,7 +12,7 @@
+         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+         user_id = payload.get("sub")
+ 
+-        if not user_id:
++        if not not user_id:
+             raise ApiError(status_code=401, message="Invalid auth_token payload")
+ 
+         return int(user_id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_5"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_5_1" aria-expanded="false" aria-controls="job_list___sub_collapse_5_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_5_1"><button class="btn btn-outline-success"><span class="job_id">5 : Job ID 9349a4fc4c584709b3909ad935a3da74</span></button></div></a><div aria-labelledby="job_list___sub_heading_5_1" data-parent="#job_list___sub_accordion_5" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_5_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=20" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (20, 14), end pos: (20, 15)</button></a></pre><pre>operator: core/ExceptionReplacer, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -17,7 +17,7 @@
+ 
+         return int(user_id)
+ 
+-    except jwt.ExpiredSignatureError:
++    except jwtCosmicRayTestingExceptionExpiredSignatureError:
+         raise ApiError(status_code=401, message="Token has expired")
+ 
+     except jwt.InvalidTokenError:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_6"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_6_1" aria-expanded="false" aria-controls="job_list___sub_collapse_6_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_6_1"><button class="btn btn-outline-success"><span class="job_id">6 : Job ID 14ede12328f94a9195c1dd5bf86889c2</span></button></div></a><div aria-labelledby="job_list___sub_heading_6_1" data-parent="#job_list___sub_accordion_6" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_6_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=23" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (23, 14), end pos: (23, 15)</button></a></pre><pre>operator: core/ExceptionReplacer, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -20,7 +20,7 @@
+     except jwt.ExpiredSignatureError:
+         raise ApiError(status_code=401, message="Token has expired")
+ 
+-    except jwt.InvalidTokenError:
++    except jwtCosmicRayTestingExceptionInvalidTokenError:
+         raise ApiError(status_code=401, message="Invalid auth_token")
+ 
+     except ValueError:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_7"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_7_1" aria-expanded="false" aria-controls="job_list___sub_collapse_7_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_7_1"><button class="btn btn-outline-success"><span class="job_id">7 : Job ID 7b1f3aafcb8b4e15bd6982de2d3aa08d</span></button></div></a><div aria-labelledby="job_list___sub_heading_7_1" data-parent="#job_list___sub_accordion_7" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_7_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=26" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (26, 11), end pos: (26, 21)</button></a></pre><pre>operator: core/ExceptionReplacer, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -23,6 +23,6 @@
+     except jwt.InvalidTokenError:
+         raise ApiError(status_code=401, message="Invalid auth_token")
+ 
+-    except ValueError:
++    except CosmicRayTestingException:
+         raise ApiError(status_code=401, message="Invalid user ID in auth_token")
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_8"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_8_1" aria-expanded="false" aria-controls="job_list___sub_collapse_8_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_8_1"><button class="btn btn-outline-success"><span class="job_id">8 : Job ID f4a8bc28185040c9b5aa3606f91f089c</span></button></div></a><div aria-labelledby="job_list___sub_heading_8_1" data-parent="#job_list___sub_accordion_8" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_8_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=9" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (9, 35), end pos: (9, 38)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -6,7 +6,7 @@
+ 
+ def get_user_id_from_token(token: str) -&gt; int:
+     if not token:
+-        raise ApiError(status_code=401, message="Missing authentication auth_token")
++        raise ApiError(status_code= 402, message="Missing authentication auth_token")
+ 
+     try:
+         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_9"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_9_1" aria-expanded="false" aria-controls="job_list___sub_collapse_9_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_9_1"><button class="btn btn-outline-success"><span class="job_id">9 : Job ID 6df6b350bdb443688b060cda8fe1bba9</span></button></div></a><div aria-labelledby="job_list___sub_heading_9_1" data-parent="#job_list___sub_accordion_9" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_9_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=9" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (9, 35), end pos: (9, 38)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -6,7 +6,7 @@
+ 
+ def get_user_id_from_token(token: str) -&gt; int:
+     if not token:
+-        raise ApiError(status_code=401, message="Missing authentication auth_token")
++        raise ApiError(status_code= 400, message="Missing authentication auth_token")
+ 
+     try:
+         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_10"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_10_1" aria-expanded="false" aria-controls="job_list___sub_collapse_10_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_10_1"><button class="btn btn-outline-success"><span class="job_id">10 : Job ID 7d4abd4f218b4d19987be528e85e492f</span></button></div></a><div aria-labelledby="job_list___sub_heading_10_1" data-parent="#job_list___sub_accordion_10" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_10_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=16" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (16, 39), end pos: (16, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -13,7 +13,7 @@
+         user_id = payload.get("sub")
+ 
+         if not user_id:
+-            raise ApiError(status_code=401, message="Invalid auth_token payload")
++            raise ApiError(status_code= 402, message="Invalid auth_token payload")
+ 
+         return int(user_id)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_11"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_11_1" aria-expanded="false" aria-controls="job_list___sub_collapse_11_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_11_1"><button class="btn btn-outline-success"><span class="job_id">11 : Job ID f7dd62cd105b4ab8921054d4c19dda66</span></button></div></a><div aria-labelledby="job_list___sub_heading_11_1" data-parent="#job_list___sub_accordion_11" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_11_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=16" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (16, 39), end pos: (16, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -13,7 +13,7 @@
+         user_id = payload.get("sub")
+ 
+         if not user_id:
+-            raise ApiError(status_code=401, message="Invalid auth_token payload")
++            raise ApiError(status_code= 400, message="Invalid auth_token payload")
+ 
+         return int(user_id)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_12"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_12_1" aria-expanded="false" aria-controls="job_list___sub_collapse_12_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_12_1"><button class="btn btn-outline-success"><span class="job_id">12 : Job ID 17b13ee7ee4d4338b72eeb3b5cce9b2a</span></button></div></a><div aria-labelledby="job_list___sub_heading_12_1" data-parent="#job_list___sub_accordion_12" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_12_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=21" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (21, 35), end pos: (21, 38)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -18,7 +18,7 @@
+         return int(user_id)
+ 
+     except jwt.ExpiredSignatureError:
+-        raise ApiError(status_code=401, message="Token has expired")
++        raise ApiError(status_code= 402, message="Token has expired")
+ 
+     except jwt.InvalidTokenError:
+         raise ApiError(status_code=401, message="Invalid auth_token")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_13"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_13_1" aria-expanded="false" aria-controls="job_list___sub_collapse_13_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_13_1"><button class="btn btn-outline-success"><span class="job_id">13 : Job ID 6d658918b1894b68939944bba6367f4f</span></button></div></a><div aria-labelledby="job_list___sub_heading_13_1" data-parent="#job_list___sub_accordion_13" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_13_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=21" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (21, 35), end pos: (21, 38)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 5</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -18,7 +18,7 @@
+         return int(user_id)
+ 
+     except jwt.ExpiredSignatureError:
+-        raise ApiError(status_code=401, message="Token has expired")
++        raise ApiError(status_code= 400, message="Token has expired")
+ 
+     except jwt.InvalidTokenError:
+         raise ApiError(status_code=401, message="Invalid auth_token")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_14"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_14_1" aria-expanded="false" aria-controls="job_list___sub_collapse_14_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_14_1"><button class="btn btn-outline-success"><span class="job_id">14 : Job ID 3c977466140143e2828ff2490f0db82d</span></button></div></a><div aria-labelledby="job_list___sub_heading_14_1" data-parent="#job_list___sub_accordion_14" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_14_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=24" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (24, 35), end pos: (24, 38)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 6</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -21,7 +21,7 @@
+         raise ApiError(status_code=401, message="Token has expired")
+ 
+     except jwt.InvalidTokenError:
+-        raise ApiError(status_code=401, message="Invalid auth_token")
++        raise ApiError(status_code= 402, message="Invalid auth_token")
+ 
+     except ValueError:
+         raise ApiError(status_code=401, message="Invalid user ID in auth_token")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_15"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_15_1" aria-expanded="false" aria-controls="job_list___sub_collapse_15_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_15_1"><button class="btn btn-outline-success"><span class="job_id">15 : Job ID 4c9989d2dba547e28b770e4bedd5bc04</span></button></div></a><div aria-labelledby="job_list___sub_heading_15_1" data-parent="#job_list___sub_accordion_15" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_15_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=24" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (24, 35), end pos: (24, 38)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 7</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -21,7 +21,7 @@
+         raise ApiError(status_code=401, message="Token has expired")
+ 
+     except jwt.InvalidTokenError:
+-        raise ApiError(status_code=401, message="Invalid auth_token")
++        raise ApiError(status_code= 400, message="Invalid auth_token")
+ 
+     except ValueError:
+         raise ApiError(status_code=401, message="Invalid user ID in auth_token")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_16"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_16_1" aria-expanded="false" aria-controls="job_list___sub_collapse_16_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_16_1"><button class="btn btn-outline-success"><span class="job_id">16 : Job ID 95dd7269048946de8129f4f74469ae98</span></button></div></a><div aria-labelledby="job_list___sub_heading_16_1" data-parent="#job_list___sub_accordion_16" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_16_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=27" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (27, 35), end pos: (27, 38)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 8</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -24,5 +24,5 @@
+         raise ApiError(status_code=401, message="Invalid auth_token")
+ 
+     except ValueError:
+-        raise ApiError(status_code=401, message="Invalid user ID in auth_token")
++        raise ApiError(status_code= 402, message="Invalid user ID in auth_token")
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_17"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_17_1" aria-expanded="false" aria-controls="job_list___sub_collapse_17_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_17_1"><button class="btn btn-outline-success"><span class="job_id">17 : Job ID 17ae7cda24854f1d82238369928f0ac4</span></button></div></a><div aria-labelledby="job_list___sub_heading_17_1" data-parent="#job_list___sub_accordion_17" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_17_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/auth/jwt.py&amp;line=27" class="text-secondary"><button class="btn btn-outline-dark">src/auth/jwt.py, start pos: (27, 35), end pos: (27, 38)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 9</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/auth/jwt.py
++++ bsrc/auth/jwt.py
+@@ -24,5 +24,5 @@
+         raise ApiError(status_code=401, message="Invalid auth_token")
+ 
+     except ValueError:
+-        raise ApiError(status_code=401, message="Invalid user ID in auth_token")
++        raise ApiError(status_code= 400, message="Invalid user ID in auth_token")
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_18"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_18_1" aria-expanded="false" aria-controls="job_list___sub_collapse_18_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_18_1"><button class="btn btn-outline-success"><span class="job_id">18 : Job ID 96353063b5404d7eb5e1957b0d748a4f</span></button></div></a><div aria-labelledby="job_list___sub_heading_18_1" data-parent="#job_list___sub_accordion_18" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_18_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_Sub, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_19"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_19_1" aria-expanded="false" aria-controls="job_list___sub_collapse_19_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_19_1"><button class="btn btn-outline-success"><span class="job_id">19 : Job ID 3743e4b0dfac4378a7f7673cb1d1749c</span></button></div></a><div aria-labelledby="job_list___sub_heading_19_1" data-parent="#job_list___sub_accordion_19" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_19_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_Mul, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_20"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_20_1" aria-expanded="false" aria-controls="job_list___sub_collapse_20_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_20_1"><button class="btn btn-outline-success"><span class="job_id">20 : Job ID 593f38a06a0445c7a8f83024577c0b21</span></button></div></a><div aria-labelledby="job_list___sub_heading_20_1" data-parent="#job_list___sub_accordion_20" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_20_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_Div, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_21"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_21_1" aria-expanded="false" aria-controls="job_list___sub_collapse_21_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_21_1"><button class="btn btn-outline-success"><span class="job_id">21 : Job ID 13b086f4b7394067a726702bbb6b723e</span></button></div></a><div aria-labelledby="job_list___sub_heading_21_1" data-parent="#job_list___sub_accordion_21" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_21_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_FloorDiv, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_22"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_22_1" aria-expanded="false" aria-controls="job_list___sub_collapse_22_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_22_1"><button class="btn btn-outline-success"><span class="job_id">22 : Job ID b77b2ae8bfe34cb4b46121265ae15681</span></button></div></a><div aria-labelledby="job_list___sub_heading_22_1" data-parent="#job_list___sub_accordion_22" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_22_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_Mod, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_23"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_23_1" aria-expanded="false" aria-controls="job_list___sub_collapse_23_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_23_1"><button class="btn btn-outline-success"><span class="job_id">23 : Job ID d3981953115649339b730b748eb20e0d</span></button></div></a><div aria-labelledby="job_list___sub_heading_23_1" data-parent="#job_list___sub_accordion_23" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_23_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_Pow, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_24"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_24_1" aria-expanded="false" aria-controls="job_list___sub_collapse_24_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_24_1"><button class="btn btn-outline-success"><span class="job_id">24 : Job ID dc50385f28a14fb89f437307368ce836</span></button></div></a><div aria-labelledby="job_list___sub_heading_24_1" data-parent="#job_list___sub_accordion_24" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_24_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_RShift, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_25"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_25_1" aria-expanded="false" aria-controls="job_list___sub_collapse_25_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_25_1"><button class="btn btn-outline-success"><span class="job_id">25 : Job ID fafac769350e4f3bafa6bcd5788016eb</span></button></div></a><div aria-labelledby="job_list___sub_heading_25_1" data-parent="#job_list___sub_accordion_25" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_25_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_LShift, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_26"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_26_1" aria-expanded="false" aria-controls="job_list___sub_collapse_26_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_26_1"><button class="btn btn-outline-success"><span class="job_id">26 : Job ID 5b7ecd2e68d54f358e4b2bb64fcaaea8</span></button></div></a><div aria-labelledby="job_list___sub_heading_26_1" data-parent="#job_list___sub_accordion_26" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_26_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_BitOr, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_27"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_27_1" aria-expanded="false" aria-controls="job_list___sub_collapse_27_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_27_1"><button class="btn btn-outline-success"><span class="job_id">27 : Job ID 6b43ab30c3ad42c48aa9b15c18030356</span></button></div></a><div aria-labelledby="job_list___sub_heading_27_1" data-parent="#job_list___sub_accordion_27" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_27_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_BitAnd, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_28"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_28_1" aria-expanded="false" aria-controls="job_list___sub_collapse_28_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_28_1"><button class="btn btn-outline-success"><span class="job_id">28 : Job ID 19a324a320df4906b43829884dc370bf</span></button></div></a><div aria-labelledby="job_list___sub_heading_28_1" data-parent="#job_list___sub_accordion_28" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_28_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 66), end pos: (281, 67)</button></a></pre><pre>operator: core/ReplaceBinaryOperator_Add_BitXor, occurrence: 0</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_29"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_29_1" aria-expanded="false" aria-controls="job_list___sub_collapse_29_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_29_1"><button class="btn btn-outline-success"><span class="job_id">29 : Job ID 4e76db0c5abf4ab1916e9960f3e70c32</span></button></div></a><div aria-labelledby="job_list___sub_heading_29_1" data-parent="#job_list___sub_accordion_29" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_29_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=274" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (274, 28), end pos: (274, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Eq, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -271,7 +271,7 @@
+         if account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+-        if account.password != password:
++        if account.password == password:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         # for when we implement password hashing</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_30"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_30_1" aria-expanded="false" aria-controls="job_list___sub_collapse_30_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_30_1"><button class="btn btn-outline-success"><span class="job_id">30 : Job ID 0e174cdf165640f7891023031a78fa6c</span></button></div></a><div aria-labelledby="job_list___sub_heading_30_1" data-parent="#job_list___sub_accordion_30" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_30_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=274" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (274, 28), end pos: (274, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Lt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -271,7 +271,7 @@
+         if account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+-        if account.password != password:
++        if account.password &lt; password:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         # for when we implement password hashing</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_31"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_31_1" aria-expanded="false" aria-controls="job_list___sub_collapse_31_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_31_1"><button class="btn btn-outline-success"><span class="job_id">31 : Job ID 389a11d2ce1b4ac880d30efe1de54440</span></button></div></a><div aria-labelledby="job_list___sub_heading_31_1" data-parent="#job_list___sub_accordion_31" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_31_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=274" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (274, 28), end pos: (274, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_LtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -271,7 +271,7 @@
+         if account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+-        if account.password != password:
++        if account.password &lt;= password:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         # for when we implement password hashing</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_32"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_32_1" aria-expanded="false" aria-controls="job_list___sub_collapse_32_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_32_1"><button class="btn btn-outline-success"><span class="job_id">32 : Job ID 4d3aefc2a29c497983e155ece3d8824b</span></button></div></a><div aria-labelledby="job_list___sub_heading_32_1" data-parent="#job_list___sub_accordion_32" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_32_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=274" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (274, 28), end pos: (274, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Gt, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -271,7 +271,7 @@
+         if account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+-        if account.password != password:
++        if account.password &gt; password:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         # for when we implement password hashing</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_33"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_33_1" aria-expanded="false" aria-controls="job_list___sub_collapse_33_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_33_1"><button class="btn btn-outline-success"><span class="job_id">33 : Job ID 5d7ebff3afe9495aa516759f8662d9c7</span></button></div></a><div aria-labelledby="job_list___sub_heading_33_1" data-parent="#job_list___sub_accordion_33" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_33_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=274" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (274, 28), end pos: (274, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_GtE, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -271,7 +271,7 @@
+         if account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+-        if account.password != password:
++        if account.password &gt;= password:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         # for when we implement password hashing</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_34"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_34_1" aria-expanded="false" aria-controls="job_list___sub_collapse_34_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_34_1"><button class="btn btn-outline-success"><span class="job_id">34 : Job ID e0c3fd370b774c14bc0f65e138098f74</span></button></div></a><div aria-labelledby="job_list___sub_heading_34_1" data-parent="#job_list___sub_accordion_34" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_34_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=274" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (274, 28), end pos: (274, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_Is, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -271,7 +271,7 @@
+         if account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+-        if account.password != password:
++        if account.password is password:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         # for when we implement password hashing</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_35"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_35_1" aria-expanded="false" aria-controls="job_list___sub_collapse_35_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_35_1"><button class="btn btn-outline-success"><span class="job_id">35 : Job ID b3ea8b567a084346aedb36487329f6af</span></button></div></a><div aria-labelledby="job_list___sub_heading_35_1" data-parent="#job_list___sub_accordion_35" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_35_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=274" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (274, 28), end pos: (274, 30)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_NotEq_IsNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -271,7 +271,7 @@
+         if account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+-        if account.password != password:
++        if account.password is not password:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         # for when we implement password hashing</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_36"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_36_1" aria-expanded="false" aria-controls="job_list___sub_collapse_36_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_36_1"><button class="btn btn-outline-success"><span class="job_id">36 : Job ID b1a145f94c3a477394c74c6e44966133</span></button></div></a><div aria-labelledby="job_list___sub_heading_36_1" data-parent="#job_list___sub_accordion_36" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_36_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=194" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (194, 20), end pos: (194, 22)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -191,7 +191,7 @@
+         # Try to find the auth_token in database
+         db_token = self.token_db.get_by_hash(token_hash)
+ 
+-        if db_token is None:
++        if db_token is not None:
+             raise TokenNotFoundError(
+                 message="Invalid or expired verification auth_token",
+                 details={"token_hash": token_hash},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_37"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_37_1" aria-expanded="false" aria-controls="job_list___sub_collapse_37_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_37_1"><button class="btn btn-outline-success"><span class="job_id">37 : Job ID 16b55e2646d041119ef8010b0100fce8</span></button></div></a><div aria-labelledby="job_list___sub_heading_37_1" data-parent="#job_list___sub_accordion_37" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_37_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=247" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (247, 19), end pos: (247, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -244,7 +244,7 @@
+ 
+         account = self.account_manager.get_account_by_email(email)
+ 
+-        if account is None:
++        if account is not None:
+             raise ApiError(
+                 status_code=404, message=f"Account not found for email: {email}"
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_38"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_38_1" aria-expanded="false" aria-controls="job_list___sub_collapse_38_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_38_1"><button class="btn btn-outline-success"><span class="job_id">38 : Job ID 7670af2c1119444790c5551fea68a3eb</span></button></div></a><div aria-labelledby="job_list___sub_heading_38_1" data-parent="#job_list___sub_accordion_38" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_38_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=271" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (271, 19), end pos: (271, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -268,7 +268,7 @@
+         # Get account from database
+         account = self.account_manager.get_account_by_email(email)
+ 
+-        if account is None:
++        if account is not None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         if account.password != password:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_39"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_39_1" aria-expanded="false" aria-controls="job_list___sub_collapse_39_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_39_1"><button class="btn btn-outline-success"><span class="job_id">39 : Job ID 7634ce9920fa4aa1978e312387dc2c4b</span></button></div></a><div aria-labelledby="job_list___sub_heading_39_1" data-parent="#job_list___sub_accordion_39" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_39_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=289" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (289, 18), end pos: (289, 20)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -286,7 +286,7 @@
+         return token
+ 
+     def get_account_by_userid(self, userid: int) -&gt; Account:
+-        if userid is None:
++        if userid is not None:
+             raise ApiError(status_code=400, message="User ID cannot be None")
+ 
+         account = self.account_manager.get_account_by_id(userid)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_40"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_40_1" aria-expanded="false" aria-controls="job_list___sub_collapse_40_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_40_1"><button class="btn btn-outline-success"><span class="job_id">40 : Job ID e208ba9d360547c3b2b58d4618cfc602</span></button></div></a><div aria-labelledby="job_list___sub_heading_40_1" data-parent="#job_list___sub_accordion_40" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_40_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=294" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (294, 19), end pos: (294, 21)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_Is_IsNot, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -291,7 +291,7 @@
+ 
+         account = self.account_manager.get_account_by_id(userid)
+ 
+-        if account is None:
++        if account is not None:
+             raise ApiError(status_code=404, message="Account not found")
+ 
+         account.rating_count = self.rating_manager.count_ratings_received_by_account_id(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_41"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_41_1" aria-expanded="false" aria-controls="job_list___sub_collapse_41_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_41_1"><button class="btn btn-outline-success"><span class="job_id">41 : Job ID ed0ffcf323c84917961f551c9b73d3de</span></button></div></a><div aria-labelledby="job_list___sub_heading_41_1" data-parent="#job_list___sub_accordion_41" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_41_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=90" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (90, 34), end pos: (90, 40)</button></a></pre><pre>operator: core/ReplaceComparisonOperator_IsNot_Is, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -87,7 +87,7 @@
+         except Exception:
+             raise ApiError(status_code=500, message="Internal server error")
+ 
+-        return created if created is not None else account
++        return created if created is None else account
+ 
+     def validate_account(self, email: str, password: str, fname: str, lname: str):
+         """Validates created account information</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_42"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_42_1" aria-expanded="false" aria-controls="job_list___sub_collapse_42_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_42_1"><button class="btn btn-outline-success"><span class="job_id">42 : Job ID 9be122bc90e0495aba94a17e8be7943e</span></button></div></a><div aria-labelledby="job_list___sub_heading_42_1" data-parent="#job_list___sub_accordion_42" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_42_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=119" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (119, 34), end pos: (119, 35)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_USub_UAdd, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -116,7 +116,7 @@
+         return email, password, fname, lname
+ 
+     def validate_email(self, email: str):
+-        domain = email.split("@")[-1]
++        domain = email.split("@")[+1]
+         if domain not in ALLOWED_DOMAINS:
+             raise ValidationError(
+                 "Email must be a valid University of Manitoba email address "</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_43"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_43_1" aria-expanded="false" aria-controls="job_list___sub_collapse_43_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_43_1"><button class="btn btn-outline-success"><span class="job_id">43 : Job ID 84c5afda3fc04dbbb76a02b9ec8ef3fc</span></button></div></a><div aria-labelledby="job_list___sub_heading_43_1" data-parent="#job_list___sub_accordion_43" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_43_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=119" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (119, 34), end pos: (119, 35)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_USub_Invert, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -116,7 +116,7 @@
+         return email, password, fname, lname
+ 
+     def validate_email(self, email: str):
+-        domain = email.split("@")[-1]
++        domain = email.split("@")[~1]
+         if domain not in ALLOWED_DOMAINS:
+             raise ValidationError(
+                 "Email must be a valid University of Manitoba email address "</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_44"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_44_1" aria-expanded="false" aria-controls="job_list___sub_collapse_44_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_44_1"><button class="btn btn-outline-success"><span class="job_id">44 : Job ID 0e20d5700fc64470a74bd02350b62749</span></button></div></a><div aria-labelledby="job_list___sub_heading_44_1" data-parent="#job_list___sub_accordion_44" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_44_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=119" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (119, 34), end pos: (119, 35)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_USub_Not, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -116,7 +116,7 @@
+         return email, password, fname, lname
+ 
+     def validate_email(self, email: str):
+-        domain = email.split("@")[-1]
++        domain = email.split("@")[not 1]
+         if domain not in ALLOWED_DOMAINS:
+             raise ValidationError(
+                 "Email must be a valid University of Manitoba email address "</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_45"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_45_1" aria-expanded="false" aria-controls="job_list___sub_collapse_45_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_45_1"><button class="btn btn-outline-success"><span class="job_id">45 : Job ID 41e26f40705941be98e8af1223d8f879</span></button></div></a><div aria-labelledby="job_list___sub_heading_45_1" data-parent="#job_list___sub_accordion_45" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_45_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=119" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (119, 34), end pos: (119, 35)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_USub, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -116,7 +116,7 @@
+         return email, password, fname, lname
+ 
+     def validate_email(self, email: str):
+-        domain = email.split("@")[-1]
++        domain = email.split("@")[1]
+         if domain not in ALLOWED_DOMAINS:
+             raise ValidationError(
+                 "Email must be a valid University of Manitoba email address "</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_46"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_46_1" aria-expanded="false" aria-controls="job_list___sub_collapse_46_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_46_1"><button class="btn btn-outline-success"><span class="job_id">46 : Job ID 6bee8103bf114246abd56301275668a1</span></button></div></a><div aria-labelledby="job_list___sub_heading_46_1" data-parent="#job_list___sub_accordion_46" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_46_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=127" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (127, 11), end pos: (127, 14)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_Not, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -124,7 +124,7 @@
+             )
+ 
+     def validate_password(self, password: str):
+-        if not re.fullmatch(PASSWORD_REGEX, password):
++        if  re.fullmatch(PASSWORD_REGEX, password):
+             raise ValidationError(
+                 "Password must be at least 8 characters long and include "
+                 "1 uppercase, 1 lowercase, 1 number, and no spaces."</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_47"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_47_1" aria-expanded="false" aria-controls="job_list___sub_collapse_47_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_47_1"><button class="btn btn-outline-success"><span class="job_id">47 : Job ID 355ff096071a41a29041eec8754c35aa</span></button></div></a><div aria-labelledby="job_list___sub_heading_47_1" data-parent="#job_list___sub_accordion_47" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_47_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=183" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (183, 11), end pos: (183, 14)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_Not, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -180,7 +180,7 @@
+             TokenAlreadyUsedError: If auth_token was already used
+             AccountNotFoundError: If account not found
+         """
+-        if not token:
++        if  token:
+             raise EmailVerificationError(
+                 message="Token cannot be empty", details={"auth_token": token}
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_48"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_48_1" aria-expanded="false" aria-controls="job_list___sub_collapse_48_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_48_1"><button class="btn btn-outline-success"><span class="job_id">48 : Job ID c9cfba9b4ba54c05a73ebd4e0642d6ab</span></button></div></a><div aria-labelledby="job_list___sub_heading_48_1" data-parent="#job_list___sub_accordion_48" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_48_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=242" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (242, 11), end pos: (242, 14)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_Not, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -239,7 +239,7 @@
+         Raises:
+             ApiError: If account not found.
+         """
+-        if not email:
++        if  email:
+             raise ApiError(status_code=400, message="Email cannot be empty")
+ 
+         account = self.account_manager.get_account_by_email(email)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_49"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_49_1" aria-expanded="false" aria-controls="job_list___sub_collapse_49_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_49_1"><button class="btn btn-outline-success"><span class="job_id">49 : Job ID 6ca91c9c6c5642aaa5976a1b81f36026</span></button></div></a><div aria-labelledby="job_list___sub_heading_49_1" data-parent="#job_list___sub_accordion_49" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_49_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=265" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (265, 11), end pos: (265, 14)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_Not, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -262,7 +262,7 @@
+             str: A JWT auth_token for the authenticated user.
+         """
+ 
+-        if not email or not password:
++        if  email or not password:
+             raise ApiError(status_code=400, message="Email and password are required")
+ 
+         # Get account from database</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_50"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_50_1" aria-expanded="false" aria-controls="job_list___sub_collapse_50_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_50_1"><button class="btn btn-outline-success"><span class="job_id">50 : Job ID 66a529de221947698f9fc039e41b95f2</span></button></div></a><div aria-labelledby="job_list___sub_heading_50_1" data-parent="#job_list___sub_accordion_50" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_50_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=265" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (265, 24), end pos: (265, 27)</button></a></pre><pre>operator: core/ReplaceUnaryOperator_Delete_Not, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -262,7 +262,7 @@
+             str: A JWT auth_token for the authenticated user.
+         """
+ 
+-        if not email or not password:
++        if not email or  password:
+             raise ApiError(status_code=400, message="Email and password are required")
+ 
+         # Get account from database</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_51"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_51_1" aria-expanded="false" aria-controls="job_list___sub_collapse_51_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_51_1"><button class="btn btn-outline-success"><span class="job_id">51 : Job ID f3aa83f38bfb4caf839409930441f9be</span></button></div></a><div aria-labelledby="job_list___sub_heading_51_1" data-parent="#job_list___sub_accordion_51" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_51_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=90" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (90, 26), end pos: (90, 45)</button></a></pre><pre>operator: core/AddNot, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -87,7 +87,7 @@
+         except Exception:
+             raise ApiError(status_code=500, message="Internal server error")
+ 
+-        return created if created is not None else account
++        return created if not created is not None else account
+ 
+     def validate_account(self, email: str, password: str, fname: str, lname: str):
+         """Validates created account information</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_52"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_52_1" aria-expanded="false" aria-controls="job_list___sub_collapse_52_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_52_1"><button class="btn btn-outline-success"><span class="job_id">52 : Job ID 08cbc43d1cbd470cafadf37da6d0863c</span></button></div></a><div aria-labelledby="job_list___sub_heading_52_1" data-parent="#job_list___sub_accordion_52" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_52_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=120" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (120, 11), end pos: (120, 40)</button></a></pre><pre>operator: core/AddNot, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -117,7 +117,7 @@
+ 
+     def validate_email(self, email: str):
+         domain = email.split("@")[-1]
+-        if domain not in ALLOWED_DOMAINS:
++        if not domain not in ALLOWED_DOMAINS:
+             raise ValidationError(
+                 "Email must be a valid University of Manitoba email address "
+                 "(@umanitoba.ca / @myumanitoba.ca)"</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_53"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_53_1" aria-expanded="false" aria-controls="job_list___sub_collapse_53_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_53_1"><button class="btn btn-outline-success"><span class="job_id">53 : Job ID de0b5297d536439fbc73bc1281cf3c86</span></button></div></a><div aria-labelledby="job_list___sub_heading_53_1" data-parent="#job_list___sub_accordion_53" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_53_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=127" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (127, 11), end pos: (127, 53)</button></a></pre><pre>operator: core/AddNot, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -124,7 +124,7 @@
+             )
+ 
+     def validate_password(self, password: str):
+-        if not re.fullmatch(PASSWORD_REGEX, password):
++        if not not re.fullmatch(PASSWORD_REGEX, password):
+             raise ValidationError(
+                 "Password must be at least 8 characters long and include "
+                 "1 uppercase, 1 lowercase, 1 number, and no spaces."</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_54"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_54_1" aria-expanded="false" aria-controls="job_list___sub_collapse_54_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_54_1"><button class="btn btn-outline-success"><span class="job_id">54 : Job ID 84ccaae73b864dcc970331ac131c280e</span></button></div></a><div aria-labelledby="job_list___sub_heading_54_1" data-parent="#job_list___sub_accordion_54" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_54_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=183" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (183, 11), end pos: (183, 20)</button></a></pre><pre>operator: core/AddNot, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -180,7 +180,7 @@
+             TokenAlreadyUsedError: If auth_token was already used
+             AccountNotFoundError: If account not found
+         """
+-        if not token:
++        if not not token:
+             raise EmailVerificationError(
+                 message="Token cannot be empty", details={"auth_token": token}
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_55"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_55_1" aria-expanded="false" aria-controls="job_list___sub_collapse_55_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_55_1"><button class="btn btn-outline-success"><span class="job_id">55 : Job ID 16b3c1b39adc4b29910c3318985c8722</span></button></div></a><div aria-labelledby="job_list___sub_heading_55_1" data-parent="#job_list___sub_accordion_55" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_55_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=194" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (194, 11), end pos: (194, 27)</button></a></pre><pre>operator: core/AddNot, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -191,7 +191,7 @@
+         # Try to find the auth_token in database
+         db_token = self.token_db.get_by_hash(token_hash)
+ 
+-        if db_token is None:
++        if not db_token is None:
+             raise TokenNotFoundError(
+                 message="Invalid or expired verification auth_token",
+                 details={"token_hash": token_hash},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_56"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_56_1" aria-expanded="false" aria-controls="job_list___sub_collapse_56_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_56_1"><button class="btn btn-outline-success"><span class="job_id">56 : Job ID ed8aa93932c74fc9b8f434e0a6adf1dc</span></button></div></a><div aria-labelledby="job_list___sub_heading_56_1" data-parent="#job_list___sub_accordion_56" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_56_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=201" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (201, 11), end pos: (201, 24)</button></a></pre><pre>operator: core/AddNot, occurrence: 5</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -198,7 +198,7 @@
+             )
+ 
+         # Check if auth_token has been used already
+-        if db_token.used:
++        if not db_token.used:
+             raise TokenAlreadyUsedError(
+                 message="This verification auth_token has already been used",
+                 details={"token_id": db_token.id},</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_57"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_57_1" aria-expanded="false" aria-controls="job_list___sub_collapse_57_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_57_1"><button class="btn btn-outline-success"><span class="job_id">57 : Job ID d10582f52bef4c0ab05ad6fcb45bd34f</span></button></div></a><div aria-labelledby="job_list___sub_heading_57_1" data-parent="#job_list___sub_accordion_57" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_57_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=208" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (208, 11), end pos: (208, 32)</button></a></pre><pre>operator: core/AddNot, occurrence: 6</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -205,7 +205,7 @@
+             )
+ 
+         # Check if auth_token has expired
+-        if db_token.is_expired():
++        if not db_token.is_expired():
+             raise TokenExpiredError(
+                 message="This verification auth_token has expired",
+                 details={</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_58"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_58_1" aria-expanded="false" aria-controls="job_list___sub_collapse_58_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_58_1"><button class="btn btn-outline-success"><span class="job_id">58 : Job ID a68d048dae77406fab9847accc5b3d45</span></button></div></a><div aria-labelledby="job_list___sub_heading_58_1" data-parent="#job_list___sub_accordion_58" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_58_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=242" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (242, 11), end pos: (242, 20)</button></a></pre><pre>operator: core/AddNot, occurrence: 7</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -239,7 +239,7 @@
+         Raises:
+             ApiError: If account not found.
+         """
+-        if not email:
++        if not not email:
+             raise ApiError(status_code=400, message="Email cannot be empty")
+ 
+         account = self.account_manager.get_account_by_email(email)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_59"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_59_1" aria-expanded="false" aria-controls="job_list___sub_collapse_59_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_59_1"><button class="btn btn-outline-success"><span class="job_id">59 : Job ID 0ccab88db00047e8ac3c300981609a73</span></button></div></a><div aria-labelledby="job_list___sub_heading_59_1" data-parent="#job_list___sub_accordion_59" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_59_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=247" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (247, 11), end pos: (247, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 8</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -244,7 +244,7 @@
+ 
+         account = self.account_manager.get_account_by_email(email)
+ 
+-        if account is None:
++        if not account is None:
+             raise ApiError(
+                 status_code=404, message=f"Account not found for email: {email}"
+             )</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_60"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_60_1" aria-expanded="false" aria-controls="job_list___sub_collapse_60_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_60_1"><button class="btn btn-outline-success"><span class="job_id">60 : Job ID 2b93d34b372142fbbb5df6c26be80387</span></button></div></a><div aria-labelledby="job_list___sub_heading_60_1" data-parent="#job_list___sub_accordion_60" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_60_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=265" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (265, 11), end pos: (265, 36)</button></a></pre><pre>operator: core/AddNot, occurrence: 9</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -262,7 +262,7 @@
+             str: A JWT auth_token for the authenticated user.
+         """
+ 
+-        if not email or not password:
++        if not not email or not password:
+             raise ApiError(status_code=400, message="Email and password are required")
+ 
+         # Get account from database</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_61"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_61_1" aria-expanded="false" aria-controls="job_list___sub_collapse_61_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_61_1"><button class="btn btn-outline-success"><span class="job_id">61 : Job ID e073d0223e3c46b389e9679540348f9d</span></button></div></a><div aria-labelledby="job_list___sub_heading_61_1" data-parent="#job_list___sub_accordion_61" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_61_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=271" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (271, 11), end pos: (271, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 10</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -268,7 +268,7 @@
+         # Get account from database
+         account = self.account_manager.get_account_by_email(email)
+ 
+-        if account is None:
++        if not account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         if account.password != password:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_62"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_62_1" aria-expanded="false" aria-controls="job_list___sub_collapse_62_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_62_1"><button class="btn btn-outline-success"><span class="job_id">62 : Job ID cc367d6e274c47b1916ebd0e106b6549</span></button></div></a><div aria-labelledby="job_list___sub_heading_62_1" data-parent="#job_list___sub_accordion_62" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_62_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=274" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (274, 11), end pos: (274, 39)</button></a></pre><pre>operator: core/AddNot, occurrence: 11</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -271,7 +271,7 @@
+         if account is None:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+-        if account.password != password:
++        if not account.password != password:
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         # for when we implement password hashing</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_63"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_63_1" aria-expanded="false" aria-controls="job_list___sub_collapse_63_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_63_1"><button class="btn btn-outline-success"><span class="job_id">63 : Job ID c380d508af6c417c9b85a2c74d63f844</span></button></div></a><div aria-labelledby="job_list___sub_heading_63_1" data-parent="#job_list___sub_accordion_63" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_63_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=289" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (289, 11), end pos: (289, 25)</button></a></pre><pre>operator: core/AddNot, occurrence: 12</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -286,7 +286,7 @@
+         return token
+ 
+     def get_account_by_userid(self, userid: int) -&gt; Account:
+-        if userid is None:
++        if not userid is None:
+             raise ApiError(status_code=400, message="User ID cannot be None")
+ 
+         account = self.account_manager.get_account_by_id(userid)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_64"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_64_1" aria-expanded="false" aria-controls="job_list___sub_collapse_64_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_64_1"><button class="btn btn-outline-success"><span class="job_id">64 : Job ID dfac6414d93f49b6b8e1b90a083a66b8</span></button></div></a><div aria-labelledby="job_list___sub_heading_64_1" data-parent="#job_list___sub_accordion_64" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_64_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=294" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (294, 11), end pos: (294, 26)</button></a></pre><pre>operator: core/AddNot, occurrence: 13</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -291,7 +291,7 @@
+ 
+         account = self.account_manager.get_account_by_id(userid)
+ 
+-        if account is None:
++        if not account is None:
+             raise ApiError(status_code=404, message="Account not found")
+ 
+         account.rating_count = self.rating_manager.count_ratings_received_by_account_id(</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_65"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_65_1" aria-expanded="false" aria-controls="job_list___sub_collapse_65_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_65_1"><button class="btn btn-outline-success"><span class="job_id">65 : Job ID bcb478a254034d8785a8ded5137457a4</span></button></div></a><div aria-labelledby="job_list___sub_heading_65_1" data-parent="#job_list___sub_accordion_65" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_65_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=222" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (222, 27), end pos: (222, 31)</button></a></pre><pre>operator: core/ReplaceTrueWithFalse, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -219,7 +219,7 @@
+ 
+         # TODO: Call DAO to update account.verified = true
+         # For now, we'll return the account (real implementation will update DB)
+-        account.verified = True
++        account.verified = False
+ 
+         # Mark auth_token as used ONLY after successful verification
+         self.token_db.mark_used(db_token.id)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_66"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_66_1" aria-expanded="false" aria-controls="job_list___sub_collapse_66_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_66_1"><button class="btn btn-outline-success"><span class="job_id">66 : Job ID 75787819a4ae4d00bfe908f13b26a64c</span></button></div></a><div aria-labelledby="job_list___sub_heading_66_1" data-parent="#job_list___sub_accordion_66" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_66_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=265" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (265, 21), end pos: (265, 23)</button></a></pre><pre>operator: core/ReplaceOrWithAnd, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -262,7 +262,7 @@
+             str: A JWT auth_token for the authenticated user.
+         """
+ 
+-        if not email or not password:
++        if not email and not password:
+             raise ApiError(status_code=400, message="Email and password are required")
+ 
+         # Get account from database</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_67"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_67_1" aria-expanded="false" aria-controls="job_list___sub_collapse_67_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_67_1"><button class="btn btn-outline-success"><span class="job_id">67 : Job ID 7fa414e18f64497b89af16e637ca2fbf</span></button></div></a><div aria-labelledby="job_list___sub_heading_67_1" data-parent="#job_list___sub_accordion_67" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_67_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=78" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (78, 15), end pos: (78, 40)</button></a></pre><pre>operator: core/ExceptionReplacer, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -75,7 +75,7 @@
+ 
+         try:
+             created = self.account_manager.create_account(account)
+-        except AccountAlreadyExistsError as e:
++        except CosmicRayTestingException as e:
+             raise AccountAlreadyExistsError(status_code=409, message=str(e))
+ 
+         except ValidationError as e:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_68"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_68_1" aria-expanded="false" aria-controls="job_list___sub_collapse_68_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_68_1"><button class="btn btn-outline-success"><span class="job_id">68 : Job ID ea98b558bf0c4a0f881cde0f90df438f</span></button></div></a><div aria-labelledby="job_list___sub_heading_68_1" data-parent="#job_list___sub_accordion_68" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_68_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=81" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (81, 15), end pos: (81, 30)</button></a></pre><pre>operator: core/ExceptionReplacer, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -78,7 +78,7 @@
+         except AccountAlreadyExistsError as e:
+             raise AccountAlreadyExistsError(status_code=409, message=str(e))
+ 
+-        except ValidationError as e:
++        except CosmicRayTestingException as e:
+             raise ApiError(status_code=422, message=str(e))
+ 
+         except DatabaseUnavailableError as e:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_69"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_69_1" aria-expanded="false" aria-controls="job_list___sub_collapse_69_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_69_1"><button class="btn btn-outline-success"><span class="job_id">69 : Job ID 6e5809566d4a46db89d754d99f01d62b</span></button></div></a><div aria-labelledby="job_list___sub_heading_69_1" data-parent="#job_list___sub_accordion_69" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_69_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=84" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (84, 15), end pos: (84, 39)</button></a></pre><pre>operator: core/ExceptionReplacer, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -81,7 +81,7 @@
+         except ValidationError as e:
+             raise ApiError(status_code=422, message=str(e))
+ 
+-        except DatabaseUnavailableError as e:
++        except CosmicRayTestingException as e:
+             raise ApiError(status_code=503, message=str(e))
+ 
+         except Exception:</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_70"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_70_1" aria-expanded="false" aria-controls="job_list___sub_collapse_70_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_70_1"><button class="btn btn-outline-success"><span class="job_id">70 : Job ID 4db85cb9ca6445dfa4fb466a4ae7170f</span></button></div></a><div aria-labelledby="job_list___sub_heading_70_1" data-parent="#job_list___sub_accordion_70" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_70_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=87" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (87, 15), end pos: (87, 24)</button></a></pre><pre>operator: core/ExceptionReplacer, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -84,7 +84,7 @@
+         except DatabaseUnavailableError as e:
+             raise ApiError(status_code=503, message=str(e))
+ 
+-        except Exception:
++        except CosmicRayTestingException:
+             raise ApiError(status_code=500, message="Internal server error")
+ 
+         return created if created is not None else account</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_71"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_71_1" aria-expanded="false" aria-controls="job_list___sub_collapse_71_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_71_1"><button class="btn btn-outline-success"><span class="job_id">71 : Job ID df12bdb83e6b4fedafd1237003c17363</span></button></div></a><div aria-labelledby="job_list___sub_heading_71_1" data-parent="#job_list___sub_accordion_71" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_71_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=79" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (79, 56), end pos: (79, 59)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 0</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -76,7 +76,7 @@
+         try:
+             created = self.account_manager.create_account(account)
+         except AccountAlreadyExistsError as e:
+-            raise AccountAlreadyExistsError(status_code=409, message=str(e))
++            raise AccountAlreadyExistsError(status_code= 410, message=str(e))
+ 
+         except ValidationError as e:
+             raise ApiError(status_code=422, message=str(e))</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_72"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_72_1" aria-expanded="false" aria-controls="job_list___sub_collapse_72_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_72_1"><button class="btn btn-outline-success"><span class="job_id">72 : Job ID d38387c10cbe43c2b4d96bf5d6dd380d</span></button></div></a><div aria-labelledby="job_list___sub_heading_72_1" data-parent="#job_list___sub_accordion_72" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_72_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=79" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (79, 56), end pos: (79, 59)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 1</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -76,7 +76,7 @@
+         try:
+             created = self.account_manager.create_account(account)
+         except AccountAlreadyExistsError as e:
+-            raise AccountAlreadyExistsError(status_code=409, message=str(e))
++            raise AccountAlreadyExistsError(status_code= 408, message=str(e))
+ 
+         except ValidationError as e:
+             raise ApiError(status_code=422, message=str(e))</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_73"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_73_1" aria-expanded="false" aria-controls="job_list___sub_collapse_73_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_73_1"><button class="btn btn-outline-success"><span class="job_id">73 : Job ID 898d285f2f2846ed9d405402c85db32d</span></button></div></a><div aria-labelledby="job_list___sub_heading_73_1" data-parent="#job_list___sub_accordion_73" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_73_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=82" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (82, 39), end pos: (82, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 2</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -79,7 +79,7 @@
+             raise AccountAlreadyExistsError(status_code=409, message=str(e))
+ 
+         except ValidationError as e:
+-            raise ApiError(status_code=422, message=str(e))
++            raise ApiError(status_code= 423, message=str(e))
+ 
+         except DatabaseUnavailableError as e:
+             raise ApiError(status_code=503, message=str(e))</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_74"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_74_1" aria-expanded="false" aria-controls="job_list___sub_collapse_74_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_74_1"><button class="btn btn-outline-success"><span class="job_id">74 : Job ID 8ef5f365aff947b2b8395b723e65da0e</span></button></div></a><div aria-labelledby="job_list___sub_heading_74_1" data-parent="#job_list___sub_accordion_74" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_74_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=82" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (82, 39), end pos: (82, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 3</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -79,7 +79,7 @@
+             raise AccountAlreadyExistsError(status_code=409, message=str(e))
+ 
+         except ValidationError as e:
+-            raise ApiError(status_code=422, message=str(e))
++            raise ApiError(status_code= 421, message=str(e))
+ 
+         except DatabaseUnavailableError as e:
+             raise ApiError(status_code=503, message=str(e))</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_75"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_75_1" aria-expanded="false" aria-controls="job_list___sub_collapse_75_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_75_1"><button class="btn btn-outline-success"><span class="job_id">75 : Job ID caf523824dec4bb695292704d002316b</span></button></div></a><div aria-labelledby="job_list___sub_heading_75_1" data-parent="#job_list___sub_accordion_75" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_75_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=85" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (85, 39), end pos: (85, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 4</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -82,7 +82,7 @@
+             raise ApiError(status_code=422, message=str(e))
+ 
+         except DatabaseUnavailableError as e:
+-            raise ApiError(status_code=503, message=str(e))
++            raise ApiError(status_code= 504, message=str(e))
+ 
+         except Exception:
+             raise ApiError(status_code=500, message="Internal server error")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_76"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_76_1" aria-expanded="false" aria-controls="job_list___sub_collapse_76_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_76_1"><button class="btn btn-outline-success"><span class="job_id">76 : Job ID a6acbcfcc26945c1acba7fb84cded0c6</span></button></div></a><div aria-labelledby="job_list___sub_heading_76_1" data-parent="#job_list___sub_accordion_76" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_76_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=85" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (85, 39), end pos: (85, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 5</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -82,7 +82,7 @@
+             raise ApiError(status_code=422, message=str(e))
+ 
+         except DatabaseUnavailableError as e:
+-            raise ApiError(status_code=503, message=str(e))
++            raise ApiError(status_code= 502, message=str(e))
+ 
+         except Exception:
+             raise ApiError(status_code=500, message="Internal server error")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_77"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_77_1" aria-expanded="false" aria-controls="job_list___sub_collapse_77_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_77_1"><button class="btn btn-outline-success"><span class="job_id">77 : Job ID 6fe8e5e777a845c0b3c1c5d76868f65d</span></button></div></a><div aria-labelledby="job_list___sub_heading_77_1" data-parent="#job_list___sub_accordion_77" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_77_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=88" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (88, 39), end pos: (88, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 6</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -85,7 +85,7 @@
+             raise ApiError(status_code=503, message=str(e))
+ 
+         except Exception:
+-            raise ApiError(status_code=500, message="Internal server error")
++            raise ApiError(status_code= 501, message="Internal server error")
+ 
+         return created if created is not None else account
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_78"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_78_1" aria-expanded="false" aria-controls="job_list___sub_collapse_78_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_78_1"><button class="btn btn-outline-success"><span class="job_id">78 : Job ID 8dd128169a0d46c4a6e394be6411e016</span></button></div></a><div aria-labelledby="job_list___sub_heading_78_1" data-parent="#job_list___sub_accordion_78" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_78_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=88" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (88, 39), end pos: (88, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 7</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -85,7 +85,7 @@
+             raise ApiError(status_code=503, message=str(e))
+ 
+         except Exception:
+-            raise ApiError(status_code=500, message="Internal server error")
++            raise ApiError(status_code= 499, message="Internal server error")
+ 
+         return created if created is not None else account
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_79"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_79_1" aria-expanded="false" aria-controls="job_list___sub_collapse_79_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_79_1"><button class="btn btn-outline-success"><span class="job_id">79 : Job ID 2d0743cbe9574254baacc417ef0afbf8</span></button></div></a><div aria-labelledby="job_list___sub_heading_79_1" data-parent="#job_list___sub_accordion_79" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_79_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=119" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (119, 35), end pos: (119, 36)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 8</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -116,7 +116,7 @@
+         return email, password, fname, lname
+ 
+     def validate_email(self, email: str):
+-        domain = email.split("@")[-1]
++        domain = email.split("@")[- 2]
+         if domain not in ALLOWED_DOMAINS:
+             raise ValidationError(
+                 "Email must be a valid University of Manitoba email address "</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_80"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_80_1" aria-expanded="false" aria-controls="job_list___sub_collapse_80_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_80_1"><button class="btn btn-outline-success"><span class="job_id">80 : Job ID 96364ab8a194474fa5a7c313be97fc9c</span></button></div></a><div aria-labelledby="job_list___sub_heading_80_1" data-parent="#job_list___sub_accordion_80" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_80_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=119" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (119, 35), end pos: (119, 36)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 9</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -116,7 +116,7 @@
+         return email, password, fname, lname
+ 
+     def validate_email(self, email: str):
+-        domain = email.split("@")[-1]
++        domain = email.split("@")[- 0]
+         if domain not in ALLOWED_DOMAINS:
+             raise ValidationError(
+                 "Email must be a valid University of Manitoba email address "</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_81"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_81_1" aria-expanded="false" aria-controls="job_list___sub_collapse_81_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_81_1"><button class="btn btn-outline-success"><span class="job_id">81 : Job ID a1a693c6d09a48cda8242a8088ffb0c3</span></button></div></a><div aria-labelledby="job_list___sub_heading_81_1" data-parent="#job_list___sub_accordion_81" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_81_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=243" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (243, 39), end pos: (243, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 10</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -240,7 +240,7 @@
+             ApiError: If account not found.
+         """
+         if not email:
+-            raise ApiError(status_code=400, message="Email cannot be empty")
++            raise ApiError(status_code= 401, message="Email cannot be empty")
+ 
+         account = self.account_manager.get_account_by_email(email)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_82"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_82_1" aria-expanded="false" aria-controls="job_list___sub_collapse_82_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_82_1"><button class="btn btn-outline-success"><span class="job_id">82 : Job ID c1f91b948ab94739b194816cbf29a1ca</span></button></div></a><div aria-labelledby="job_list___sub_heading_82_1" data-parent="#job_list___sub_accordion_82" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_82_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=243" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (243, 39), end pos: (243, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 11</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -240,7 +240,7 @@
+             ApiError: If account not found.
+         """
+         if not email:
+-            raise ApiError(status_code=400, message="Email cannot be empty")
++            raise ApiError(status_code= 399, message="Email cannot be empty")
+ 
+         account = self.account_manager.get_account_by_email(email)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_83"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_83_1" aria-expanded="false" aria-controls="job_list___sub_collapse_83_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_83_1"><button class="btn btn-outline-success"><span class="job_id">83 : Job ID e13e05aba3ad4c3bbb8ab22ddd832d5e</span></button></div></a><div aria-labelledby="job_list___sub_heading_83_1" data-parent="#job_list___sub_accordion_83" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_83_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=249" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (249, 28), end pos: (249, 31)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 12</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -246,7 +246,7 @@
+ 
+         if account is None:
+             raise ApiError(
+-                status_code=404, message=f"Account not found for email: {email}"
++                status_code= 405, message=f"Account not found for email: {email}"
+             )
+ 
+         return account</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_84"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_84_1" aria-expanded="false" aria-controls="job_list___sub_collapse_84_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_84_1"><button class="btn btn-outline-success"><span class="job_id">84 : Job ID 5a721b0a95f54642aaf88e2c3774e33f</span></button></div></a><div aria-labelledby="job_list___sub_heading_84_1" data-parent="#job_list___sub_accordion_84" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_84_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=249" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (249, 28), end pos: (249, 31)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 13</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -246,7 +246,7 @@
+ 
+         if account is None:
+             raise ApiError(
+-                status_code=404, message=f"Account not found for email: {email}"
++                status_code= 403, message=f"Account not found for email: {email}"
+             )
+ 
+         return account</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_85"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_85_1" aria-expanded="false" aria-controls="job_list___sub_collapse_85_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_85_1"><button class="btn btn-outline-success"><span class="job_id">85 : Job ID ce95793f3fe64449b9d040b97285cc88</span></button></div></a><div aria-labelledby="job_list___sub_heading_85_1" data-parent="#job_list___sub_accordion_85" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_85_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=266" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (266, 39), end pos: (266, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 14</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -263,7 +263,7 @@
+         """
+ 
+         if not email or not password:
+-            raise ApiError(status_code=400, message="Email and password are required")
++            raise ApiError(status_code= 401, message="Email and password are required")
+ 
+         # Get account from database
+         account = self.account_manager.get_account_by_email(email)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_86"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_86_1" aria-expanded="false" aria-controls="job_list___sub_collapse_86_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_86_1"><button class="btn btn-outline-success"><span class="job_id">86 : Job ID 8646ed06e3c24cff8ee4a54d30c2d953</span></button></div></a><div aria-labelledby="job_list___sub_heading_86_1" data-parent="#job_list___sub_accordion_86" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_86_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=266" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (266, 39), end pos: (266, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 15</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -263,7 +263,7 @@
+         """
+ 
+         if not email or not password:
+-            raise ApiError(status_code=400, message="Email and password are required")
++            raise ApiError(status_code= 399, message="Email and password are required")
+ 
+         # Get account from database
+         account = self.account_manager.get_account_by_email(email)</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_87"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_87_1" aria-expanded="false" aria-controls="job_list___sub_collapse_87_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_87_1"><button class="btn btn-outline-success"><span class="job_id">87 : Job ID 26d8168495564dcea3aee0e9ec24b951</span></button></div></a><div aria-labelledby="job_list___sub_heading_87_1" data-parent="#job_list___sub_accordion_87" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_87_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=272" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (272, 39), end pos: (272, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 16</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -269,7 +269,7 @@
+         account = self.account_manager.get_account_by_email(email)
+ 
+         if account is None:
+-            raise ApiError(status_code=401, message="Invalid email or password")
++            raise ApiError(status_code= 402, message="Invalid email or password")
+ 
+         if account.password != password:
+             raise ApiError(status_code=401, message="Invalid email or password")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_88"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_88_1" aria-expanded="false" aria-controls="job_list___sub_collapse_88_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_88_1"><button class="btn btn-outline-success"><span class="job_id">88 : Job ID 7e1575fecdae49e7853e46ec775c9246</span></button></div></a><div aria-labelledby="job_list___sub_heading_88_1" data-parent="#job_list___sub_accordion_88" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_88_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=272" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (272, 39), end pos: (272, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 17</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -269,7 +269,7 @@
+         account = self.account_manager.get_account_by_email(email)
+ 
+         if account is None:
+-            raise ApiError(status_code=401, message="Invalid email or password")
++            raise ApiError(status_code= 400, message="Invalid email or password")
+ 
+         if account.password != password:
+             raise ApiError(status_code=401, message="Invalid email or password")</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_89"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_89_1" aria-expanded="false" aria-controls="job_list___sub_collapse_89_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_89_1"><button class="btn btn-outline-success"><span class="job_id">89 : Job ID 5375524935a1405f8e7f41ea9b39d046</span></button></div></a><div aria-labelledby="job_list___sub_heading_89_1" data-parent="#job_list___sub_accordion_89" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_89_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=275" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (275, 39), end pos: (275, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 18</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -272,7 +272,7 @@
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         if account.password != password:
+-            raise ApiError(status_code=401, message="Invalid email or password")
++            raise ApiError(status_code= 402, message="Invalid email or password")
+ 
+         # for when we implement password hashing
+         ## if not bcrypt.checkpw(password.encode(), account.password.encode()):</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_90"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_90_1" aria-expanded="false" aria-controls="job_list___sub_collapse_90_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_90_1"><button class="btn btn-outline-success"><span class="job_id">90 : Job ID 925ab24ee06c45c4b5be7c61ae613114</span></button></div></a><div aria-labelledby="job_list___sub_heading_90_1" data-parent="#job_list___sub_accordion_90" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_90_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=275" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (275, 39), end pos: (275, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 19</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -272,7 +272,7 @@
+             raise ApiError(status_code=401, message="Invalid email or password")
+ 
+         if account.password != password:
+-            raise ApiError(status_code=401, message="Invalid email or password")
++            raise ApiError(status_code= 400, message="Invalid email or password")
+ 
+         # for when we implement password hashing
+         ## if not bcrypt.checkpw(password.encode(), account.password.encode()):</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_91"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_91_1" aria-expanded="false" aria-controls="job_list___sub_collapse_91_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_91_1"><button class="btn btn-outline-success"><span class="job_id">91 : Job ID 178c16b7a91f4df18f4d7ce72fe1adb3</span></button></div></a><div aria-labelledby="job_list___sub_heading_91_1" data-parent="#job_list___sub_accordion_91" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_91_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 92), end pos: (281, 94)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 20</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_92"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_92_1" aria-expanded="false" aria-controls="job_list___sub_collapse_92_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_92_1"><button class="btn btn-outline-success"><span class="job_id">92 : Job ID ead1e5c81b214b928aa8f0844894be88</span></button></div></a><div aria-labelledby="job_list___sub_heading_92_1" data-parent="#job_list___sub_accordion_92" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_92_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.SKIPPED</p><p>test outcome: None</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=281" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (281, 92), end pos: (281, 94)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 21</pre></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_93"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_93_1" aria-expanded="false" aria-controls="job_list___sub_collapse_93_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_93_1"><button class="btn btn-outline-success"><span class="job_id">93 : Job ID 2f8fe2aa72c64680a6e3e8f0a3b25b9a</span></button></div></a><div aria-labelledby="job_list___sub_heading_93_1" data-parent="#job_list___sub_accordion_93" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_93_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=290" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (290, 39), end pos: (290, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 22</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -287,7 +287,7 @@
+ 
+     def get_account_by_userid(self, userid: int) -&gt; Account:
+         if userid is None:
+-            raise ApiError(status_code=400, message="User ID cannot be None")
++            raise ApiError(status_code= 401, message="User ID cannot be None")
+ 
+         account = self.account_manager.get_account_by_id(userid)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_94"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_94_1" aria-expanded="false" aria-controls="job_list___sub_collapse_94_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_94_1"><button class="btn btn-outline-success"><span class="job_id">94 : Job ID 83b9785509d74ebfaf84e813294fac81</span></button></div></a><div aria-labelledby="job_list___sub_heading_94_1" data-parent="#job_list___sub_accordion_94" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_94_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=290" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (290, 39), end pos: (290, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 23</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -287,7 +287,7 @@
+ 
+     def get_account_by_userid(self, userid: int) -&gt; Account:
+         if userid is None:
+-            raise ApiError(status_code=400, message="User ID cannot be None")
++            raise ApiError(status_code= 399, message="User ID cannot be None")
+ 
+         account = self.account_manager.get_account_by_id(userid)
+ </pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_95"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_95_1" aria-expanded="false" aria-controls="job_list___sub_collapse_95_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_95_1"><button class="btn btn-outline-success"><span class="job_id">95 : Job ID fb66814781ce41fd8fdf70e6e947ae1b</span></button></div></a><div aria-labelledby="job_list___sub_heading_95_1" data-parent="#job_list___sub_accordion_95" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_95_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=295" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (295, 39), end pos: (295, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 24</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -292,7 +292,7 @@
+         account = self.account_manager.get_account_by_id(userid)
+ 
+         if account is None:
+-            raise ApiError(status_code=404, message="Account not found")
++            raise ApiError(status_code= 405, message="Account not found")
+ 
+         account.rating_count = self.rating_manager.count_ratings_received_by_account_id(
+             userid</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div><div class="mb-1" id="job_list___sub_accordion_96"><div class="card"><a data-toggle="collapse" data-target="#job_list___sub_collapse_96_1" aria-expanded="false" aria-controls="job_list___sub_collapse_96_1" href="#" class="job_list___sub_multi_heading"><div role="alert" class="card-header alert-success" id="job_list___sub_heading_96_1"><button class="btn btn-outline-success"><span class="job_id">96 : Job ID a6150ac6a0c147fc8050d645a23ecb8f</span></button></div></a><div aria-labelledby="job_list___sub_heading_96_1" data-parent="#job_list___sub_accordion_96" class="collapse job_list___sub_multi_collapse" id="job_list___sub_collapse_96_1"><div class="card-body"><div class="work-item"><div class="alert alert-success test-outcome" role="alert"><p>worker outcome: WorkerOutcome.NORMAL</p><p>test outcome: TestOutcome.KILLED</p></div></div><pre class="location"><a href="pycharm://open?file=src/business_logic/services/account_service.py&amp;line=295" class="text-secondary"><button class="btn btn-outline-dark">src/business_logic/services/account_service.py, start pos: (295, 39), end pos: (295, 42)</button></a></pre><pre>operator: core/NumberReplacer, occurrence: 25</pre><div class="alert alert-secondary"><pre class="diff">--- mutation diff ---
+--- asrc/business_logic/services/account_service.py
++++ bsrc/business_logic/services/account_service.py
+@@ -292,7 +292,7 @@
+         account = self.account_manager.get_account_by_id(userid)
+ 
+         if account is None:
+-            raise ApiError(status_code=404, message="Account not found")
++            raise ApiError(status_code= 403, message="Account not found")
+ 
+         account.rating_count = self.rating_manager.count_ratings_received_by_account_id(
+             userid</pre></div><div class="alert alert-secondary"><pre class="diff">Initializing DBUtility...
+Initializing DBUtility...
+</pre></div></div></div></div></div></div></div></div></div></div><script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script><script type="text/javascript">$('div.job_list___sub_multi_collapse').on('shown.bs.collapse',  function () {    correct_behavior_functional_buttons();  });$('div.job_list___sub_multi_collapse').on('hidden.bs.collapse',  function () {    correct_behavior_functional_buttons();  });function correct_behavior_functional_buttons() {    var expand = false;    var collapse = false;    $('a.job_list___sub_multi_heading').each(function(index) {      if ($(this).attr('aria-expanded') == 'false') {        expand = true;        return false;      };    });    $('a.job_list___sub_multi_heading').each(function(index) {      if ($(this).attr('aria-expanded') == 'true') {        collapse = true;        return false;      };    });    if (expand) {      $('div#job_item_expand_all').css('display', 'inline-block');    } else {      $('div#job_item_expand_all').css('display', 'none');    };    if (collapse) {      $('div#job_item_collapse_all').css('display', 'inline-block');    } else {      $('div#job_item_collapse_all').css('display', 'none');    };  };correct_behavior_functional_buttons();</script></body></html>

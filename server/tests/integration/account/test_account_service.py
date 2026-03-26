@@ -2,14 +2,20 @@ from __future__ import annotations
 
 import os
 import unittest
+from uuid import uuid4
+
+from sqlalchemy import text
 
 from src.business_logic.services.account_service import AccountService
 from src.business_logic.managers.account import AccountManager
+from src.business_logic.managers.rating import RatingManager
 from src.db.account.mysql import MySQLAccountDB
+from src.db.rating.mysql import MySQLRatingDB
+from src.domain_models import Rating
 from src.utils import ValidationError, AccountAlreadyExistsError
 from src.api.errors import ApiError
 
-from tests.helpers.integration_db import  ensure_tables_exist, reset_all_tables
+from tests.helpers.integration_db import ensure_tables_exist, reset_all_tables
 from tests.helpers.integration_db_session import acquire, get_db, release
 
 
@@ -18,7 +24,6 @@ class TestAccountServiceIntegration(unittest.TestCase):
     Integration tests:
       AccountService -> AccountManager -> MySQLAccountDB -> real MySQL (docker)
     """
-
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -35,13 +40,17 @@ class TestAccountServiceIntegration(unittest.TestCase):
 
         # Wire real DB -> manager -> service
         cls._account_db = MySQLAccountDB(db=cls._db)
+        cls._rating_db = MySQLRatingDB(db=cls._db)
         cls._manager = AccountManager(cls._account_db)
-        cls._service = AccountService(cls._manager)
+        cls._rating_manager = RatingManager(cls._rating_db)
+        cls._service = AccountService(
+            account_manager=cls._manager,
+            rating_manager=cls._rating_manager,
+        )
 
     @classmethod
     def tearDownClass(cls) -> None:
         release(cls._session, remove_volumes=False)
-
 
     # -----------------------------
     # create_account
@@ -146,12 +155,12 @@ class TestAccountServiceIntegration(unittest.TestCase):
             self._service.login("", "")
 
         self.assertEqual(ctx.exception.status_code, 400)
-    
+
     # -----------------------------
     # get account with userid
     # -----------------------------
 
-    def test_get_account_userid_returns_account(self) -> None:
+    def test_get_account_by_userid_returns_account(self) -> None:
         # Create account to retrieve
         created = self._service.create_account(
             email="userid@umanitoba.ca",
@@ -161,23 +170,94 @@ class TestAccountServiceIntegration(unittest.TestCase):
         )
 
         # Fetch using returned ID
-        account = self._service.get_account_userid(created.id)
+        account = self._service.get_account_by_userid(created.id)
 
         # Verify returned data matches DB
         self.assertIsNotNone(account)
         self.assertEqual(account.id, created.id)
         self.assertEqual(account.email, "userid@umanitoba.ca")
 
-    def test_get_account_userid_not_found_raises_404(self) -> None:
+    def test_get_account_by_userid_not_found_raises_404(self) -> None:
         # Non-existent ID
         with self.assertRaises(ApiError) as ctx:
-            self._service.get_account_userid(999999)
+            self._service.get_account_by_userid(999999)
 
         self.assertEqual(ctx.exception.status_code, 404)
 
-    def test_get_account_userid_none_raises_400(self) -> None:
+    def test_get_account_by_userid_none_raises_400(self) -> None:
         # None should be rejected immediately
         with self.assertRaises(ApiError) as ctx:
-            self._service.get_account_userid(None)
+            self._service.get_account_by_userid(None)
 
         self.assertEqual(ctx.exception.status_code, 400)
+
+    def test_get_account_by_userid_populates_rating_count(self) -> None:
+        seller = self._service.create_account(
+            email="rcount_seller@umanitoba.ca",
+            password="Password1",
+            fname="Seller",
+            lname="Count",
+        )
+        buyer = self._service.create_account(
+            email="rcount_buyer@umanitoba.ca",
+            password="Password1",
+            fname="Buyer",
+            lname="Count",
+        )
+
+        listing_id = self._insert_listing(seller.id, sold_to_id=buyer.id, is_sold=True)
+        self._rating_manager.create_rating(Rating(
+            listing_id=listing_id,
+            rater_id=buyer.id,
+            transaction_rating=5,
+        ))
+
+        account = self._service.get_account_by_userid(seller.id)
+        self.assertEqual(account.rating_count, 1)
+
+    def test_get_account_by_userid_rating_count_zero_when_no_ratings(self) -> None:
+        seller = self._service.create_account(
+            email="rcount_zero@umanitoba.ca",
+            password="Password1",
+            fname="Zero",
+            lname="Ratings",
+        )
+
+        account = self._service.get_account_by_userid(seller.id)
+        self.assertEqual(account.rating_count, 0)
+
+    # --------------------------------------------------
+    # helpers
+    # --------------------------------------------------
+    def _insert_listing(
+        self,
+        seller_id: int,
+        *,
+        sold_to_id: int | None = None,
+        is_sold: bool = False,
+    ) -> int:
+        uniq = uuid4().hex[:8]
+
+        sql = text("""
+            INSERT INTO listing (
+                seller_id, title, description, price,
+                location, image_url, is_sold, sold_to_id
+            )
+            VALUES (
+                :seller_id, :title, :description, :price,
+                :location, :image_url, :is_sold, :sold_to_id
+            )
+        """)
+
+        with self._db.transaction() as conn:
+            result = conn.execute(sql, {
+                "seller_id": seller_id,
+                "title": f"Listing {uniq}",
+                "description": "Test listing",
+                "price": 50.0,
+                "location": "Winnipeg",
+                "image_url": None,
+                "is_sold": is_sold,
+                "sold_to_id": sold_to_id,
+            })
+            return int(result.lastrowid)

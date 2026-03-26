@@ -1,0 +1,242 @@
+<div class="layout">
+  <app-left-navigation
+    [listings]="sidebarListings"
+    [listingsCount]="sidebarListings.length"
+    (createListing)="onCreateListing($event)"
+    (deleteListing)="onDeleteListing($event)"
+  ></app-left-navigation>
+
+  <div class="right">
+    <app-header></app-header>
+
+    <main class="content">
+      <section class="offers-shell">
+        <div class="offers-header">
+          <div>
+            <h2>All Offers</h2>
+            <p>Review the offers you received and the offers you sent.</p>
+          </div>
+          <div class="offers-summary">
+            <span>{{ offers.length }} offer{{ offers.length === 1 ? '' : 's' }}</span>
+          </div>
+        </div>
+
+        @if (isLoading) {
+          <p class="status">Loading offers...</p>
+        } @else if (errorMessage) {
+          <p class="status error">{{ errorMessage }}</p>
+        } @else if (offers.length === 0) {
+          <div class="empty-state">
+            <mat-icon>notifications_none</mat-icon>
+            <h3>No offers yet</h3>
+            <p>Your received and sent offers will appear here as activity happens.</p>
+          </div>
+        } @else {
+          @if (receivedOffers.length > 0) {
+            <section class="offer-section">
+              <div class="section-copy">
+                <h3>Received Offers</h3>
+                <p>Offers buyers sent for your listings.</p>
+              </div>
+              <div class="offers-list">
+                @for (offer of receivedOffers; track offer.id) {
+                  <mat-card class="offer-card" [class.offer-card-unseen]="!offer.seen">
+                    <div class="offer-card-header">
+                      <div>
+                        <p class="offer-label">Listing</p>
+                        <h3>{{ offer.listingTitle }}</h3>
+                      </div>
+                      <span
+                        class="offer-status"
+                        [class.offer-status-pending]="offer.accepted === null"
+                        [class.offer-status-accepted]="offer.accepted === true"
+                        [class.offer-status-declined]="offer.accepted === false"
+                      >
+                        {{ getStatusLabel(offer) }}
+                      </span>
+                    </div>
+
+                    <div class="offer-meta">
+                      <div>
+                        <span class="meta-label">Offer price</span>
+                        <strong>${{ offer.offeredPrice.toFixed(2) }}</strong>
+                      </div>
+                      <div>
+                        <span class="meta-label">Buyer</span>
+                        <strong>{{ offer.buyerName }}</strong>
+                      </div>
+                      <div>
+                        <span class="meta-label">Pickup location</span>
+                        <strong>{{ offer.locationOffered || 'Not provided' }}</strong>
+                      </div>
+                      <div>
+                        <span class="meta-label">Sent</span>
+                        <strong>
+                          {{
+                            offer.createdDate
+                              ? (offer.createdDate | date: 'medium')
+                              : 'Unknown'
+                          }}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div class="offer-actions">
+                      <button
+                        mat-flat-button
+                        type="button"
+                        class="accept-btn"
+                        [disabled]="!canResolveOffer(offer)"
+                        (click)="resolveOffer(offer.id, true)"
+                      >
+                        {{
+                          isResolvingOffer(offer.id) && offer.accepted === null
+                            ? 'Saving...'
+                            : 'Accept'
+                        }}
+                      </button>
+                      <button
+                        mat-stroked-button
+                        type="button"
+                        class="decline-btn"
+                        [disabled]="!canResolveOffer(offer)"
+                        (click)="resolveOffer(offer.id, false)"
+                      >
+                        {{
+                          isResolvingOffer(offer.id) && offer.accepted === null
+                            ? 'Saving...'
+                            : 'Decline'
+                        }}
+                      </button>
+                      <button
+                        mat-stroked-button
+                        type="button"
+                        (click)="openListing(offer.listingId)"
+                      >
+                        View Listing
+                      </button>
+                    </div>
+                  </mat-card>
+                }
+              </div>
+            </section>
+          }
+
+          @if (sentOffers.length > 0) {
+            <section class="offer-section">
+              <div class="section-copy">
+                <h3>Sent Offers</h3>
+                <p>Track whether sellers accepted or declined your offers.</p>
+              </div>
+              <div class="offers-list">
+                @for (offer of sentOffers; track offer.id) {
+                  <mat-card
+                    class="offer-card"
+                    [class.offer-card-unseen]="offer.hasUnreadDecision"
+                  >
+                    <div class="offer-card-header">
+                      <div>
+                        <p class="offer-label">Listing</p>
+                        <h3>{{ offer.listingTitle }}</h3>
+                      </div>
+                      <span
+                        class="offer-status"
+                        [class.offer-status-pending]="offer.accepted === null"
+                        [class.offer-status-accepted]="offer.accepted === true"
+                        [class.offer-status-declined]="offer.accepted === false"
+                      >
+                        {{ getStatusLabel(offer) }}
+                      </span>
+                    </div>
+
+                    <div class="offer-meta">
+                      <div>
+                        <span class="meta-label">Your offer</span>
+                        <strong>${{ offer.offeredPrice.toFixed(2) }}</strong>
+                      </div>
+                      <div>
+                        <span class="meta-label">Pickup location</span>
+                        <strong>{{ offer.locationOffered || 'Not provided' }}</strong>
+                      </div>
+                      <div>
+                        <span class="meta-label">Seller decision</span>
+                        <strong>{{ getStatusLabel(offer) }}</strong>
+                      </div>
+                      <div>
+                        <span class="meta-label">Seller</span>
+                        <strong>{{ offer.sellerName || 'Unknown seller' }}</strong>
+                      </div>
+                      <div>
+                        <span class="meta-label">Sent</span>
+                        <strong>
+                          {{
+                            offer.createdDate
+                              ? (offer.createdDate | date: 'medium')
+                              : 'Unknown'
+                          }}
+                        </strong>
+                      </div>
+                    </div>
+
+                    @if (offer.accepted === true) {
+                      <div class="rating-panel">
+                        <div class="rating-panel-copy">
+                          <p class="offer-label">Rate Seller</p>
+                          <h4>How was your purchase from {{ offer.sellerName }}?</h4>
+                        </div>
+
+                        <div class="rating-stars" aria-label="Rate seller">
+                          @for (star of [1, 2, 3, 4, 5]; track star) {
+                            <button
+                              mat-stroked-button
+                              type="button"
+                              class="rating-star-btn"
+                              [class.rating-star-btn-selected]="offer.pendingRating !== null && star <= offer.pendingRating"
+                              [disabled]="offer.hasRatedSeller || offer.isSubmittingRating"
+                              (click)="setPendingRating(offer.id, star)"
+                            >
+                              {{ star }}
+                            </button>
+                          }
+                        </div>
+
+                        @if (offer.ratingMessage) {
+                          <p class="rating-feedback">{{ offer.ratingMessage }}</p>
+                        }
+
+                        @if (offer.ratingError) {
+                          <p class="rating-feedback rating-feedback-error">{{ offer.ratingError }}</p>
+                        }
+                      </div>
+                    }
+
+                    <div class="offer-actions">
+                      @if (offer.accepted === true) {
+                        <button
+                          mat-flat-button
+                          type="button"
+                          class="accept-btn"
+                          [disabled]="!canRateSeller(offer) || offer.pendingRating === null"
+                          (click)="submitSellerRating(offer)"
+                        >
+                          {{ offer.isSubmittingRating ? 'Submitting...' : (offer.hasRatedSeller ? 'Rated' : 'Rate Seller') }}
+                        </button>
+                      }
+                      <button
+                        mat-stroked-button
+                        type="button"
+                        (click)="openListing(offer.listingId)"
+                      >
+                        View Listing
+                      </button>
+                    </div>
+                  </mat-card>
+                }
+              </div>
+            </section>
+          }
+        }
+      </section>
+    </main>
+  </div>
+</div>

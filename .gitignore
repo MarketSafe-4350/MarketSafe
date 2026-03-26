@@ -14,4 +14,9 @@ server/.env
 
 .coverage
 
+*.sqlite
+
 server/uploads
+server/uploads
+
+.secrets

@@ -12,4 +12,5 @@ export interface Account {
   // optional profile-related fields
   ratingAvg?: number;
   ratingCount?: number;
+  ratingSum?: number;
 }

@@ -35,6 +35,33 @@
         <span class="dot">•</span>
         <span class="comment-count">{{ commentCountLabel }}</span>
       </div>
+
+      @if (showSellerProfileButton || showOfferButton) {
+        <div class="list-actions">
+          @if (showOfferButton) {
+            <button
+              mat-flat-button
+              type="button"
+              class="send-offer-btn"
+              [disabled]="isOfferDisabled"
+              (click)="onOfferClick($event)"
+            >
+              {{ offerButtonLabel }}
+            </button>
+          }
+
+          @if (showSellerProfileButton) {
+          <button
+            mat-stroked-button
+            type="button"
+            class="seller-profile-btn"
+            (click)="onSellerProfileClick($event)"
+          >
+            View Seller Profile
+          </button>
+          }
+        </div>
+      }
     </div>
   </div>
 </mat-card>

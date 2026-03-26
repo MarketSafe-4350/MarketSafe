@@ -14,7 +14,14 @@ class TestMainUnit(unittest.TestCase):
         sys.modules.pop("src.main", None)
 
     def test_main_create_app_smoke_for_coverage(self) -> None:
-        with patch.dict(os.environ, {"DB_HOST": "test-host"}, clear=False), patch(
+        test_env = {
+            "DB_HOST": "test-host",
+            "DB_PORT": "3306",
+            "DB_NAME": "test-db",
+            "DB_USER": "test-user",
+            "DB_PASSWORD": "test-pass",
+        }
+        with patch.dict(os.environ, test_env, clear=False), patch(
             "src.main.DBUtility.initialize"
         ) as init_mock, patch("pathlib.Path.mkdir", autospec=True) as mkdir_mock:
             sys.modules.pop("src.main", None)
@@ -27,9 +34,9 @@ class TestMainUnit(unittest.TestCase):
             init_mock.assert_called_once_with(
                 host="test-host",
                 port=3306,
-                database="marketsafe",
-                username="marketsafe",
-                password="marketsafe",
+                database="test-db",
+                username="test-user",
+                password="test-pass",
                 driver="mysql+pymysql",
             )
 
@@ -38,6 +45,7 @@ class TestMainUnit(unittest.TestCase):
             paths = [getattr(r, "path", "") for r in app.routes]
             self.assertTrue(any(p.startswith("/accounts") for p in paths))
             self.assertTrue(any(p.startswith("/listings") for p in paths))
+            self.assertTrue(any(p.startswith("/offers") for p in paths))
             self.assertIn("/uploads", paths)
 
             from fastapi.exceptions import RequestValidationError

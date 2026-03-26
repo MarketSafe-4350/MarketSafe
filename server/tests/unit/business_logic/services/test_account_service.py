@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import unittest
 from unittest.mock import MagicMock, patch
+import datetime
+import jwt
 
 from src.business_logic.services.account_service import AccountService
 from src.domain_models import Account
@@ -19,15 +21,19 @@ from src.utils import (
     EmailVerificationError,
 )
 
+SECRET_KEY="change-me"
 
 class TestAccountServiceUnit(unittest.TestCase):
     def setUp(self) -> None:
         self.account_manager: MagicMock = MagicMock(name="account_manager")
         self.token_db: MagicMock = MagicMock(name="token_db")
+        self.rating_manager: MagicMock = MagicMock(name="rating_manager")
         self.service = AccountService(
             account_manager=self.account_manager,
             token_db=self.token_db,
+            rating_manager=self.rating_manager,
         )
+
 
     # -----------------------------
     # validate_email / validate_password / validate_account
@@ -267,6 +273,17 @@ class TestAccountServiceUnit(unittest.TestCase):
         db_token.account_id = 123
         db_token.is_expired.return_value = False
 
+        real_account = Account(
+            email="test@umanitoba.ca",
+            password="hashedpassword",
+            fname="Test",
+            lname="User",
+            account_id=123,
+        )
+        self.account_manager.get_account_by_id.return_value = real_account
+        self.rating_manager.count_ratings_received_by_account_id.return_value = 0
+        self.rating_manager.get_average_rating_by_account_id.return_value = None
+
         with patch(
             "src.business_logic.services.account_service.TokenGenerator.hash_token",
             return_value="hashed",
@@ -288,28 +305,39 @@ class TestAccountServiceUnit(unittest.TestCase):
         self.assertEqual(ctx.exception.status_code, 400)
 
     def test_get_account_by_userid_returns_dummy_account(self) -> None:
-        out = self.service.get_account_by_userid("anything")
+        real_account = Account(
+            email="test@umanitoba.ca",
+            password="hashedpassword",
+            fname="Test",
+            lname="User",
+            account_id=1,
+        )
+        self.account_manager.get_account_by_id.return_value = real_account
+        self.rating_manager.count_ratings_received_by_account_id.return_value = 0
+        self.rating_manager.get_average_rating_by_account_id.return_value = None
+
+        out = self.service.get_account_by_userid(1)
         self.assertIsInstance(out, Account)
         self.assertEqual(out.id, 1)
 
     # -----------------------------
-    # get_account_userid (manager-based)
+    # get_account_by_userid (manager-based)
     # -----------------------------
-    def test_get_account_userid_none_raises_400(self) -> None:
+    def test_get_account_by_userid_none_raises_400(self) -> None:
         with self.assertRaises(ApiError) as ctx:
-            self.service.get_account_userid(None)
+            self.service.get_account_by_userid(None)
         self.assertEqual(ctx.exception.status_code, 400)
 
-    def test_get_account_userid_not_found_raises_404(self) -> None:
+    def test_get_account_by_userid_not_found_raises_404(self) -> None:
         self.account_manager.get_account_by_id.return_value = None
         with self.assertRaises(ApiError) as ctx:
-            self.service.get_account_userid(99)
+            self.service.get_account_by_userid(99)
         self.assertEqual(ctx.exception.status_code, 404)
 
-    def test_get_account_userid_success_returns_account(self) -> None:
+    def test_get_account_by_userid_success_returns_account(self) -> None:
         acc = MagicMock(spec=Account)
         self.account_manager.get_account_by_id.return_value = acc
-        out = self.service.get_account_userid(5)
+        out = self.service.get_account_by_userid(5)
         self.assertIs(out, acc)
         self.account_manager.get_account_by_id.assert_called_once_with(5)
 
@@ -381,3 +409,101 @@ class TestAccountServiceUnit(unittest.TestCase):
 
         self.assertEqual(token, "tok123")
         self.assertTrue(enc.called)
+
+
+    def test_validate_email_uses_last_domain_segment(self):
+        # Correct code uses split("@")[-1], so this should accept "umanitoba.ca".
+        # Mutants using [1] or [+1] would incorrectly read "dept" and raise.
+        self.service.validate_email("student@dept@umanitoba.ca")
+
+    def test_login_raises_when_email_missing(self):
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("", "ValidPass1")
+
+        self.assertEqual(ctx.exception.status_code, 400)
+        self.assertEqual(ctx.exception._message, "Email and password are required")
+
+
+    def test_login_raises_when_password_missing(self):
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("user@umanitoba.ca", "")
+
+        self.assertEqual(ctx.exception.status_code, 400)
+        self.assertEqual(ctx.exception._message, "Email and password are required")
+
+
+    @patch("src.business_logic.services.account_service.jwt.encode")
+    def test_login_raises_for_wrong_password_when_stored_password_is_lexicographically_greater(
+        self, mock_encode
+    ):
+        account = Account(
+            email="user@umanitoba.ca",
+            password="zPassword9",
+            fname="Test",
+            lname="User",
+            account_id=7,
+            verified=True,
+        )
+        self.account_manager.get_account_by_email.return_value = account
+
+        with self.assertRaises(ApiError) as ctx:
+            self.service.login("user@umanitoba.ca", "aPassword9")
+
+        self.assertEqual(ctx.exception.status_code, 401)
+        self.assertEqual(ctx.exception._message, "Invalid email or password")
+        mock_encode.assert_not_called()
+
+
+    @patch("src.business_logic.services.account_service.jwt.encode")
+    def test_login_allows_equal_passwords_even_when_distinct_string_objects(
+        self, mock_encode
+    ):
+        stored_password = "ValidPass1"
+        supplied_password = "".join(["Valid", "Pass", "1"])
+
+        self.assertEqual(stored_password, supplied_password)
+        self.assertIsNot(stored_password, supplied_password)
+
+        account = Account(
+            email="user@umanitoba.ca",
+            password=stored_password,
+            fname="Test",
+            lname="User",
+            account_id=7,
+            verified=True,
+        )
+        self.account_manager.get_account_by_email.return_value = account
+        mock_encode.return_value = "fake-jwt"
+
+        token = self.service.login("user@umanitoba.ca", supplied_password)
+
+        self.assertEqual(token, "fake-jwt")
+        mock_encode.assert_called_once()
+
+
+    @patch("src.business_logic.services.account_service.jwt.encode")
+    @patch("src.business_logic.services.account_service.datetime.datetime")
+    def test_login_sets_expiration_to_exactly_30_days(self, mock_datetime, mock_encode):
+        frozen_now = datetime.datetime(2026, 3, 21, 12, 0, 0, tzinfo=datetime.timezone.utc)
+        mock_datetime.now.return_value = frozen_now
+
+        account = Account(
+            email="user@umanitoba.ca",
+            password="ValidPass1",
+            fname="Test",
+            lname="User",
+            account_id=7,
+            verified=True,
+        )
+        self.account_manager.get_account_by_email.return_value = account
+        mock_encode.return_value = "fake-jwt"
+
+        token = self.service.login("user@umanitoba.ca", "ValidPass1")
+
+        self.assertEqual(token, "fake-jwt")
+
+        payload = mock_encode.call_args.args[0]
+        self.assertEqual(
+            payload["exp"],
+            frozen_now + datetime.timedelta(days=30),
+        )

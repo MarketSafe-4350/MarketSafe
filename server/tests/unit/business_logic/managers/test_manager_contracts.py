@@ -3,6 +3,7 @@ import unittest
 from src.business_logic.managers.account import IAccountManager
 from src.business_logic.managers.comment import ICommentManager
 from src.business_logic.managers.listing import IListingManager
+from src.business_logic.managers.offer.abstract_offer_manager import IOffermanager
 
 
 # -------------------------
@@ -17,6 +18,10 @@ class DummyListingDB:
 
 
 class DummyCommentDB:
+    pass
+
+
+class DummyOfferDB:
     pass
 
 
@@ -49,6 +54,21 @@ class AccountManagerContractStub(IAccountManager):
 
     def get_account_with_listings(self, account_id):
         return super().get_account_with_listings(account_id)
+
+    def get_account_with_listings_by_email(self, email):
+        return super().get_account_with_listings_by_email(email)
+
+    def get_account_with_listings_for(self, account):
+        return super().get_account_with_listings_for(account)
+
+    def fill_account_rating_values(self, account):
+        return super().fill_account_rating_values(account)
+
+    def get_account_with_rating_values_by_id(self, account_id):
+        return super().get_account_with_rating_values_by_id(account_id)
+
+    def get_account_with_rating_values_by_email(self, email):
+        return super().get_account_with_rating_values_by_email(email)
 
 
 class CommentManagerContractStub(ICommentManager):
@@ -89,7 +109,7 @@ class ListingManagerContractStub(IListingManager):
         return super().list_unsold_listings()
 
     def list_recent_unsold(self, limit=50, offset=0):
-        return super().list_recent_unsold(limit=limit, offset=offset)
+        return super().list_recent_unsold(limit, offset)
 
     def list_unsold_by_location(self, location):
         return super().list_unsold_by_location(location)
@@ -101,7 +121,7 @@ class ListingManagerContractStub(IListingManager):
         return super().list_unsold_by_location_and_max_price(location, max_price)
 
     def find_unsold_by_title_keyword(self, keyword, limit=50, offset=0):
-        return super().find_unsold_by_title_keyword(keyword, limit=limit, offset=offset)
+        return super().find_unsold_by_title_keyword(keyword, limit, offset)
 
     def list_listings_by_seller(self, seller_id):
         return super().list_listings_by_seller(seller_id)
@@ -111,6 +131,15 @@ class ListingManagerContractStub(IListingManager):
 
     def get_listing_with_comments(self, listing_id):
         return super().get_listing_with_comments(listing_id)
+
+    def fill_listing_rating_value(self, listing):
+        return super().fill_listing_rating_value(listing)
+
+    def get_listing_with_rating_by_id(self, listing_id):
+        return super().get_listing_with_rating_by_id(listing_id)
+
+    def get_listing_with_comments_and_rating(self, listing_id):
+        return super().get_listing_with_comments_and_rating(listing_id)
 
     def update_listing(self, listing):
         return super().update_listing(listing)
@@ -125,8 +154,60 @@ class ListingManagerContractStub(IListingManager):
         return super().delete_listing(listing_id)
 
 
+class OfferManagerContractStub(IOffermanager):
+    """Minimal implementation used to validate the IOffermanager contract."""
+
+    def create_offer(self, offer):
+        return super().create_offer(offer)
+
+    def get_offer_by_id(self, offer_id):
+        return super().get_offer_by_id(offer_id)
+
+    def get_all_offers(self):
+        return super().get_all_offers()
+
+    def get_offers_by_listing_id(self, listing_id):
+        return super().get_offers_by_listing_id(listing_id)
+
+    def get_offers_by_sender_id(self, sender_id):
+        return super().get_offers_by_sender_id(sender_id)
+
+    def get_accepted_offers_by_listing_id(self, listing_id):
+        return super().get_accepted_offers_by_listing_id(listing_id)
+
+    def get_unseen_offers_by_listing_id(self, listing_id):
+        return super().get_unseen_offers_by_listing_id(listing_id)
+
+    def get_pending_offers_by_listing_id(self, listing_id):
+        return super().get_pending_offers_by_listing_id(listing_id)
+
+    def get_offer_by_sender_and_listing(self, sender_id, listing_id):
+        return super().get_offer_by_sender_and_listing(sender_id, listing_id)
+
+    def get_offers_sellers(self, seller_id):
+        return super().get_offers_sellers(seller_id)
+
+    def get_offer_sellers_pending(self, seller_id):
+        return super().get_offer_sellers_pending(seller_id)
+
+    def get_offer_sellers_unseen(self, seller_id):
+        return super().get_offer_sellers_unseen(seller_id)
+
+    def get_pending_offers_with_listing_by_sender(self, sender_id):
+        return super().get_pending_offers_with_listing_by_sender(sender_id)
+
+    def set_offer_seen(self, offer_id):
+        return super().set_offer_seen(offer_id)
+
+    def set_offer_accepted(self, offer_id, accepted, actor_id):
+        return super().set_offer_accepted(offer_id, accepted, actor_id)
+
+    def delete_offer(self, offer_id):
+        return super().delete_offer(offer_id)
+
+
 # -------------------------
-# Contract tests (all three)
+# Contract tests (all four)
 # -------------------------
 class TestBusinessManagerContracts(unittest.TestCase):
     """Contract-level tests for abstract business-layer manager interfaces."""
@@ -164,6 +245,17 @@ class TestBusinessManagerContracts(unittest.TestCase):
             mgr.set_verified_by_email("a@b.com", True)
         with self.assertRaises(NotImplementedError):
             mgr.get_account_with_listings(1)
+
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_listings_by_email("a@b.com")
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_listings_for(account=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.fill_account_rating_values(account=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_rating_values_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_rating_values_by_email("a@b.com")
 
     # -------------------------
     # ICommentManager
@@ -235,3 +327,87 @@ class TestBusinessManagerContracts(unittest.TestCase):
             mgr.update_listing_price(listing_id=1, price=99.99)
         with self.assertRaises(NotImplementedError):
             mgr.delete_listing(1)
+
+        with self.assertRaises(NotImplementedError):
+            mgr.fill_listing_rating_value(listing=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_listing_with_rating_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_listing_with_comments_and_rating(1)
+
+    def test_account_manager_rating_and_listing_extension_methods_raise_not_implemented(self):
+        mgr = AccountManagerContractStub(account_db=DummyAccountDB())
+
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_listings_by_email("a@b.com")
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_listings_for(account=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.fill_account_rating_values(account=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_rating_values_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_account_with_rating_values_by_email("a@b.com")
+
+    def test_listing_manager_rating_extension_methods_raise_not_implemented(self):
+        mgr = ListingManagerContractStub(
+            listing_db=DummyListingDB(),
+            comment_db=DummyCommentDB(),
+        )
+
+        with self.assertRaises(NotImplementedError):
+            mgr.fill_listing_rating_value(listing=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_listing_with_rating_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_listing_with_comments_and_rating(1)
+
+    # -------------------------
+    # IOffermanager
+    # -------------------------
+    def test_offer_manager_requires_offer_db(self):
+        with self.assertRaises(Exception):
+            OfferManagerContractStub(offer_db=None, listing_db=DummyListingDB())
+
+    def test_offer_manager_requires_listing_db(self):
+        with self.assertRaises(Exception):
+            OfferManagerContractStub(offer_db=DummyOfferDB(), listing_db=None)
+
+    def test_offer_manager_default_methods_raise_not_implemented(self):
+        mgr = OfferManagerContractStub(
+            offer_db=DummyOfferDB(),
+            listing_db=DummyListingDB(),
+        )
+
+        with self.assertRaises(NotImplementedError):
+            mgr.create_offer(offer=None)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_offer_by_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_all_offers()
+        with self.assertRaises(NotImplementedError):
+            mgr.get_offers_by_listing_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_offers_by_sender_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_accepted_offers_by_listing_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_unseen_offers_by_listing_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_pending_offers_by_listing_id(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_offer_by_sender_and_listing(sender_id=1, listing_id=1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_offers_sellers(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_offer_sellers_pending(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_offer_sellers_unseen(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.get_pending_offers_with_listing_by_sender(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.set_offer_seen(1)
+        with self.assertRaises(NotImplementedError):
+            mgr.set_offer_accepted(offer_id=1, accepted=True, actor_id=1)
+        with self.assertRaises(NotImplementedError):
+            mgr.delete_offer(1)
