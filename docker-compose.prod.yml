@@ -91,12 +91,13 @@ services:
   frontend:
     image: ${DOCKER_USERNAME}/marketsafe-frontend:latest
     ports:
-      - "${FRONTEND_PORT:-4200}:4200"
+      - "${FRONTEND_PORT:-4200}:${FRONTEND_PORT:-4200}"
     depends_on:
       - api
     environment:
       API_BASE_URL: ${API_BASE_URL}
       FRONTEND_URL: ${FRONTEND_URL}
+      FRONTEND_PORT: ${FRONTEND_PORT:-4200}
 
 volumes:
   mysql_data:

@@ -11,7 +11,8 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD"]
+      test:
+        ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD"]
       interval: 5s
       timeout: 3s
       retries: 30
@@ -98,7 +99,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "${FRONTEND_PORT:-4200}:4200"
+      - "${FRONTEND_PORT:-4200}:${FRONTEND_PORT:-4200}"
     depends_on:
       - api
     volumes:
@@ -107,6 +108,7 @@ services:
     environment:
       API_BASE_URL: ${API_BASE_URL}
       FRONTEND_URL: ${FRONTEND_URL}
+      FRONTEND_PORT: ${FRONTEND_PORT:-4200}
     command: npm run start:docker
 
 volumes:
