@@ -128,7 +128,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: backend-coverage-xml
-          path: server # restores coverage.xml to server/ so SonarQube can find
+          path: server # restores coverage.xml to server/ so SonarQube can find it
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@3988e54db2467c7e9583a4af619c3f5647d6b8ad
