@@ -14,12 +14,12 @@ class AccountSignup(BaseModel):
 class AccountResponse(BaseModel):
     """Data model for account response."""
 
-    id: Optional[int]
+    id: Optional[int] = None
     email: EmailStr
     fname: str
     lname: str
     verified: bool
-    average_rating_received: Optional[float]
+    average_rating_received: Optional[float] = None
     sum_of_ratings_received: int
     rating_count: int
 
