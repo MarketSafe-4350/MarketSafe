@@ -131,6 +131,6 @@ jobs:
           path: server # restores coverage.xml to server/ so SonarQube can find
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
+        uses: SonarSource/sonarqube-scan-action@3988e54db2467c7e9583a4af619c3f5647d6b8ad
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # authenticates with SonarQube
