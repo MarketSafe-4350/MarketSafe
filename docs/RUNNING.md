@@ -98,6 +98,7 @@ No Docker required. Run from the `server/` directory:
 
 ```bash
 cd server
+pip install -r requirements.txt
 coverage run -m tests.unit.all_unit_tests
 ```
 
@@ -107,6 +108,7 @@ Requires Docker. The test suite automatically spins up a dedicated MySQL contain
 
 ```bash
 cd server
+pip install -r requirements.txt
 coverage run -m tests.integration.all_integration_tests
 ```
 
@@ -114,6 +116,7 @@ coverage run -m tests.integration.all_integration_tests
 
 ```bash
 cd server
+pip install -r requirements.txt
 coverage run -m tests.all_tests
 ```
 
@@ -154,9 +157,9 @@ npm run lint
 | Stop local stack          | `docker compose down`                                                                   |
 | Start production stack    | `docker compose -f docker-compose.prod.yml up`                                          |
 | Stop production stack     | `docker compose -f docker-compose.prod.yml down`                                        |
-| Backend unit tests        | `cd server && coverage run -m tests.unit.all_unit_tests`                                |
-| Backend integration tests | `cd server && coverage run -m tests.integration.all_integration_tests`                  |
-| Backend all tests         | `cd server && coverage run -m tests.all_tests`                                          |
+| Backend unit tests        | `cd server && pip install -r requirements.txt && coverage run -m tests.unit.all_unit_tests`                                |
+| Backend integration tests | `cd server && pip install -r requirements.txt && coverage run -m tests.integration.all_integration_tests`                  |
+| Backend all tests         | `cd server && pip install -r requirements.txt && coverage run -m tests.all_tests`                                          |
 | Backend coverage          | `cd server && coverage report -m`                                                       |
 | Frontend tests            | `cd frontend && npm test`                                                               |
 | Frontend lint             | `cd frontend && npm run lint`                                                           |
