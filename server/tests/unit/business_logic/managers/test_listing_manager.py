@@ -572,24 +572,3 @@ class TestListingManagerUnit(unittest.TestCase):
         self.mgr.mark_listing_sold(actor, listing, buyer)
 
         listing.mark_sold.assert_called_once_with(10)
-    # def test_mark_listing_sold_raises_when_seller_tries_to_buy_own_listing(self):
-    #     actor_id = 7
-    #     buyer_id = 7
-
-    #     listing = SimpleNamespace(
-    #         id=123,
-    #         seller_id=7,
-    #         is_sold=False,
-    #     )
-
-    #     self.listing_db.get_by_id.return_value = listing
-
-    #     with self.assertRaises(UnapprovedBehaviorError) as cm:
-    #         self.mgr.mark_listing_sold(
-    #             listing_id=123,
-    #             actor_id=actor_id,
-    #             buyer_id=buyer_id,
-    #         )
-
-    #     self.assertIn("Seller cannot buy their own listing", str(cm.exception))
-    #     self.listing_db.set_sold.assert_not_called()
