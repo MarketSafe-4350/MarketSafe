@@ -11,6 +11,7 @@ from src.utils import (
 from typing_extensions import override
 from typing import List, Optional
 
+ACTOR_NOT_PERSISTED_ERROR = "actor must be persisted (actor.id is None)."
 
 class CommentManager(ICommentManager):
     """
@@ -45,7 +46,7 @@ class CommentManager(ICommentManager):
 
         # Persisted checks
         if actor.id is None:
-            raise ValidationError("actor must be persisted (actor.id is None).")
+            raise ValidationError(ACTOR_NOT_PERSISTED_ERROR)
         if listing.id is None:
             raise ValidationError("listing must be persisted (listing.id is None).")
 
@@ -95,7 +96,7 @@ class CommentManager(ICommentManager):
         Validation.require_not_none(comment, "comment")
 
         if actor.id is None:
-            raise ValidationError("actor must be persisted (actor.id is None).")
+            raise ValidationError(ACTOR_NOT_PERSISTED_ERROR)
 
         if comment.id is None:
             raise ValidationError("comment must be persisted (comment.id is None).")
@@ -132,7 +133,7 @@ class CommentManager(ICommentManager):
         comment_id = Validation.require_int(comment_id, "comment_id")
 
         if actor.id is None:
-            raise ValidationError("actor must be persisted (actor.id is None).")
+            raise ValidationError(ACTOR_NOT_PERSISTED_ERROR)
 
         if not bool(actor.verified):
             raise UnapprovedBehaviorError("Only verified users can delete comments.")
