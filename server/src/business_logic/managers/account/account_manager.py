@@ -75,9 +75,6 @@ class AccountManager(IAccountManager):
     def list_accounts(self) -> List[Account]:
         accounts = self._account_db.get_all()
 
-        if self._rating_db is None:
-            return accounts
-
         for account in accounts:
             self._populate_rating_values_if_available(account)
 

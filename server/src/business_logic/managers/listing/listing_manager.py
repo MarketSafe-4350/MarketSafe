@@ -296,8 +296,6 @@ class ListingManager(IListingManager):
         return listing
 
     def _populate_ratings_if_available(self, listings: List[Listing]) -> List[Listing]:
-        if self._rating_db is None:
-            return listings
 
         for listing in listings:
             self._populate_rating_if_available(listing)
