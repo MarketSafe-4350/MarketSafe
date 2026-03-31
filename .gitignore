@@ -4,6 +4,7 @@
 # frontend angular
 .angular
 .cache
+frontend/src/assets/env.js
 
 # backend python
 __pycache__
