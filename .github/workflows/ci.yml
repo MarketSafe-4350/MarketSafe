@@ -113,8 +113,8 @@ jobs:
           name: backend-coverage-xml
           path: server/coverage.xml
 
-  sonarcloud:
-    name: SonarCloud Analysis
+  sonarqube:
+    name: SonarQube Analysis
     runs-on: ubuntu-latest
     needs: [frontend-ci, backend-ci] # wait for both CI jobs to pass before scanning
 
@@ -128,10 +128,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: backend-coverage-xml
-          path: server # restores coverage.xml to server/ so SonarCloud can find it
+          path: server # restores coverage.xml to server/ so SonarQube can find it
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # allows SonarCloud to post PR decorations
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # authenticates with SonarCloud
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # authenticates with SonarQube
