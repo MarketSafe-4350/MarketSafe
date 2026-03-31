@@ -55,7 +55,6 @@
 -- - A listing cannot be marked sold (is_sold=TRUE) unless sold_to_id is set.
 -- - A rating can only be inserted/updated if the listing is sold AND the rater is the buyer.
 -- - One rating per listing is enforced by UNIQUE(listing_id).
-DECLARE ERR_SQLSTATE CHAR(5) DEFAULT '45000';
 
 CREATE TABLE account (
   id        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -233,12 +232,12 @@ BEGIN
 
   -- Cannot rate an unsold listing
   IF sold_flag = FALSE OR buyer_id IS NULL THEN
-    SIGNAL SQLSTATE ERR_SQLSTATE SET MESSAGE_TEXT = 'Cannot rate: listing not sold';
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot rate: listing not sold';
   END IF;
 
   -- Only the buyer can rate the listing
   IF NEW.rater_id <> buyer_id THEN
-    SIGNAL SQLSTATE ERR_SQLSTATE SET MESSAGE_TEXT = 'Only the buyer can rate this listing';
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only the buyer can rate this listing';
   END IF;
 END$$
 
@@ -256,11 +255,11 @@ BEGIN
   WHERE id = NEW.listing_id;
 
   IF sold_flag = FALSE OR buyer_id IS NULL THEN
-    SIGNAL SQLSTATE ERR_SQLSTATE SET MESSAGE_TEXT = 'Cannot rate: listing not sold';
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot rate: listing not sold';
   END IF;
 
   IF NEW.rater_id <> buyer_id THEN
-    SIGNAL SQLSTATE ERR_SQLSTATE SET MESSAGE_TEXT = 'Only the buyer can rate this listing';
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Only the buyer can rate this listing';
   END IF;
 END$$
 
@@ -297,7 +296,7 @@ BEFORE UPDATE ON listing
 FOR EACH ROW
 BEGIN
   IF NEW.is_sold = TRUE AND NEW.sold_to_id IS NULL THEN
-    SIGNAL SQLSTATE ERR_SQLSTATE SET MESSAGE_TEXT = 'sold_to_id must be set when is_sold is TRUE';
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'sold_to_id must be set when is_sold is TRUE';
   END IF;
 END$$
 
