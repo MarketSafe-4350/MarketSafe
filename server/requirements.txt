@@ -19,3 +19,5 @@ cosmic-ray==8.4.3
 coverage==7.2.7
 
 minio==7.2.15
+
+locust==2.43.3
