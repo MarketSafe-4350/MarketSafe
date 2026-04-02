@@ -110,9 +110,8 @@ def setup_test(environment, **kwargs):
 
 
 class LoadTest(HttpUser):
-    wait_time = between(5, 7)
+    wait_time = between(3, 5) # control the requests per second (lower number = more requests)
     host = "http://localhost:8000"
-
 
     def on_start(self):
         self.listing_id = shared_data["listing_id"]
@@ -130,7 +129,7 @@ class LoadTest(HttpUser):
     # Account Routes
     # ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # SKIP create account
+    # DONE IN SETUP
     @task(0)
     def signup_account(self):
         unique = int(time.time() * 1000)
@@ -196,7 +195,7 @@ class LoadTest(HttpUser):
             name="/listings/seller/{seller_id}"
         )
 
-    # SKIP create listing
+    # DONE IN SETUP
     @task(0)
     def create_listing(self):
         unique = int(time.time() * 1000)
@@ -291,7 +290,7 @@ class LoadTest(HttpUser):
     # Offer Routes
     # ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    # SKIP create offer
+    # SKIP create offer - 'ConflictError' thrown if more than one offer sent from same user
     @task(0)
     def create_offer(self):
         if not self.listing_id:
@@ -299,7 +298,7 @@ class LoadTest(HttpUser):
         self.client.post(
             f"/listings/{self.listing_id}/offer",
             json={
-                "offered_price": 999,
+                "offered_price": 888,
                 "location_offered": "UC"
             },
             name="/listings/{listing_id}/offer [POST]"
