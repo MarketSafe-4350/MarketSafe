@@ -2,9 +2,12 @@ import os
 import time
 import requests
 from locust import HttpUser, task, between, events
+from dotenv import load_dotenv
 
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "../../../.env"))
 
-BASE_URL = "http://localhost:8000"
+API_PORT = os.getenv("API_PORT", "8000")
+BASE_URL = f"http://localhost:{API_PORT}"
 
 shared_data = {
     "seller_account_id": None,
@@ -110,8 +113,8 @@ def setup_test(environment, **kwargs):
 
 
 class LoadTest(HttpUser):
-    wait_time = between(3, 5) # control the requests per second (lower number = more requests)
-    host = "http://localhost:8000"
+    wait_time = between(3, 5) # ~300 req/min with 20 users; lower values = more requests per minute
+    host = BASE_URL
 
     def on_start(self):
         self.listing_id = shared_data["listing_id"]
