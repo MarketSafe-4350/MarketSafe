@@ -52,6 +52,8 @@ docker compose up --build
 | Backend  | http://localhost:8000 |
 | MinIO    | http://localhost:9001 |
 
+> **Note:** The URLs above reflect the default ports from `.env.example` (`FRONTEND_PORT=4200`, `API_PORT=8000`, `MINIO_CONSOLE_PORT=9001`). If you change these values in your `.env`, the URLs will differ accordingly.
+
 To stop and remove containers:
 
 ```bash
@@ -126,6 +128,33 @@ coverage run -m tests.all_tests
 cd server
 coverage report -m
 ```
+
+### Backend — Mutation Tests
+
+Requires [Cosmic Ray](https://cosmic-ray.readthedocs.io/) and a running MySQL test database (Docker). Runs mutation tests across all features and generates TXT and HTML reports under `server/tests/mutation_tests/reports/`.
+
+```bash
+cd server
+pip install -r requirements.txt
+python -m tests.mutation_tests.run_mutation_tests
+```
+
+### Backend — Load Tests
+
+Requires a running backend server. Simulates concurrent users hitting the API. The backend URL is determined by `API_PORT` in your `.env` file.
+
+```bash
+cd server/tests/load_testing
+pip install -r ../../requirements.txt
+locust -f locustfile.py --headless -u 20 -r 20 --run-time 1m
+```
+
+- `-u` — number of concurrent users to simulate
+- `-r` — spawn rate (users spawned per second until `-u` is reached); does not control requests per minute
+
+With 20 users and the default `wait_time = between(3, 5)` in the locustfile, this generates ~300 req/min, which exceeds the 200 req/min target. To adjust requests per minute, change the `wait_time` values in `locustfile.py`.
+
+Omit `--headless` to use the interactive Locust UI at `http://localhost:8089`.
 
 ### Frontend — Unit Tests
 
