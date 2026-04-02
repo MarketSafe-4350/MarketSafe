@@ -4,7 +4,6 @@
 # frontend angular
 .angular
 .cache
-
 # backend python
 __pycache__
 .venv/
