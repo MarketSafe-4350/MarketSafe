@@ -49,6 +49,12 @@ The Angular frontend communicates with a Python FastAPI backend over REST, backe
 - [How to Contribute](./docs/CONTRIBUTING.md) — architecture overview, coding standards, branching, and testing workflow
 - [Kanban Board](https://github.com/orgs/MarketSafe-4350/projects/1) — track current and upcoming work
 
+## Reports
+
+- [Security Scan Report](./docs/security_scan/SECURITY_SCAN_REPORT.md) - summary of the security scan report
+- [Mutation Tests Report](./docs/mutationtests/MUTATION_TEST_REPORT.md) - summary of the mutation tests report
+- [Load Tests Report](./docs/load_tests/LOAD_TEST_REPORT.md) - summary of the load tests report
+
 ## Resources
 
 - [Project Proposal](./docs/PROJECT_PROPOSAL.md)
@@ -57,3 +63,4 @@ The Angular frontend communicates with a Python FastAPI backend over REST, backe
 - [ER Diagram](./docs/ERDiagram-MarketSafe.png)
 - [Test Plan](./docs/Test-Plan-MarketSafe.pdf)
 - [Technique Seminar Presentation](https://www.canva.com/design/DAHDSS4tHag/oaLfDizjoUK_bZkn3bvQbg/edit?utm_content=DAHDSS4tHag&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+- [Final Project Presentation](https://canva.link/aha6e6zvn3ypgmq)
