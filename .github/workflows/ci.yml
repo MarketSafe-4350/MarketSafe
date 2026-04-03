@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: ["production", "main"]
   push:
@@ -30,7 +31,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Lint
         run: npm run lint
@@ -103,3 +104,34 @@ jobs:
         with:
           name: backend-coverage-html
           path: server/htmlcov
+
+      - name: Generate coverage report (XML)
+        run: coverage xml
+
+      - name: Upload coverage XML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage-xml
+          path: server/coverage.xml
+
+  sonarqube:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    needs: [frontend-ci, backend-ci] # wait for both CI jobs to pass before scanning
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full git history required for blame annotations and new code detection
+
+      - name: Download backend coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-coverage-xml
+          path: server # restores coverage.xml to server/ so SonarQube can find it
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@3988e54db2467c7e9583a4af619c3f5647d6b8ad
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # authenticates with SonarQube

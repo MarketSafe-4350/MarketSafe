@@ -217,8 +217,7 @@ class AccountService:
         # Get the account and mark as verified
         account: Account = self.get_account_by_userid(db_token.account_id)
 
-        # TODO: Call DAO to update account.verified = true
-        # For now, we'll return the account (real implementation will update DB)
+        
         account.verified = True
 
         # Mark auth_token as used ONLY after successful verification

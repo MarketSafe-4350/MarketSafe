@@ -123,7 +123,7 @@ class TestListingManagerIntegration(unittest.TestCase):
         seller = self._create_account("seller")
         buyer = self._create_account("buyer")
 
-        not_persisted = self._new_listing(seller.id)  # id=None
+        not_persisted = self._new_listing(seller.id)
 
         with self.assertRaises(ListingNotFoundError):
             self._mgr.mark_listing_sold(
