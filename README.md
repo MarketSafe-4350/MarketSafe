@@ -64,3 +64,4 @@ The Angular frontend communicates with a Python FastAPI backend over REST, backe
 - [Test Plan](./docs/Test-Plan-MarketSafe.pdf)
 - [Technique Seminar Presentation](https://www.canva.com/design/DAHDSS4tHag/oaLfDizjoUK_bZkn3bvQbg/edit?utm_content=DAHDSS4tHag&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 - [Final Project Presentation](https://canva.link/aha6e6zvn3ypgmq)
+- [Final Project Release Docs](./docs/ProjectRelease_MarketSafe.pdf)
